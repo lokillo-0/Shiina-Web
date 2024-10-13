@@ -1,0 +1,70 @@
+<#include "assets/base.html">
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer></script>
+    <script>
+    window.onloadTurnstileCallback = function () {
+        turnstile.render("#example-container", {
+          sitekey: "0x4AAAAAAAxWVLFtcczWi1P4",
+          callback: function (token) {
+            console.log("Token: " + token);
+          },
+        });
+      };
+    </script>
+    <div class="container h-100">
+        <div class="row h-100 justify-content-center align-items-center">
+            <div class="card mt-2 mb-2">
+                <h4 class="card-header">Login</h4>
+                <div class="card-body">
+                    <div class="alert alert-danger" role="alert">
+                        Usuario y/o Contraseña incorrecta.
+                    </div>
+                    <form data-toggle="validator" role="form" method="post" action="#">
+                        <input type="hidden" class="hide" id="csrf_token" name="csrf_token"
+                            value="C8nPqbqTxzcML7Hw0jLRu41ry5b9a10a0e2bc2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Email or Username</label>
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text" id="add-on-1">@</span>
+                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="add-on-1">
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <div class="input-group">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-lock"></i></span>
+                                            <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="add-on-1">
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAAxWVLFtcczWi1P4"></div>
+                        <div class="row">
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkbox_remember" type="checkbox" name="remember">
+                                <label for="checkbox_remember">Remember me</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <input type="hidden" name="redirect" value="">
+                                <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login"
+                                    name="submit">
+                            </div>
+                        </div>
+                    </form>
+                    <div class="clear"></div>
+                    <i class="fa fa-user fa-fw"></i> No account? <a href="/register">Register</a><br>
+                    <i class="fa fa-undo fa-fw"></i> Forgot password? <a href="/recover">Recover</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <#include "assets/footer.html">

@@ -1,0 +1,71 @@
+<!-- Navbar nav scrolling -->
+ <style>
+    .navbar {
+        font-size: 1.1rem;
+    }
+
+    .fa-heart {
+        color: crimson;
+    }
+
+    .line-vert {
+        border-left: 1px solid var(--bs-content-border-color);
+        height: 30px;
+        border-color: gray;
+        margin: 0 10px;
+    }
+ </style>
+<nav class="navbar navbar-expand-lg" style="background-color: var(--bs-content-bg); border-bottom: var(--bs-border-width) solid var(--bs-content-border-color);">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="/">
+        <img src="/img/onl.png" alt="Logo" width="50" height="50" class="d-inline-block align-text-top">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-collapse-7" aria-controls="navbar-collapse-7" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbar-collapse-7">
+        <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+          <li class="nav-item ">
+            <a class="nav-link <#if actNav == 1>active</#if>" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <#if actNav == 2>active</#if>" aria-current="page" href="/leaderboard">Leaderboards</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <#if actNav == 3>active</#if>" aria-current="page" href="/beatmaps">Beatmaps</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link <#if actNav == 4>active</#if>" aria-current="page" href="/clans">Clans</a>
+          </li>
+          <li class="nav-item dropdown ">
+            <a class="nav-link dropdown-toggle <#if actNav == 5>active</#if>" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Docs
+            </a>
+            <ul class="dropdown-menu mt-lg-2 rounded-top-0">
+              <#list docs as doc>
+                <li><a class="dropdown-item" href="/docs/${doc.route}">${doc.krz}</a></li>
+                </#list>
+            </ul>
+          </li>
+        </ul>
+        <div class="d-flex">
+            <div class="line-vert"></div>
+        </div>
+        <form class="d-flex" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search osuNoLimits" aria-label="Search">
+          <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+        <div class="d-flex">
+            <div class="line-vert"></div>
+        </div>
+
+        <div class="d-flex">
+            <a href="/login" class="btn btn-secondary mx-2">Login</a>
+            <a href="/register" class="btn btn-primary">Register</a>
+          
+        </div>
+
+      </div>
+    </div>
+  </nav>
+  

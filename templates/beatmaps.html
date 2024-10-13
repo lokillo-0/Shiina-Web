@@ -1,0 +1,162 @@
+<#include "assets/base.html">
+    <script>
+        function checkForArtist() {
+            artist = document.getElementById('artist');
+            if (artist.value.length > 0) {
+                selectParam('artist', artist.value);
+            } else {
+                removeParam('artist');
+            }
+        }
+
+        function checkForCreator() {
+            artist = document.getElementById('creator');
+            if (artist.value.length > 0) {
+                selectParam('creator', artist.value);
+
+            } else {
+                removeParam('creator');
+            }
+        }
+
+        
+    </script>
+    <div class="container-xxl">
+        <div class="card mt-4">
+            <div class="row w-100">
+                <div class="button-group col col-auto">
+                    <img src="/img/modes/osu.svg" class="sort-button <#if mode == 999>selected</#if>" value="0"
+                        onclick="selectParam('mode', 0)"></img>
+                    <img src="/img/modes/taiko.svg" class="sort-button <#if mode == 1>selected</#if>" value="1"
+                        onclick="selectParam('mode',1)"></img>
+                    <img src="/img/modes/catch.svg" class="sort-button <#if mode == 2>selected</#if>" value="2"
+                        onclick="selectParam('mode', 2)"></img>
+                    <img src="/img/modes/mania.svg" class="sort-button <#if mode == 3>selected</#if>" value="3"
+                        onclick="selectParam('mode', 3)"></img>
+                </div>
+                <div class="col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group my-auto" role="group" aria-label="Mixed example">
+                        <button type="button" onclick="selectParam('status', 999)"
+                            class="btn btn-<#if status == 999>primary<#else>secondary</#if>">No Filter</button>
+                        <button type="button" onclick="selectParam('status', 2)"
+                            class="btn btn-<#if status == 2>primary<#else>secondary</#if>">Ranked</button>
+                        <button type="button" onclick="selectParam('status', 1)"
+                            class="btn btn-<#if status == 1>primary<#else>secondary</#if>">Pending</button>
+                        <button type="button" onclick="selectParam('status', 3)"
+                            class="btn btn-<#if status == 3>primary<#else>secondary</#if>">Approved</button>
+                        <button type="button" onclick="selectParam('status', 5)"
+                            class="btn btn-<#if status == 5>primary<#else>secondary</#if>">Loved</button>
+                        <button type="button" onclick="selectParam('status', 4)"
+                            class="btn btn-<#if status == 4>primary<#else>secondary</#if>">Qualified</button>
+                    </div>
+
+                </div>
+                <div class="col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group my-auto input-group" role="group" aria-label="Mixed example">
+
+                        <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-user"></i></span>
+                        <input id="artist" onfocusout="checkForArtist()" type="text" class="form-control"
+                            value="<#if artist??>${artist}</#if>" placeholder="Artist" aria-label="Artist"
+                            aria-describedby="Artist">
+
+                    </div>
+
+                </div>
+                <div class="col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group my-auto input-group" role="group" aria-label="Mixed example">
+
+                        <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-user"></i></span>
+                        <input id="creator" onfocusout="checkForCreator()" type="text" class="form-control"
+                            value="<#if creator??>${creator}</#if>" placeholder="Creator" aria-label="Creator"
+                            aria-describedby="Creator">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">Found <span class="cyan">${entries}</span> entries</div>
+
+        <nav class="mt-4 d-flex justify-content-center" aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item <#if page == 1>disabled</#if>">
+                    <a class="page-link" href="#" onclick="selectParam('page', '${page - 1}')" aria-label="Previous">
+                        <span aria-hidden="true">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </span>
+                    </a>
+                </li>
+                <#assign maxPagesBtn=0>
+                    <#assign maxPages=entries / 100>
+                        <#list page-9..maxPages as pages>
+                            <#if (pages> 0)>
+                                <#assign maxPagesBtn=maxPagesBtn+1>
+
+                                    <#if maxPagesBtn==21>
+                                        <#break>
+                                    </#if>
+
+                                    <li class="page-item <#if page == pages>active</#if>"><a
+                                            onclick="selectParam('page', '${pages}')" href="#"
+                                            class="page-link">${pages}</a></li>
+                            </#if>
+                        </#list>
+                        <li class="page-item <#if (page == maxPages?floor)>disabled</#if>">
+                            <a class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </span>
+                            </a>
+                        </li>
+            </ul>
+        </nav>
+
+        <div class="row mt-4">
+            <#list beatmaps as beatmap>
+
+                <div class="col col-12 col-md-6 col-lg-4 mb-2">
+                    <div class="card beatmap-card">
+                        <img src="https://assets.ppy.sh/beatmaps/${beatmap.set_id?long?c}/covers/card.jpg"
+                            class="card-img-top" alt="Cover Image"
+                            onerror="this.onerror=null; this.src='https://osu.ppy.sh/assets/images/default-bg.7594e945.png';">
+                        <div class="card-body beatmap-card-body">
+                            <h5 class="card-title"><span
+                                    class="badge bg-danger">${convertStatusBack(beatmap.status)}</span> ${beatmap.title}
+                            </h5>
+                            <p class="card-text">
+                                <span class="badge bg-secondary mt-2"><i class="fa-solid fa-user"></i> Artist:
+                                    ${beatmap.artist}</span>
+                                <span class="badge bg-secondary mt-2"><i class="fa-solid fa-check"></i> Passes:
+                                    ${beatmap.passes}</span>
+                            </p>
+                            <div class="mb-3">
+                                <div class="row">
+                                    <div class="col col-auto">
+                                        <span style="font-size: 20px;"><i class="fa-solid fa-star"></i>
+                                            ${beatmap.diff}</span>
+                                    </div>
+                                    <div class="col col-auto">
+                                        <span style="font-size: 20px;"><i class="fa-solid fa-headphones"></i>
+                                            ${beatmap.bpm}</span>
+                                    </div>
+                                    <div class="col col-auto">
+                                        <span style="font-size: 20px;"><i class="fa-solid fa-play"></i>
+                                            ${beatmap.plays}</span>
+                                    </div>
+                                    <div class="col col-auto">
+                                        <img class="mode-icon" src="${convertModeIcon(beatmap.mode)}" alt="" srcset="">
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <a href="/beatmap/${beatmap.id}" class="btn btn-primary">View</a>
+                            <a href="https://osu.ppy.sh/beatmapsets/${beatmap.set_id?long?c}#${convertModeBack(beatmap.mode)}/${beatmap.id?long?c}"
+                                target="_blank" class="btn btn-pink">View on osu.ppy.sh</a>
+                        </div>
+                    </div>
+                </div>
+            </#list>
+        </div>
+    </div>
+
+    <#include "assets/footer.html">
