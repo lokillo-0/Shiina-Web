@@ -30,7 +30,6 @@ public class ShiinaRoute {
             if(user != null) {
                 request.loggedIn = true;
                 request.data.put("user", user);
-                App.log.info("User " + user.name + " is logged in");
             }
         }
         request.data.put("c", App.customization);

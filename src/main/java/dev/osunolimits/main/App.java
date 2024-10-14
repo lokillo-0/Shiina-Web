@@ -11,6 +11,7 @@ import dev.osunolimits.routes.get.Clans;
 import dev.osunolimits.routes.get.Home;
 import dev.osunolimits.routes.get.Leaderboard;
 import dev.osunolimits.routes.get.Login;
+import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.post.Logout;
 import io.github.cdimascio.dotenv.Dotenv;
 import redis.clients.jedis.JedisPooled;
@@ -48,6 +49,7 @@ public class App {
         WebServer.get("/login", new Login());
         WebServer.post("/login", new dev.osunolimits.routes.post.Login());
         WebServer.post("/logout", new Logout());
+        WebServer.notFound(new NotFound());
 
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();

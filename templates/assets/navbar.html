@@ -48,23 +48,23 @@
             </ul>
           </li>
         </ul>
-        <div class="d-flex">
+        <div class="d-none d-md-none d-lg-flex">
             <div class="line-vert shiina-border"></div>
         </div>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="Search osuNoLimits" aria-label="Search">
+        <form class="d-flex  my-2 my-lg-0" role="search">
+          <input class="form-control me-2" type="search" placeholder="Search ${c.serverName}" aria-label="Search">
           <button class="btn btn-primary" type="submit">Search</button>
         </form>
-        <div class="d-flex">
+        <div class="d-none d-md-none d-lg-flex">
             <div class="line-vert shiina-border"></div>
         </div>
 
-        <div class="d-flex">
+        <div class="d-flex mt-3 my-lg-0">
           <#if user??>
           <button class="btn btn-secondary dropdown-toggle" style="background-color: transparent; color: white; padding: 5px; padding-left: 10px; padding-right: 5px;" type="button" data-bs-toggle="dropdown" aria-expanded="false">
             <img class="me-2" src="${avatarServer}/${user.id}" alt="Profile Image" width="28" height="28">Marc
         </button>
-        <ul class="dropdown-menu dropdown-menu-end">
+        <ul class="dropdown-menu dropdown-menu-lg-end">
             <li><a class="dropdown-item" href="/u/${user.id}">Profil</a></li>
             <li><a class="dropdown-item" href="/settings">Profile Settings</a></li>
             <li><a class="dropdown-item" data-turbo="false" href="/admin/start">Admin Panel</a></li>
