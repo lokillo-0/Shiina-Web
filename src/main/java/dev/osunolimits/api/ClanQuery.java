@@ -1,6 +1,7 @@
 package dev.osunolimits.api;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,27 @@ public class ClanQuery {
         private double competitionValue;
     }
 
+    @Data
+    public class SingleClanResponse {
+        private int id;
+        private String name;
+        private String created;
+        private String tag;
+        private String ownerName;
+        private String ownerCountry;
+        private int ownerLastActivity;
+        private int owner;
+        private int members;
+        private double totalPP;
+        private double avgPP;
+        private double rankedScore;
+        private double acc;
+        private int totalPPRank;
+        private int avgPPRank;
+        private int rankedScoreRank;
+        private int accRank;
+    }
+
     public enum CompetitionType {
         TOTALPP,
         AVGPP,
@@ -46,6 +68,35 @@ public class ClanQuery {
     private final String GETCLAN_AVGPP = "SELECT c.*, (SELECT COUNT(*) FROM users u WHERE u.clan_id = c.id) AS memberCount, (SELECT COALESCE(AVG(s.pp), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS avgPP FROM clans c ORDER BY `avgPP` DESC LIMIT ? OFFSET ?;";
     private final String GETCLAN_RANKEDSCORE = "SELECT c.*, (SELECT COUNT(*) FROM users u WHERE u.clan_id = c.id) AS memberCount, (SELECT COALESCE(SUM(s.rscore), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS rankedScore FROM clans c ORDER BY `rankedScore` DESC LIMIT ? OFFSET ?;";
     private final String GETCLAN_ACC = "SELECT c.*, (SELECT COUNT(*) FROM users u WHERE u.clan_id = c.id) AS memberCount, (SELECT ROUND(AVG(s.acc), 2) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS acc FROM clans c ORDER BY `acc` DESC LIMIT ? OFFSET ?;";
+    private final String GETCLAN_SINGLE = "WITH ClanRanks AS (SELECT c.id, RANK() OVER (ORDER BY COALESCE(SUM(s.pp), 0) DESC) AS totalPPRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id), AvgPPRanks AS (SELECT c.id, RANK() OVER (ORDER BY COALESCE(AVG(s.pp), 0) DESC) AS avgPPRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id), RankedScoreRanks AS (SELECT c.id, RANK() OVER (ORDER BY COALESCE(SUM(s.rscore), 0) DESC) AS rankedScoreRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id), AccRanks AS (SELECT c.id, RANK() OVER (ORDER BY ROUND(AVG(s.acc), 2) DESC) AS accRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id) SELECT u.name AS `owner_name`, u.latest_activity AS `owner_online`, u.country AS `owner_country`,c.*, (SELECT COUNT(*) FROM users u WHERE u.clan_id = c.id) AS memberCount, (SELECT COALESCE(SUM(s.pp), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS totalPP, cr.totalPPRank, (SELECT COALESCE(AVG(s.pp), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS avgPP, apr.avgPPRank, (SELECT COALESCE(SUM(s.rscore), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS rankedScore, rsr.rankedScoreRank, (SELECT ROUND(AVG(s.acc), 2) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS acc, ar.accRank FROM clans c LEFT JOIN users u ON owner = u.id LEFT JOIN ClanRanks cr ON cr.id = c.id LEFT JOIN AvgPPRanks apr ON apr.id = c.id LEFT JOIN RankedScoreRanks rsr ON rsr.id = c.id LEFT JOIN AccRanks ar ON ar.id = c.id WHERE c.id = ?;";
+
+    public SingleClanResponse getClan(int mode, int id) throws SQLException {
+        if(mode > 8) return null;
+
+        ResultSet rs = mysql.Query(GETCLAN_SINGLE, String.valueOf(mode), String.valueOf(mode), String.valueOf(mode), String.valueOf(mode), String.valueOf(mode), String.valueOf(mode), String.valueOf(mode), String.valueOf(mode), String.valueOf(id));
+        if(!rs.next()) return null;
+
+        SingleClanResponse response = new SingleClanResponse();
+        response.setId(rs.getInt("id"));
+        response.setName(rs.getString("name"));
+        response.setTag(rs.getString("tag"));
+        response.setCreated(rs.getString("created_at"));
+        response.setOwnerName(rs.getString("owner_name"));
+        response.setOwnerLastActivity(rs.getInt("owner_online"));
+        response.setOwnerCountry(rs.getString("owner_country"));
+        response.setOwner(rs.getInt("owner"));
+        response.setMembers(rs.getInt("memberCount"));
+        response.setTotalPP(rs.getDouble("totalPP"));
+        response.setAvgPP(rs.getDouble("avgPP"));
+        response.setRankedScore(rs.getDouble("rankedScore"));
+        response.setAcc(rs.getDouble("acc"));
+        response.setTotalPPRank(rs.getInt("totalPPRank"));
+        response.setAvgPPRank(rs.getInt("avgPPRank"));
+        response.setRankedScoreRank(rs.getInt("rankedScoreRank"));
+        response.setAccRank(rs.getInt("accRank"));
+
+        return response;
+    }
 
     public List<ClanResponse> getClan(CompetitionType type, int mode, int limit, int offset) {
         List<ClanResponse> responses = new ArrayList<>();

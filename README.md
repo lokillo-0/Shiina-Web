@@ -12,13 +12,17 @@ The new version of Shiina for **bancho.py**
 - ✅ Leaderboards based on API
 - ✅ Country Leaderboards based on API
 - ✅ Homepage with statistics
-- ✅ Clans with some compatitive statistics
+- ✅ Clan Leaderboard with some compatitive statistics
+- ✅ Clan Page
+- ❌ Search
 - ❌ Authorization
 - ❌ Admin Panel
 - ❌ Beatmap Request
-- ❌ Clan Page
+
 - ❌ User Page
 - ❌ Profile Edit
+- ❌ Sitemap Generation
+- ❌ SEO
 - ❌ Donate
 - ❌ Password recovery
 
