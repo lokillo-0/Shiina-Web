@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import ch.qos.logback.classic.Logger;
+import dev.osunolimits.modules.ShiinaTemplateException;
 import dev.osunolimits.utils.OsuConverter;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateModelException;
@@ -42,7 +43,9 @@ public class WebServer extends Spark {
     public void ignite(String ip, int port, int updateDelay) {
         ipAddress(ip);
         port(port);
-
+        freemarkerCfg.setWhitespaceStripping(true);
+        freemarkerCfg.setTemplateExceptionHandler(new ShiinaTemplateException());
+        freemarkerCfg.setLogTemplateExceptions(false);
         try {
             freemarkerCfg.setDirectoryForTemplateLoading(new File("templates/"));
         } catch (IOException e) {

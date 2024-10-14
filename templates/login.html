@@ -2,14 +2,10 @@
 <#include "assets/base.html">
 <script>
     document.addEventListener("turbo:load", function () {
-
-       // Check if captcha turnstile is loaded div name is turnstile
         if (document.getElementById("turnstile")) {
-            //Check if turnstile is there and if it is loaded
             if (document.getElementById("turnstile").innerHTML.length == 0) {
                 console.log("Rendering Turnstile");
                 try {
-                 
                     turnstile.render("#turnstile", {
                     sitekey: "${turnstilePublic}",
                     callback: function (token) {
@@ -18,9 +14,6 @@
                 } catch (error) {
                     
                 }
-               
-
-    
             }
         }
     });
