@@ -1,12 +1,14 @@
 
 <#include "assets/base.html">
 <script>
-    document.addEventListener("turbo:load", function () {
+    var turnstileId = null;
+    var load = document.addEventListener("turbo:load", function () {
         if (document.getElementById("turnstile")) {
+            turnstile.ready(function () {
             if (document.getElementById("turnstile").innerHTML.length == 0) {
                 console.log("Rendering Turnstile");
                 try {
-                    turnstile.render("#turnstile", {
+                    turnstileId = turnstile.render("#turnstile", {
                     sitekey: "${turnstilePublic}",
                     callback: function (token) {
                     },
@@ -15,15 +17,22 @@
                     
                 }
             }
+        });
         }
     });
 
 
-    document.addEventListener("turbo:before-visit", function () {
-        if (document.getElementById("turnstile") != null && document.getElementById("turnstile").innerHTML.length != 0) {
-        turnstile.reset();
-        document.getElementById("turnstile").innerHTML = '';
+    var cache = document.addEventListener("turbo:before-cache", function () {
+        if(turnstileId != null && document.getElementById("turnstile")) {
+            if(document.getElementById("turnstile").innerHTML.length > 0) {
+                console.log("Removing Turnstile");
+                turnstile.remove(turnstileId);
+            }
         }
+
+        document.removeEventListener("turbo:load", load);
+        document.removeEventListener("turbo:before-cache", cache);
+        
     });
 </script>
     <div style="height: 80vh;"><div class="container h-100">
@@ -68,7 +77,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div id="turnstile"></div>
+                        <div id="turnstile" data-theme="${c.mode}"></div>
                         <div class="row my-2">
                             <div class="checkbox checkbox-primary">
                                 <input id="checkbox_remember" type="checkbox" name="remember">

@@ -21,10 +21,10 @@
 
         
     </script>
-    <div class="container">
+    <div class="container ">
         <div class="card mt-4">
-            <div class="row w-100">
-                <div class="button-group col col-auto">
+            <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+                <div class="my-2 my-lg-0 col col-auto">
                     <img src="/img/modes/osu.svg" class="sort-button <#if mode == 999>selected</#if>" value="0"
                         onclick="selectParam('mode', 0)"></img>
                     <img src="/img/modes/taiko.svg" class="sort-button <#if mode == 1>selected</#if>" value="1"
@@ -34,8 +34,8 @@
                     <img src="/img/modes/mania.svg" class="sort-button <#if mode == 3>selected</#if>" value="3"
                         onclick="selectParam('mode', 3)"></img>
                 </div>
-                <div class="col col-auto d-flex align-items-center justify-content-center ">
-                    <div class="btn-group my-auto" role="group" aria-label="Mixed example">
+                <div class="col col-12 col-md-auto my-2 my-lg-0 d-flex align-items-center justify-content-center ">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
                         <button type="button" onclick="selectParam('status', 999)"
                             class="btn btn-<#if status == 999>primary<#else>secondary</#if>">No Filter</button>
                         <button type="button" onclick="selectParam('status', 2)"
@@ -51,7 +51,7 @@
                     </div>
 
                 </div>
-                <div class="col col-auto d-flex align-items-center justify-content-center ">
+                <div class="my-2 my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
                     <div class="btn-group my-auto input-group" role="group" aria-label="Mixed example">
 
                         <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-user"></i></span>
@@ -62,7 +62,7 @@
                     </div>
 
                 </div>
-                <div class="col col-auto d-flex align-items-center justify-content-center ">
+                <div class="my-2 my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
                     <div class="btn-group my-auto input-group" role="group" aria-label="Mixed example">
 
                         <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-user"></i></span>
@@ -87,11 +87,11 @@
                 </li>
                 <#assign maxPagesBtn=0>
                     <#assign maxPages=entries / 100>
-                        <#list page-9..maxPages as pages>
+                        <#list page-3..maxPages + 1 as pages>
                             <#if (pages> 0)>
                                 <#assign maxPagesBtn=maxPagesBtn+1>
 
-                                    <#if maxPagesBtn==21>
+                                    <#if maxPagesBtn==8>
                                         <#break>
                                     </#if>
 
@@ -100,8 +100,8 @@
                                             class="page-link">${pages}</a></li>
                             </#if>
                         </#list>
-                        <li class="page-item <#if (page == maxPages?floor)>disabled</#if>">
-                            <a class="page-link" href="#" aria-label="Next">
+                        <li class="page-item <#if (page == maxPages?ceiling)>disabled</#if>">
+                            <a class="page-link" onclick="selectParam('page', '${page + 1}')" aria-label="Next">
                                 <span aria-hidden="true">
                                     <i class="fa-solid fa-arrow-right"></i>
                                 </span>
