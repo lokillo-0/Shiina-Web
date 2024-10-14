@@ -3,6 +3,8 @@ package dev.osunolimits.main;
 import java.io.File;
 import java.io.IOException;
 
+import org.slf4j.LoggerFactory;
+
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaTemplateException;
 import dev.osunolimits.utils.OsuConverter;
@@ -12,10 +14,7 @@ import spark.Spark;
 
 public class WebServer extends Spark {
 
-    private Logger logger = null;
-    public WebServer(Logger logger) {
-        this.logger = logger;
-    }
+    private final Logger LOG = (Logger) LoggerFactory.getLogger(WebServer.class);
 
     public static Configuration freemarkerCfg = new Configuration(Configuration.VERSION_2_3_23);
 
@@ -29,10 +28,10 @@ public class WebServer extends Spark {
 
     public void createDefaultDirectories() {
         if (new File("templates/").mkdirs()) {
-            logger.info("Created templates directory 'templates/'");
+            LOG.info("Created templates directory 'templates/'");
         }
         if (new File("static/").mkdirs()) {
-            logger.info("Created templates directory 'static/'");
+            LOG.info("Created templates directory 'static/'");
         }
     }
 
@@ -49,7 +48,7 @@ public class WebServer extends Spark {
         try {
             freemarkerCfg.setDirectoryForTemplateLoading(new File("templates/"));
         } catch (IOException e) {
-            logger.error("Failed to load templates directory", e);
+            LOG.error("Failed to load templates directory", e);
         }
         freemarkerCfg.setTemplateUpdateDelayMilliseconds(updateDelay);
         try {
@@ -60,11 +59,11 @@ public class WebServer extends Spark {
         after((req, res) -> {
             res.header("Server", "Shiina-Web");
             
-            logger.info("| Web | " + req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.url() + " | " + req.userAgent() + " | " + req.headers("Referer"));
+            LOG.info(req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.url() + " | " + req.userAgent() + " | " + req.headers("Referer"));
         });
         awaitInitialization();
 
-        logger.info("WebServer ignited on -> (" + ip + ":" + port + ")");
+        LOG.info("WebServer ignited on -> " +   ip + ":" + port + ")");
     }
 
 }

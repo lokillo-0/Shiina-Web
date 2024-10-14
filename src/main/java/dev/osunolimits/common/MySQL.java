@@ -8,10 +8,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import dev.osunolimits.main.App;
 import dev.osunolimits.utils.Validation;
 
 public final class MySQL {
+
+	private static Logger log = (Logger) LoggerFactory.getLogger(MySQL.class);
 
 	private final int COLUMN_WIDTH = 20;
 
@@ -119,7 +124,7 @@ public final class MySQL {
     
     private void logSQL(String message) {
         if(App.loggerEnv.get("MYSQL_LOG").equalsIgnoreCase("TRUE")) {
-            App.log.info(message);
+            log.info(message);
         }
     }
 }

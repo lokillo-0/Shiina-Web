@@ -38,7 +38,7 @@ public class App {
         init.initializeDatabase();
         init.initializeJedis();
         customization = init.initializeCustomizations();
-        webServer = new WebServer(log);
+        webServer = new WebServer();
         init.initializeWebServer(webServer);
 
         WebServer.get("/", new Home());

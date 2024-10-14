@@ -3,20 +3,20 @@ package dev.osunolimits.common;
 import java.sql.Connection;
 import java.sql.SQLException;
 
+import org.slf4j.LoggerFactory;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-import dev.osunolimits.main.App;
-
+import ch.qos.logback.classic.Logger;
 
 public class Database {
+    private static Logger log = (Logger) LoggerFactory.getLogger(Database.class);
     private HikariConfig hikariConfig;
     public static HikariDataSource dataSource;
     private int connectionTimeout;
     private int maximumPoolSize;
     public static int currentConnections;
-
-
 
     /**
      * Set the connection timeout value.
@@ -65,7 +65,8 @@ public class Database {
 
     /**
      * Set the default connection settings with default values.
-     * The default values are cachePrepStmts=true, prepStmtCacheSize=250, prepStmtCacheSqlLimit=2048, autoReconnect=true.
+     * The default values are cachePrepStmts=true, prepStmtCacheSize=250,
+     * prepStmtCacheSqlLimit=2048, autoReconnect=true.
      */
     public void setDefaultSettings() {
         hikariConfig.addDataSourceProperty("cachePrepStmts", true);
@@ -126,17 +127,16 @@ public class Database {
         hikariConfig.setUsername(user);
         hikariConfig.setPassword(password);
 
-            dataSource = new HikariDataSource(hikariConfig);
+        dataSource = new HikariDataSource(hikariConfig);
 
-            try (Connection connection = dataSource.getConnection()) {
-                App.log.info("Connected to Database (" + url + ")");
-                connection.close();
-            } catch (SQLException e) {
-                App.log.error("Error while connecting to MySQL database " + e.getMessage());
-            }
+        try (Connection connection = dataSource.getConnection()) {
+            log.info("Connected to Database (" + url + ")");
+            connection.close();
+        } catch (SQLException e) {
+            log.error("Error while connecting to MySQL database " + e.getMessage());
         }
-    
-    
+    }
+
     /**
      * Get a connection to the MySQL database.
      *
@@ -149,7 +149,7 @@ public class Database {
             Database.currentConnections++;
             return connection;
         } catch (SQLException e) {
-            App.log.error("Error while obtaining a connection from the pool.", e);
+            log.error("Error while obtaining a connection from the pool.", e);
             return null;
         }
     }

@@ -3,7 +3,7 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <charset>UTF-8</charset>
             <pattern>
-                %highlight(%-5level) %d{yyyy-MM-dd HH:mm:ss} %cyan(%logger{36}) - %msg%n%throwable
+                %highlight(%-5level) %yellow(%d{yyyy-MM-dd HH:mm:ss}) %cyan(%thread) %magenta(%logger{36}) - %msg%n%red(%throwable)
             </pattern>
         </encoder>
     </appender>

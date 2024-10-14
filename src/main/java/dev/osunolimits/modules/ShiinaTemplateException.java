@@ -2,16 +2,20 @@ package dev.osunolimits.modules;
 
 import java.io.Writer;
 
-import dev.osunolimits.main.App;
+import org.slf4j.LoggerFactory;
+
+import ch.qos.logback.classic.Logger;
 import freemarker.core.Environment;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
 
 public class ShiinaTemplateException implements TemplateExceptionHandler{
 
+     private final Logger LOG = (Logger) LoggerFactory.getLogger(ShiinaTemplateException.class);
+
     @Override
     public void handleTemplateException(TemplateException te, Environment env, Writer out) throws TemplateException {
-        App.log.error("Error processing template " + te.getTemplateSourceName() + " | " +  te.getMessage());
+        LOG.error("Error processing template " + te.getTemplateSourceName() + " | " +  te.getMessage());
     }
     
 }
