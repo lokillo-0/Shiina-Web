@@ -46,8 +46,8 @@
 
         <div class="card mt-4">
             <div class="px-auto row d-flex justify-content-center align-items-center">
-                <span onclick="removeParam('country')"
-                    class="col-auto country-selector pt-1 <#if !country??>active</#if>">No Country</span>
+                <button onclick="removeParam('country')"
+                    class="col-auto country-selector pt-1 btn <#if !country??> btn-primary active <#else>btn-secondary</#if>">No Country</button>
                 <#list countries as flag>
                     <#if flag_index==10>
                         <span data-bs-toggle="modal" data-bs-target="#country-modal" style="user-select: none;"
@@ -73,13 +73,13 @@
                         <div class="row">
                             <div class="col col-auto">
                                 <button onclick="selectParam('page', '${page - 1}')"
-                                    class="pagination-button bg-body m-2 <#if page ==1>disabled</#if>" <#if
+                                    class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
                                     page==1>disabled</#if>><i
                                         class="fa-solid fa-arrow-left pagination-icon"></i></button>
                             </div>
                             <div class="col ms-auto col-auto">
                                 <button onclick="selectParam('page', '${page + 1}')"
-                                    class="pagination-button bg-body m-2 <#if pageSize != 50>disabled</#if>" <#if
+                                    class="pagination-button bg-secondary m-2 <#if pageSize != 50>disabled</#if>" <#if
                                     pageSize !=50>disabled</#if>><i
                                         class="fa-solid fa-arrow-right pagination-icon"></i></button>
                             </div>
@@ -91,7 +91,10 @@
                                 <#list leaderboard as player>
 
                                     <li style="list-style: none;">
-                                        <div class="bg-body m-2 p-3 row" style="border-radius: 5px;">
+                                        <a href="/u/${player.playerId}" class="bg-secondary m-2 p-3 row leaderboard-panel style="border-radius: 5px;">
+                                            <span class="col-auto d-flex align-items-center"><img class="flag"
+                                                src="${avatarServer}/${player.playerId}"
+                                                alt=""></span>
                                             <span class="col-auto d-flex align-items-center"><img class="flag"
                                                     src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${player.country}.svg"
                                                     alt=""></span>
@@ -100,8 +103,8 @@
                                                 + leaderboardC}</span>
                                             <span class="col-auto d-flex align-items-center">
                                                 <#if player.clanTag?? && player.clanId??>
-                                                    <a href="/clan/${player.clanId}"
-                                                        class="badge clan-badge bg-primary">[${player.clanTag}]</a>
+                                                    <button  href="/clan/${player.clanId}"
+                                                        class="clan-badge btn btn-primary" >[${player.clanTag}]</button>
                                                 </#if>
                                                 <span class="ms-2">${player.name}</span>
                                             </span>
@@ -121,7 +124,7 @@
                                                         <#break>
                                                 </#switch>
                                             </div>
-                                        </div>
+                                        </a>
                                     </li>
                                     <#assign leaderboardC=leaderboardC + 1>
                                 </#list>
@@ -132,13 +135,13 @@
                             <div class="row">
                                 <div class="col col-auto">
                                     <button onclick="selectParam('page', '${page - 1}')"
-                                        class="pagination-button bg-body m-2 <#if page ==1>disabled</#if>" <#if
+                                        class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
                                         page==1>disabled</#if>><i
                                             class="fa-solid fa-arrow-left pagination-icon"></i></button>
                                 </div>
                                 <div class="col ms-auto col-auto">
                                     <button onclick="selectParam('page', '${page + 1}')"
-                                        class="pagination-button bg-body m-2 <#if pageSize != 50>disabled</#if>" <#if
+                                        class="pagination-button bg-secondary m-2 <#if pageSize != 50>disabled</#if>" <#if
                                         pageSize !=50>disabled</#if>><i
                                             class="fa-solid fa-arrow-right pagination-icon"></i></button>
                                 </div>

@@ -1,14 +1,17 @@
 package dev.osunolimits.main;
 
+import java.util.Map;
+
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
-import dev.osunolimits.routes.Beatmaps;
-import dev.osunolimits.routes.Clans;
-import dev.osunolimits.routes.Home;
-import dev.osunolimits.routes.Leaderboard;
-import dev.osunolimits.routes.Login;
+import dev.osunolimits.routes.get.Beatmaps;
+import dev.osunolimits.routes.get.Clans;
+import dev.osunolimits.routes.get.Home;
+import dev.osunolimits.routes.get.Leaderboard;
+import dev.osunolimits.routes.get.Login;
+import dev.osunolimits.routes.post.Logout;
 import io.github.cdimascio.dotenv.Dotenv;
 import redis.clients.jedis.JedisPooled;
 
@@ -20,7 +23,7 @@ public class App {
     public static final Logger log = (Logger) LoggerFactory.getLogger(App.class);
     public static final Dotenv loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
     public static final Dotenv env = Dotenv.configure().directory(".config/").load();
-
+    public static Map<String, Object> customization;
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
@@ -34,7 +37,7 @@ public class App {
         init.initializeJettyLogging();
         init.initializeDatabase();
         init.initializeJedis();
-
+        customization = init.initializeCustomizations();
         webServer = new WebServer(log);
         init.initializeWebServer(webServer);
 
@@ -43,6 +46,8 @@ public class App {
         WebServer.get("/leaderboard", new Leaderboard());
         WebServer.get("/clans", new Clans());
         WebServer.get("/login", new Login());
+        WebServer.post("/login", new dev.osunolimits.routes.post.Login());
+        WebServer.post("/logout", new Logout());
 
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();

@@ -1,4 +1,4 @@
-package dev.osunolimits.routes;
+package dev.osunolimits.routes.get;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;

@@ -52,7 +52,8 @@ public class WebServer extends Spark {
         }
         after((req, res) -> {
             res.header("Server", "Shiina-Web");
-            logger.info("| Web | " + req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.url() + " |");
+            
+            logger.info("| Web | " + req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.url() + " | " + req.userAgent() + " | " + req.headers("Referer"));
         });
         awaitInitialization();
 

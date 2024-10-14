@@ -1,3 +1,35 @@
+.clan-panel:hover, .clan-panel:focus {
+    cursor: pointer;
+    transform: translateX(20px);
+    transition: transform 0.2s;
+}
+
+.shiina-border {
+    border-color: var(--bs-action-border-color)!important;
+}
+
+.leaderboard-panel {
+    border-radius: 5px;
+    text-decoration: none;
+    color:white
+}
+
+.page-item  {
+    cursor: pointer;
+}
+
+.leaderboard-panel:hover, .leaderboard-panel:focus {
+    cursor: pointer;
+    transform: translateX(20px);
+    transition: transform 0.2s;
+}
+
+
+.clan-panel {
+    text-decoration: none;
+    color:white
+}
+
 .home-video {
     position: relative;
     /* Allow absolute positioning of overlay */
@@ -211,22 +243,27 @@
 }
 
 .country-selector {
+    border-color: var(--bs-action-border-color);
+    border: 1px solid var(--bs-action-border-color);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
     cursor: pointer;
     margin: 5px;
-    height: 30px;
+    height: 35px;
 
 }
 
 .country-selector:hover,
 .country-selector.active {
-    background-color: #61616167;
+    background-color: var(--bs-primary-hover-bg);
     border-radius: 5px;
     transition: 0.8s;
 }
 
 .pagination-button {
     padding: 20px;
-
+    border-radius: 5px;
     color: inherit;
     border: none;
     font: inherit;
@@ -235,14 +272,15 @@
 }
 
 .pagination-button:hover {
-    background-color: #36363667 !important;
+    background-color: var(--bs-secondary-color);
 
     transition: 0.8s;
 
 }
 
 .pagination-button.disabled {
-    background-color: rgba(87, 87, 87, 0.548) !important;
+    background-color: var(--bs-card-border-color);
+    opacity: 80%;
     user-select: none;
     cursor: not-allowed;
 
@@ -250,10 +288,86 @@
 
 .clan-badge {
     text-decoration: none;
+    padding: 1px;
+    font-size: small;
 }
 
 .leaderboard-list {
     margin: 0;
     padding: 0;
     list-style-type: none;
+}
+
+
+.sp-card-wrapper {
+  transform-style: preserve-3d;
+  opacity: 0.99;
+}
+
+.sp-card {
+
+  background: #191c29;
+  border-radius: 6px;
+
+}
+
+.sp-card:hover::after,
+.sp-card:hover::before {
+    background-image: linear-gradient(
+        var(--rotate),
+        #5ddcff,
+        #243e8b 43%,
+        #4e00c2
+      );
+  transition: background 4s;
+
+}
+
+.sp-card::before {
+  content: "";
+  position: absolute;
+  left: calc(0% - 5px);
+  top: calc(0% - 5px);
+  width: calc(100% + 10px);
+  height: calc(100% + 10px);
+  border-radius: 5px;
+  opacity: 50%;
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  animation: spin 2.5s linear infinite;
+  z-index: -1;
+}
+
+.sp-card::after {
+  content: "";
+  position: absolute;
+  left: calc(0% - 0px);
+  top: calc(0% - 0px);
+  width: calc(100% + 0px);
+  height: calc(100% + 0px);
+  transform: scale(0.2 0.2);
+  filter: blur(50px);
+  background-image: linear-gradient(
+    var(--rotate),
+    #5ddcff,
+    #3c67e3 43%,
+    #4e00c2
+  );
+  opacity: 1;
+  transition: opacity 2s;
+  animation: spin 2.5s linear infinite;
+  z-index: -1;
+}
+
+@keyframes spin {
+  0% {
+    --rotate: 0deg;
+  }
+  100% {
+    --rotate: 360deg;
+  }
 }

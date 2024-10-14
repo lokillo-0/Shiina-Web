@@ -18,3 +18,9 @@ The new version of Shiina for **bancho.py**
 - ❌ Profile Edit
 - ❌ Donate
 - ❌ Password recovery
+
+### **Technical:**
+
+- ✅ API Request Caching
+- ✅ Error/Request Logger
+- ✅ Easy customization with `config/custimization.yml`

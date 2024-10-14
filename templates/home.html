@@ -3,18 +3,14 @@
         
     </style>
     <div class="container desktop mt-2">
-        <div class="home-video">
-            <video src="video/onl.mp4" class="video" autoplay loop muted></video>
+        <div class="home-video mb-4">
+            <video src="${c.homeVideoUrl}" class="video" autoplay loop muted></video>
             <div class="overlay">
                 <div class="row">
                     <div class="col lol col-6" >
                         <div style="margin-top: 50px; margin-left: 50px; margin-right: 50px">
-
-
-                            <h1 class="display-4">OsuNoLimits</h1>
-                            <div class="lead-h">an unrestricted Sandbox, Cheating, and Testing Server where the
-                                possibilities are endless in-game. From embracing the serene realms of Relax Cheats to
-                                venturing into uncharted territories</div>
+                            <h1 class="display-4">${c.serverName}</h1>
+                            <div class="lead-h">${c.homeDescription}</div>
                                 <div class="badge-grp">
                                     <span class="home-badge"><span class="purple">${playerCount.total}</span> Registered</span>
                                     <span class="home-badge"><span class="green">${playerCount.online}</span> Online</span>
@@ -24,15 +20,20 @@
                                     <span class="home-badge"><span class="red">${customCount.plays}</span> Plays</span>
                                     <span class="home-badge"><span class="cyan">${customCount.beatmaps}</span> Beatmaps</span>
                                 </div>
-                            <a class="btn btn-primary" href="/register" role="button">Register</a>
-                            <a class="btn btn-discord" href="/discord" role="button">Discord</a>
-                            <a class="btn btn-secondary" href="/docs/connect">How to connect?</a>
+                                <div class="mt-2">
+                                    <#if !loggedIn>
+                                    <a class="btn btn-primary" href="/register" role="button">Register</a>
+                                </#if>
+                                <a class="btn btn-discord" href="${c.discordUrl}" role="button">Discord</a>
+                                <a class="btn btn-secondary" href="/docs/connect">How to connect?</a>
+                                </div>
+                           
                         </div>
 
 
                     </div>
                     <div class="col col-6 logo-col">
-                        <img src="img/biglogo.webp" class="d-flex justify-content-center mx-auto"
+                        <img src="${c.homeBigLogoUrl}" class="d-flex justify-content-center mx-auto"
                             style="width: inherit; max-width: 40%;" alt="">
                     </div>
 
@@ -40,83 +41,91 @@
             </div>
         </div>
     </div>
-    <section class="d-flex bg-body" style="margin-top: 20px;" id="feature-cards">
+    <section class="d-flex bg-body mb-4 mt-4" style="margin-top: 20px;" id="feature-cards">
         <div class="container d-flex justify-content-center">
             <div class="row align-items-center justify-content-center">
-                <div class="col-12 align-self-center">
+                <div class="col-10 align-self-center">
     
                     <div class="row">
                         <div class="col-12 col-lg-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mx-auto text-center">
-                                            <i class="fa fa-cloud-upload-alt fa-4x text-info"></i>
+                            <div class="sp-card-wrapper my-2">
+                                <div class="d-flex justify-content-center">
+                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="toast-header" style="min-height: 70px;">
+                                            <i class="fa fa-cloud-upload-alt text-primary me-2" style="opacity: 100%;"></i>
+                                          <strong class="me-auto">Free osu!Direct</strong>
+                                          
                                         </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 text-center">
-                                            <p class="text-info">Free osu!Direct</p>
-                                            <p class="text-secondary">osuNoLimits offers free osu!Direct with <a href="https://osu.direct">osu.direct</a>.</p>
+                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
+                                            <small>${c.serverName} offers free osu!Direct with <a href="https://osu.direct">osu.direct</a></small>
+                                        </div>
+                                      </div>
+                                </div>
+                               
+                            </div>
+                         
+                        </div>
+                        <div class="col-12 col-lg-3">
+                            <div class="sp-card-wrapper my-2">
+                                <div class="d-flex justify-content-center">
+                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="toast-header" style="min-height: 70px;">
+                                            <i class="fa fa-desktop text-primary me-2" style="opacity: 100%;"></i>
+                                          <strong class="me-auto">Performant frontend</strong>
+                                          
+                                        </div>
+                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
+                                            <small>${c.serverName} offers a stable and feature-rich website with the help of <a href="https://github.com/osu-NoLimits/Shiina-Web/tree/main">shiina</a></small>
+                                        </div>
+                                      </div>
+                                </div>
+                               
                             
-                                        </div>
-                                    </div>
-                                </div>
                             </div>
+                         
+                            
                         </div>
                         <div class="col-12 col-lg-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mx-auto text-center">
-                                            <i class="fa fa-desktop fa-4x text-warning"></i>
+                            <div class="sp-card-wrapper my-2">
+                                <div class="d-flex justify-content-center">
+                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="toast-header" style="min-height: 70px;">
+                                            <i class="fa fa-solid fa-people-robbery text-primary me-2" style="opacity: 100%;"></i>
+                                          <strong class="me-auto">Integrated clans</strong>
+                                          
                                         </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 text-center">
-                                            <p class="text-warning">Self-Made Frontend</p>
-                                            <p class="text-secondary">osuNoLimits runs Shiina a website that uses Java.</p>
-                                           
+                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
+                                            <small>${c.serverName} offers compatitive clan gameplay with statistics</small>
                                         </div>
-                                    </div>
+                                      </div>
                                 </div>
+                               
+                            
                             </div>
+                         
+                            
                         </div>
                         <div class="col-12 col-lg-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mx-auto text-center">
-                                            <i class="fa fa-envelope fa-4x text-success"></i>
+                            <div class="sp-card-wrapper my-2">
+                                <div class="d-flex justify-content-center">
+                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
+                                        <div class="toast-header" style="min-height: 70px;">
+                                            <i class="fa fa-solid fa-wrench fa-people-robbery text-primary me-2" style="opacity: 100%;"></i>
+                                          <strong class="me-auto">Maintained enviroment</strong>
+                                          
                                         </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 text-center">
-                                            <p class="text-success">Integrated Clans</p>
-                                            <p class="text-secondary">Group up with friends and compete with other players.</p>
-                                           
+                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
+                                            <small>Our Developers are working hard to improve our services</small>
                                         </div>
-                                    </div>
+                                      </div>
                                 </div>
+                               
+                            
                             </div>
+                         
+                            
                         </div>
-                        <div class="col-12 col-lg-3">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <div class="row">
-                                        <div class="col mx-auto text-center">
-                                            <i class="fa fa-wrench fa-4x text-danger"></i>
-                                        </div>
-                                    </div>
-                                    <div class="row mt-3">
-                                        <div class="col-12 text-center">
-                                            <p class="text-danger">Maintained Enviroments</p>
-                                            <p class="text-secondary">Our Developers are working hard to improve our services.</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
             </div>

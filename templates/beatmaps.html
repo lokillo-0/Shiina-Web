@@ -21,7 +21,7 @@
 
         
     </script>
-    <div class="container-xxl">
+    <div class="container">
         <div class="card mt-4">
             <div class="row w-100">
                 <div class="button-group col col-auto">
@@ -74,12 +74,12 @@
             </div>
         </div>
 
-        <div class="mt-4">Found <span class="cyan">${entries}</span> entries</div>
+        <div class="mt-2">Found <span class="text-primary">${entries}</span> entries</div>
 
-        <nav class="mt-4 d-flex justify-content-center" aria-label="Page navigation example">
+        <nav class="mt-2 d-flex justify-content-center" aria-label="Page navigation example">
             <ul class="pagination">
                 <li class="page-item <#if page == 1>disabled</#if>">
-                    <a class="page-link" href="#" onclick="selectParam('page', '${page - 1}')" aria-label="Previous">
+                    <a class="page-link" onclick="selectParam('page', '${page - 1}')" aria-label="Previous">
                         <span aria-hidden="true">
                             <i class="fa-solid fa-arrow-left"></i>
                         </span>
@@ -96,7 +96,7 @@
                                     </#if>
 
                                     <li class="page-item <#if page == pages>active</#if>"><a
-                                            onclick="selectParam('page', '${pages}')" href="#"
+                                            onclick="selectParam('page', '${pages}')" 
                                             class="page-link">${pages}</a></li>
                             </#if>
                         </#list>
@@ -117,7 +117,7 @@
                     <div class="card beatmap-card">
                         <img src="https://assets.ppy.sh/beatmaps/${beatmap.set_id?long?c}/covers/card.jpg"
                             class="card-img-top" alt="Cover Image"
-                            onerror="this.onerror=null; this.src='https://osu.ppy.sh/assets/images/default-bg.7594e945.png';">
+                            onerror="this.onerror=null; this.src='https://shiina.osunolimits.dev/img/nobeatmapicon.png';"  loading="lazy" >
                         <div class="card-body beatmap-card-body">
                             <h5 class="card-title"><span
                                     class="badge bg-danger">${convertStatusBack(beatmap.status)}</span> ${beatmap.title}

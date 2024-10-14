@@ -1,24 +1,45 @@
+
 <#include "assets/base.html">
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback" defer></script>
-    <script>
-    window.onloadTurnstileCallback = function () {
-        turnstile.render("#example-container", {
-          sitekey: "0x4AAAAAAAxWVLFtcczWi1P4",
-          callback: function (token) {
-            console.log("Token: " + token);
-          },
-        });
-      };
-    </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"></script>
+<script>
+    document.addEventListener("turbo:load", function () {
+
+       // Check if captcha turnstile is loaded div name is turnstile
+        if (document.getElementById("turnstile")) {
+            //Check if turnstile is there and if it is loaded
+            if (document.getElementById("turnstile").innerHTML.length == 0) {
+           
+             
+                turnstile.render("#turnstile", {
+                    sitekey: "${turnstilePublic}",
+                    callback: function (token) {
+                    },
+                });
+
+    
+            }
+        }
+    });
+
+
+</script>
+
     <div class="container h-100">
         <div class="row h-100 justify-content-center align-items-center">
             <div class="card mt-2 mb-2">
-                <h4 class="card-header">Login</h4>
+                <h4 class="card-header mt-2">Login</h4>
                 <div class="card-body">
-                    <div class="alert alert-danger" role="alert">
-                        Usuario y/o Contraseña incorrecta.
-                    </div>
-                    <form data-toggle="validator" role="form" method="post" action="#">
+                    <#if error??>
+                        <div class="alert alert-danger" role="alert">
+                            ${error}
+                        </div>
+                    </#if>
+                    <#if info??>
+                        <div class="alert alert-primary" role="alert">
+                            ${info}
+                        </div>
+                    </#if>
+                    <form data-turbo="false" data-toggle="validator" role="form" method="post" action="/login">
                         <input type="hidden" class="hide" id="csrf_token" name="csrf_token"
                             value="C8nPqbqTxzcML7Hw0jLRu41ry5b9a10a0e2bc2">
                         <div class="row">
@@ -27,7 +48,7 @@
                                     <label>Email or Username</label>
                                     <div class="input-group mb-3">
                                         <span class="input-group-text" id="add-on-1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="add-on-1">
+                                        <input name="input" required type="text" class="form-control" placeholder="Email or Username" aria-label="Email or Username" aria-describedby="add-on-1">
                                       </div>
                                 </div>
                             </div>
@@ -39,20 +60,20 @@
                                     <div class="input-group">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-lock"></i></span>
-                                            <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="add-on-1">
+                                            <input required name="password" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="add-on-1">
                                           </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAAxWVLFtcczWi1P4"></div>
-                        <div class="row">
+                        <div id="turnstile"></div>
+                        <div class="row my-2">
                             <div class="checkbox checkbox-primary">
                                 <input id="checkbox_remember" type="checkbox" name="remember">
                                 <label for="checkbox_remember">Remember me</label>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row my-2">
                             <div class="col-md-12">
                                 <input type="hidden" name="redirect" value="">
                                 <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login"

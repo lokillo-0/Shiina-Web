@@ -1,6 +1,12 @@
 package dev.osunolimits.main;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Map;
+
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
@@ -12,6 +18,8 @@ import redis.clients.jedis.JedisPooled;
 
 public class Init {
 
+    public final Logger log = (Logger) LoggerFactory.getLogger(Init.class);
+
     public void initializeWebServer(WebServer webServer) {
         webServer.setThreadPool(10, 20, 60000);
         webServer.createDefaultDirectories();
@@ -20,14 +28,27 @@ public class Init {
         try {
             webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("PORT")), 3000);
         } catch (Exception e) {
-            App.log.error("Failed to ignite WebServer", e);
+            log.error("Failed to ignite WebServer", e);
             return;
+        }
+    }
+
+    public Map<String, Object> initializeCustomizations() {
+        Yaml yaml = new Yaml();
+        try {
+            String yamlContent = Files.readString(Paths.get(".config/customization.yml"));
+            Map<String, Object> obj = yaml.load(yamlContent);
+            log.info("Loaded customization.yml");
+            return obj;
+        } catch (IOException e) {
+            log.error("Failed to load customization.yml", e);
+            return null;
         }
     }
 
     public void initializeRedisConfiguration() {
          if (App.loggerEnv.get("HIKARI_LOG").equalsIgnoreCase("FALSE")) {
-            App.log.info("Disabling HikariCP logging");
+            log.info("Disabling HikariCP logging");
             LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
             Logger hikariLogger = loggerContext.getLogger("com.zaxxer.hikari");
             hikariLogger.setLevel(ch.qos.logback.classic.Level.OFF);
@@ -36,7 +57,7 @@ public class Init {
 
     public void initializeJettyLogging() {
         if (App.loggerEnv.get("JETTY_LOG").equalsIgnoreCase("FALSE")) {
-            App.log.info("Disabling Jetty logging");
+            log.info("Disabling Jetty logging");
             LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
             
             // Disable logging for Jetty
@@ -61,7 +82,7 @@ public class Init {
             database.connectToMySQL(App.env.get("DBHOST"), App.env.get("DBUSER"), App.env.get("DBPASS"), App.env.get("DBNAME"),
                     ServerTimezone.UTC);
         } catch (Exception e) {
-            App.log.error("Failed to configure Database", e);
+            log.error("Failed to configure Database", e);
             return;
         }
     }
@@ -78,10 +99,12 @@ public class Init {
             .build();
 
             App.jedisPool = new JedisPooled(hostAndPort, clientConfig);
-            App.log.info("Connected to Redis: " + App.jedisPool.ping());
+          
+            
+            log.info("Connected to Redis: " + App.jedisPool.ping());
             
         } catch (Exception e) {
-            App.log.error("Failed to configure Jedis", e);
+            log.error("Failed to configure Jedis", e);
             return;
         }
     }

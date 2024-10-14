@@ -2,12 +2,35 @@ package dev.osunolimits.utils;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.SecureRandom;
+import java.util.Base64;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
 import dev.osunolimits.main.App;
+import lombok.Data;
 
 public class Auth {
+
+    @Data
+    public class User {
+        public Integer id;
+        public String name;
+        public String safe_name;
+        public String email;
+        public Integer priv;
+        public Integer created;
+    }
+
+    private static final SecureRandom secureRandom = new SecureRandom(); 
+    private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); 
+
+    public static String generateNewToken() {
+        byte[] randomBytes = new byte[24];
+        secureRandom.nextBytes(randomBytes);
+        return base64Encoder.encodeToString(randomBytes);
+    }
+
     public static Boolean checkPw(String raw, String bcrypt) {
         try {
             // Create an instance of the MD5 MessageDigest

@@ -1,58 +1,48 @@
-<footer class="section footer-dark pt-4">
+<footer class="section footer-dark bg-secondary text-body-secondary footer pt-4">
     <div class="container">
         <div class="row row-30">
             <div class="col-md-4 col-xl-5">
                 <div class="pr-xl-4">
                     <a class="brand" href="/">
-                        <img class="img-fluid footer-logo" src="/img/onl.png" alt="osuNoLimits Logo">
+                        <img class="img-fluid footer-logo" src="${c.logoUrl}" alt="osuNoLimits Logo">
                     </a>
                     <p class="footer-text mt-2">
-                        We believe in granting you the freedom to explore to your heart's content. While we reserve the
-                        right to introduce minor restrictions in the future, for now, let your imagination run wild.
+                       ${c.footerDescription}
                     </p>
                     <p class="rights mt-3">
-                        © <span class="copyright-year">2024</span> osuNoLimits.
-                        <br> Not affiliated with ppy.sh or osu!
+                        ${c.footerCopyright}
                     </p>
                 </div>
             </div>
-            <div class="col-md-4">
-                
+            <#list c.footer as footerItem>
+            <div class="col-md-${footerItem?size} ms-md-auto">
                 <ul class="nav-list mt-2">
-                    <li> <h5 class="footer-heading">Vote</h5></li>
-                    <li><a href="https://osu-server-list.com/server/osunolimits" class="footer-link">osu!ServerList</a></li>
-                    <li><a href="https://topg.org/osu-private-servers/server-662716/" class="footer-link">TopG</a></li>
+                    <li> <h5 class="footer-heading">${footerItem.title}</h5></li>
+                    <#list footerItem.items as item>
+                        <li><a href="${item.url}" class="footer-link">${item.name}</a></li>
+                    </#list>
                 </ul>
             </div>
-            <div class="col-md-4 col-xl-3">
-               
-                <ul class="nav-list mt-2">
-                    <li> <h5 class="footer-heading">Links</h5></li>
-                    <li><a href="/docs" class="footer-link">Docs</a></li>
-                    <li><a href="/" class="footer-link">Home</a></li>
-                    <li><a href="/beatmaps" class="footer-link">Beatmaps</a></li>
-                    <li><a href="/donate" class="footer-link">Donate</a></li>
-                </ul>
-            </div>
+            </#list>
+          
         </div>
     </div>
     </footer>
 </footer>
 <style>.footer-dark {
-    background-color: #191C20; /* Dark background for dark mode */
-    color: #f5f5f5; /* Light text color */
+
     padding-top: 2rem;
     padding-bottom: 2rem;
 }
 
 .footer-dark a {
-    color: #f5f5f5;
+
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
 .footer-dark a:hover {
-    color: var(--bs-blue); /* Accent color on hover */
+    color: var(--bs-primary); /* Accent color on hover */
 }
 
 .footer-logo {
@@ -71,7 +61,7 @@
 }
 
 .footer-heading {
-    color: var(--bs-blue); /* Accent color for headings */
+    color: var(--bs-primary); /* Accent color for headings */
     font-size: 1.1rem;
     font-weight: bold;
 }
@@ -83,7 +73,7 @@
 }
 
 .footer-link:hover {
-    color: var(--bs-blue); /* Accent color on hover */
+    color: var(--bs-primary); /* Accent color on hover */
 }
 
 .nav-list li {
@@ -107,7 +97,7 @@
     // add parameter to url and keep current parameters
     let url = new URL(window.location.href);
     url.searchParams.delete(param);
-    window.location.href = url;
+    Turbo.visit(url);
 }
 
 
@@ -121,7 +111,7 @@ function selectParam(param, value) {
     if (param == 'mode') {
         url.searchParams.delete('country');
     }
-    window.location.href = url;
+    Turbo.visit(url);
 }
 
 
