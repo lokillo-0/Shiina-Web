@@ -5,6 +5,8 @@ The new version of Shiina for **bancho.py**
 
 > ⚠️ Shiina-Web isn't ready to use in production
 
+> ⚠️ For building there is no official way yet
+
 ### **Feature List:**
 
 - ✅ Leaderboards based on API
@@ -23,5 +25,5 @@ The new version of Shiina for **bancho.py**
 ### **Technical:**
 
 - ✅ API Request Caching
-- ✅ Error/Request Logger
-- ✅ Easy customization with `config/custimization.yml`
+- ✅ Error/Request Logger with configutaion at `.config/logger.env`
+- ✅ Easy customization with `.config/customization.yml`
