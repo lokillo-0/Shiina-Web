@@ -31,3 +31,17 @@ footer:
         url: "https://discord.gg/8Zv6r3Q"
       - name: "GitHub"
         url: "https://github.com/osu-NoLimits/Shiina-Web/tree/main"
+
+timeline:
+  - year: "Mid 2024"
+    title: "osuNoLimits was founded"
+    description: "osuNoLimits was founded in Mid 2024."
+    icon: "fa fa-solid fa-play"
+    color: "primary"
+    textColor: "body-tertiary"
+  - year: "End 2024"
+    title: "osuNoLimits started shiina"
+    description: "osuNoLimits started developing shiina in End 2024."
+    icon: "fa fa-solid fa-gear"
+    color: "info"
+    textColor: "white"

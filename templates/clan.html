@@ -105,13 +105,13 @@
                                             <td>
                                                 Clan created:
                                             </td>
-                                            <td>${clan.created}</td>
+                                            <td data-timestamp-format="date" data-timestamp="${clan.created}">${clan.created}</td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 Owner last active
                                             </td>
-                                            <td>${clan.ownerLastActivity}</td>
+                                            <td data-timestamp-format="unix" data-timestamp="${clan.ownerLastActivity?replace(",", "")}">${clan.ownerLastActivity}</td>
                                         </tr>
                                         <tr>
                                             <td>
