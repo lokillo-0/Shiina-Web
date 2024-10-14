@@ -22,6 +22,10 @@ public class WebServer extends Spark {
         threadPool(maxThreads, minThreads, timeOutMillis);
     }
 
+    public void setTemplateUpdateDelay(int delay) {
+        freemarkerCfg.setTemplateUpdateDelayMilliseconds(delay);
+    }
+
     public void createDefaultDirectories() {
         if (new File("templates/").mkdirs()) {
             logger.info("Created templates directory 'templates/'");

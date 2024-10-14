@@ -1,6 +1,5 @@
 
 <#include "assets/base.html">
-<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onloadTurnstileCallback"></script>
 <script>
     document.addEventListener("turbo:load", function () {
 
@@ -8,13 +7,18 @@
         if (document.getElementById("turnstile")) {
             //Check if turnstile is there and if it is loaded
             if (document.getElementById("turnstile").innerHTML.length == 0) {
-           
-             
-                turnstile.render("#turnstile", {
+                console.log("Rendering Turnstile");
+                try {
+                 
+                    turnstile.render("#turnstile", {
                     sitekey: "${turnstilePublic}",
                     callback: function (token) {
                     },
                 });
+                } catch (error) {
+                    
+                }
+               
 
     
             }
@@ -22,6 +26,12 @@
     });
 
 
+    document.addEventListener("turbo:before-visit", function () {
+        if (document.getElementById("turnstile") != null && document.getElementById("turnstile").innerHTML.length != 0) {
+        turnstile.reset();
+        document.getElementById("turnstile").innerHTML = '';
+        }
+    });
 </script>
 
     <div class="container h-100">

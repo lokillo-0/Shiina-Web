@@ -311,13 +311,15 @@
 
 }
 
+
+
 .sp-card:hover::after,
 .sp-card:hover::before {
     background-image: linear-gradient(
         var(--rotate),
-        #5ddcff,
-        #243e8b 43%,
-        #4e00c2
+        hsla(var(--bs-primary-hsl)),
+        var(--bs-primary-700),
+        var(--bs-primary-900)
       );
   transition: background 4s;
 
@@ -334,13 +336,15 @@
   opacity: 50%;
   background-image: linear-gradient(
     var(--rotate),
-    #5ddcff,
-    #3c67e3 43%,
-    #4e00c2
+    hsla(var(--bs-primary-hsl)),
+    var(--bs-primary-700),
+    var(--bs-primary-900)
   );
   animation: spin 2.5s linear infinite;
   z-index: -1;
 }
+
+
 
 .sp-card::after {
   content: "";
@@ -353,9 +357,9 @@
   filter: blur(50px);
   background-image: linear-gradient(
     var(--rotate),
-    #5ddcff,
-    #3c67e3 43%,
-    #4e00c2
+    hsla(var(--bs-primary-hsl)),
+    var(--bs-primary-700),
+    var(--bs-primary-900)
   );
   opacity: 1;
   transition: opacity 2s;

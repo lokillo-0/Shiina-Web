@@ -42,7 +42,7 @@
 }
 
 .footer-dark a:hover {
-    color: var(--bs-primary); /* Accent color on hover */
+    color: var(--bs-primary-600); /* Accent color on hover */
 }
 
 .footer-logo {
@@ -61,7 +61,7 @@
 }
 
 .footer-heading {
-    color: var(--bs-primary); /* Accent color for headings */
+    color: var(--bs-primary-600); /* Accent color for headings */
     font-size: 1.1rem;
     font-weight: bold;
 }
@@ -73,7 +73,7 @@
 }
 
 .footer-link:hover {
-    color: var(--bs-primary); /* Accent color on hover */
+    color: var(--bs-primary-600); /* Accent color on hover */
 }
 
 .nav-list li {
@@ -93,7 +93,8 @@
 }
 </style>
 
-<script>function removeParam(param) {
+<script>
+function removeParam(param) {
     // add parameter to url and keep current parameters
     let url = new URL(window.location.href);
     url.searchParams.delete(param);

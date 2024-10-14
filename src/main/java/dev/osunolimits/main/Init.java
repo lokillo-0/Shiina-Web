@@ -21,9 +21,20 @@ public class Init {
     public final Logger log = (Logger) LoggerFactory.getLogger(Init.class);
 
     public void initializeWebServer(WebServer webServer) {
-        webServer.setThreadPool(10, 20, 60000);
+        try {
+            webServer.setThreadPool(Integer.parseInt(App.env.get("MIN_THREADS")), Integer.parseInt(App.env.get("MAX_THREAS")), Integer.parseInt(App.env.get("TIMEOUT_MS")));
+        } catch (Exception e) {
+            log.warn("Failed to set WebServer Thread Configuration");
+        }
+        
         webServer.createDefaultDirectories();
         webServer.setDefaultDirectories();
+        try {
+            webServer.setTemplateUpdateDelay(Integer.parseInt(App.env.get("TEMPLATE_UPDATE_DELAY")));
+        } catch (Exception e) {
+            log.warn("Failed to set Template Update Delay (Caching)");
+        }
+        
         
         try {
             webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("PORT")), 3000);
