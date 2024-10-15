@@ -44,7 +44,7 @@ public class Clan extends Shiina {
 
         shiina.data.put("clan", response);
         shiina.data.put("members", clanQuery.getMembers(id));
-        
+        shiina.data.put("activity", clanQuery.getClanActivity(id, mode));
         return renderTemplate("clan.html", shiina, res, req);
     }
     

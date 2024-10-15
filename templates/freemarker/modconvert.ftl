@@ -1,0 +1,1 @@
+<span class="fw-bold"><#list passedMods as mod><#if mod?index == 0>+ ${mod}<#else>, ${mod}</#if></#list></span>

@@ -42,13 +42,13 @@ public class Login extends Shiina {
                             "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
 
         if(input == null || input.isEmpty()) {
-            shiina.data.put("error", "Invalid Mail or Username");
+            shiina.data.put("error", "Invalid (Username/Mail) or Password");
             return renderTemplate("login.html", shiina, res, req);
         }
 
         String password = req.queryParams("password");
         if(password == null || password.isEmpty()) {
-            shiina.data.put("error", "Invalid Password");
+            shiina.data.put("error", "Invalid (Username/Mail) or Password");
             return renderTemplate("login.html", shiina, res, req);
         }
         boolean rememberMe = false;
@@ -74,13 +74,13 @@ public class Login extends Shiina {
 
         ResultSet validationRs = shiina.mysql.Query(selectSql, input);
         if(!validationRs.next()) {
-            shiina.data.put("error", "Invalid Mail or Password");
+            shiina.data.put("error", "Invalid (Username/Mail) or Password");
             return renderTemplate("login.html", shiina, res, req);
         }
         String pwBcrypt = validationRs.getString("pw_bcrypt");
 
         if(!Auth.checkPw(password, pwBcrypt)) {
-            shiina.data.put("error", "Invalid Mail or Password");
+            shiina.data.put("error", "Invalid (Username/Mail) or Password");
             return renderTemplate("login.html", shiina, res, req);
         }
 

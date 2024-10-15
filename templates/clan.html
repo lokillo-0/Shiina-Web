@@ -35,7 +35,7 @@
                         </h2>
                     </div>
                     <div class="col col-12 col-md-6">
-                        <a href="/u/391" class="bg-secondary m-2 p-3 row leaderboard-panel style=" border-radius:=""
+                        <a href="/u/${clan.owner}" class="bg-secondary m-2 p-3 row leaderboard-panel style=" border-radius:=""
                             5px;"="">
                             <span class="m-1 m-sm-0 col-auto d-flex align-items-center"><img class="flag"
                                     src="https://a.osunolimits.dev/${clan.owner}" alt=""></span>
@@ -153,7 +153,7 @@
 
                 <div class="row" id="leaderboard">
                     <#list members as member>
-                        <div class="col col-12 col-md-6 member-entry <#if (member?index >= 6)> d-none</#if>">
+                        <div class="col col-12 col-md-6 member-entry <#if (member?index >= 4)> d-none</#if>">
                             <a href="/u/${member.id}" class="bg-secondary m-2 p-3 row leaderboard-panel"
                                 style="border-radius: 5px;">
                                 <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
@@ -174,65 +174,50 @@
                     </#list>
                 </div>
 
-                <#if (members?size> 6)>
-                    <div class="text-center mt-3">
+                <#if (members?size> 4)>
+                    <div class="text-center mt-4">
                         <button id="loadMoreBtn" class="btn btn-primary">Load More</button>
                     </div>
                 </#if>
-                <input type="hidden" id="currentCount" value="6">
+                <input type="hidden" id="currentCount" value="4">
                 <input type="hidden" id="totalMembers" value="${members?size}">
 
-                <script>
-                    var loadMoreBtn;
-                    var clanLoadBtn;
-
-                    function loadMoreHandler() {
-                        let currentCount = parseInt(document.getElementById('currentCount').value, 10);
-                        const totalMembers = parseInt(document.getElementById('totalMembers').value, 10);
-
-                        const hiddenEntries = document.querySelectorAll('.member-entry.d-none');
-                        const limit = Math.min(hiddenEntries.length, 6);
-
-                        for (let i = 0; i < limit; i++) {
-                            hiddenEntries[i].classList.remove('d-none');
-                        }
-
-                        currentCount += limit;
-                        document.getElementById('currentCount').value = currentCount;
-
-                        if (currentCount >= totalMembers) {
-                            loadMoreBtn.style.display = 'none';
-                        }
-                    }
-
-                    var clanLeaderboardLoad = function () {
-                        loadMoreBtn = document.getElementById('loadMoreBtn');
-
-                        // Check if the loadMoreBtn element exists
-                        if (!loadMoreBtn) {
-                            return; // Exit if button is not present in the DOM
-                        }
-
-                        if (clanLoadBtn == undefined) {
-                            clanLoadBtn = loadMoreBtn.addEventListener('click', loadMoreHandler);
-                        }
-                    };
-
-                    var clanLeaderboardUnload = function () {
-                        if (loadMoreBtn != undefined && clanLoadBtn != undefined) {
-                            loadMoreBtn.removeEventListener('click', loadMoreHandler);
-                        }
-
-                        document.removeEventListener('turbo:load', clanLeaderboardLoad);
-                        document.removeEventListener('turbo:before-cache', clanLeaderboardUnload);
-
-                        loadMoreBtn = undefined;
-                        clanLoadBtn = undefined;
-                    };
-
-                    document.addEventListener('turbo:load', clanLeaderboardLoad);
-                    document.addEventListener('turbo:before-cache', clanLeaderboardUnload);
-                </script>
+                <div class="row my-4" id="activity">
+                    <#list activity as act>
+                        <div class="col col-12 col-md-6 act-entry <#if (act?index >= 4)> d-none</#if> d-flex flex-column mb-4"> <!-- Flex column with bottom margin -->
+                            <div class="row p-2 align-items-center">
+                                <div class="col-auto">
+                                    <img class="flag" src="https://a.osunolimits.dev/${act.id}" alt="">
+                                </div>
+                                <div class="col-auto d-flex align-items-center">
+                                    <span class="h6">${act.name}</span>
+                                    <small class="ms-2" data-timestamp-format="date" data-timestamp="${act.playTime}">${act.playTime}</small>
+                                </div>
+                            </div>
+                            <div class="bg-secondary p-3 leaderboard-panel d-flex flex-grow-1" style="border-radius: 5px;">
+                                <div class="d-block d-lg-flex flex-grow-1"> <!-- Ensures this div takes available height -->
+                                    <div class="col-12 col-lg-5 d-flex justify-content-center">
+                                        <img class="img-fluid rounded-2" src="https://assets.ppy.sh/beatmaps/${act.set_id?c}/covers/card.jpg" alt="">
+                                    </div>
+                                    <div class="col-12 d-flex mt-2 mt-lg-0 col-lg-7 mx-2 d-flex flex-column justify-content-start justify-content-sm-between"> <!-- Added flex column -->
+                                        <#assign passedMods = act.mods>
+                                        <span class="ms-2 text-wrap">-${act.mapFilename?replace(".osu", "")} <#include "/freemarker/modconvert.ftl"></span>
+                                        <p class="fs-5 ms-2">${act.pp}pp</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </#list>
+                </div>
+                <input type="hidden" id="currentCountAct" value="4">
+                <input type="hidden" id="totalMembersAct" value="${activity?size}">
+                
+                <#if (activity?size> 4)>
+                    <div class="text-center mt-4">
+                        <button id="loadMoreBtnAct" class="btn btn-primary">Load More</button>
+                    </div>
+                </#if>
+          
 
             </div>
         </div>
@@ -242,3 +227,74 @@
     </div>
 
     <#include "assets/footer.html">
+    <script>
+        var loadMoreBtn = document.getElementById('loadMoreBtn');
+        var loadMoreBtnAct = document.getElementById('loadMoreBtnAct');
+        
+        // Variables to track the bound event listeners
+        var loadMoreBtnHandler = null;
+        var loadMoreBtnActHandler = null;
+    
+        function loadMoreHandler(isActivity) {
+            let currentCountName = isActivity ? 'currentCountAct' : 'currentCount';
+            let totalMembersName = isActivity ? 'totalMembersAct' : 'totalMembers';
+            let entryName = isActivity ? 'act' : 'member';
+    
+            let currentCount = parseInt(document.getElementById(currentCountName).value, 10);
+            let totalMembers = parseInt(document.getElementById(totalMembersName).value, 10);
+    
+            // Find the hidden entries (those with the class 'd-none')
+            const hiddenEntries = document.querySelectorAll('.' + entryName + '-entry.d-none');
+            const limit = Math.min(hiddenEntries.length, 4);  // Show up to 4 entries at a time
+    
+            for (let i = 0; i < limit; i++) {
+                hiddenEntries[i].classList.remove('d-none');
+            }
+    
+            currentCount += limit;
+            document.getElementById(currentCountName).value = currentCount;
+    
+            // Hide the button if all entries are visible
+            if (currentCount >= totalMembers || hiddenEntries.length === 0) {
+                if (isActivity) {
+                    loadMoreBtnAct.style.display = 'none';  // Hide the activity button
+                } else {
+                    loadMoreBtn.style.display = 'none';  // Hide the member button
+                }
+            }
+        }
+    
+        function initLoadMoreButtons() {
+            cleanupLoadMoreButtons();  // Ensure any previous listeners are removed before adding new ones
+    
+            // Bind the event listeners and store their references
+            if (loadMoreBtn) {
+                loadMoreBtnHandler = () => loadMoreHandler(false);
+                loadMoreBtn.addEventListener('click', loadMoreBtnHandler);
+            }
+    
+            if (loadMoreBtnAct) {
+                loadMoreBtnActHandler = () => loadMoreHandler(true);
+                loadMoreBtnAct.addEventListener('click', loadMoreBtnActHandler);
+            }
+        }
+    
+        function cleanupLoadMoreButtons() {
+            // Remove the event listeners using the stored references
+            if (loadMoreBtn && loadMoreBtnHandler) {
+                loadMoreBtn.removeEventListener('click', loadMoreBtnHandler);
+                loadMoreBtnHandler = null;
+            }
+    
+            if (loadMoreBtnAct && loadMoreBtnActHandler) {
+                loadMoreBtnAct.removeEventListener('click', loadMoreBtnActHandler);
+                loadMoreBtnActHandler = null;
+            }
+        }
+    
+        // Register Turbo navigation events
+        document.addEventListener('turbo:load', initLoadMoreButtons);
+        document.addEventListener('turbo:before-cache', cleanupLoadMoreButtons);
+    </script>
+    
+    
