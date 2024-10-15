@@ -93,28 +93,3 @@
     list-style: none;
 }
 </style>
-
-<script>
-function removeParam(param) {
-    // add parameter to url and keep current parameters
-    let url = new URL(window.location.href);
-    url.searchParams.delete(param);
-    Turbo.visit(url);
-}
-
-
-function selectParam(param, value) {
-    // add parameter to url and keep current parameters
-    let url = new URL(window.location.href);
-    url.searchParams.set(param, value);
-    if (param != 'page' || param == 'country') {
-        url.searchParams.set('page', 1);
-    }
-    if (param == 'mode') {
-        url.searchParams.delete('country');
-    }
-    Turbo.visit(url);
-}
-
-
-</script>

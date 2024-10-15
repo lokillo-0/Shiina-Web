@@ -4,19 +4,19 @@
         <div class="card mt-4">
             <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
                 <#include "/freemarker/selector.ftl">
-                <div
-                    class="my-2 col-12 col-md-auto my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
-                    <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
-                        <button type="button"
-                            onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
-                            class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
-                            <#if (mode==3)>disabled</#if>>Relax</button>
-                        <button type="button" onclick="selectParam('mode', '8')"
-                            class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4 &&
-                            mode !=8)>disabled</#if>>AutoPilot</button>
-                    </div>
+                    <div
+                        class="my-2 col-12 col-md-auto my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
+                        <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                            <button type="button"
+                                onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
+                                class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
+                                <#if (mode==3)>disabled</#if>>Relax</button>
+                            <button type="button" onclick="selectParam('mode', '8')"
+                                class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4
+                                && mode !=8)>disabled</#if>>AutoPilot</button>
+                        </div>
 
-                </div>
+                    </div>
 
             </div>
         </div>
@@ -95,13 +95,16 @@
                                             <td>
                                                 Clan created:
                                             </td>
-                                            <td data-timestamp-format="date" data-timestamp="${clan.created}">${clan.created}</td>
+                                            <td data-timestamp-format="date" data-timestamp="${clan.created}">
+                                                ${clan.created}</td>
                                         </tr>
                                         <tr>
                                             <td>
                                                 Owner last active
                                             </td>
-                                            <td data-timestamp-format="unix" data-timestamp="${clan.ownerLastActivity?replace(",", "")}">${clan.ownerLastActivity}</td>
+                                            <td data-timestamp-format="unix"
+                                                data-timestamp="${clan.ownerLastActivity?c}">
+                                                ${clan.ownerLastActivity?c}</td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -148,6 +151,88 @@
 
                 </div>
 
+                <div class="row" id="leaderboard">
+                    <#list members as member>
+                        <div class="col col-12 col-md-6 member-entry <#if (member?index >= 6)> d-none</#if>">
+                            <a href="/u/${member.id}" class="bg-secondary m-2 p-3 row leaderboard-panel"
+                                style="border-radius: 5px;">
+                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
+                                    <img class="flag" src="https://a.osunolimits.dev/${member.id}" alt="">
+                                </span>
+                                <span class="m-1 m-sm-0 col-auto d-none d-lg-flex align-items-center">
+                                    <img class="flag"
+                                        src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${member.country}.svg"
+                                        alt="">
+                                </span>
+                                <span class="m-1 m-sm-0 col-auto"
+                                    style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);"></span>
+                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
+                                    <span class="ms-2">-${member.name}</span>
+                                </span>
+                            </a>
+                        </div>
+                    </#list>
+                </div>
+
+                <#if (members?size> 6)>
+                    <div class="text-center mt-3">
+                        <button id="loadMoreBtn" class="btn btn-primary">Load More</button>
+                    </div>
+                </#if>
+                <input type="hidden" id="currentCount" value="6">
+                <input type="hidden" id="totalMembers" value="${members?size}">
+
+                <script>
+                    var loadMoreBtn;
+                    var clanLoadBtn;
+
+                    function loadMoreHandler() {
+                        let currentCount = parseInt(document.getElementById('currentCount').value, 10);
+                        const totalMembers = parseInt(document.getElementById('totalMembers').value, 10);
+
+                        const hiddenEntries = document.querySelectorAll('.member-entry.d-none');
+                        const limit = Math.min(hiddenEntries.length, 6);
+
+                        for (let i = 0; i < limit; i++) {
+                            hiddenEntries[i].classList.remove('d-none');
+                        }
+
+                        currentCount += limit;
+                        document.getElementById('currentCount').value = currentCount;
+
+                        if (currentCount >= totalMembers) {
+                            loadMoreBtn.style.display = 'none';
+                        }
+                    }
+
+                    var clanLeaderboardLoad = function () {
+                        loadMoreBtn = document.getElementById('loadMoreBtn');
+
+                        // Check if the loadMoreBtn element exists
+                        if (!loadMoreBtn) {
+                            return; // Exit if button is not present in the DOM
+                        }
+
+                        if (clanLoadBtn == undefined) {
+                            clanLoadBtn = loadMoreBtn.addEventListener('click', loadMoreHandler);
+                        }
+                    };
+
+                    var clanLeaderboardUnload = function () {
+                        if (loadMoreBtn != undefined && clanLoadBtn != undefined) {
+                            loadMoreBtn.removeEventListener('click', loadMoreHandler);
+                        }
+
+                        document.removeEventListener('turbo:load', clanLeaderboardLoad);
+                        document.removeEventListener('turbo:before-cache', clanLeaderboardUnload);
+
+                        loadMoreBtn = undefined;
+                        clanLoadBtn = undefined;
+                    };
+
+                    document.addEventListener('turbo:load', clanLeaderboardLoad);
+                    document.addEventListener('turbo:before-cache', clanLeaderboardUnload);
+                </script>
 
             </div>
         </div>

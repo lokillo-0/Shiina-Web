@@ -17,14 +17,12 @@ unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function() {
 function timeUntil(dateInput, unix) {
     let inputDate;
     if(unix) {
-        console.log('unix');
         inputDate = new Date(dateInput * 1000);
     }else {
         inputDate = new Date(dateInput.replace(' ', 'T') + 'Z');
     }
     
     const currentDate = new Date();
-    console.log(inputDate)
     const differenceInSeconds = Math.floor((inputDate - currentDate) / 1000);
     
     const isPast = differenceInSeconds < 0;
@@ -51,4 +49,23 @@ function timeUntil(dateInput, unix) {
     }
 
     return isPast ? result.trim() + ' ago' : result.trim() + ' from now';
+}
+
+function removeParam(param) {
+    let url = new URL(window.location.href);
+    url.searchParams.delete(param);
+    Turbo.visit(url);
+}
+
+
+function selectParam(param, value) {
+    let url = new URL(window.location.href);
+    url.searchParams.set(param, value);
+    if (param != 'page' || param == 'country') {
+        url.searchParams.set('page', 1);
+    }
+    if (param == 'mode') {
+        url.searchParams.delete('country');
+    }
+    Turbo.visit(url);
 }
