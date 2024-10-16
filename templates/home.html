@@ -3,12 +3,12 @@
         
     </style>
     <div style="min-height: 600px;" class="container desktop my-5">
-        <div style="min-height: 600px;" class="home-video mb-4">
+        <div style="min-height: 600px;" class="home-video d-flex flex-grow-1 mb-4">
 
-            <div id="spinner" class="spinner-grow position-fixed" role="status">
+            <div id="spinner" class="spinner-grow position-absolute" role="status">
                 <span style="left: 50%; right: 50%; z-index: 200;" class="visually-hidden">Loading...</span>
             </div>
-                <video style="object-fit: cover; min-height: 600px;" src="${c.homeVideoUrl}" id="video"  class="video lazy-video" autoplay loop muted></video>
+                <video style="object-fit: cover; height: 600px;" src="${c.homeVideoUrl}" id="video" class="video lazy-video" autoplay loop muted></video>
          
             <div class="overlay">
                 <div class="row">
@@ -46,221 +46,129 @@
             </div>
         </div>
     </div>
-    <section class="d-flex bg-body my-5" style="margin-top: 20px;" id="feature-cards">
-        <div class="container d-flex justify-content-center">
-            <div class="row align-items-center justify-content-center">
-                <div class="col-10 align-self-center">
-    
-                    <div class="row">
-                        <div class="col-12 col-lg-3">
-                            <div class="sp-card-wrapper my-2">
-                                <div class="d-flex justify-content-center">
-                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="toast-header" style="min-height: 70px;">
-                                            <i class="fa fa-cloud-upload-alt text-primary me-2" style="opacity: 100%;"></i>
-                                          <strong class="me-auto">Free osu!Direct</strong>
-                                          
-                                        </div>
-                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
-                                            <small>${c.serverName} offers free osu!Direct with <a href="https://osu.direct">osu.direct</a></small>
-                                        </div>
-                                      </div>
-                                </div>
-                               
-                            </div>
-                         
+    <section class="d-flex bg-body my-5" id="feature-cards" style="margin-top: 20px;">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-12 col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm h-100 bg-secondary text-body rounded-3">
+                        <div class="card-body d-flex flex-column align-items-center py-4">
+                            <i class="fa fa-cloud-upload-alt fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title mb-3">Free osu!Direct</h5>
+                            <p class="card-text mb-0">${c.serverName} offers free osu!Direct with <a href="https://osu.direct" class="text-decoration-none text-primary">osu.direct</a></p>
                         </div>
-                        <div class="col-12 col-lg-3">
-                            <div class="sp-card-wrapper my-2">
-                                <div class="d-flex justify-content-center">
-                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="toast-header" style="min-height: 70px;">
-                                            <i class="fa fa-desktop text-primary me-2" style="opacity: 100%;"></i>
-                                          <strong class="me-auto">Performant frontend</strong>
-                                          
-                                        </div>
-                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
-                                            <small>${c.serverName} offers a stable and feature-rich website with the help of <a href="https://github.com/osu-NoLimits/Shiina-Web/tree/main">shiina</a></small>
-                                        </div>
-                                      </div>
-                                </div>
-                               
-                            
-                            </div>
-                         
-                            
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm h-100 bg-secondary text-body rounded-3">
+                        <div class="card-body d-flex flex-column align-items-center py-4">
+                            <i class="fa fa-desktop fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title mb-3">Performant Frontend</h5>
+                            <p class="card-text mb-0">${c.serverName} offers a stable and feature-rich website with <a href="https://github.com/osu-NoLimits/Shiina-Web/tree/main" class="text-decoration-none text-primary">Shiina</a></p>
                         </div>
-                        <div class="col-12 col-lg-3">
-                            <div class="sp-card-wrapper my-2">
-                                <div class="d-flex justify-content-center">
-                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="toast-header" style="min-height: 70px;">
-                                            <i class="fa fa-solid fa-people-robbery text-primary me-2" style="opacity: 100%;"></i>
-                                          <strong class="me-auto">Integrated clans</strong>
-                                          
-                                        </div>
-                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
-                                            <small>${c.serverName} offers compatitive clan gameplay with statistics</small>
-                                        </div>
-                                      </div>
-                                </div>
-                               
-                            
-                            </div>
-                         
-                            
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm h-100 bg-secondary text-body rounded-3">
+                        <div class="card-body d-flex flex-column align-items-center py-4">
+                            <i class="fa fa-people-robbery fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title mb-3">Integrated Clans</h5>
+                            <p class="card-text mb-0">${c.serverName} offers competitive clan gameplay with statistics</p>
                         </div>
-                        <div class="col-12 col-lg-3">
-                            <div class="sp-card-wrapper my-2">
-                                <div class="d-flex justify-content-center">
-                                    <div class="sp-card toast fade show w-100" role="alert" aria-live="assertive" aria-atomic="true">
-                                        <div class="toast-header" style="min-height: 70px;">
-                                            <i class="fa fa-solid fa-wrench fa-people-robbery text-primary me-2" style="opacity: 100%;"></i>
-                                          <strong class="me-auto">Maintained enviroment</strong>
-                                          
-                                        </div>
-                                        <div class="toast-body d-flex align-items-center" style="min-height: 90px;">
-                                            <small>Our Developers are working hard to improve our services</small>
-                                        </div>
-                                      </div>
-                                </div>
-                               
-                            
-                            </div>
-                         
-                            
+                    </div>
+                </div>
+                <div class="col-12 col-lg-3 mb-4">
+                    <div class="card border-0 shadow-sm h-100 bg-secondary text-body rounded-3">
+                        <div class="card-body d-flex flex-column align-items-center py-4">
+                            <i class="fa fa-wrench fa-3x mb-3 text-primary"></i>
+                            <h5 class="card-title mb-3">Maintained Environment</h5>
+                            <p class="card-text mb-0">Our developers are working hard to improve our services</p>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </section>
+    
     <style>
-.main-timeline {
-    font-family: 'Mukta', sans-serif;
-    position: relative;
-}
-
-.main-timeline .timeline {
-    float: left;
-    width: 50.5%;
-    margin: 0 10px 0 0;
-}
-
-.main-timeline .timeline-content {
-    color: #666;
-    padding: 0 140px 15px 0;
-    border-bottom: 10px solid  unset;
-    display: block;
-    position: relative;
-}
-
-.main-timeline .timeline-content:hover {
-    text-decoration: none;
-}
-
-
-.main-timeline .timeline-year {
-    line-height: 95px;
-    height: 95px;
-    width: 95px;
-    border-radius: 50%;
-    right: 20px;
-    bottom: 8px;
-    /* You can add a border or background color here if needed */
-}
-
-.main-timeline .timeline:nth-child(even) {
-    float: right;
-    text-align: right;
-    margin: 0 0 0 10px;
-}
-
-.main-timeline .timeline:nth-child(even) .timeline-content {
-    padding: 0 0 15px 140px;
-}
-
-.main-timeline .timeline:nth-child(even) .timeline-year {
-    right: auto;
-    left: 20px;
-}
-
-@media screen and (max-width: 767px) {
-    .main-timeline .timeline,
-    .main-timeline .timeline:nth-child(even) {
-        width: 100%;
-        margin: 0 0 30px 0;
-    }
-
-    .main-timeline .timeline-content,
-    .main-timeline .timeline:nth-child(even) .timeline-content {
-        text-align: left;
-        padding: 0 150px 15px 0;
-    }
-
-    .main-timeline .timeline-year,
-    .main-timeline .timeline:nth-child(even) .timeline-year {
-        left: auto;
-        right: 28px;
-    }
-}
-
-@media screen and (max-width: 576px) {
-
-    .main-timeline .timeline-content,
-    .main-timeline .timeline:nth-child(even) .timeline-content {
-        border-bottom-width: 7px;
-        padding: 0 95px 15px 0;
-    }
-
-    .main-timeline .timeline-year {
-        line-height: 60px;
-        height: 60px;
-        width: 60px;
-        bottom: 4px;
-        right: 13px;
-    }
-
-    .main-timeline .timeline:nth-child(even) .timeline-year {
-        right: 13px;
-    }
-}
-
-@media screen and (max-width: 399px) {
-    .main-timeline .timeline-content,
-    .main-timeline .timeline:nth-child(even) .timeline-content {
-        padding: 0 0 85px 0;
-    }
-}
-
-
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        .card-title {
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+        .card-text a:hover {
+            text-decoration: underline;
+        }
     </style>
-    <div class="container my-4">
+    <#if c.showAdditionalStats>
+    <section class="bg-body py-5" id="server-stats">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-                    <div class="main-timeline">
+            <div class="row text-center">
 
-                        <#list c.timeline as timeline>
-                            <div class="timeline">
-                                <div class="timeline-content border-bottom border-${timeline.color} border-5">
-                                    <div class="fs-2 text-${timeline.color} my-1">
-                                        <i class="${timeline.icon}"></i>
-                                    </div>
-                                    <h3 class="text-${timeline.color} text-uppercase text-break">${timeline.title}</h3>
-                                    <p class="m-0">
-                                        ${timeline.description}
-                                    </p>
-                                    <span class="timeline-year text-${timeline.textColor} user-select-none text-center text-break position-absolute bg-${timeline.color}">${timeline.year}</span>
-                                </div>
+    
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="stat-card d-flex justify-content-between align-items-center bg-secondary text-body p-4 rounded-3 shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-server fa-3x me-3 text-primary"></i>
+                            <div>
+                                <h5 class="mb-0">Ingame Logins</h5>
+                                <small class="text-muted">Today: ${customCount.loginsToday}</small>
                             </div>
-                        </#list>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0">${customCount.totalLogins}</h4>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="stat-card d-flex justify-content-between align-items-center bg-secondary text-body p-4 rounded-3 shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-users fa-3x me-3 text-primary"></i>
+                            <div>
+                                <h5 class="mb-0">Running Since</h5>
+                               
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0"data-timestamp-format="date" data-timestamp="${startup}">${startup}</h4>
+                        </div>
+                    </div>
+                </div>
+    
+                <div class="col-12 col-md-4 mb-4">
+                    <div class="stat-card d-flex justify-content-between align-items-center bg-secondary text-body p-4 rounded-3 shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <i class="fa fa-download fa-3x me-3 text-primary"></i>
+                            <div>
+                                <h5 class="mb-0">Staff Members</h5>
+                                <small class="text-muted">Restricted: ${customCount.restricted}</small>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="fw-bold mb-0">${customCount.staff}</h4>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>        
-    </div>
+        </div>
+    </section>
+    </#if>
+    <style>
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+    
     
             </div>
         </div>

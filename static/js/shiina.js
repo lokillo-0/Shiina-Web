@@ -6,17 +6,29 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
         const video = document.getElementById('video');
         loadVideoWithDelay(video);
     }
+
     nodesArray.forEach(node => {
         let fomat;
         if (node.getAttribute('data-timestamp-format') == 'date') { format = false; } else { format = true; }
         node.innerHTML = timeUntil(node.getAttribute('data-timestamp'), format);
     });
 
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+
+});
+
+submitStartTurbo = document.addEventListener('turbo:submit-start', function () {
+    Turbo.navigator.delegate.adapter.showProgressBar();
 });
 
 unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function () {
+    Turbo.navigator.delegate.adapter.showProgressBar();
     document.removeEventListener("turbo:load", loadEventTurbo);
     document.removeEventListener("turbo:before-cache", unloadEvenetTurbo);
+    document.removeEventListener("turbo:submit-start", submitStartTurbo);
 });
 
 function loadLazyLoadImage(img) {
@@ -27,19 +39,21 @@ function loadLazyLoadImage(img) {
         setTimeout(() => {
             img.classList.add('loaded');
             img.previousElementSibling.style.display = 'none';
-        }, 100);
+        }, 300);
     }
 }
 
 function loadVideoWithDelay(video) {
     const loader = document.getElementById('spinner');
-    video.style.dislay = 'none';
-    loader.style.display = 'block';
-    setTimeout(() => {
-        video.classList.add('loaded');
-        loader.style.display = 'none';
-        video.style.display = 'block';
-    }, 3000);
+    if (!video.classList.contains('loaded')) {
+        video.style.dislay = 'none';
+        loader.style.display = 'block';
+        setTimeout(() => {
+            video.classList.add('loaded');
+            loader.style.display = 'none';
+            video.style.display = 'block';
+        }, 3000);
+    }
 }
 
 
@@ -48,11 +62,12 @@ function lazyLoadNoImage(img, icon) {
         img.classList.add('loaded');
         img.previousElementSibling.style.display = 'none';
     } else {
+        random = Math.floor(Math.random() * 1000);
         setTimeout(() => {
             img.src = icon;
             img.classList.add('loaded');
             img.previousElementSibling.style.display = 'none';
-        }, 200);
+        }, random);
     }
 }
 

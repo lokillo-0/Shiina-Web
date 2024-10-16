@@ -38,7 +38,7 @@ public class Beatmaps extends Shiina {
         if (req.queryParams("creator") != null) {
             creator = Optional.of(req.queryParams("creator"));
         }
-        int mode = 999;
+        int mode = 0;
         if (req.queryParams("mode") != null && Validation.isNumeric(req.queryParams("mode"))) {
             mode = Integer.parseInt(req.queryParams("mode"));
         }

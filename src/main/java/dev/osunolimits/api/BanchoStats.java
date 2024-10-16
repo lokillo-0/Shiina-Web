@@ -32,6 +32,10 @@ public class BanchoStats {
         private int clans;
         private int plays;
         private int beatmaps;
+        private int totalLogins;
+        private int loginsToday;
+        private int staff;
+        private int restricted;
     }
 
     OkHttpClient client;

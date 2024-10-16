@@ -15,41 +15,26 @@
                                 class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4
                                 && mode !=8)>disabled</#if>>AutoPilot</button>
                         </div>
-
                     </div>
-
             </div>
         </div>
-
-
     </div>
     <div class="container">
         <div class="card w-400 mx-auto my-4">
-
-
-            <div class="card-body">
-
+            <div class="card-body">  
                 <div class="row border-bottom mb-2 py-4">
                     <div class="col col-12 col-md-6 d-flex align-items-center">
-                        <h2 class="card-title m-2">${clan.name} <span class="btn btn-primary user-select-none">[${clan.tag}]</span>
-                        </h2>
+                        <h2 class="card-title m-2">${clan.name} <span class="btn btn-primary user-select-none">[${clan.tag}]</span></h2>
                     </div>
                     <div class="col col-12 col-md-6">
-                        <a href="/u/${clan.owner}" class="bg-secondary m-2 p-3 row leaderboard-panel style=" border-radius:=""
-                            5px;"="">
-                            <span class="m-1 m-sm-0 col-auto d-flex align-items-center"><img class="flag"
-                                    src="https://a.osunolimits.dev/${clan.owner}" alt=""></span>
-                            <span class="m-1 m-sm-0 col-auto d-none d-lg-flex  align-items-center"><img class="flag"
-                                    src="/img/flags/${clan.ownerCountry}.svg"
-                                    alt=""></span>
-                            <span class="m-1 m-sm-0 col-auto"
-                                style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);"><i
-                                    class="fa-solid fa-crown"></i></span>
-                            <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-                                <span class="ms-2">-${clan.ownerName}</span>
-                            </span>
-
-                        </a>
+                        <#assign u = {
+                            "id": clan.owner,
+                            "name": clan.ownerName,
+                            "country": clan.ownerCountry,
+                            "isOwner": true
+                        }>
+                        <#assign index=0>
+                        <#include "/freemarker/models/user.ftl">
                     </div>
                 </div>
 
@@ -126,8 +111,6 @@
                                             </td>
                                             <td>${clan.acc}%</td>
                                         </tr>
-
-
                                     </tbody>
                                 </table>
                             </div>
@@ -136,25 +119,9 @@
                 </div>
 
                 <div class="row" id="leaderboard">
-                    <#list members as member>
-                        <div class="col col-12 col-md-6 member-entry <#if (member?index >= 4)> d-none</#if>">
-                            <a href="/u/${member.id}" class="bg-secondary m-2 p-3 row leaderboard-panel"
-                                style="border-radius: 5px;">
-                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-                                    <img class="flag" src="https://a.osunolimits.dev/${member.id}" alt="">
-                                </span>
-                                <span class="m-1 m-sm-0 col-auto d-none d-lg-flex align-items-center">
-                                    <img class="flag"
-                                        src="/img/flags/${member.country}.svg"
-                                        alt="">
-                                </span>
-                                <span class="m-1 m-sm-0 col-auto"
-                                    style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);"></span>
-                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-                                    <span class="ms-2">-${member.name}</span>
-                                </span>
-                            </a>
-                        </div>
+                    <#list members as u>
+                        <#assign index=u?index>
+                        <#include "/freemarker/models/user.ftl"> 
                     </#list>
                 </div>
 
@@ -167,30 +134,9 @@
                 <input type="hidden" id="totalMembers" value="${members?size}">
 
                 <div class="row my-4" id="activity">
-                    <#list activity as act>
-                        <div class="col col-12 col-md-6 act-entry <#if (act?index >= 4)> d-none</#if> d-flex flex-column mb-4"> <!-- Flex column with bottom margin -->
-                            <div class="row p-2 align-items-center">
-                                <div class="col-auto">
-                                    <img class="flag" src="https://a.osunolimits.dev/${act.id}" alt="">
-                                </div>
-                                <div class="col-auto d-flex align-items-center">
-                                    <span class="h6">${act.name}</span>
-                                    <small class="ms-2" data-timestamp-format="date" data-timestamp="${act.playTime}">${act.playTime}</small>
-                                </div>
-                            </div>
-                            <div class="bg-secondary p-3 leaderboard-panel d-flex flex-grow-1" style="border-radius: 5px;">
-                                <div class="d-block d-lg-flex flex-grow-1"> <!-- Ensures this div takes available height -->
-                                    <div class="col-12 col-lg-5 d-flex justify-content-center">
-                                        <img class="img-fluid rounded-2" src="https://assets.ppy.sh/beatmaps/${act.set_id?c}/covers/card.jpg" alt="">
-                                    </div>
-                                    <div class="col-12 d-flex mt-2 mt-lg-0 col-lg-7 mx-2 d-flex flex-column justify-content-start justify-content-sm-between"> <!-- Added flex column -->
-                                        <#assign passedMods = act.mods>
-                                        <span class="ms-2 text-wrap">-${act.mapFilename?replace(".osu", "")} <#include "/freemarker/modconvert.ftl"></span>
-                                        <p class="fs-5 ms-2">${act.pp}pp</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <#list activity as score>
+                        <#assign index=score?index>
+                        <#include "/freemarker/models/score.ftl">
                     </#list>
                 </div>
                 <input type="hidden" id="currentCountAct" value="4">
@@ -201,21 +147,16 @@
                         <button id="loadMoreBtnAct" class="btn btn-primary">Load More</button>
                     </div>
                 </#if>
-          
-
+                    
             </div>
         </div>
-
-    </div>
-    <div>
     </div>
 
     <#include "assets/footer.html">
     <script>
         var loadMoreBtn = document.getElementById('loadMoreBtn');
         var loadMoreBtnAct = document.getElementById('loadMoreBtnAct');
-        
-        // Variables to track the bound event listeners
+
         var loadMoreBtnHandler = null;
         var loadMoreBtnActHandler = null;
     
@@ -226,10 +167,9 @@
     
             let currentCount = parseInt(document.getElementById(currentCountName).value, 10);
             let totalMembers = parseInt(document.getElementById(totalMembersName).value, 10);
-    
-            // Find the hidden entries (those with the class 'd-none')
+
             const hiddenEntries = document.querySelectorAll('.' + entryName + '-entry.d-none');
-            const limit = Math.min(hiddenEntries.length, 4);  // Show up to 4 entries at a time
+            const limit = Math.min(hiddenEntries.length, 4); 
     
             for (let i = 0; i < limit; i++) {
                 hiddenEntries[i].classList.remove('d-none');
@@ -237,21 +177,19 @@
     
             currentCount += limit;
             document.getElementById(currentCountName).value = currentCount;
-    
-            // Hide the button if all entries are visible
+
             if (currentCount >= totalMembers || hiddenEntries.length === 0) {
                 if (isActivity) {
-                    loadMoreBtnAct.style.display = 'none';  // Hide the activity button
+                    loadMoreBtnAct.style.display = 'none'; 
                 } else {
-                    loadMoreBtn.style.display = 'none';  // Hide the member button
+                    loadMoreBtn.style.display = 'none';
                 }
             }
         }
     
         function initLoadMoreButtons() {
-            cleanupLoadMoreButtons();  // Ensure any previous listeners are removed before adding new ones
+            cleanupLoadMoreButtons(); 
     
-            // Bind the event listeners and store their references
             if (loadMoreBtn) {
                 loadMoreBtnHandler = () => loadMoreHandler(false);
                 loadMoreBtn.addEventListener('click', loadMoreBtnHandler);
@@ -264,7 +202,6 @@
         }
     
         function cleanupLoadMoreButtons() {
-            // Remove the event listeners using the stored references
             if (loadMoreBtn && loadMoreBtnHandler) {
                 loadMoreBtn.removeEventListener('click', loadMoreBtnHandler);
                 loadMoreBtnHandler = null;
@@ -276,7 +213,6 @@
             }
         }
     
-        // Register Turbo navigation events
         document.addEventListener('turbo:load', initLoadMoreButtons);
         document.addEventListener('turbo:before-cache', cleanupLoadMoreButtons);
     </script>

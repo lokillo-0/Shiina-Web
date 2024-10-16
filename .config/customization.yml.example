@@ -11,6 +11,8 @@ homeDescription: "an unrestricted Sandbox, Cheating, and Testing Server where th
 homeBigLogoUrl: "/img/biglogo.webp"
 homeVideoUrl: "/video/onl.mp4"
 
+showAdditionalStats: false
+
 footerDescription: "We believe in granting you the freedom to explore to your heart's content. While we reserve the right to introduce minor restrictions in the future, for now, let your imagination run wild."
 footerCopyright: "© 2024 osuNoLimits.<br>Not affiliated with ppy.sh or osu!"
 footer:
@@ -31,17 +33,3 @@ footer:
         url: "https://discord.gg/8Zv6r3Q"
       - name: "GitHub"
         url: "https://github.com/osu-NoLimits/Shiina-Web/tree/main"
-
-timeline:
-  - year: "Mid 2024"
-    title: "osuNoLimits was founded"
-    description: "osuNoLimits was founded in Mid 2024."
-    icon: "fa fa-solid fa-play"
-    color: "primary"
-    textColor: "body-tertiary"
-  - year: "End 2024"
-    title: "osuNoLimits started shiina"
-    description: "osuNoLimits started developing shiina in End 2024."
-    icon: "fa fa-solid fa-gear"
-    color: "info"
-    textColor: "white"
