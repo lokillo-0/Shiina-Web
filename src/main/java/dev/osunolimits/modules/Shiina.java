@@ -1,6 +1,5 @@
 package dev.osunolimits.modules;
 
-import org.w3c.tidy.Tidy;
 import java.io.*;
 import dev.osunolimits.main.App;
 import dev.osunolimits.main.WebServer;

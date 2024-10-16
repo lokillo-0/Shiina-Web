@@ -2,9 +2,14 @@
     <style>
         
     </style>
-    <div class="container desktop my-5">
-        <div class="home-video mb-4">
-            <video src="${c.homeVideoUrl}" class="video" autoplay loop muted></video>
+    <div style="min-height: 600px;" class="container desktop my-5">
+        <div style="min-height: 600px;" class="home-video mb-4">
+
+            <div id="spinner" class="spinner-grow position-fixed" role="status">
+                <span style="left: 50%; right: 50%; z-index: 200;" class="visually-hidden">Loading...</span>
+            </div>
+                <video style="object-fit: cover; min-height: 600px;" src="${c.homeVideoUrl}" id="video"  class="video lazy-video" autoplay loop muted></video>
+         
             <div class="overlay">
                 <div class="row">
                     <div class="col lol col-6" >

@@ -19,7 +19,7 @@
                 <li class="page-item <#if page == pages>active</#if>"><a onclick="selectParam('page', '${pages}')" class="page-link">${pages}</a></li>
             </#if>
         </#list>
-        <li class="page-item <#if (page == maxPages?ceiling)>disabled</#if>">
+        <li class="page-item <#if (page == maxPages || entries == 0) || maxPages?ceiling == page>disabled</#if>">
             <a class="page-link" onclick="selectParam('page', '${page + 1}')" aria-label="Next">
                 <span aria-hidden="true">
                     <i class="fa-solid fa-arrow-right"></i>

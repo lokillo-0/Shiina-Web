@@ -2,11 +2,16 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
     const nodesWithTimestamp = document.querySelectorAll('[data-timestamp]');
     const nodesArray = Array.from(nodesWithTimestamp);
 
+    if (document.getElementById('video') != undefined) {
+        const video = document.getElementById('video');
+        loadVideoWithDelay(video);
+    }
     nodesArray.forEach(node => {
         let fomat;
         if (node.getAttribute('data-timestamp-format') == 'date') { format = false; } else { format = true; }
         node.innerHTML = timeUntil(node.getAttribute('data-timestamp'), format);
     });
+
 });
 
 unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function () {
@@ -15,20 +20,40 @@ unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function () 
 });
 
 function loadLazyLoadImage(img) {
-    setTimeout(() => {
-    img.classList.add('loaded');
-    img.previousElementSibling.style.display = 'none';
-    }, 200);
-}
-
-function lazyLoadNoImage(img, icon) {
-    // wait for 2 seconds before loading the icon
-    setTimeout(() => {
-        img.src = icon;
+    if (img.complete && img.naturalHeight !== 0) {
         img.classList.add('loaded');
         img.previousElementSibling.style.display = 'none';
-    }, 200);
+    } else {
+        setTimeout(() => {
+            img.classList.add('loaded');
+            img.previousElementSibling.style.display = 'none';
+        }, 100);
+    }
+}
 
+function loadVideoWithDelay(video) {
+    const loader = document.getElementById('spinner');
+    video.style.dislay = 'none';
+    loader.style.display = 'block';
+    setTimeout(() => {
+        video.classList.add('loaded');
+        loader.style.display = 'none';
+        video.style.display = 'block';
+    }, 3000);
+}
+
+
+function lazyLoadNoImage(img, icon) {
+    if (img.complete && img.naturalHeight !== 0) {
+        img.classList.add('loaded');
+        img.previousElementSibling.style.display = 'none';
+    } else {
+        setTimeout(() => {
+            img.src = icon;
+            img.classList.add('loaded');
+            img.previousElementSibling.style.display = 'none';
+        }, 200);
+    }
 }
 
 function timeUntil(dateInput, unix) {

@@ -11,6 +11,18 @@
     </#switch>
 </#function>
 
+<#function convertStatusBackColor color>
+    <#switch color>
+        <#case 0><#return "secondary"><#break>
+        <#case 1><#return "warning"><#break>
+        <#case 2><#return "dark"><#break>
+        <#case 3><#return "success"><#break>
+        <#case 4><#return "info"><#break>
+        <#case 5><#return "danger"><#break>
+        <#default><#return "body"><#break>
+    </#switch>
+</#function>
+
 <#function convertModeBack mode>
     <#switch mode>
         <#case 0><#return "osu"><#break>
