@@ -1,33 +1,50 @@
-loadEventTurbo = document.addEventListener("turbo:load", function() {
+loadEventTurbo = document.addEventListener("turbo:load", function () {
     const nodesWithTimestamp = document.querySelectorAll('[data-timestamp]');
     const nodesArray = Array.from(nodesWithTimestamp);
 
     nodesArray.forEach(node => {
         let fomat;
-        if(node.getAttribute('data-timestamp-format') == 'date') { format = false; } else { format = true; }
-        node.innerHTML = timeUntil(node.getAttribute('data-timestamp'),format);
+        if (node.getAttribute('data-timestamp-format') == 'date') { format = false; } else { format = true; }
+        node.innerHTML = timeUntil(node.getAttribute('data-timestamp'), format);
     });
 });
 
-unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function() {
+unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function () {
     document.removeEventListener("turbo:load", loadEventTurbo);
-    document.removeEventListener("turbo:before-cache", unloadEvenetTurbo);  
+    document.removeEventListener("turbo:before-cache", unloadEvenetTurbo);
 });
+
+function loadLazyLoadImage(img) {
+    setTimeout(() => {
+    img.classList.add('loaded');
+    img.previousElementSibling.style.display = 'none';
+    }, 200);
+}
+
+function lazyLoadNoImage(img, icon) {
+    // wait for 2 seconds before loading the icon
+    setTimeout(() => {
+        img.src = icon;
+        img.classList.add('loaded');
+        img.previousElementSibling.style.display = 'none';
+    }, 200);
+
+}
 
 function timeUntil(dateInput, unix) {
     let inputDate;
-    if(unix) {
+    if (unix) {
         inputDate = new Date(dateInput * 1000);
-    }else {
+    } else {
         inputDate = new Date(dateInput.replace(' ', 'T') + 'Z');
     }
-    
+
     const currentDate = new Date();
     const differenceInSeconds = Math.floor((inputDate - currentDate) / 1000);
-    
+
     const isPast = differenceInSeconds < 0;
     const absDifferenceInSeconds = Math.abs(differenceInSeconds);
-    
+
     const timeUnits = [
         { unit: 'year', seconds: 29030400 },
         { unit: 'month', seconds: 2419200 },

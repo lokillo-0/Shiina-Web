@@ -31,7 +31,7 @@
 
                 <div class="row border-bottom mb-2 py-4">
                     <div class="col col-12 col-md-6 d-flex align-items-center">
-                        <h2 class="card-title m-2">${clan.name} <span class="badge badge-secondary">[${clan.tag}]</span>
+                        <h2 class="card-title m-2">${clan.name} <span class="btn btn-primary user-select-none">[${clan.tag}]</span>
                         </h2>
                     </div>
                     <div class="col col-12 col-md-6">
@@ -40,7 +40,7 @@
                             <span class="m-1 m-sm-0 col-auto d-flex align-items-center"><img class="flag"
                                     src="https://a.osunolimits.dev/${clan.owner}" alt=""></span>
                             <span class="m-1 m-sm-0 col-auto d-none d-lg-flex  align-items-center"><img class="flag"
-                                    src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${clan.ownerCountry}.svg"
+                                    src="/img/flags/${clan.ownerCountry}.svg"
                                     alt=""></span>
                             <span class="m-1 m-sm-0 col-auto"
                                 style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);"><i
@@ -75,21 +75,11 @@
                                     <h2>#${clan.accRank}</h2>
                                 </div>
                             </div>
-
-
                         </div>
 
                         <div class="col col-12 col-sm-12 col-lg-6">
                             <div class="ml-2 mr-2">
                                 <table class="w-100">
-                                    <thead>
-                                        <tr>
-                                            <th>
-
-                                            </th>
-                                            <th></th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         <tr>
                                             <td>
@@ -140,15 +130,9 @@
 
                                     </tbody>
                                 </table>
-
-
-
                             </div>
-
                         </div>
-
                     </div>
-
                 </div>
 
                 <div class="row" id="leaderboard">
@@ -161,7 +145,7 @@
                                 </span>
                                 <span class="m-1 m-sm-0 col-auto d-none d-lg-flex align-items-center">
                                     <img class="flag"
-                                        src="https://raw.githubusercontent.com/lipis/flag-icons/refs/heads/main/flags/4x3/${member.country}.svg"
+                                        src="/img/flags/${member.country}.svg"
                                         alt="">
                                 </span>
                                 <span class="m-1 m-sm-0 col-auto"

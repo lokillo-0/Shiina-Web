@@ -93,6 +93,11 @@
       <artifactId>snakeyaml</artifactId>
       <version>2.3</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.jtidy</groupId>
+      <artifactId>jtidy</artifactId>
+      <version>1.0.5</version>
+    </dependency>
   </dependencies>
 
   <build>

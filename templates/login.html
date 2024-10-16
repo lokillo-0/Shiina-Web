@@ -1,40 +1,5 @@
 
 <#include "assets/base.html">
-<script>
-    var turnstileId = null;
-    var load = document.addEventListener("turbo:load", function () {
-        if (document.getElementById("turnstile")) {
-            turnstile.ready(function () {
-            if (document.getElementById("turnstile").innerHTML.length == 0) {
-                console.log("Rendering Turnstile");
-                try {
-                    turnstileId = turnstile.render("#turnstile", {
-                    sitekey: "${turnstilePublic}",
-                    callback: function (token) {
-                    },
-                });
-                } catch (error) {
-                    
-                }
-            }
-        });
-        }
-    });
-
-
-    var cache = document.addEventListener("turbo:before-cache", function () {
-        if(turnstileId != null && document.getElementById("turnstile")) {
-            if(document.getElementById("turnstile").innerHTML.length > 0) {
-                console.log("Removing Turnstile");
-                turnstile.remove(turnstileId);
-            }
-        }
-
-        document.removeEventListener("turbo:load", load);
-        document.removeEventListener("turbo:before-cache", cache);
-        
-    });
-</script>
     <div style="height: 80vh;"><div class="container h-100">
         <div class="row h-100 justify-content-center align-items-center">
             <div class="card mt-2 mb-2">
@@ -51,8 +16,6 @@
                         </div>
                     </#if>
                     <form data-turbo="false" data-toggle="validator" role="form" method="post" action="/login">
-                        <input type="hidden" class="hide" id="csrf_token" name="csrf_token"
-                            value="C8nPqbqTxzcML7Hw0jLRu41ry5b9a10a0e2bc2">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="form-group">
@@ -98,4 +61,39 @@
                 </div>
             </div>
         </div></div></div>
-    <#include "assets/footer.html">
+<#include "assets/footer.html">
+<script>
+    var turnstileId = null;
+    var load = document.addEventListener("turbo:load", function () {
+        if (document.getElementById("turnstile")) {
+            turnstile.ready(function () {
+            if (document.getElementById("turnstile").innerHTML.length == 0) {
+                console.log("Rendering Turnstile");
+                try {
+                    turnstileId = turnstile.render("#turnstile", {
+                    sitekey: "${turnstilePublic}",
+                    callback: function (token) {
+                    },
+                });
+                } catch (error) {
+                    
+                }
+            }
+        });
+        }
+    });
+
+
+    var cache = document.addEventListener("turbo:before-cache", function () {
+        if(turnstileId != null && document.getElementById("turnstile")) {
+            if(document.getElementById("turnstile").innerHTML.length > 0) {
+                console.log("Removing Turnstile");
+                turnstile.remove(turnstileId);
+            }
+        }
+
+        document.removeEventListener("turbo:load", load);
+        document.removeEventListener("turbo:before-cache", cache);
+        
+    });
+</script>

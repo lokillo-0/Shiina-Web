@@ -45,7 +45,7 @@ public class BeatmapQuery {
         private String version;
         private String creator;
         private String filename;
-        private String lastUpdate;
+        private String last_update;
         private int totalLength;
         private int maxCombo;
         private boolean frozen;

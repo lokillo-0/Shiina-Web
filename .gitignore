@@ -22,7 +22,10 @@
 *.rar
 
 # Shiina-Web
+.config/logger.env
 .config/.env
+.config/customization.yml
+
 .cache/
 .logs/
 

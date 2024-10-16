@@ -24,14 +24,13 @@ public class Login extends Shiina {
         shiina.data.put("actNav", 0);
     
         String captchaResponse = req.queryParams("cf-turnstile-response");
-        String csrfToken = req.queryParams("csrf_token");
 
         if(req.cookie("shiina") != null && App.jedisPool.get("shiina:" + req.cookie("shiina")) != null) {
             shiina.data.put("info", "You are already logged in");
             return renderTemplate("login.html", shiina, res, req);
         }
 
-        if(csrfToken == null || csrfToken.isEmpty() || captchaResponse == null || captchaResponse.isEmpty()) {
+        if(captchaResponse == null || captchaResponse.isEmpty()) {
             shiina.data.put("error", "Invalid Captcha");
             return renderTemplate("login.html", shiina, res, req);
         }

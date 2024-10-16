@@ -1,26 +1,4 @@
 <#include "assets/base.html">
-    <script>
-        function checkForArtist() {
-            artist = document.getElementById('artist');
-            if (artist.value.length > 0) {
-                selectParam('artist', artist.value);
-            } else {
-                removeParam('artist');
-            }
-        }
-
-        function checkForCreator() {
-            artist = document.getElementById('creator');
-            if (artist.value.length > 0) {
-                selectParam('creator', artist.value);
-
-            } else {
-                removeParam('creator');
-            }
-        }
-
-        
-    </script>
     <div class="container ">
         <div class="card mt-4">
             <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
@@ -44,18 +22,14 @@
                 </div>
                 <div class="my-2 my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
                     <div class="btn-group my-auto input-group" role="group" aria-label="Mixed example">
-
                         <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-user"></i></span>
                         <input id="artist" onfocusout="checkForArtist()" type="text" class="form-control"
                             value="<#if artist??>${artist}</#if>" placeholder="Artist" aria-label="Artist"
                             aria-describedby="Artist">
-
                     </div>
-
                 </div>
                 <div class="my-2 my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
                     <div class="btn-group my-auto input-group" role="group" aria-label="Mixed example">
-
                         <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-user"></i></span>
                         <input id="creator" onfocusout="checkForCreator()" type="text" class="form-control"
                             value="<#if creator??>${creator}</#if>" placeholder="Creator" aria-label="Creator"
@@ -66,90 +40,38 @@
         </div>
 
         <div class="mt-2">Found <span class="text-primary">${entries}</span> entries</div>
+        
+        <#include "/freemarker/flowing_pagination.ftl">
 
-        <nav class="mt-2 d-flex justify-content-center" aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item <#if page == 1>disabled</#if>">
-                    <a class="page-link" onclick="selectParam('page', '${page - 1}')" aria-label="Previous">
-                        <span aria-hidden="true">
-                            <i class="fa-solid fa-arrow-left"></i>
-                        </span>
-                    </a>
-                </li>
-                <#assign maxPagesBtn=0>
-                    <#assign maxPages=entries / 100>
-                        <#list page-3..maxPages + 1 as pages>
-                            <#if (pages> 0)>
-                                <#assign maxPagesBtn=maxPagesBtn+1>
-
-                                    <#if maxPagesBtn==8>
-                                        <#break>
-                                    </#if>
-
-                                    <li class="page-item <#if page == pages>active</#if>"><a
-                                            onclick="selectParam('page', '${pages}')" 
-                                            class="page-link">${pages}</a></li>
-                            </#if>
-                        </#list>
-                        <li class="page-item <#if (page == maxPages?ceiling)>disabled</#if>">
-                            <a class="page-link" onclick="selectParam('page', '${page + 1}')" aria-label="Next">
-                                <span aria-hidden="true">
-                                    <i class="fa-solid fa-arrow-right"></i>
-                                </span>
-                            </a>
-                        </li>
-            </ul>
-        </nav>
-
-        <div class="row my-4">
+       
+            <div class="row mb-4 g-3">
             <#list beatmaps as beatmap>
-
-                <div class="col col-12 col-md-6 col-lg-4 mb-2">
-                    <div class="card beatmap-card">
-                        <img src="https://assets.ppy.sh/beatmaps/${beatmap.set_id?long?c}/covers/card.jpg"
-                            class="card-img-top" alt="Cover Image"
-                            onerror="this.onerror=null; this.src='https://shiina.osunolimits.dev/img/nobeatmapicon.png';"  loading="lazy" >
-                        <div class="card-body beatmap-card-body d-flex align-items-end">
-                            <div class="">
-                            <h5 class="card-title"><span
-                                    class="badge bg-danger">${convertStatusBack(beatmap.status)}</span> ${beatmap.title}
-                            </h5>
-                            <p class="card-text">
-                                <span class="badge bg-secondary mt-2"><i class="fa-solid fa-user"></i> Artist:
-                                    ${beatmap.artist}</span>
-                                <span class="badge bg-secondary mt-2"><i class="fa-solid fa-check"></i> Passes:
-                                    ${beatmap.passes}</span>
-                            </p>
-                            <div class="mb-3">
-                                <div class="row">
-                                    <div class="col col-auto">
-                                        <span style="font-size: 20px;"><i class="fa-solid fa-star"></i>
-                                            ${beatmap.diff}</span>
-                                    </div>
-                                    <div class="col col-auto">
-                                        <span style="font-size: 20px;"><i class="fa-solid fa-headphones"></i>
-                                            ${beatmap.bpm}</span>
-                                    </div>
-                                    <div class="col col-auto">
-                                        <span style="font-size: 20px;"><i class="fa-solid fa-play"></i>
-                                            ${beatmap.plays}</span>
-                                    </div>
-                                    <div class="col col-auto">
-                                        <img class="mode-icon" src="${convertModeIcon(beatmap.mode)}" alt="" srcset="">
-                                    </div>
-
-                                </div>
-
-                            </div>
-                            <a href="/beatmap/${beatmap.id}" class="btn btn-primary">View</a>
-                            <a href="https://osu.ppy.sh/beatmapsets/${beatmap.set_id?long?c}#${convertModeBack(beatmap.mode)}/${beatmap.id?long?c}"
-                                target="_blank" class="btn btn-pink">View on osu.ppy.sh</a>
-                        </div>
-                    </div>
-                </div>
-                </div>
+                <#include "/freemarker/models/beatmap.ftl">
             </#list>
-        </div>
+            </div>
+
+
+        <#include "/freemarker/flowing_pagination.ftl">
     </div>
 
-    <#include "assets/footer.html">
+<#include "assets/footer.html">
+<script>
+    function checkForArtist() {
+        artist = document.getElementById('artist');
+        if (artist.value.length > 0) {
+            selectParam('artist', artist.value);
+        } else {
+            removeParam('artist');
+        }
+    }
+
+    function checkForCreator() {
+        artist = document.getElementById('creator');
+        if (artist.value.length > 0) {
+            selectParam('creator', artist.value);
+
+        } else {
+            removeParam('creator');
+        }
+    }
+</script>
