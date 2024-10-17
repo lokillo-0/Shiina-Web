@@ -1,0 +1,72 @@
+<#include "assets/base.html">
+<div class="container">
+    <div class="card w-400 mx-auto my-4">
+        <div class="card-body">  
+            <div class="row border-bottom mb-2 py-4">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="/img/ranking/ranking-${score.grade}.png" alt="Grade" class="img-fluid me-3" style="height: 50px;">
+                    <span class="h2 me-2">${score.username}'s Score</span> 
+                    <small data-timestamp-format="date" data-timestamp="${score.playTime}">${score.playTime}</small>
+                </div>
+            </div>
+        </div>
+        <div class="m-4">
+            <div class="row">
+                <div class="col col-12 col-sm-12 col-lg-6 d-flex flex-column">
+                    <div class="row">
+                        <div class="col col-12 col-md-6">
+                            <small>Performance Points</small>
+                            <h2>${score.pp?string("0")}pp</h2>
+                        </div>
+                        <div class="col col-12 col-md-6">
+                            <small>Score</small>
+                            <h2>${score.score}</h2>
+                        </div>
+                        <div class="col col-12 col-md-6">
+                            <small>Accuracy</small>
+                            <h2>${score.acc?string("0.00")}%</h2>
+                        </div>
+                        <div class="col col-12 col-md-6">
+                            <small>Mods</small>
+                            <#assign passedMods=score.mods>
+                            <h2><#include "/freemarker/modconvert.ftl"></h2>
+                        </div>
+                    </div>
+                    <div class="btn-group mt-auto" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Replay</button>
+                        <button type="button" class="btn btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> Report Score</button>
+                    </div>
+                </div>
+                <div class="col mt-2 mt-lg-0 col-12 col-sm-12 col-lg-6">
+                    <#assign beatmap=score.beatmap>
+                    <#assign bigBm=true>
+                    <#include "/freemarker/models/beatmap.ftl">
+                </div>
+            </div>
+        </div>
+        <div class="p-4">
+            <div class="row">
+                <div class="col-12 col-md-6">
+                    <h5 class="">Hit Statistics</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item bg-body">300s: ${score.n300}</li>
+                        <li class="list-group-item bg-body">100s: ${score.n100}</li>
+                        <li class="list-group-item bg-body">50s: ${score.n50}</li>
+                        <li class="list-group-item bg-body">Misses: ${score.nmiss}</li>
+                        <li class="list-group-item bg-body">Gekis: ${score.ngeki}</li>
+                        <li class="list-group-item bg-body">Katus: ${score.nkatu}</li>
+                    </ul>
+                </div>
+                <div class="col-12 col-md-6">
+                    <h5 class="">Play Information</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item bg-body">Play Time: ${score.playTime}</li>
+                        <li class="list-group-item bg-body">Grade: ${score.grade}</li>
+                        <li class="list-group-item bg-body">Status: ${score.status}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<#include "assets/footer.html">

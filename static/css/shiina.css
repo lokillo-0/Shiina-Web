@@ -537,27 +537,30 @@
     min-height: 105px;
 }
 
-/* Initial state for new page */
-/* Fade and slide-out when leaving the page */
-.page-exit {
-    opacity: 1;
-    transform: translateY(0);
-    transition: opacity 0.4s ease, transform 0.4s ease;
+.shiina-card {
+    cursor:pointer;
+    user-select: none;
 }
 
-.page-exit-active {
-    opacity: 0;
-    transform: translateY(20px); /* Slide down slightly while fading out */
+.stat-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.stat-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
 }
 
-/* Fade and slide-in when entering the page */
-.page-enter {
-    opacity: 0;
-    transform: translateY(-20px); /* Start with a slight upward slide */
-    transition: opacity 0.5s ease, transform 0.5s ease;
+.shiina-up-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
-.page-enter-active {
-    opacity: 1;
-    transform: translateY(0); /* Slide back to original position */
+.shiina-up-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+.shiina-up-card-title {
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+.shiina-up-card-text a:hover {
+    text-decoration: underline;
 }

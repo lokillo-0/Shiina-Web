@@ -1,4 +1,4 @@
-<div class="col-12 col-lg-6 flex-column">
+<div class="col-12 col-lg-<#if bigBm??>12 h-100<#else>6</#if> flex-column">
     <div class="card beatmap-card text-white bg-secondary h-100">
         <div class="row g-0 h-100">
             <div class="col-md-4 d-flex flex-grow-1">
@@ -17,7 +17,7 @@
                     <div>
                         <div class="card-title-bm">
                             <span class="fs-5">
-                                ${beatmap.title}
+                                ${beatmap.filename?replace(".osu", "")}
                             </span>
                         </div>
                         <div class="card-artist">

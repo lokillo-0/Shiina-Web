@@ -10,10 +10,9 @@ import com.google.gson.JsonParser;
 
 import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
+import dev.osunolimits.models.Beatmap;
 import dev.osunolimits.utils.CacheInterceptor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import okhttp3.Cache;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -22,50 +21,17 @@ import okhttp3.Response;
 
 public class BeatmapQuery {
 
+    @Data
     public class BeatmapResponse {
-        @Getter @Setter
         private String status;
-
-        @Getter @Setter
-        private BeatmapItem[] data;
-
-        @Getter @Setter
+        private Beatmap[] data;
         private BeatmapMeta meta;
     }
 
     @Data
-    public class BeatmapItem {
-        private int id;
-        private String server;
-        private int set_id;
-        private int status;
-        private String md5;
-        private String artist;
-        private String title;
-        private String version;
-        private String creator;
-        private String filename;
-        private String last_update;
-        private int totalLength;
-        private int maxCombo;
-        private boolean frozen;
-        private int plays;
-        private int passes;
-        private int mode;
-        private int bpm;
-        private float cs;
-        private float ar;
-        private float od;
-        private float hp;
-        private float diff;
-    }
-
     public class BeatmapMeta {
-        @Getter @Setter
         private int total;
-        @Getter @Setter
         private int page;
-        @Getter @Setter
         private int page_size;
     }
 
