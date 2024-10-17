@@ -11,6 +11,14 @@
     </#switch>
 </#function>
 
+<#function convertScoreStatus status>
+    <#switch status>
+        <#case 0><#return "Not submitted"><#break>
+        <#case 2><#return "Submitted"><#break>
+    </#switch>
+</#function>
+
+
 <#function convertStatusBackColor color>
     <#switch color>
         <#case 0><#return "secondary"><#break>
@@ -21,6 +29,20 @@
         <#case 5><#return "danger"><#break>
         <#default><#return "body"><#break>
     </#switch>
+</#function>
+
+<#function convertDiffToColor diff>
+    <#if diff?contains("Easy")>
+        <#return "success">
+    <#elseif diff?contains("Normal")>
+        <#return "info">
+    <#elseif diff?contains("Hard")>
+        <#return "warning">
+    <#elseif diff?contains("Insane")>
+        <#return "danger">
+    <#else>
+        <#return "secondary">
+    </#if>
 </#function>
 
 <#function convertModeBack mode>

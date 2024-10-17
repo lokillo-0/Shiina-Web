@@ -1,3 +1,5 @@
+let tooltipList = []; // Keep track of initialized tooltips
+
 loadEventTurbo = document.addEventListener("turbo:load", function () {
     const nodesWithTimestamp = document.querySelectorAll('[data-timestamp]');
     const nodesArray = Array.from(nodesWithTimestamp);
@@ -8,16 +10,16 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
     }
 
     nodesArray.forEach(node => {
-        let fomat;
+        let format;
         if (node.getAttribute('data-timestamp-format') == 'date') { format = false; } else { format = true; }
         node.innerHTML = timeUntil(node.getAttribute('data-timestamp'), format);
     });
 
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-    return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
-
+    // Initialize Bootstrap tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
 });
 
 submitStartTurbo = document.addEventListener('turbo:submit-start', function () {
@@ -25,19 +27,29 @@ submitStartTurbo = document.addEventListener('turbo:submit-start', function () {
 });
 
 beforeVisitTurbo = document.addEventListener('turbo:before-visit', () => {
+    
 });
 
 beforeRenderTurbo = document.addEventListener('turbo:before-render', () => {
+   
 });
 
-unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function () {
+// Remove tooltips and event listeners when navigating back
+unloadEventTurbo = document.addEventListener("turbo:before-cache", function () {
     Turbo.navigator.delegate.adapter.showProgressBar();
+
+    // Properly dispose of all tooltips before caching
+    tooltipList.forEach(tooltip => {
+        tooltip.dispose();
+    });
+    tooltipList = [];
+
+    // Clean up event listeners
     document.removeEventListener("turbo:load", loadEventTurbo);
-    document.removeEventListener("turbo:before-cache", unloadEvenetTurbo);
+    document.removeEventListener("turbo:before-cache", unloadEventTurbo);
     document.removeEventListener("turbo:submit-start", submitStartTurbo);
     document.removeEventListener("turbo:before-visit", beforeVisitTurbo);
     document.removeEventListener("turbo:before-render", beforeRenderTurbo);
-
 });
 
 function loadLazyLoadImage(img) {

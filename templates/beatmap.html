@@ -1,0 +1,85 @@
+<#include "assets/base.html">
+
+<div class="container">
+    <div class="card mt-4">
+        <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+            
+            <#include "/freemarker/selector.ftl">
+                <div
+                    class="my-2 col-12 col-md-auto my-lg-0 col col-auto d-flex align-items-center justify-content-center ">
+                    <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                        <button type="button"
+                            onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
+                            class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
+                            <#if (mode==3)>disabled</#if>>Relax</button>
+                        <button type="button" onclick="selectParam('mode', '8')"
+                            class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4
+                            && mode !=8)>disabled</#if>>AutoPilot</button>
+                    </div>
+
+                </div>
+
+        </div>
+        
+    </div>
+
+    <div class="card mt-4">
+      <div class="card-body">
+        <#list beatmap.diffs as diff>
+            <a href="/b/${diff.id?c}" data-bs-toggle="tooltip" data-bs-placement="top" title='${diff.version}' style="font-size: 25px; text-decoration: none;" class="fa-regular <#if beatmap.version = diff.version>shiina-versel</#if> text-${convertDiffToColor(diff.version)} ms-1 fa-circle"></a>
+        </#list>
+      </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <!-- Beatmap Header -->
+    <div class="card p-20">
+        <h1 class="card-title">${beatmap.artist} - ${beatmap.title}</h1>
+        <p class="text-muted">Mapped by: ${beatmap.creator}</p>
+        <div class="d-flex flex-column flex-lg-row justify-content-between">
+            <div>
+                <span><strong>BPM:</strong> ${beatmap.bpm}</span><br>
+                <span><strong>Set ID:</strong> ${beatmap.setId}</span><br>
+                <span><strong>Status:</strong> ${beatmap.status}</span><br>
+                <span><strong>Mode:</strong> ${beatmap.mode}</span>
+            </div>
+            <div>
+                <span><strong>Last Update:</strong> ${beatmap.lastUpdate}</span><br>
+                <span><strong>Total Plays:</strong> ${beatmap.plays}</span><br>
+                <span><strong>Passes:</strong> ${beatmap.passes}</span><br>
+                <span><strong>Length:</strong> ${beatmap.totalLength} seconds</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scores Table -->
+    <h3 class="mt-20">Top Scores</h3>
+    <div class="table-responsive">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>User</th>
+                    <th>Country</th>
+                    <th>PP</th>
+                    <th>Play Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <#list beatmap.scores as score>
+                <tr>
+                    <td>#${score?index + 1}</td>
+                    <td>${score.name}</td>
+                    <td><span class="flag flag-${score.country}"></span> ${score.country}</td>
+                    <td>${score.pp}</td>
+                    <td data-timetamp-format="date" >${score.playTime}</td>
+                </tr>
+                </#list>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<#include "assets/footer.html">

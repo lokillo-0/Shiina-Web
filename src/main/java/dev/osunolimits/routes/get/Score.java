@@ -26,7 +26,13 @@ public class Score extends Shiina {
         }
 
         ScoreQuery scoreQuery = new ScoreQuery(shiina.mysql);
-        shiina.data.put("score", scoreQuery.getScore(id));
+        Object o = scoreQuery.getScore(id);
+        if(o == null) {
+            return null;
+        }
+
+        shiina.data.put("score", o);
+
         
         return renderTemplate("score.html", shiina, res, req);
     }

@@ -48,10 +48,10 @@
                     </div>
                     <div class="hover-icons mt-2">
                         <a href="/b/${beatmap.id?c}" class="icon-link">
-                            <i data-bs-toggle="tooltip" data-bs-placement="top" title='View Beatmap'  class="fa-solid fa-arrow-up-right-from-square" class="fa-solid fa-play-circle"></i>
+                            <i data-bs-toggle="tooltip" data-bs-placement="top" title='View Beatmap'  class="fas fa-eye"></i>
                         </a>
                         <a href="https://osu.direct/api/d/${beatmap.set_id?c}" class="icon-link">
-                            <i data-bs-toggle="tooltip" data-bs-placement="top" title='Download'  class="fa-solid fa-download" class="fa-solid fa-play-circle"></i>
+                            <i data-bs-toggle="tooltip" data-bs-placement="top" title='Download'  class="fa-solid fa-download"></i>
                         </a>
                         <a href="osu://dl/${beatmap.set_id?c}" class="icon-link">
                             <i data-bs-toggle="tooltip" data-bs-placement="top" title='Download with osu!Direct' class="fa-solid fa-play-circle"></i>

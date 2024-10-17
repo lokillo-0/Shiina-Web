@@ -28,7 +28,7 @@
                     <#include "/freemarker/modconvert.ftl">
                 </span>
                 <span class="fs-5 ms-2">
-                    ${score.pp?string("0")}pp <span class="fs-6">(${score.acc?string("0.00")}%)</span>
+                    ${score.pp?string("0")}pp <span class="fs-6">(${score.acc?string("0.00")}%)</span> <#assign height=30> <#include "/freemarker/gradeconvert.ftl">
                 </span>
             </div>
             <div class="icon-container-score d-flex align-items-center">

@@ -4,7 +4,8 @@
         <div class="card-body">  
             <div class="row border-bottom mb-2 py-4">
                 <div class="d-flex align-items-center mb-3">
-                    <img src="/img/ranking/ranking-${score.grade}.png" alt="Grade" class="img-fluid me-3" style="height: 50px;">
+                    <#assign height=60>
+                    <#include "/freemarker/gradeconvert.ftl">
                     <span class="h2 me-2">${score.username}'s Score</span> 
                     <small data-timestamp-format="date" data-timestamp="${score.playTime}">${score.playTime}</small>
                 </div>
@@ -33,8 +34,10 @@
                         </div>
                     </div>
                     <div class="btn-group mt-auto" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Replay</button>
+                        <a href="${apiUrl}/v1/get_replay?id=${score.id?c}" type="button" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Replay</a>
+                        <#if user??>
                         <button type="button" class="btn btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> Report Score</button>
+                        </#if>
                     </div>
                 </div>
                 <div class="col mt-2 mt-lg-0 col-12 col-sm-12 col-lg-6">
@@ -50,20 +53,31 @@
                     <h5 class="">Hit Statistics</h5>
                     <ul class="list-group">
                         <li class="list-group-item bg-body">300s: ${score.n300}</li>
+                        <li class="list-group-item bg-body">Gekis: ${score.ngeki}</li>
                         <li class="list-group-item bg-body">100s: ${score.n100}</li>
+                        <li class="list-group-item bg-body">Katus: ${score.nkatu}</li>
                         <li class="list-group-item bg-body">50s: ${score.n50}</li>
                         <li class="list-group-item bg-body">Misses: ${score.nmiss}</li>
-                        <li class="list-group-item bg-body">Gekis: ${score.ngeki}</li>
-                        <li class="list-group-item bg-body">Katus: ${score.nkatu}</li>
                     </ul>
                 </div>
-                <div class="col-12 col-md-6">
+                <div class="col-12 mt-2 flex-column mt-md-0 col-md-6">
                     <h5 class="">Play Information</h5>
                     <ul class="list-group">
                         <li class="list-group-item bg-body">Play Time: ${score.playTime}</li>
                         <li class="list-group-item bg-body">Grade: ${score.grade}</li>
-                        <li class="list-group-item bg-body">Status: ${score.status}</li>
+                        <li class="list-group-item bg-body">Status: ${convertScoreStatus(score.status)}</li>
                     </ul>
+                    <div class="d-flex mt-auto">
+                        <#assign u = {
+                            "id": score.userId,
+                            "name": score.username,
+                            "country": score.country,
+                            "big": true
+                        }>
+                        <#assign index = 0>
+                        <#include "/freemarker/models/user.ftl">
+                    </div>
+                    
                 </div>
             </div>
         </div>

@@ -7,11 +7,14 @@
     min-height: 100vh;
 }
 
+.clan-panel {
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out; 
+}
+
 .clan-panel:hover,
 .clan-panel:focus {
-    cursor: pointer;
     transform: translateX(20px);
-    transition: transform 0.2s;
 }
 
 .shiina-border {
@@ -30,6 +33,10 @@
 
 .leaderboard-panel {
     transition: transform 0.2s ease-in-out; /* Transition for both hover and unhover */
+}
+
+.shiina-versel {
+    font-size: 30px!important;
 }
 
 .leaderboard-panel:hover,

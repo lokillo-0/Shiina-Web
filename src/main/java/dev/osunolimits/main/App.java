@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
+import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Clan;
 import dev.osunolimits.routes.get.Clans;
@@ -50,6 +51,7 @@ public class App {
         WebServer.get("/clans", new Clans());
         WebServer.get("/clan/:id", new Clan());
         WebServer.get("/scores/:id", new Score());
+        WebServer.get("/b/:id", new Beatmap());
         WebServer.get("/login", new Login());
         WebServer.post("/login", new dev.osunolimits.routes.post.Login());
         WebServer.post("/logout", new Logout());

@@ -37,6 +37,7 @@ public class ClanQuery {
         private int set_id;
         private int score_id;
         private String[] mods;
+        private String grade;
         private String playTime;
         private double pp;
         private double acc;
@@ -94,7 +95,7 @@ public class ClanQuery {
     private final String GETCLAN_ACC = "SELECT c.*, (SELECT COUNT(*) FROM users u WHERE u.clan_id = c.id) AS memberCount, (SELECT ROUND(AVG(s.acc), 2) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS acc FROM clans c HAVING acc > 0 ORDER BY `acc` DESC LIMIT ? OFFSET ?;";
     private final String GETCLAN_SINGLE = "WITH ClanRanks AS (SELECT c.id, RANK() OVER (ORDER BY COALESCE(SUM(s.pp), 0) DESC) AS totalPPRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id), AvgPPRanks AS (SELECT c.id, RANK() OVER (ORDER BY COALESCE(AVG(s.pp), 0) DESC) AS avgPPRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id), RankedScoreRanks AS (SELECT c.id, RANK() OVER (ORDER BY COALESCE(SUM(s.rscore), 0) DESC) AS rankedScoreRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id), AccRanks AS (SELECT c.id, RANK() OVER (ORDER BY ROUND(AVG(s.acc), 2) DESC) AS accRank FROM clans c LEFT JOIN users u ON u.clan_id = c.id LEFT JOIN stats s ON u.id = s.id AND s.mode = ? GROUP BY c.id) SELECT u.name AS `owner_name`, u.latest_activity AS `owner_online`, u.country AS `owner_country`,c.*, (SELECT COUNT(*) FROM users u WHERE u.clan_id = c.id) AS memberCount, (SELECT COALESCE(SUM(s.pp), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS totalPP, cr.totalPPRank, (SELECT COALESCE(AVG(s.pp), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS avgPP, apr.avgPPRank, (SELECT COALESCE(SUM(s.rscore), 0) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS rankedScore, rsr.rankedScoreRank, (SELECT ROUND(AVG(s.acc), 2) FROM users u JOIN stats s ON u.id = s.id WHERE u.clan_id = c.id AND s.mode = ?) AS acc, ar.accRank FROM clans c LEFT JOIN users u ON owner = u.id LEFT JOIN ClanRanks cr ON cr.id = c.id LEFT JOIN AvgPPRanks apr ON apr.id = c.id LEFT JOIN RankedScoreRanks rsr ON rsr.id = c.id LEFT JOIN AccRanks ar ON ar.id = c.id WHERE c.id = ?;";
     private final String GETCLAN_MEMBERS = "SELECT `id`, `name`, `country`, `priv`, `latest_activity` FROM `users` WHERE `clan_id` = ? AND clan_priv != 3;";
-    private final String GETCLAN_ACTIVITY = "SELECT `users`.`id`, `users`.`name`, `maps`.`filename`, `maps`.`id` AS `map_id`, `maps`.`set_id` AS `set_id`, `top_scores`.`play_time`, `top_scores`.`mods`, `top_scores`.`pp`, `top_scores`.`id` AS `score_id`, `top_scores`.`acc` FROM (SELECT `userid`, `map_md5`, `mods`, MAX(`play_time`) AS `play_time`, MAX(`pp`) AS `pp`, MAX(`acc`) AS `acc`, MAX(`id`) AS `id` FROM `scores` WHERE `status` = 2 AND `mode` = ? GROUP BY `userid`, `map_md5`, `mods` ORDER BY `play_time` DESC) AS `top_scores` LEFT JOIN `users` ON `top_scores`.`userid` = `users`.`id` LEFT JOIN `maps` ON `maps`.`md5` = `top_scores`.`map_md5` WHERE `users`.`clan_id` = ? ORDER BY `top_scores`.`play_time` DESC LIMIT 20;";
+    private final String GETCLAN_ACTIVITY = "SELECT `users`.`id`, `users`.`name`, `maps`.`filename`, `maps`.`id` AS `map_id`, `maps`.`set_id` AS `set_id`, `top_scores`.`play_time`, `top_scores`.`mods`, `top_scores`.`pp`, `top_scores`.`id` AS `score_id`, `top_scores`.`acc`, `scores`.`grade` FROM (SELECT `userid`, `map_md5`, `mods`, MAX(`play_time`) AS `play_time`, MAX(`pp`) AS `pp`, MAX(`acc`) AS `acc`, MAX(`id`) AS `id` FROM `scores` WHERE `status` = 2 AND `mode` = ? GROUP BY `userid`, `map_md5`, `mods` ORDER BY `play_time` DESC) AS `top_scores` LEFT JOIN `users` ON `top_scores`.`userid` = `users`.`id` LEFT JOIN `maps` ON `maps`.`md5` = `top_scores`.`map_md5` LEFT JOIN `scores` ON `scores`.`id` = `top_scores`.`id` WHERE `users`.`clan_id` = ? ORDER BY `top_scores`.`play_time` DESC LIMIT 20;";
 
     public List<ClanAcitvityResponse> getClanActivity(int id, int mode) throws SQLException {
         List<ClanAcitvityResponse> responses = new ArrayList<>();
@@ -108,6 +109,7 @@ public class ClanQuery {
             response.setSet_id(rs.getInt("set_id"));
             response.setScore_id(rs.getInt("score_id"));
             response.setMods(OsuConverter.convertMods(rs.getInt("mods")));
+            response.setGrade(rs.getString("grade"));
             response.setPlayTime(rs.getString("play_time"));
             response.setAcc(rs.getDouble("acc"));
             response.setPp(rs.getDouble("pp"));

@@ -19,6 +19,7 @@ public class ScoreQuery {
 
     @Data
     public class Score {
+        private int id;
         private long score;
         private int pp;
         private double acc;
@@ -36,17 +37,19 @@ public class ScoreQuery {
         private String playTime;
         private int userId;
         private String username;
+        private String country;
         private int perfect;
         private Beatmap beatmap;
     }
 
-    private final String SCORE_QUERY = "SELECT `score`, `pp`, `acc`, `scores`.`max_combo` AS `max_combo_scores`, `mods`, `n300`, `n100`, `n50`, `nmiss`, `ngeki`, `nkatu`, `grade`, `scores`.`status` AS `score_status`, `scores`.`mode` AS `score_mode`, `play_time`, `userid`, `users`.`name`, `perfect`, `maps`.`id` AS `bm_id`, `maps`.`set_id`, `maps`.`filename` AS `bm_title`, `maps`.`artist`, `maps`.`creator`, `maps`.`passes`, `maps`.`plays`, `maps`.`diff`, `maps`.`last_update`, `maps`.`status` AS `bm_status` FROM `scores` LEFT JOIN `maps` ON `map_md5` = `maps`.`md5` LEFT JOIN `users` ON `userid` = `users`.`id` WHERE `scores`.`id` = ?;";
+    private final String SCORE_QUERY = "SELECT `scores`.`id` AS `score_id`, `score`, `pp`, `acc`, `scores`.`max_combo` AS `max_combo_scores`, `mods`, `n300`, `n100`, `n50`, `nmiss`, `ngeki`, `nkatu`, `grade`, `scores`.`status` AS `score_status`, `scores`.`mode` AS `score_mode`, `play_time`, `userid`, `users`.`name`, `users`.`country`, `perfect`, `maps`.`id` AS `bm_id`, `maps`.`set_id`, `maps`.`filename` AS `bm_title`, `maps`.`artist`, `maps`.`creator`, `maps`.`passes`, `maps`.`plays`, `maps`.`diff`, `maps`.`last_update`, `maps`.`status` AS `bm_status` FROM `scores` LEFT JOIN `maps` ON `map_md5` = `maps`.`md5` LEFT JOIN `users` ON `userid` = `users`.`id` WHERE `scores`.`id` = ?;";
 
     public Score getScore(int id) throws SQLException {
         ResultSet scoreRs = mysql.Query(SCORE_QUERY, id);
 
         if(scoreRs.next()) {
             Score score = new Score();
+            score.setId(scoreRs.getInt("score_id"));
             score.setScore(scoreRs.getLong("score"));
             score.setPp(scoreRs.getInt("pp"));
             score.setAcc(scoreRs.getDouble("acc"));
@@ -64,6 +67,7 @@ public class ScoreQuery {
             score.setPlayTime(scoreRs.getString("play_time"));
             score.setUserId(scoreRs.getInt("userid"));
             score.setUsername(scoreRs.getString("name"));
+            score.setCountry(scoreRs.getString("country"));
             score.setPerfect(scoreRs.getInt("perfect"));
             Beatmap beatmap = new Beatmap();
             beatmap.setId(scoreRs.getInt("bm_id"));
