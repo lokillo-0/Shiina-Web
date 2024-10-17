@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaTemplateException;
 import dev.osunolimits.utils.OsuConverter;
+import freemarker.cache.NullCacheStorage;
 import freemarker.template.Configuration;
 import freemarker.template.TemplateModelException;
 import spark.Spark;
@@ -51,6 +52,9 @@ public class WebServer extends Spark {
             LOG.error("Failed to load templates directory", e);
         }
         freemarkerCfg.setTemplateUpdateDelayMilliseconds(updateDelay);
+        if(updateDelay == 0) {
+            freemarkerCfg.setCacheStorage(new NullCacheStorage());
+        }
         try {
             freemarkerCfg.setSharedVariable("OsuConverter", OsuConverter.class);
         } catch (TemplateModelException e) {

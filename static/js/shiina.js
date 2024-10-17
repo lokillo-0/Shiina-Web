@@ -24,11 +24,20 @@ submitStartTurbo = document.addEventListener('turbo:submit-start', function () {
     Turbo.navigator.delegate.adapter.showProgressBar();
 });
 
+beforeVisitTurbo = document.addEventListener('turbo:before-visit', () => {
+});
+
+beforeRenderTurbo = document.addEventListener('turbo:before-render', () => {
+});
+
 unloadEvenetTurbo = document.addEventListener("turbo:before-cache", function () {
     Turbo.navigator.delegate.adapter.showProgressBar();
     document.removeEventListener("turbo:load", loadEventTurbo);
     document.removeEventListener("turbo:before-cache", unloadEvenetTurbo);
     document.removeEventListener("turbo:submit-start", submitStartTurbo);
+    document.removeEventListener("turbo:before-visit", beforeVisitTurbo);
+    document.removeEventListener("turbo:before-render", beforeRenderTurbo);
+
 });
 
 function loadLazyLoadImage(img) {

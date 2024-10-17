@@ -133,9 +133,10 @@
                 <input type="hidden" id="currentCount" value="4">
                 <input type="hidden" id="totalMembers" value="${members?size}">
 
-                <div class="row my-4" id="activity">
+                <div class="row my-4 mx-0" id="activity">
                     <#list activity as score>
                         <#assign index=score?index>
+                        <#assign isActivity=true>
                         <#include "/freemarker/models/score.ftl">
                     </#list>
                 </div>
