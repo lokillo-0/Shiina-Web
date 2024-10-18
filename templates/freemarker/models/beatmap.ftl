@@ -8,7 +8,7 @@
                     </div>
                 </div>
                 <img src="https://assets.ppy.sh/beatmaps/${beatmap.set_id?c}/covers/card.jpg"
-                    class="img-fluid rounded-start card-img" alt="Leaderboard Image"
+                    class="img-fluid rounded-start card-img" alt="Beatmap Image"
                     onload="loadLazyLoadImage(this);"
                     onerror="lazyLoadNoImage(this, '${noBeatmapIcon}');">
             </div>

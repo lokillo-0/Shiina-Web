@@ -26,60 +26,118 @@
     <div class="card mt-4">
       <div class="card-body">
         <#list beatmap.diffs as diff>
-            <a href="/b/${diff.id?c}" data-bs-toggle="tooltip" data-bs-placement="top" title='${diff.version}' style="font-size: 25px; text-decoration: none;" class="fa-regular <#if beatmap.version = diff.version>shiina-versel</#if> text-${convertDiffToColor(diff.version)} ms-1 fa-circle"></a>
+            <a href="/b/${diff.id?c}" data-bs-html="false" data-bs-toggle="tooltip" data-bs-placement="top" title="${diff.version}" style="font-size: 25px; text-decoration: none;" class="fa-regular <#if beatmap.version = diff.version>shiina-versel</#if> text-${convertDiffToColor(diff.version)} ms-2 fa-circle"></a>
         </#list>
       </div>
     </div>
-</div>
 
-
-<div class="container">
-    <!-- Beatmap Header -->
-    <div class="card p-20">
-        <h1 class="card-title">${beatmap.artist} - ${beatmap.title}</h1>
-        <p class="text-muted">Mapped by: ${beatmap.creator}</p>
-        <div class="d-flex flex-column flex-lg-row justify-content-between">
-            <div>
-                <span><strong>BPM:</strong> ${beatmap.bpm}</span><br>
-                <span><strong>Set ID:</strong> ${beatmap.setId}</span><br>
-                <span><strong>Status:</strong> ${beatmap.status}</span><br>
-                <span><strong>Mode:</strong> ${beatmap.mode}</span>
+    <div class="card mt-2 p-4">
+       
+            <div class="row mb-2">
+                <div class="col col-12 col-md-4">
+                    <div style="min-height:160px;" class="image-placeholder">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <img src="https://assets.ppy.sh/beatmaps/${beatmap.setId?c}/covers/card.jpg" 
+                    onload="loadLazyLoadImage(this);"
+                    onerror="lazyLoadNoImage(this, '${noBeatmapIcon}');"     
+                    class="img-fluid card-img rounded w-100" style="min-height:160px;  object-fit: cover; height: 100%;">
+                </div>
+                <div class="col-12 col-md-8">
+                    <h1 class="card-title">${beatmap.artist} - ${beatmap.title}</h1>
+                    <p class="text-muted">Mapped by: ${beatmap.creator}</p>
+                    <div class="d-flex flex-wrap align-items-center">
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Circle Size">CS: ${beatmap.cs}</span>
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Drain">HP: ${beatmap.hp}</span>
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Overall Difficulty">OD: ${beatmap.od}</span>
+                        <span class="badge badge-secondary shiina-nosel me-1" data-bs-toggle="tooltip" title="Approach Rate">AR: ${beatmap.ar}</span>
+                        <span class="badge bg-${convertStatusBackColor(beatmap.status)} shiina-nosel me-1" data-bs-toggle="tooltip" title="Status">
+                            ${convertStatusBack(beatmap.status)}
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div>
-                <span><strong>Last Update:</strong> ${beatmap.lastUpdate}</span><br>
-                <span><strong>Total Plays:</strong> ${beatmap.plays}</span><br>
-                <span><strong>Passes:</strong> ${beatmap.passes}</span><br>
-                <span><strong>Length:</strong> ${beatmap.totalLength} seconds</span>
+       
+        
+
+        <div class="row mb-2">
+            <div class="col-md-4">
+                <a target="_blank" href="https://osu.ppy.sh/beatmapsets/${beatmap.setId?c}#${convertModeBack(beatmap.mode)}/${id?c}" type="button" class="btn shiina-osubtn w-100 mb-1"><i class="fa-solid fa-circle"></i> View on osu!</a>
+                <a href="https://osu.direct/api/d/${beatmap.setId?c}" type="button" class="btn btn-primary w-100 mb-1"><i class="fa-solid fa-download"></i> Download Beatmap</a>
+            </div>
+            <div class="col-md-8">
+                <div class="d-flex flex-wrap align-items-center">
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="${beatmap.version}" class="fa-regular me-2 shiina-modeshow text-${convertDiffToColor(beatmap.version)} mt-2 mt-md-0 shiina-nosel fa-circle"><span>${beatmap.version}</span></a></p>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Difficulty" class="me-2 fa-solid shiina-modeshow text-primary mt-2 mt-md-0 shiina-nosel fa-star">
+                        <span>${beatmap.diff?string("0.00")}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="BPM" class="fa-solid fa-headphones me-2 shiina-modeshow text-primary mt-2 mt-md-0 shiina-nosel">
+                        <span>${beatmap.bpm}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Length (Minutes)" class="me-2 fa-solid shiina-modeshow text-primary mt-2 mt-md-0 shiina-nosel fa-stopwatch">
+                        <span>${(beatmap.totalLength / 60)?string("0.0")}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Plays" class="fa-solid fa-play me-2 shiina-modeshow text-primary mt-2 mt-md-0 shiina-nosel">
+                        <span>${beatmap.plays}</span>
+                    </a>
+                    <a data-bs-toggle="tooltip" data-bs-placement="top" title="Passes" class="fa-solid fa-circle-check me-2 shiina-modeshow text-primary mt-2 mt-md-0 shiina-nosel">
+                        <span>${beatmap.passes}</span>
+                    </a>
+                    
+                </div>
+                <div class="mt-2">Last Update: <small data-timestamp-format="date" data-timestamp="${beatmap.lastUpdate}">${beatmap.lastUpdate}</small></div>
             </div>
         </div>
+        
+        
     </div>
+</div>
+<div class="container mb-4">
+    <div class="card mt-2 p-4">
+        <#list beatmap.scores as score>
+        <div class="col col-12 member-entry">
+            <a href="/scores/${score.id?c}" class="bg-secondary m-2 p-3 row leaderboard-panel" style="border-radius: 5px;">
+                <!-- Column for avatar and flag horizontally aligned -->
+                <div class="col-auto d-flex align-items-center">
+                    <!-- Avatar -->
+                    <span class="m-1">
+                        <img class="flag" src="https://a.osunolimits.dev/${score.userId}" alt="">
+                    </span>
+                    <!-- Flag aligned next to the avatar -->
+                    <span class="m-1 ms-4 d-flex align-items-center">
+                        <img class="flag" src="/img/flags/${score.country}.svg" alt="${u.country} Flag">
+                    </span>
+                </div>
 
-    <!-- Scores Table -->
-    <h3 class="mt-20">Top Scores</h3>
-    <div class="table-responsive">
-        <table class="table table-hover table-striped">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>User</th>
-                    <th>Country</th>
-                    <th>PP</th>
-                    <th>Play Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                <#list beatmap.scores as score>
-                <tr>
-                    <td>#${score?index + 1}</td>
-                    <td>${score.name}</td>
-                    <td><span class="flag flag-${score.country}"></span> ${score.country}</td>
-                    <td>${score.pp}</td>
-                    <td data-timetamp-format="date" >${score.playTime}</td>
-                </tr>
-                </#list>
-            </tbody>
-        </table>
+                <!-- Player name -->
+                <div class="col d-flex align-items-center">
+                    <span class="ms-2">
+                        ${score.name}
+                    </span>
+                </div>
+
+                <!-- Grade and PP aligned to the right -->
+                <div class="col-auto ms-auto d-flex align-items-center">
+                    <!-- Grade -->
+                    <div class="me-3 d-flex align-items-center">
+                        <#assign height=30> <#include "/freemarker/gradeconvert.ftl">
+                    </div>
+                    <!-- PP -->
+                    <div class="d-flex align-items-center">
+                        ${score.pp?string("0")}pp
+                    </div>
+                </div>
+            </a>
+        </div>
+        <#else>
+        <h1>No scores set on this beatmap</h1>
+        </#list>
     </div>
 </div>
 
+
+
 <#include "assets/footer.html">
+

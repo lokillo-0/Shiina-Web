@@ -86,6 +86,7 @@ public class Beatmap extends Shiina {
 
         while(scoreQuery.next()) {
             FullBeatmap.BeatmapScore score = new FullBeatmap().new BeatmapScore();
+            // Get priv and clan?? 
             score.setId(scoreQuery.getInt("id"));
             score.setPp(scoreQuery.getInt("pp"));
             score.setGrade(scoreQuery.getString("grade"));

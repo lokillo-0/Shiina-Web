@@ -31,6 +31,38 @@
     cursor: pointer;
 }
 
+.shiina-nosel {
+    user-select: none;
+    cursor: pointer;
+}
+
+.shiina-modeshow {
+
+    display: flex;
+    align-items: center;
+    font-size: 25px; text-decoration: none;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid var(--bs-content-border-color);
+}
+
+.shiina-osubtn {
+    background-color: #FE7CB6;
+    color: #000000!important;
+    border:0 none;
+}
+
+.shiina-osubtn:hover, .shiina-osubtn:focus , .shiina-osubtn:active, .shiina-osubtn.active, .shiina-osubtn:active:focus {
+    background-color: #E6649F;
+}
+
+.shiina-modeshow span{
+    font-family: var(--bs-font-sans-serif);
+    font-weight: normal;
+    margin-left: 5px;
+    font-size: 15px;
+}
+
 .leaderboard-panel {
     transition: transform 0.2s ease-in-out; /* Transition for both hover and unhover */
 }
