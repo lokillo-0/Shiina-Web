@@ -14,6 +14,7 @@ import dev.osunolimits.routes.get.Home;
 import dev.osunolimits.routes.get.Leaderboard;
 import dev.osunolimits.routes.get.Login;
 import dev.osunolimits.routes.get.Score;
+import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.post.Logout;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -52,6 +53,7 @@ public class App {
         WebServer.get("/clan/:id", new Clan());
         WebServer.get("/scores/:id", new Score());
         WebServer.get("/b/:id", new Beatmap());
+        WebServer.get("/u/:id", new User());
         WebServer.get("/login", new Login());
         WebServer.post("/login", new dev.osunolimits.routes.post.Login());
         WebServer.post("/logout", new Logout());

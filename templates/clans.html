@@ -75,38 +75,31 @@
                         <div class="col col-12">
                             <ul class="leaderboard-list">
                                 <#assign clanC=0>
-                                    <#list clans as clan>
-
-                                        <li style="list-style: none;">
-                                            <a href="/clan/${clan.id}" class="bg-secondary m-2 p-3 row clan-panel"
-                                                style="border-radius: 5px;">
-
-                                                <span class="col-auto"
-                                                    style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${offset
-                                                    + clanC}</span>
-                                                <span class="col col-auto d-flex align-items-center">
-
-                                                    <button class="clan-badge btn btn-primary" >[${clan.tag}]</button>  <span class="ms-2"> ${clan.name}</span>
+                                <#list clans as clan>
+                                    <li style="list-style: none;">
+                                        <a href="/clan/${clan.id}" class="bg-secondary m-2 p-3 row clan-panel" style="border-radius: 5px;">
+                                            <span class="col-auto" style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${offset + clanC}</span>
+                                            <span class="col col-auto d-flex align-items-center">
+                                                <button class="clan-badge btn btn-primary">[${clan.tag}]</button>
+                                                <span class="ms-2">${clan.name}</span>
+                                            </span>
+                                            <div class="col-auto ms-auto d-flex align-items-center" style="min-width: 200px;"> <!-- Feste Breite -->
+                                                <span class="d-flex align-items-center me-3"> <!-- Abstand zwischen Icon und Text -->
+                                                    <i class="fa-solid fa-users me-1"></i> ${clan.members}
                                                 </span>
-                                                <span class="col col-auto d-flex align-items-center">
-                                                    <span class="ms-2"><i class="fa-solid fa-users"></i>
-                                                        ${clan.members}</span>
+                                                <span class="d-flex align-items-center">
+                                                    ${clan.competitionValue}<#switch sort><#case "totalpp">pp<#break><#case "avgpp">pp<#break><#case "rankedscore"> Score<#break><#case "acc">%<#break></#switch>
                                                 </span>
-                                                <div class="col-auto ms-auto d-flex align-items-center">
-                                                    ${clan.competitionValue}<#switch sort>
-                                                        <#case "totalpp">pp<#break>
-                                                                <#case "avgpp">pp<#break>
-                                                                        <#case "rankedscore"> Score<#break>
-                                                                                <#case "acc">%<#break>
-                                                    </#switch>
-                                                </div>
-                                            </a>
-                                        </li>
-                                        <#assign clanC=clanC + 1>
-                                    </#list>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <#assign clanC=clanC + 1>
+                                </#list>
                             </ul>
                         </div>
-
+                        
+                        
+                        
                         <div class="col col-12">
                             <div class="row">
                                 <div class="col col-auto">

@@ -33,6 +33,7 @@ public class FullBeatmap {
     public class BeatmapScore {
         private int id;
         private int pp;
+        private String[] mods;
         private String grade;
         private String playTime;
         private int userId;

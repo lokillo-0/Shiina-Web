@@ -8,6 +8,7 @@ import dev.osunolimits.models.FullBeatmap;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.utils.OsuConverter;
 import dev.osunolimits.utils.Validation;
 import spark.Request;
 import spark.Response;
@@ -18,7 +19,7 @@ public class Beatmap extends Shiina {
     @Override
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
-        shiina.data.put("actNav", 0);
+        shiina.data.put("actNav", 3);
 
         Integer id = null;
         if (req.params("id") != null && Validation.isNumeric(req.params("id"))) {
@@ -82,7 +83,7 @@ public class Beatmap extends Shiina {
         }
         List<FullBeatmap.BeatmapScore> scores = new ArrayList<>();
 
-        ResultSet scoreQuery = shiina.mysql.Query("SELECT s.id, s.pp, s.grade, s.play_time, s.userid, u.name, u.country FROM scores s LEFT JOIN users u ON s.userid = u.id WHERE s.map_md5 = ? AND s.pp = (SELECT MAX(pp) FROM scores WHERE map_md5 = s.map_md5 AND s.status = 2 AND userid = s.userid) AND s.mode = ? ORDER BY s.pp DESC LIMIT 50;", fullBeatmap.getMd5(),mode);
+        ResultSet scoreQuery = shiina.mysql.Query("SELECT s.id, s.pp, s.grade, s.play_time, s.userid, s.mods, u.name, u.country, u.priv FROM scores AS `s` LEFT JOIN users AS `u` ON s.userid = u.id WHERE s.map_md5 = ? AND s.pp = (SELECT MAX(pp) FROM scores WHERE map_md5 = s.map_md5 AND s.status = 2 AND userid = s.userid) AND s.mode = ? ORDER BY `s`.`pp` DESC, `s`.`play_time`  ASC LIMIT 0, 50;", fullBeatmap.getMd5(),mode);
 
         while(scoreQuery.next()) {
             FullBeatmap.BeatmapScore score = new FullBeatmap().new BeatmapScore();
@@ -91,6 +92,7 @@ public class Beatmap extends Shiina {
             score.setPp(scoreQuery.getInt("pp"));
             score.setGrade(scoreQuery.getString("grade"));
             score.setPlayTime(scoreQuery.getString("play_time"));
+            score.setMods(OsuConverter.convertMods(scoreQuery.getInt("mods")));
             score.setUserId(scoreQuery.getInt("userid"));
             score.setName(scoreQuery.getString("name"));
             score.setCountry(scoreQuery.getString("country"));

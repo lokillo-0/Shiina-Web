@@ -65,6 +65,7 @@
         <div class="row mb-2">
             <div class="col-md-4">
                 <a target="_blank" href="https://osu.ppy.sh/beatmapsets/${beatmap.setId?c}#${convertModeBack(beatmap.mode)}/${id?c}" type="button" class="btn shiina-osubtn w-100 mb-1"><i class="fa-solid fa-circle"></i> View on osu!</a>
+                <a target="_blank" href="osu://dl/${beatmap.setId?c}" type="button" class="btn shiina-osubtn w-100 mb-1"> Download with osu!direct</a>
                 <a href="https://osu.direct/api/d/${beatmap.setId?c}" type="button" class="btn btn-primary w-100 mb-1"><i class="fa-solid fa-download"></i> Download Beatmap</a>
             </div>
             <div class="col-md-8">
@@ -95,26 +96,31 @@
     </div>
 </div>
 <div class="container mb-4">
-    <div class="card mt-2 p-4">
+    <div class="card mt-2 p-3">
         <#list beatmap.scores as score>
         <div class="col col-12 member-entry">
             <a href="/scores/${score.id?c}" class="bg-secondary m-2 p-3 row leaderboard-panel" style="border-radius: 5px;">
                 <!-- Column for avatar and flag horizontally aligned -->
-                <div class="col-auto d-flex align-items-center">
+                <div class="col-auto d-flex align-items-center me-4">
+                    
                     <!-- Avatar -->
                     <span class="m-1">
                         <img class="flag" src="https://a.osunolimits.dev/${score.userId}" alt="">
                     </span>
                     <!-- Flag aligned next to the avatar -->
-                    <span class="m-1 ms-4 d-flex align-items-center">
-                        <img class="flag" src="/img/flags/${score.country}.svg" alt="${u.country} Flag">
+                    <span class="m-1 ms-4">
+                        <img class="flag" src="/img/flags/${score.country}.svg" alt="${score.country} Flag">
+                    </span>
+                    <span class="m-1 col-5 ms-4 d-flex align-items-center">
+                        <span class="h3">#${score?index + 1}</span>
                     </span>
                 </div>
 
                 <!-- Player name -->
                 <div class="col d-flex align-items-center">
                     <span class="ms-2">
-                        ${score.name}
+                        <#assign passedMods = score.mods>
+                        ${score.name} <#include "/freemarker/modconvert.ftl">  
                     </span>
                 </div>
 

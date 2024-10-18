@@ -47,14 +47,19 @@
 }
 
 .shiina-osubtn {
-    background-color: #FE7CB6;
+    background-color: #E6649F;
     color: #000000!important;
     border:0 none;
 }
 
-.shiina-osubtn:hover, .shiina-osubtn:focus , .shiina-osubtn:active, .shiina-osubtn.active, .shiina-osubtn:active:focus {
-    background-color: #E6649F;
+.shiina-osubtn:hover, .shiina-osubtn:focus , .shiina-osubtn:active, .shiina-osubtn.active {
+    background-color: #FE7CB6;
 }
+
+.shiina-osubtn:active:focus {
+    background-color: rgb(230, 149, 185);
+}
+
 
 .shiina-modeshow span{
     font-family: var(--bs-font-sans-serif);

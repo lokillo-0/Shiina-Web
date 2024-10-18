@@ -41,7 +41,7 @@
     <#elseif diff?contains("Insane")>
         <#return "danger">
     <#else>
-        <#return "secondary">
+        <#return "reset">
     </#if>
 </#function>
 
