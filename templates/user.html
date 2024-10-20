@@ -1,157 +1,258 @@
 <#include "assets/base.html">
-<div class="container">
-    <!-- Mode Selector Card -->
-    <div class="card mt-4">
-        <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
-            <#include "/freemarker/selector.ftl">
-            <div class="my-2 col-12 col-md-auto my-lg-0 col-auto d-flex align-items-center justify-content-center">
-                <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
-                    <button type="button" onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')" 
-                        class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
-                        <#if (mode==3)>disabled</#if>>Relax</button>
-                    <button type="button" onclick="selectParam('mode', '8')" 
-                        class="btn btn-<#if mode == 8>primary<#else>secondary</#if>"
-                        <#if (mode !=0 && mode !=4 && mode !=8)>disabled</#if>>AutoPilot</button>
-                </div>
+    <div class="container">
+        <!-- Mode Selector Card -->
+        <div class="card mt-4">
+            <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+                <#include "/freemarker/selector.ftl">
+                    <div
+                        class="my-2 col-12 col-md-auto my-lg-0 col-auto d-flex align-items-center justify-content-center">
+                        <div class="btn-group flex-wrap" role="group" aria-label="Mixed example">
+                            <button type="button"
+                                onclick="selectParam('mode', '<#if (mode == 0 || mode == 1 || mode == 2 || mode == 8)>${convertModeToRelax(mode)}</#if>')"
+                                class="btn btn-<#if (mode == 4 || mode == 5 || mode == 6)>primary<#else>secondary</#if>"
+                                <#if (mode==3)>disabled</#if>>Relax</button>
+                            <button type="button" onclick="selectParam('mode', '8')"
+                                class="btn btn-<#if mode == 8>primary<#else>secondary</#if>" <#if (mode !=0 && mode !=4
+                                && mode !=8)>disabled</#if>>AutoPilot</button>
+                        </div>
+                    </div>
             </div>
         </div>
-    </div>
 
-    <!-- Profile Section -->
-    <div class="card mt-4">
-        <div class="bg-secondary rounded-top">
-            <div class="row p-4">
-                <!-- Profile Picture -->
-                <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
-                    <img src="https://a.osunolimits.dev/${u.player.info.id}" alt="Profile picture" class="img-fluid rounded" style="max-width: 150px; min-width: 150px;">
-                </div>
-                <!-- Player Name -->
-                <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
-                    <h1 class="fw-bold">${u.player.info.name}</h1>
-                    <#if status.player_status.online == true>
-                        <div class="shiina-online-status rounded">
-                            <span class="shiina-online-status-circle"></span>
-                            <span class="shiina-online-status-text"><#if status.player_status.status.action == 0>Idle<#elseif status.player_status.status.action == 1>Online<#else>Playing ${status.player_status.status.info_text}</#if></div>
-                        
-                    </#if>
+        <!-- Profile Section -->
+        <div class="card mt-4">
+            <div class="bg-secondary rounded-top">
+                <div class="row p-4">
+                    <!-- Profile Picture -->
+                    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
+                        <img src="https://a.osunolimits.dev/${u.player.info.id}" alt="Profile picture"
+                            class="img-fluid rounded" style="max-width: 150px; min-width: 150px;">
                     </div>
-         
+                    <!-- Player Name -->
+                    <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
+                        <h1 class="fw-bold">${u.player.info.name}</h1>
+                        <#if status.player_status.online==true>
+                            <div class="shiina-online-status rounded">
+                                <span class="shiina-online-status-circle"></span>
+                                <span class="shiina-online-status-text">
+                                    <#if status.player_status.status.action==0>Idle<#elseif
+                                            status.player_status.status.action==1>Online<#else>Playing
+                                                ${status.player_status.status.info_text}</#if>
+                            </div>
+
+                        </#if>
+                    </div>
+
+                </div>
+
             </div>
+            <div class="m-2 my-4">
+                <div class="row">
+                    <div class="col col-12 col-sm-12 col-lg-6">
+                        <div class="row mx-4 justify-content-center align-items-center">
+                            <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                                <small>Rank</small>
+                                <h2>#<#if u.player.stats[mode?string].rank==0>-<#else>
+                                            ${u.player.stats[mode?string].rank}</#if>
+                                </h2>
+                            </div>
+                            <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                                <small>Country Rank <img class="flag rounded" width="20" height="15"
+                                        src="/img/flags/${u.player.info.country}.svg" alt=""></small>
+                                <h2>#<#if u.player.stats[mode?string].country_rank==0>-<#else>
+                                            ${u.player.stats[mode?string].country_rank}</#if>
+                                </h2>
+                            </div>
+                        </div>
 
-        </div>
-        <div class="m-2 my-4">
-            <div class="row">
-                <div class="col col-12 col-sm-12 col-lg-6">
-                    <div class="row mx-4 justify-content-center align-items-center">
-                        <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                            <small>Rank</small>
-                            <h2>#<#if u.player.stats[mode?string].rank == 0>-<#else>${u.player.stats[mode?string].rank}</#if></h2>
+                        <div class="row justify-content-center my-4" id="counts">
+                            <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                                <img src="/img/ranking/ranking-XH.png" class="img-fluid" alt="Ranking XH"
+                                    style="max-width: 30px;">
+                                <small class="mt-1">${u.player.stats[mode?string].xh_count}</small>
+                            </div>
+                            <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                                <img src="/img/ranking/ranking-X.png" class="img-fluid" alt="Ranking X"
+                                    style="max-width: 30px;">
+                                <small class="mt-1">${u.player.stats[mode?string].x_count}</small>
+                            </div>
+                            <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                                <img src="/img/ranking/ranking-SH.png" class="img-fluid" alt="Ranking SH"
+                                    style="max-width: 30px;">
+                                <small class="mt-1">${u.player.stats[mode?string].sh_count}</small>
+                            </div>
+                            <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                                <img src="/img/ranking/ranking-S.png" class="img-fluid" alt="Ranking S"
+                                    style="max-width: 30px;">
+                                <small class="mt-1">${u.player.stats[mode?string].s_count}</small>
+                            </div>
+                            <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                                <img src="/img/ranking/ranking-A.png" class="img-fluid" alt="Ranking A"
+                                    style="max-width: 30px;">
+                                <small class="mt-1">${u.player.stats[mode?string].a_count}</small>
+                            </div>
                         </div>
-                        <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                            <small>Country Rank <img
-                                class="flag rounded" width="20" height="15"
-                                src="/img/flags/${u.player.info.country}.svg"
-                                alt=""></small>
-                            <h2>#<#if u.player.stats[mode?string].country_rank == 0>-<#else>${u.player.stats[mode?string].country_rank}</#if></h2>
-                        </div>
+
+
                     </div>
-                    
-                    <div class="row justify-content-center my-4" id="counts">
-                        <div class="col-4 col-md-2 d-flex flex-column align-items-center">
-                            <img src="/img/ranking/ranking-XH.png" class="img-fluid" alt="Ranking XH" style="max-width: 30px;">
-                            <small class="mt-1">${u.player.stats[mode?string].xh_count}</small>
-                        </div>
-                        <div class="col-4 col-md-2 d-flex flex-column align-items-center">
-                            <img src="/img/ranking/ranking-X.png" class="img-fluid" alt="Ranking X" style="max-width: 30px;">
-                            <small class="mt-1">${u.player.stats[mode?string].x_count}</small>
-                        </div>
-                        <div class="col-4 col-md-2 d-flex flex-column align-items-center">
-                            <img src="/img/ranking/ranking-SH.png" class="img-fluid" alt="Ranking SH" style="max-width: 30px;">
-                            <small class="mt-1">${u.player.stats[mode?string].sh_count}</small>
-                        </div>
-                        <div class="col-4 col-md-2 d-flex flex-column align-items-center">
-                            <img src="/img/ranking/ranking-S.png" class="img-fluid" alt="Ranking S" style="max-width: 30px;">
-                            <small class="mt-1">${u.player.stats[mode?string].s_count}</small>
-                        </div>
-                        <div class="col-4 col-md-2 d-flex flex-column align-items-center">
-                            <img src="/img/ranking/ranking-A.png" class="img-fluid" alt="Ranking A" style="max-width: 30px;">
-                            <small class="mt-1">${u.player.stats[mode?string].a_count}</small>
-                        </div>
-                    </div>
-                    
-                    
-                </div>
-                <div class="col col-12 col-sm-12 col-lg-6">
-                    
-                    <div class="ml-2 mr-2">
-                        <table class="w-100">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        Joined:
-                                    </td>
-                                    <td data-timestamp-format="unix" data-timestamp="${u.player.info.creation_time?c}">
-                                        ${u.player.info.creation_time?c}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Last Activity:
-                                    </td>
-                                    <td data-timestamp-format="unix"
-                                        data-timestamp="${u.player.info.latest_activity?c}">
-                                        ${u.player.info.latest_activity?c}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        PP:
-                                    </td>
-                                    <td>${u.player.stats[mode?string].pp}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Total Score:
-                                    </td>
-                                    <td>${u.player.stats[mode?string].tscore}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Ranked Score:
-                                    </td>
-                                    <td>${u.player.stats[mode?string].rscore?c}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Max Combo:
-                                    </td>
-                                    <td>${u.player.stats[mode?string].max_combo}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Total Hits:
-                                    </td>
-                                    <td>${u.player.stats[mode?string].total_hits}</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Accuracy:
-                                    </td>
-                                    <td>${u.player.stats[mode?string].acc?string("0.00")}%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <#assign playTime = u.player.stats[mode?string].playtime>
-                        <small class="mt-4">Played for 
-                        <#list convertPlaytime(playTime)?keys as key>
+                    <div class="col col-12 col-sm-12 col-lg-6">
+
+                        <div class="ml-2 mr-2">
+                            <table class="w-100">
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            Joined:
+                                        </td>
+                                        <td data-timestamp-format="unix"
+                                            data-timestamp="${u.player.info.creation_time?c}">
+                                            ${u.player.info.creation_time?c}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Last Activity:
+                                        </td>
+                                        <td data-timestamp-format="unix"
+                                            data-timestamp="${u.player.info.latest_activity?c}">
+                                            ${u.player.info.latest_activity?c}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            PP:
+                                        </td>
+                                        <td>${u.player.stats[mode?string].pp}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Total Score:
+                                        </td>
+                                        <td>${u.player.stats[mode?string].tscore}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Ranked Score:
+                                        </td>
+                                        <td>${u.player.stats[mode?string].rscore?c}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Max Combo:
+                                        </td>
+                                        <td>${u.player.stats[mode?string].max_combo}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Total Hits:
+                                        </td>
+                                        <td>${u.player.stats[mode?string].total_hits}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Accuracy:
+                                        </td>
+                                        <td>${u.player.stats[mode?string].acc?string("0.00")}%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <#assign playTime=u.player.stats[mode?string].playtime>
+                                <small class="mt-4">Played for
+                                    <#list convertPlaytime(playTime)?keys as key>
                                         ${convertPlaytime(playTime)[key]}
-                                 ${key}
-                         </#list>
-                        </small>
+                                        ${key}
+                                    </#list>
+                                </small>
+                        </div>
                     </div>
                 </div>
             </div>
-    </div>
-   
-</div>
+            <style>
+                #myChart {
+                    width: 100% !important;
+                    height: 150px !important;
 
-</div>
+                }
+            </style>
+            <div class="row p-1 p-md-4">
+                <canvas id="myChart"></canvas>
+
+            </div>
+
+
+
+        </div>
+
+    </div>
 <#include "assets/footer.html">
+<script>
+    var out;
+    
+    // Function to load and initialize the chart
+    function loadEventTurbo() {
+        let ctx = document.getElementById('myChart');
+    
+        let data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list>];
+        let values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list>];
+        
+        out = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: data,
+                datasets: [{
+                    label: '# of Plays',
+                    data: values,
+                    borderColor: bsPrimary, // Bootstrap primary color
+                    borderWidth: 2,
+                    tension: 0.1,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                aspectRatio: 5,
+                scales: {
+                    x: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: 'white'
+                        }
+                    }
+                },
+            }
+        });
+    }
+    
+    // Function to handle window resize
+    function winEvent() {
+        out.resize();
+    }
+    
+    // Add event listeners
+    document.addEventListener("turbo:load", loadEventTurbo);
+    window.addEventListener('resize', winEvent);
+    
+    document.addEventListener('turbo:before-render', function () {
+        // You can handle any pre-render operations here if needed
+    });
+    
+    // Function to clean up before navigating away (unload chart and events)
+    function unloadEventTurbo() {
+        window.removeEventListener('resize', winEvent);
+        document.removeEventListener("turbo:load", loadEventTurbo);
+        document.removeEventListener("turbo:before-cache", unloadEventTurbo);
+        if(out != null) out.destroy();
+    }
+    
+    document.addEventListener("turbo:before-cache", unloadEventTurbo);
+    </script>
+    
