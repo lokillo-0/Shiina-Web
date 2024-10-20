@@ -89,7 +89,7 @@
                             <div class="col-4 col-md-2 d-flex flex-column align-items-center">
                                 <img src="/img/ranking/ranking-A.png" class="img-fluid" alt="Ranking A"
                                     style="max-width: 30px;">
-                                <small class="mt-1">${u.player.stats[mode?string].a_count}</small>
+                                <small id="text" class="mt-1">${u.player.stats[mode?string].a_count}</small>
                             </div>
                         </div>
 
@@ -182,77 +182,106 @@
         </div>
 
     </div>
-<#include "assets/footer.html">
-<script>
-    var out;
-    
-    // Function to load and initialize the chart
-    function loadEventTurbo() {
-        let ctx = document.getElementById('myChart');
-    
-        let data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list>];
-        let values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list>];
-        
-        out = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: data,
-                datasets: [{
-                    label: '# of Plays',
-                    data: values,
-                    borderColor: bsPrimary, // Bootstrap primary color
-                    borderWidth: 2,
-                    tension: 0.1,
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                aspectRatio: 5,
-                scales: {
-                    x: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
-                        },
-                        ticks: {
-                            color: 'white'
-                        }
+    <#include "assets/footer.html">
+        <script>
+            var out;
+            var bootstrapTextColor = getBootstrapTextColor();
+            var bootstrapTextTransparent = getBootstrapTextTransparent();
+            console.log(bootstrapTextColor);
+            console.log(bootstrapTextTransparent);
+            function getBootstrapTextColor() {
+                const element = document.getElementById('text');
+                const computedStyle = window.getComputedStyle(element);
+                return computedStyle.color;
+            }
+
+            function getBootstrapTextTransparent() {
+                let color = getBootstrapTextColor();
+
+                // remove last char of color
+                color = color.slice(0, -1);
+                color += ', 0.2)';
+
+                return color;
+            }
+
+
+            // Function to load and initialize the chart
+            function loadEventTurbo() {
+                if (out != null) {
+                    out.destroy();
+                }
+
+                let ctx = document.getElementById('myChart');
+
+                let data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list >];
+                let values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list >];
+
+                out = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data,
+                        datasets: [{
+                            label: '# of Plays',
+                            data: values,
+                            borderColor: bsPrimary, // Bootstrap primary color
+                            borderWidth: 2,
+                            tension: 0.1,
+                        }]
                     },
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.1)'
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        aspectRatio: 5,
+                        scales: {
+                            x: {
+                                grid: {
+                                    color: bootstrapTextTransparent
+                                },
+                                ticks: {
+                                    color: bootstrapTextColor
+                                }
+                            },
+                            y: {
+                                beginAtZero: true,
+                                grid: {
+                                    color: bootstrapTextTransparent
+                                },
+                                ticks: {
+                                    color: bootstrapTextColor
+                                }
+                            }
                         },
-                        ticks: {
-                            color: 'white'
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
                         }
                     }
-                },
+                });
+
             }
-        });
-    }
-    
-    // Function to handle window resize
-    function winEvent() {
-        out.resize();
-    }
-    
-    // Add event listeners
-    document.addEventListener("turbo:load", loadEventTurbo);
-    window.addEventListener('resize', winEvent);
-    
-    document.addEventListener('turbo:before-render', function () {
-        // You can handle any pre-render operations here if needed
-    });
-    
-    // Function to clean up before navigating away (unload chart and events)
-    function unloadEventTurbo() {
-        window.removeEventListener('resize', winEvent);
-        document.removeEventListener("turbo:load", loadEventTurbo);
-        document.removeEventListener("turbo:before-cache", unloadEventTurbo);
-        if(out != null) out.destroy();
-    }
-    
-    document.addEventListener("turbo:before-cache", unloadEventTurbo);
-    </script>
-    
+
+            // Function to handle window resize
+            function winEvent() {
+                out.resize();
+            }
+
+            // Add event listeners
+            document.addEventListener("turbo:load", loadEventTurbo);
+            window.addEventListener('resize', winEvent);
+
+            document.addEventListener('turbo:before-render', function () {
+                // You can handle any pre-render operations here if needed
+            });
+
+            // Function to clean up before navigating away (unload chart and events)
+            function unloadEventTurbo() {
+                window.removeEventListener('resize', winEvent);
+                document.removeEventListener("turbo:load", loadEventTurbo);
+                document.removeEventListener("turbo:before-cache", unloadEventTurbo);
+                if (out != null) out.destroy();
+            }
+
+            document.addEventListener("turbo:before-cache", unloadEventTurbo);
+        </script>

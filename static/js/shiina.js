@@ -1,10 +1,12 @@
 let tooltipList = []; // Keep track of initialized tooltips
 
+
 const bsPrimary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
 
 loadEventTurbo = document.addEventListener("turbo:load", function () {
     const nodesWithTimestamp = document.querySelectorAll('[data-timestamp]');
     const nodesArray = Array.from(nodesWithTimestamp);
+    
 
     if (document.getElementById('video') != undefined) {
         const video = document.getElementById('video');
