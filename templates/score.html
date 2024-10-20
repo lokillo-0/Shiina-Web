@@ -1,86 +1,122 @@
 <#include "assets/base.html">
-<div class="container">
-    <div class="card w-400 mx-auto my-4">
-        <div class="card-body">  
-            <div class="row border-bottom mb-2 py-4">
-                <div class="d-flex align-items-center mb-3">
-                    <#assign height=60>
-                    <#include "/freemarker/gradeconvert.ftl">
-                    <span class="h2 me-2">${score.username}'s Score</span> 
-                    <small data-timestamp-format="date" data-timestamp="${score.playTime}">${score.playTime}</small>
-                </div>
+<div class="container my-5">
+    <div class="card w-100 shadow-lg">
+        <!-- Header Section with Player's Name and Score -->
+        <div class="card-header bg-secondary text-body d-flex justify-content-between align-items-center py-4">
+            <div class="d-flex align-items-center">
+                <#assign height=60>
+                <#include "/freemarker/gradeconvert.ftl">
+                <span class="h1 fw-bold mb-0">${score.username}'s Score</span>
             </div>
+            <small class="text-end" data-timestamp-format="date" data-timestamp="${score.playTime}">
+                ${score.playTime?string('yyyy-MM-dd HH:mm')}
+            </small>
         </div>
-        <div class="m-4">
+
+        <!-- Main Score Section -->
+        <div class="card-body px-4 bg-body">
             <div class="row">
-                <div class="col col-12 col-sm-12 col-lg-6 d-flex flex-column">
-                    <div class="row">
-                        <div class="col col-12 col-md-6">
+                <!-- Performance Points and Accuracy -->
+                <div class="col-lg-6 d-flex flex-column">
+                    <div class="row mb-3">
+                        <div class="col-6">
                             <small>Performance Points</small>
-                            <h2>${score.pp?string("0")}pp</h2>
+                            <h2 class="text-success">${score.pp?string("0")}pp</h2>
                         </div>
-                        <div class="col col-12 col-md-6">
+                        <div class="col-6">
+                            <small>Accuracy</small>
+                            <h2 class="text-info">${score.acc?string("0.00")}%</h2>
+                        </div>
+                    </div>
+
+                    <!-- Score and Mods -->
+                    <div class="row">
+                        <div class="col-6">
                             <small>Score</small>
                             <h2>${score.score}</h2>
                         </div>
-                        <div class="col col-12 col-md-6">
-                            <small>Accuracy</small>
-                            <h2>${score.acc?string("0.00")}%</h2>
-                        </div>
-                        <div class="col col-12 col-md-6">
+                        <div class="col-6">
                             <small>Mods</small>
                             <#assign passedMods=score.mods>
-                            <h2><#include "/freemarker/modconvert.ftl"></h2>
+                            <h2 class="text-warning"><#include "/freemarker/modconvert.ftl"></h2>
                         </div>
                     </div>
-                    <div class="btn-group mt-auto" role="group" aria-label="Basic example">
-                        <a href="${apiUrl}/v1/get_replay?id=${score.id?c}" type="button" class="btn btn-primary"><i class="fa-solid fa-download"></i> Download Replay</a>
+
+                    <!-- Download and Report Buttons -->
+                    <div class="btn-group mt-4" role="group">
+                        <a href="${apiUrl}/v1/get_replay?id=${score.id?c}" type="button" class="btn btn-primary">
+                            <i class="fa-solid fa-download"></i> Download Replay
+                        </a>
                         <#if user??>
-                        <button type="button" class="btn btn-danger"><i class="fa-solid fa-triangle-exclamation"></i> Report Score</button>
+                        <button type="button" class="btn btn-danger">
+                            <i class="fa-solid fa-exclamation-triangle"></i> Report Score
+                        </button>
                         </#if>
                     </div>
                 </div>
-                <div class="col mt-2 mt-lg-0 col-12 col-sm-12 col-lg-6">
+
+                <!-- Beatmap Information -->
+                <div class="col-lg-6">
                     <#assign beatmap=score.beatmap>
                     <#assign bigBm=true>
                     <#include "/freemarker/models/beatmap.ftl">
                 </div>
             </div>
-        </div>
-        <div class="p-4">
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    <h5 class="">Hit Statistics</h5>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <h5 class="text-center">Hit Statistics</h5>
                     <ul class="list-group">
-                        <li class="list-group-item bg-body">300s: ${score.n300}</li>
-                        <li class="list-group-item bg-body">Gekis: ${score.ngeki}</li>
-                        <li class="list-group-item bg-body">100s: ${score.n100}</li>
-                        <li class="list-group-item bg-body">Katus: ${score.nkatu}</li>
-                        <li class="list-group-item bg-body">50s: ${score.n50}</li>
-                        <li class="list-group-item bg-body">Misses: ${score.nmiss}</li>
+                        <li class="list-group-item bg-body d-flex justify-content-between">
+                            <span>300s:</span>
+                            <span class="badge bg-info">${score.n300}</span>
+                        </li>
+                        <li class="list-group-item bg-body d-flex justify-content-between">
+                            <span>Gekis:</span>
+                            <span class="badge bg-info">${score.ngeki}</span>
+                        </li>
+                        <li class="list-group-item bg-body d-flex justify-content-between">
+                            <span>100s:</span>
+                            <span class="badge bg-secondary">${score.n100}</span>
+                        </li>
+                        <li class="list-group-item bg-body d-flex justify-content-between">
+                            <span>Katus:</span>
+                            <span class="badge bg-secondary">${score.nkatu}</span>
+                        </li>
+                        <li class="list-group-item bg-body d-flex justify-content-between">
+                            <span>50s:</span>
+                            <span class="badge bg-warning">${score.n50}</span>
+                        </li>
+                        <li class="list-group-item bg-body d-flex justify-content-between">
+                            <span>Misses:</span>
+                            <span class="badge bg-danger">${score.nmiss}</span>
+                        </li>
                     </ul>
                 </div>
-                <div class="col-12 mt-2 flex-column mt-md-0 col-md-6">
-                    <h5 class="">Play Information</h5>
+    
+                <!-- Play Information -->
+                <div class="col-md-6">
+                    <h5 class="text-center">Play Information</h5>
                     <ul class="list-group">
-                        <li class="list-group-item bg-body">Play Time: ${score.playTime}</li>
+                        <li class="list-group-item bg-body">Play Time: ${score.playTime?string('yyyy-MM-dd HH:mm')}</li>
                         <li class="list-group-item bg-body">Grade: ${score.grade}</li>
                         <li class="list-group-item bg-body">Status: ${convertScoreStatus(score.status)}</li>
                     </ul>
-                    <div class="d-flex mt-auto">
+    
+                    <!-- Player Avatar and Info -->
+                    <div class="d-flex justify-content-center mt-3">
                         <#assign u = {
                             "id": score.userId,
                             "name": score.username,
                             "country": score.country,
                             "big": true
                         }>
-                        <#assign index = 0>
                         <#include "/freemarker/models/user.ftl">
                     </div>
-                    
                 </div>
             </div>
+            
         </div>
+
     </div>
 </div>
 <#include "assets/footer.html">

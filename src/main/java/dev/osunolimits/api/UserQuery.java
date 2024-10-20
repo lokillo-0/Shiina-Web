@@ -18,15 +18,15 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class UserQuery {
-       
     private OkHttpClient client;
+
     public UserQuery() {
         client = new OkHttpClient.Builder()
-        .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
-        .readTimeout(10, TimeUnit.SECONDS)
-        .cache(new Cache(new File(".cache/beatmaps"), 100L * 1024L * 1024L))
-        .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
+    .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
+    .cache(new Cache(new File(".cache/beatmaps"), 100L * 1024L * 1024L))
+    .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
     }
+
 
     public FullUser getUser(int id) {
         String url = "/v1/get_player_info?scope=all&id=" + id;

@@ -38,14 +38,15 @@ public class BanchoStats {
         private int restricted;
     }
 
-    OkHttpClient client;
+    private OkHttpClient client;
     public BanchoStats() {
         client = new OkHttpClient.Builder()
-        .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
-        .readTimeout(10, TimeUnit.SECONDS)
-        .cache(new Cache(new File(".cache/stats"), 100L * 1024L * 1024L))
-        .connectionPool(new ConnectionPool(200, 30, TimeUnit.MINUTES)).build(); 
+    .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES)) 
+    .cache(new Cache(new File(".cache/stats"), 100L * 1024L * 1024L))
+    .connectionPool(new ConnectionPool(50, 30, TimeUnit.MINUTES)).build(); 
     }
+
+
 
     public CustomCountResponse getCustomCount() {
         Request requestMaps = APIRequest.build("/v2/maps");
@@ -84,7 +85,7 @@ public class BanchoStats {
             playerCount.setOnline(counts.getAsJsonObject().get("online").getAsInt());
             return playerCount;
         }catch(Exception e) {
-            App.log.error("Failed to get /v1/get_player_count");
+            App.log.error("Failed to get /v1/get_player_count", e);
             return null;
         }
 

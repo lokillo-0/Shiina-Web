@@ -45,7 +45,7 @@ public class App {
         customization = init.initializeCustomizations();
         webServer = new WebServer();
         init.initializeWebServer(webServer);
-
+        init.initializeOkHttpCacheReset();
         WebServer.get("/", new Home());
         WebServer.get("/beatmaps", new Beatmaps());
         WebServer.get("/leaderboard", new Leaderboard());

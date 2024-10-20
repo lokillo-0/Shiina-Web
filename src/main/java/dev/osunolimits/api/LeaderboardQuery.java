@@ -84,15 +84,13 @@ public class LeaderboardQuery {
         private String clanTag;
     }
 
-    private static OkHttpClient client;
+    private OkHttpClient client;
 
     public LeaderboardQuery() {
-       
-        LeaderboardQuery.client =new OkHttpClient.Builder()
-        .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
-        .readTimeout(10, TimeUnit.SECONDS)
-        .cache(new Cache(new File(".cache/leaderboard"), 100L * 1024L * 1024L))
-        .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
+        client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
+                .cache(new Cache(new File(".cache/leaderboard"), 100L * 1024L * 1024L))
+                .connectionPool(new ConnectionPool(50, 20, TimeUnit.SECONDS)).build();
     }
 
     private int parameter = 0;
@@ -104,6 +102,7 @@ public class LeaderboardQuery {
         } else {
             return "&";
         }
+
     }
 
     public LeaderboardResponse getLeaderboard(String sort, int mode, int limit, int offset, Optional<String> country) {

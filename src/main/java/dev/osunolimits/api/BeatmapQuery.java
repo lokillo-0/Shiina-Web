@@ -36,15 +36,14 @@ public class BeatmapQuery {
     }
 
     int maxSize;
-
-    private static OkHttpClient client;
+    private OkHttpClient client;
     public BeatmapQuery() {
-        BeatmapQuery.client = new OkHttpClient.Builder()
-        .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
-        .readTimeout(10, TimeUnit.SECONDS)
-        .cache(new Cache(new File(".cache/beatmaps"), 100L * 1024L * 1024L))
-        .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
+        client = new OkHttpClient.Builder()
+    .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
+    .cache(new Cache(new File(".cache/beatmaps"), 100L * 1024L * 1024L))
+    .connectionPool(new ConnectionPool(50, 10, TimeUnit.SECONDS)).build(); 
     }
+
 
     private int parameter = 0;
 
