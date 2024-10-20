@@ -9,7 +9,7 @@ import com.google.gson.JsonParser;
 
 import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
-import dev.osunolimits.models.FullUser;
+import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.utils.CacheInterceptor;
 import okhttp3.Cache;
 import okhttp3.ConnectionPool;
@@ -17,28 +17,28 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class UserQuery {
+
+public class UserStatusQuery {
     private OkHttpClient client;
 
-    public UserQuery() {
+    public UserStatusQuery() {
         client = new OkHttpClient.Builder()
-    .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
-    .cache(new Cache(new File(".cache/users"), 100L * 1024L * 1024L))
-    .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
+        .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
+        .cache(new Cache(new File(".cache/status"), 100L * 1024L * 1024L))
+        .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
     }
 
-
-    public FullUser getUser(int id) {
-        String url = "/v1/get_player_info?scope=all&id=" + id;
+    public UserStatus getUserStatus(int id) {
+        String url = "/v1/get_player_status?id=" + id;
         Request request = APIRequest.build(url);
         try {
             Response response = client.newCall(request).execute();
             JsonElement element = JsonParser.parseString(response.body().string());
-            FullUser userResponse = new Gson().fromJson(element, FullUser.class);
-            return userResponse;
+            UserStatus userStatus = new Gson().fromJson(element, UserStatus.class);
+            return userStatus;
 
         } catch (Exception e) {
-            App.log.error("Failed to get Beatmaps", e);
+            App.log.error("Failed to get User Status", e);
         }
         return null;
     }

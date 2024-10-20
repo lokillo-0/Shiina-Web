@@ -1,7 +1,9 @@
 package dev.osunolimits.routes.get;
 
 import dev.osunolimits.api.UserQuery;
+import dev.osunolimits.api.UserStatusQuery;
 import dev.osunolimits.models.FullUser;
+import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -36,8 +38,14 @@ public class User extends Shiina {
             return null;
         }
 
+        UserStatusQuery userStatusQuery = new UserStatusQuery();
+        UserStatus userStatus = userStatusQuery.getUserStatus(id);
+        
+
+
         shiina.data.put("u", user);
         shiina.data.put("mode", mode);
+        shiina.data.put("status", userStatus);
         return renderTemplate("user.html", shiina, res, req);
     }
     

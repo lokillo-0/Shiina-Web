@@ -21,6 +21,29 @@
     border-color: var(--bs-action-border-color) !important;
 }
 
+.shiina-online-status {
+    display: flex; /* Use flexbox for alignment */
+    align-items: center; /* Vertically center the items */
+    padding: 10px;
+    background-color: #00000050;
+    max-width: 300px;
+}
+
+.shiina-online-status-circle {
+    min-width: 10px;
+    min-height: 10px;
+    border-radius: 50%;
+    display: inline-block; /* This can be removed since flexbox is used */
+    margin-right: 5px;
+    background-color: #07ad07;
+}
+
+.shiina-online-status-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .leaderboard-panel {
     border-radius: 5px;
     text-decoration: none;

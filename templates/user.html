@@ -28,23 +28,28 @@
                 <!-- Player Name -->
                 <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
                     <h1 class="fw-bold">${u.player.info.name}</h1>
-    
-                </div>
+                    <#if status.player_status.online == true>
+                        <div class="shiina-online-status rounded">
+                            <span class="shiina-online-status-circle"></span>
+                            <span class="shiina-online-status-text"><#if status.player_status.status.action == 0>Idle<#elseif status.player_status.status.action == 1>Online<#else>Playing ${status.player_status.status.info_text}</#if></div>
+                        
+                    </#if>
+                    </div>
+         
             </div>
+
         </div>
-        
         <div class="m-2 my-4">
             <div class="row">
-                <h4>Rankings</h4>
                 <div class="col col-12 col-sm-12 col-lg-6">
-                    <div class="row justify-content-center">
-                        <div class="col col-12 col-md-6">
+                    <div class="row mx-4 justify-content-center align-items-center">
+                        <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                             <small>Rank</small>
                             <h2>#<#if u.player.stats[mode?string].rank == 0>-<#else>${u.player.stats[mode?string].rank}</#if></h2>
                         </div>
-                        <div class="col col-12 col-md-6">
+                        <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                             <small>Country Rank <img
-                                class="flag rounded" width="35" height="20"
+                                class="flag rounded" width="20" height="15"
                                 src="/img/flags/${u.player.info.country}.svg"
                                 alt=""></small>
                             <h2>#<#if u.player.stats[mode?string].country_rank == 0>-<#else>${u.player.stats[mode?string].country_rank}</#if></h2>
@@ -144,8 +149,9 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
    
+</div>
+
 </div>
 <#include "assets/footer.html">
