@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
+import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Clan;
@@ -58,6 +59,8 @@ public class App {
         WebServer.post("/login", new dev.osunolimits.routes.post.Login());
         WebServer.post("/logout", new Logout());
         WebServer.notFound(new NotFound());
+
+        WebServer.get("/api/v1/get_first_places", new GetFirstPlaces());
 
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();
