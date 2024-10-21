@@ -16,6 +16,8 @@ import spark.Response;
 public class GetFirstPlaces extends Shiina {
 
     private final String GET_FIRST_PLACES = "SELECT s.userid, s.map_md5, m.id AS map_id, s.score AS max_score, s.pp, s.acc, s.max_combo, s.n300, s.n100, s.n50, s.nmiss, s.ngeki, s.nkatu, s.grade, s.play_time FROM scores s JOIN (SELECT map_md5, MAX(score) AS max_score FROM scores WHERE status = 2 GROUP BY map_md5) AS max_scores ON s.map_md5 = max_scores.map_md5 AND s.score = max_scores.max_score JOIN maps m ON s.map_md5 = m.md5 WHERE s.userid = ? AND s.status = 2 AND s.mode = ? ORDER BY s.play_time DESC LIMIT ? OFFSET ?;";
+    
+    private final String COUNT_FIRST_PLACES = "SELECT COUNT(*) AS first_place_count FROM (SELECT s.userid, s.map_md5 FROM scores s JOIN (SELECT map_md5, MAX(score) AS max_score FROM scores WHERE status = 2 GROUP BY map_md5) AS max_scores ON s.map_md5 = max_scores.map_md5 AND s.score = max_scores.max_score WHERE s.userid = ? AND s.status = 2) AS first_places;";
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
@@ -33,16 +35,19 @@ public class GetFirstPlaces extends Shiina {
 
         Integer offset = 0;
         if (req.queryParams("offset") != null && Validation.isNumeric(req.queryParams("offset"))) {
-            id = Integer.parseInt(req.queryParams("offset"));
+            offset = Integer.parseInt(req.queryParams("offset"));
         }
 
-        if(id == null) {
+        if (id == null) {
             return "Invalid ID";
         }
+
+        // Fetch first places
         ArrayList<FirstPlace> firstPlaces = new ArrayList<>();
         FirstPlacesResponse response = new FirstPlacesResponse();
         boolean hasNextPage = false;
-        ResultSet firstPlacesQuery = shiina.mysql.Query(GET_FIRST_PLACES, id,mode, 11, offset);
+
+        ResultSet firstPlacesQuery = shiina.mysql.Query(GET_FIRST_PLACES, id, mode, 11, offset);
         while (firstPlacesQuery.next()) {
             FirstPlace firstPlace = new FirstPlace();
             firstPlace.setUser_id(firstPlacesQuery.getInt("userid"));
@@ -61,20 +66,23 @@ public class GetFirstPlaces extends Shiina {
             firstPlace.setGrade(firstPlacesQuery.getString("grade"));
             firstPlace.setPlay_time(firstPlacesQuery.getString("play_time"));
             firstPlaces.add(firstPlace);
-            // check if it is 11 to see if there is a next page
+
             if (firstPlaces.size() == 11) {
                 hasNextPage = true;
                 firstPlaces.remove(10);
             }
-            
-           
         }
+        
+        // Fetch count of first places
+        ResultSet countQuery = shiina.mysql.Query(COUNT_FIRST_PLACES, id);
+        if (countQuery.next()) {
+            response.setCount(countQuery.getInt("first_place_count"));
+        }
+
         response.setFirstPlaces(firstPlaces.toArray(new FirstPlace[0]));
         response.setStatus("success");
         response.setHasNextPage(hasNextPage);
 
-
-        // Convert response to json with gson
         res.type("application/json");
         Gson gson = new Gson();
 
@@ -85,6 +93,7 @@ public class GetFirstPlaces extends Shiina {
     public class FirstPlacesResponse {
         private String status;
         private boolean hasNextPage;
+        private int count;
         private FirstPlace[] firstPlaces;
     }
 
@@ -106,6 +115,4 @@ public class GetFirstPlaces extends Shiina {
         private String grade;
         private String play_time;
     }
-
 }
-
