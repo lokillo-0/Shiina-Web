@@ -20,8 +20,8 @@ public class FullUser {
     public class UserStats {
         private int id;
         private int mode;
-        private int tscore;
-        private int rscore;
+        private long tscore;
+        private long rscore;
         private int pp;
         private int plays;
         private int playtime;

@@ -10,6 +10,7 @@ import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.utils.LevelCalculator;
 import dev.osunolimits.utils.Validation;
 import spark.Request;
 import spark.Response;
@@ -49,7 +50,9 @@ public class User extends Shiina {
         while (playCountGraphRs.next()) {
             userStats.put(playCountGraphRs.getString("month"), playCountGraphRs.getInt("play_count"));
         }
-        
+
+        shiina.data.put("level", LevelCalculator.getLevelPrecise(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
+        shiina.data.put("levelProgress", LevelCalculator.getPercentageToNextLevel(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
         shiina.data.put("playCountGraph", userStats);
         shiina.data.put("u", user);
         shiina.data.put("mode", mode);

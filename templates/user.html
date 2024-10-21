@@ -92,7 +92,8 @@
                                 <small id="text" class="mt-1">${u.player.stats[mode?string].a_count}</small>
                             </div>
                         </div>
-
+                        ${level}
+                        ${levelProgress}
 
                     </div>
                     <div class="col col-12 col-sm-12 col-lg-6">
@@ -132,7 +133,7 @@
                                         <td>
                                             Ranked Score:
                                         </td>
-                                        <td>${u.player.stats[mode?string].rscore?c}</td>
+                                        <td>${u.player.stats[mode?string].rscore}</td>
                                     </tr>
                                     <tr>
                                         <td>
