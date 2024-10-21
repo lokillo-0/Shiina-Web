@@ -21,6 +21,8 @@
     border-color: var(--bs-action-border-color) !important;
 }
 
+
+
 .shiina-online-status {
     display: flex; /* Use flexbox for alignment */
     align-items: center; /* Vertically center the items */

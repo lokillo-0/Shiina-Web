@@ -44,18 +44,20 @@ public class LevelCalculator {
     }
 
     public static double getPercentageToNextLevel(long xp) {
-        int level = getLevel(xp);
-        long currentLevelXP = getRequiredScoreForLevel(level);
-        long nextLevelXP = getRequiredScoreForLevel(level + 1);
+        double level = getLevelPrecise(xp);
+        int baseLevel = (int) level;
+        long currentLevelXP = getRequiredScoreForLevel(baseLevel);
+        long nextLevelXP = getRequiredScoreForLevel(baseLevel + 1);
 
+    
         if (nextLevelXP == Long.MAX_VALUE) {
-            return 1.0; // For max level, the progress is full
+            return 100.0;
         }
-
+    
         long xpProgress = xp - currentLevelXP;
         long xpForNextLevel = nextLevelXP - currentLevelXP;
-
-        // Return value between 0.0 and 1.0 for progress bar
-        return (double) xpProgress / xpForNextLevel;
+    
+        double progress = Math.max(0, (double) xpProgress / xpForNextLevel) * 100;
+        return Math.min(progress, 100); 
     }
 }
