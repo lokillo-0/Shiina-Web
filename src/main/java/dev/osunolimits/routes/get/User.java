@@ -50,7 +50,7 @@ public class User extends Shiina {
         while (playCountGraphRs.next()) {
             userStats.put(playCountGraphRs.getString("month"), playCountGraphRs.getInt("play_count"));
         }
-
+        shiina.data.put("id", id);
         shiina.data.put("level", LevelCalculator.getLevelPrecise(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
         shiina.data.put("levelProgress", LevelCalculator.getPercentageToNextLevel(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
         shiina.data.put("playCountGraph", userStats);

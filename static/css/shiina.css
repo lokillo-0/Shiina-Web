@@ -21,7 +21,24 @@
     border-color: var(--bs-action-border-color) !important;
 }
 
+.shiina-pill {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
+.shiina-pill span {
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+.shiina-pill-icon {
+    display: inline-block;
+    background-color: var(--bs-primary);
+    color: var(--bs-primary-contrast);
+    height: 20px;
+    width: 7.5px;
+    border-radius: 25%;
+}
 
 .shiina-online-status {
     display: flex; /* Use flexbox for alignment */

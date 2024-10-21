@@ -20,7 +20,7 @@
         </div>
 
         <!-- Profile Section -->
-        <div class="card mt-4">
+        <div class="card my-4">
             <div class="bg-secondary rounded-top">
                 <div class="row p-4">
                     <!-- Profile Picture -->
@@ -46,10 +46,17 @@
                 </div>
 
             </div>
+            <div class="shiina-pill m-1 m-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Rankings</span>
+            </div>
             <div class="m-2 my-4">
                 <div class="row">
+
                     <div class="col col-12 col-sm-12 col-lg-6">
+
                         <div class="row mx-4 justify-content-center align-items-center">
+
                             <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                                 <small>Rank</small>
                                 <h2>#<#if u.player.stats[mode?string].rank==0>-<#else>
@@ -103,7 +110,7 @@
                             </div>
                         </div>
 
-                        
+
                     </div>
                     <div class="col col-12 col-sm-12 col-lg-6">
 
@@ -182,116 +189,42 @@
 
                 }
             </style>
+            <div class="shiina-pill m-1 m-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Playcount Graph</span>
+            </div>
             <div class="row p-1 p-md-4">
+
                 <canvas id="myChart"></canvas>
 
             </div>
+            <div class="shiina-pill m-1 m-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>First Places <span id="firstPlacesCount">(-)</span></span>
+            </div>
+            <div class="row p-1 p-md-4">
 
+                <div id="firstPlaces">
 
+                </div>
+                <div>
+                    <button onclick="loadMore()" id="firstPlacesButton" class="btn btn-primary">Load More</button>
+                </div>
+               
+            </div>
 
         </div>
 
     </div>
+    <input type="hidden" id="offsetFirstPlaces" value="0">
+    <input type="hidden" id="firstLoad" value="true">
+
     <#include "assets/footer.html">
-        <script>
-            var out;
-            var bootstrapTextColor = getBootstrapTextColor();
-            var bootstrapTextTransparent = getBootstrapTextTransparent();
-            console.log(bootstrapTextColor);
-            console.log(bootstrapTextTransparent);
-            function getBootstrapTextColor() {
-                const element = document.getElementById('text');
-                const computedStyle = window.getComputedStyle(element);
-                return computedStyle.color;
-            }
-
-            function getBootstrapTextTransparent() {
-                let color = getBootstrapTextColor();
-
-                // remove last char of color
-                color = color.slice(0, -1);
-                color += ', 0.2)';
-
-                return color;
-            }
-
-
-            // Function to load and initialize the chart
-            function loadEventTurbo() {
-                if (out != null) {
-                    out.destroy();
-                }
-
-                let ctx = document.getElementById('myChart');
-
-                let data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list >];
-                let values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list >];
-
-                out = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: data,
-                        datasets: [{
-                            label: '# of Plays',
-                            data: values,
-                            borderColor: bsPrimary, // Bootstrap primary color
-                            borderWidth: 2,
-                            tension: 0.1,
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        aspectRatio: 5,
-                        scales: {
-                            x: {
-                                grid: {
-                                    color: bootstrapTextTransparent
-                                },
-                                ticks: {
-                                    color: bootstrapTextColor
-                                }
-                            },
-                            y: {
-                                beginAtZero: true,
-                                grid: {
-                                    color: bootstrapTextTransparent
-                                },
-                                ticks: {
-                                    color: bootstrapTextColor
-                                }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        }
-                    }
-                });
-
-            }
-
-            // Function to handle window resize
-            function winEvent() {
-                out.resize();
-            }
-
-            // Add event listeners
-            document.addEventListener("turbo:load", loadEventTurbo);
-            window.addEventListener('resize', winEvent);
-
-            document.addEventListener('turbo:before-render', function () {
-                // You can handle any pre-render operations here if needed
-            });
-
-            // Function to clean up before navigating away (unload chart and events)
-            function unloadEventTurbo() {
-                window.removeEventListener('resize', winEvent);
-                document.removeEventListener("turbo:load", loadEventTurbo);
-                document.removeEventListener("turbo:before-cache", unloadEventTurbo);
-                if (out != null) out.destroy();
-            }
-
-            document.addEventListener("turbo:before-cache", unloadEventTurbo);
-        </script>
+    
+    <script>
+        var reqUrl = "/api/v1/get_first_places?id=${id}&mode=${mode}&offset=";
+        var data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list>];
+        var values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list>];
+    </script>
+    
+    <script src="/js/user.js"></script>
