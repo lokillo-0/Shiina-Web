@@ -46,7 +46,7 @@
                 </div>
 
             </div>
-            <div class="shiina-pill m-1 m-md-4 d-flex align-items-center">
+            <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
                 <span>Rankings</span>
             </div>
@@ -189,7 +189,67 @@
 
                 }
             </style>
-            <div class="shiina-pill m-1 m-md-4 d-flex align-items-center">
+            
+           
+
+            <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Best Scores </span>
+            </div>
+            <div class="row p-1 p-md-4">
+
+                <div id="bestScores">
+                    <div id="bestScoresLoader" class="d-flex align-items-center justify-content-center h-100">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="loadMoreScores()" id="bestScoresButton" class="btn btn-primary">Load More</button>
+                </div>
+               
+            </div>
+
+            <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Last Scores </span>
+            </div>
+            <div class="row p-1 p-md-4">
+
+                <div id="lastScores">
+                    <div id="lastScoresLoader" class="d-flex align-items-center justify-content-center h-100">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="loadMoreScoresLast()" id="lastScoresButton" class="btn btn-primary">Load More</button>
+                </div>
+               
+            </div>
+
+            <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>First Places <span id="firstPlacesCount">(-)</span></span>
+            </div>
+            <div class="row p-1 p-md-4">
+
+                <div id="firstPlaces">
+                    <div id="firstPlaceLoader" class="d-flex align-items-center justify-content-center h-100">
+                        <div class="spinner-grow" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button onclick="loadMore()" id="firstPlacesButton" class="btn btn-primary">Load More</button>
+                </div>
+               
+            </div>
+
+            <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
                 <span>Playcount Graph</span>
             </div>
@@ -198,33 +258,24 @@
                 <canvas id="myChart"></canvas>
 
             </div>
-            <div class="shiina-pill m-1 m-md-4 d-flex align-items-center">
-                <div class="shiina-pill-icon"></div>
-                <span>First Places <span id="firstPlacesCount">(-)</span></span>
-            </div>
-            <div class="row p-1 p-md-4">
 
-                <div id="firstPlaces">
-
-                </div>
-                <div>
-                    <button onclick="loadMore()" id="firstPlacesButton" class="btn btn-primary">Load More</button>
-                </div>
-               
-            </div>
 
         </div>
 
     </div>
     <input type="hidden" id="offsetFirstPlaces" value="0">
+    <input type="hidden" id="offsetBestScores" value="0">
+    <input type="hidden" id="offsetLastScores" value="0">
     <input type="hidden" id="firstLoad" value="true">
 
     <#include "assets/footer.html">
     
     <script>
+        var bootstrapTextColor = getBootstrapTextColor();
+        var bootstrapTextTransparent = getBootstrapTextTransparent();
+
         var reqUrl = "/api/v1/get_first_places?id=${id}&mode=${mode}&offset=";
+        var reqUrlScores = "/api/v1/get_player_scores?id=${id}&mode=${mode}&offset=";
         var data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list>];
         var values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list>];
     </script>
-    
-    <script src="/js/user.js"></script>
