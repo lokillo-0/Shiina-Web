@@ -197,6 +197,29 @@ public class OsuConverter {
                 return null;
         }
     }
+
+    public static String convertModeBackNoRx(String mode) {
+        switch (mode) {
+            case "0":
+                return "OSU";
+            case "4":
+                return "OSU";
+            case "8":
+                return "OSU";
+            case "1":
+                return "TAIKO";
+            case "2":
+                return "CATCH";
+            case "3":
+                return "MANIA";
+            case "5":
+                return "TAIKO";
+            case "6":
+                return "CATCH";
+            default:
+                return null;
+        }
+    }
     public class SortHelper {
         // Available values : tscore, rscore, pp, acc, plays, playtime
         public static String[] sortArray = { "PP", "ACC", "Total Score", "Rated Score", "Plays", "Playtime" };

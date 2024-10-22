@@ -1,66 +1,77 @@
 
 <#include "assets/base.html">
-    <div style="height: 80vh;"><div class="container h-100">
-        <div class="row h-100 justify-content-center align-items-center">
-            <div class="card mt-2 mb-2">
-                <h4 class="card-header mt-2">Login</h4>
-                <div class="card-body">
-                    <#if error??>
-                        <div class="alert alert-danger" role="alert">
-                            ${error}
-                        </div>
-                    </#if>
-                    <#if info??>
-                        <div class="alert alert-primary" role="alert">
-                            ${info}
-                        </div>
-                    </#if>
-                    <form data-turbo="false" data-toggle="validator" role="form" method="post" action="/login">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Email or Username</label>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="add-on-1">@</span>
-                                        <input name="input" required type="text" class="form-control" placeholder="Email or Username" aria-label="Email or Username" aria-describedby="add-on-1">
-                                      </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <div class="input-group">
-                                        <div class="input-group mb-3">
-                                            <span class="input-group-text" id="add-on-1"><i class="fa-solid fa-lock"></i></span>
-                                            <input required name="password" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="add-on-1">
-                                          </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div id="turnstile" data-theme="${c.mode}"></div>
-                        <div class="row my-2">
-                            <div class="checkbox checkbox-primary">
-                                <input id="checkbox_remember" type="checkbox" name="remember">
-                                <label for="checkbox_remember">Remember me</label>
-                            </div>
-                        </div>
-                        <div class="row my-2">
-                            <div class="col-md-12">
-                                <input type="hidden" name="redirect" value="">
-                                <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login"
-                                    name="submit">
-                            </div>
-                        </div>
-                    </form>
-                    <div class="clear"></div>
-                    <i class="fa fa-user fa-fw"></i> No account? <a href="/register">Register</a><br>
-                    <i class="fa fa-undo fa-fw"></i> Forgot password? <a href="/recover">Recover</a>
+<div class="container my-5">
+    <div class="card w-100">
+        <!-- Card Header -->
+        <div class="bg-secondary border-0 card-header text-body d-flex justify-content-between align-items-center py-4">
+            <span class="h1 fw-bold mb-0">Login</span>
+        </div>
+
+        <!-- Card Body with Login Form -->
+        <div class="card-body bg-body px-4">
+            <!-- Error or Info Alerts -->
+            <#if error??>
+                <div class="alert alert-danger" role="alert">
+                    ${error}
                 </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    ${info}
+                </div>
+            </#if>
+
+            <!-- Login Form -->
+            <form data-turbo="false" data-toggle="validator" role="form" method="post" action="/login">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label>Email or Username</label>
+                            <div class="input-group">
+                                <span class="input-group-text" id="add-on-1">@</span>
+                                <input name="input" required type="text" class="form-control" placeholder="Email or Username" aria-label="Email or Username" aria-describedby="add-on-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group mb-3">
+                            <label>Password</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
+                                <input required name="password" type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="add-on-1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="turnstile" data-theme="${c.mode}"></div>
+
+                <div class="row my-2">
+                    <div class="checkbox checkbox-primary">
+                        <input id="checkbox_remember" type="checkbox" name="remember">
+                        <label for="checkbox_remember">Remember me</label>
+                    </div>
+                </div>
+
+        
+                <div class="row my-3">
+                    <div class="col-md-12">
+                        <input type="hidden" name="redirect" value="">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Additional Links -->
+            <div class="mt-4">
+                <i class="fa fa-user fa-fw"></i> No account? <a href="/register">Register</a><br>
+                <i class="fa fa-undo fa-fw"></i> Forgot password? <a href="/recover">Recover</a>
             </div>
-        </div></div></div>
+        </div>
+    </div>
+</div>
 <#include "assets/footer.html">
 <script>
     var turnstileId = null;
@@ -82,7 +93,6 @@
         });
         }
     });
-
 
     var cache = document.addEventListener("turbo:before-cache", function () {
         if(turnstileId != null && document.getElementById("turnstile")) {

@@ -378,7 +378,7 @@ function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, 
     // Icons for view and replay
     output += '<div class="icon-container-score d-flex align-items-center">';
     output += '<a href="/scores/' + scoreId + '" class="icon-link-score me-3"><i data-bs-toggle="tooltip" data-bs-placement="top" title="View Score" class="fas fa-eye"></i></a>';
-    output += '<a href="/v1/get_replay?id=' + scoreId + '" class="icon-link-score"><i data-bs-toggle="tooltip" data-bs-placement="top" title="Download Replay" class="fas fa-download"></i></a>';
+    output += '<a href="' + apiUrl + '/v1/get_replay?id=' + scoreId + '" class="icon-link-score"><i data-bs-toggle="tooltip" data-bs-placement="top" title="Download Replay" class="fas fa-download"></i></a>';
     output += '</div>';
 
     output += '</div></div></div>';
@@ -398,20 +398,63 @@ function getBootstrapTextTransparent() {
     return color;
 }
 
+function addLoader(button) {
+    button.disabled = true; // Disable the button
+    button.innerHTML = '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Loading...';
+}
+
+function removeLoader(button, originalText) {
+    button.disabled = false; // Re-enable the button
+    button.innerHTML = originalText; // Restore the original text
+}
+
 function loadMore() {
+    let button = document.getElementById('firstPlacesButton');
+    let originalText = button.innerHTML;
+    addLoader(button); // Add loader to button
+
     let offset = document.getElementById('offsetFirstPlaces');
     offset.value = parseInt(offset.value) + 5;
-    loadFirstPlaces(reqUrl, false);
+
+    // Keep the loader visible for at least 1 second
+    setTimeout(() => {
+        loadFirstPlaces(reqUrl, false); // Call the loading function
+
+        // Remove loader after loading process (1 second delay before executing)
+        removeLoader(button, originalText);
+    }, 500); // 1-second delay
 }
 
 function loadMoreScores() {
+    let button = document.getElementById('bestScoresButton');
+    let originalText = button.innerHTML;
+    addLoader(button); // Add loader to button
+
     let offset = document.getElementById('offsetBestScores');
     offset.value = parseInt(offset.value) + 5;
-    loadBestScores(reqUrlScores, false);
+
+    // Keep the loader visible for at least 1 second
+    setTimeout(() => {
+        loadBestScores(reqUrlScores, false); // Call the loading function
+
+        // Remove loader after loading process (1 second delay before executing)
+        removeLoader(button, originalText);
+    }, 500); // 1-second delay
 }
 
 function loadMoreScoresLast() {
+    let button = document.getElementById('lastScoresButton');
+    let originalText = button.innerHTML;
+    addLoader(button); // Add loader to button
+
     let offset = document.getElementById('offsetLastScores');
     offset.value = parseInt(offset.value) + 5;
-    loadLastScores(reqUrlScores, false);
+
+    // Keep the loader visible for at least 1 second
+    setTimeout(() => {
+        loadLastScores(reqUrlScores, false); // Call the loading function
+
+        // Remove loader after loading process (1 second delay before executing)
+        removeLoader(button, originalText);
+    }, 500); // 1-second delay
 }

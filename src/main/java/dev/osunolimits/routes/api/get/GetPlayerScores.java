@@ -30,8 +30,9 @@ public class GetPlayerScores extends Shiina {
         "s.pp, s.acc, s.mods, s.grade, s.play_time " +
         "FROM scores s " +
         "JOIN maps m ON s.map_md5 = m.md5 " +
-        "WHERE s.userid = ? AND s.mode = ? AND s.status = 2 " +
+        "WHERE s.userid = ? AND s.mode = ? AND s.status = 2 AND m.status = 2 " +  // Filter for status = 2
         "ORDER BY s.pp DESC LIMIT ? OFFSET ?;";
+    
 
     @Override
     public Object handle(Request req, Response res) throws Exception {

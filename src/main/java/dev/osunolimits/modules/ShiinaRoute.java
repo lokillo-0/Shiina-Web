@@ -32,6 +32,8 @@ public class ShiinaRoute {
                 request.data.put("user", user);
             }
         }
+        request.data.put("assetsUrl", App.env.get("ASSETSURL"));
+        request.data.put("apiUrlPub", App.env.get("APIURLPUBLIC"));
         request.data.put("apiUrl", App.env.get("APIURL"));
         request.data.put("c", App.customization);
         request.data.put("turnstilePublic", App.env.get("TURNSTILE_KEY"));

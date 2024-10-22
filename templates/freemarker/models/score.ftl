@@ -2,7 +2,7 @@
     <#if isActivity??>
     <div class="row p-2 align-items-center">
         <div class="col-auto">
-            <img class="flag" src="https://a.osunolimits.dev/${score.id}" alt="">
+            <img class="flag" src="${avatarServer}/${score.id}" alt="">
         </div>
         <div class="col-auto d-flex align-items-center">
             <span class="h6">
@@ -33,7 +33,7 @@
             </div>
             <div class="icon-container-score d-flex align-items-center">
                 <a href="/scores/${score.score_id?c}" class="icon-link-score me-3"><i data-bs-toggle="tooltip" data-bs-placement="top" title='View Score' class="fas fa-eye"></i></a>
-                <a href="${apiUrl}/v1/get_replay?id=${score.score_id?c}" class="icon-link-score"><i data-bs-toggle="tooltip" data-bs-placement="top" title='Download Replay' class="fas fa-download"></i></a>
+                <a href="${apiUrlPub}/v1/get_replay?id=${score.score_id?c}" class="icon-link-score"><i data-bs-toggle="tooltip" data-bs-placement="top" title='Download Replay' class="fas fa-download"></i></a>
             </div>
         </div>
     </div>

@@ -25,7 +25,7 @@
                 <div class="row p-4">
                     <!-- Profile Picture -->
                     <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
-                        <img src="https://a.osunolimits.dev/${u.player.info.id}" alt="Profile picture"
+                        <img src="${avatarServer}/${u.player.info.id}" alt="Profile picture"
                             class="img-fluid rounded" style="max-width: 150px; min-width: 150px;">
                     </div>
                     <!-- Player Name -->
@@ -182,22 +182,14 @@
                     </div>
                 </div>
             </div>
-            <style>
-                #myChart {
-                    width: 100% !important;
-                    height: 150px !important;
 
-                }
-            </style>
-            
-           
+            <!-- BEST SCORES -->
 
             <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
                 <span>Best Scores </span>
             </div>
             <div class="row p-1 p-md-4">
-
                 <div id="bestScores">
                     <div id="bestScoresLoader" class="d-flex align-items-center justify-content-center h-100">
                         <div class="spinner-grow" role="status">
@@ -206,17 +198,17 @@
                     </div>
                 </div>
                 <div>
-                    <button onclick="loadMoreScores()" id="bestScoresButton" class="btn btn-primary">Load More</button>
+                    <button onclick="loadMoreScores()" id="bestScoresButton" class="btn btn-primary btn-lg">Load More</button>
                 </div>
-               
             </div>
+
+            <!-- LAST SCORES -->
 
             <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
                 <span>Last Scores </span>
             </div>
             <div class="row p-1 p-md-4">
-
                 <div id="lastScores">
                     <div id="lastScoresLoader" class="d-flex align-items-center justify-content-center h-100">
                         <div class="spinner-grow" role="status">
@@ -225,17 +217,17 @@
                     </div>
                 </div>
                 <div>
-                    <button onclick="loadMoreScoresLast()" id="lastScoresButton" class="btn btn-primary">Load More</button>
+                    <button onclick="loadMoreScoresLast()" id="lastScoresButton" class="btn btn-primary btn-lg">Load More</button>
                 </div>
-               
             </div>
+
+            <!-- FIRST PLACES -->
 
             <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
                 <span>First Places <span id="firstPlacesCount">(-)</span></span>
             </div>
             <div class="row p-1 p-md-4">
-
                 <div id="firstPlaces">
                     <div id="firstPlaceLoader" class="d-flex align-items-center justify-content-center h-100">
                         <div class="spinner-grow" role="status">
@@ -244,10 +236,11 @@
                     </div>
                 </div>
                 <div>
-                    <button onclick="loadMore()" id="firstPlacesButton" class="btn btn-primary">Load More</button>
+                    <button onclick="loadMore()" id="firstPlacesButton" class="btn btn-primary btn-lg">Load More</button>
                 </div>
-               
             </div>
+
+            <!-- PLAYCOUNT GRAPH -->
 
             <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
@@ -259,6 +252,31 @@
 
             </div>
 
+            <!-- ACHIEVEMENTS -->
+            
+            <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Achievements</span>
+            </div>
+            <div class="row p-1 p-md-4 flex-wrap">
+                <#list achievements as ach>
+                    <div class="col col-6 col-md-3 g-2 g-md-5">
+                        <div class="text-center position-relative">
+                            <img 
+                                src="${assetsUrl}/medals/client/${ach.file}.png" 
+                                alt="${ach.name}" 
+                                class="img-fluid m-2" 
+                                data-bs-toggle="tooltip" 
+                                data-bs-placement="top" 
+                                title="${ach.desc}" 
+                                style="max-height: 100px;"
+                            >
+                            <p class="mt-2 fw-bold">${ach.name}</p>
+                        </div>
+                    </div>
+                </#list>
+            </div>
+            
 
         </div>
 
@@ -273,7 +291,7 @@
     <script>
         var bootstrapTextColor = getBootstrapTextColor();
         var bootstrapTextTransparent = getBootstrapTextTransparent();
-
+        var apiUrl = "${apiUrlPub}";
         var reqUrl = "/api/v1/get_first_places?id=${id}&mode=${mode}&offset=";
         var reqUrlScores = "/api/v1/get_player_scores?id=${id}&mode=${mode}&offset=";
         var data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list>];

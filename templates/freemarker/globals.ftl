@@ -1,4 +1,4 @@
-<#assign noBeatmapIcon = "https://shiina.osunolimits.dev/img/nobeatmapicon.png"> 
+<#assign noBeatmapIcon = "/img/nobeatmapicon.png"> 
 <#function convertStatusBack status>
     <#switch status>
         <#case 0><#return "Not submitted"><#break>
