@@ -7,7 +7,7 @@ import java.util.List;
 
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
-import dev.osunolimits.utils.OsuConverter;
+import dev.osunolimits.utils.osu.OsuConverter;
 import lombok.Data;
 
 public class ClanQuery {

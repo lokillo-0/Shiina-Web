@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.models.Beatmap;
-import dev.osunolimits.utils.OsuConverter;
+import dev.osunolimits.utils.osu.OsuConverter;
 import lombok.Data;
 
 

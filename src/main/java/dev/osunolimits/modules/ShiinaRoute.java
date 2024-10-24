@@ -17,6 +17,7 @@ public class ShiinaRoute {
         public MySQL mysql;
         public HashMap<String, Object> data = new HashMap<>();
         public boolean loggedIn = false;
+        public Auth.User user;
 
     }
 
@@ -29,6 +30,7 @@ public class ShiinaRoute {
             Auth.User user = gson.fromJson(userJson, Auth.User.class);
             if(user != null) {
                 request.loggedIn = true;
+                request.user = user;
                 request.data.put("user", user);
             }
         }

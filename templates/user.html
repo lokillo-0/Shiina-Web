@@ -18,6 +18,16 @@
                     </div>
             </div>
         </div>
+        <#if restricted && !self>
+        <div class="alert alert-danger mt-4" role="alert">
+            This user is in restricted mode and not present in our ranking. You can see this user's profile because you are a staff member.
+        </div>
+        </#if>
+        <#if restricted && self>
+        <div class="alert alert-danger mt-4" role="alert">
+            You are in restricted mode and not present in our ranking. Visit our <a href="${c.discordUrl}">Discord</a> for further information.
+        </div>
+        </#if>
 
         <!-- Profile Section -->
         <div class="card my-4">

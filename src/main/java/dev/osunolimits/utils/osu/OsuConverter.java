@@ -1,4 +1,4 @@
-package dev.osunolimits.utils;
+package dev.osunolimits.utils.osu;
 
 import java.util.ArrayList;
 
