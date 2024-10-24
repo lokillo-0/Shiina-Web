@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.get;
+package dev.osunolimits.routes.get.simple;
 
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;

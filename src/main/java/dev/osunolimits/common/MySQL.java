@@ -85,16 +85,26 @@ public final class MySQL {
 		}
 	}
 
-	public int Exec(String sql, String... args) {
+	public int Exec(String sql, Object... args) {
 		try {
 			PreparedStatement stmt = currentCon.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			for (int i = 0; i < args.length; i++) {
-				stmt.setString(i + 1, args[i]);
+				if (args[i] instanceof String) {
+					stmt.setString(i + 1, (String) args[i]);
+				} else if (args[i] instanceof Integer) {
+					stmt.setInt(i + 1, (Integer) args[i]);
+				} else if (args[i] instanceof Long) {
+					stmt.setLong(i + 1, (Long) args[i]);
+				} else if (args[i] instanceof Boolean) {
+					stmt.setBoolean(i + 1, (Boolean) args[i]);
+				} else {
+					throw new IllegalArgumentException("Unsupported parameter type: " + args[i].getClass());
+				}
 			}
 	
 			int rowsAffected = stmt.executeUpdate();
 			logSQL(stmt.toString());
-
+	
 			ResultSet rs = stmt.getGeneratedKeys();
 			if (rs.next()) {
 				int generatedKey = rs.getInt(1);
@@ -106,8 +116,7 @@ public final class MySQL {
 			logSQL(ex.getMessage());
 			return -1;
 		}
-	}
-	
+	}	
 
 	public void close() {
 		try {

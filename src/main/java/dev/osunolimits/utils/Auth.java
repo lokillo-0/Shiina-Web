@@ -33,14 +33,24 @@ public class Auth {
 
     public static Boolean checkPw(String raw, String bcrypt) {
         try {
-            // Create an instance of the MD5 MessageDigest
-            MessageDigest md = MessageDigest.getInstance("MD5");
-
-            // Hash the input string and return the result as a hex string directly
-            return BCrypt.checkpw(new BigInteger(1, md.digest(raw.getBytes())).toString(16), bcrypt);
+            return BCrypt.checkpw(md5(raw), bcrypt);
         } catch (Exception e) {
             App.log.error("Failed to encode MD5", e);
             return null;
         }
+    }
+
+    public static String md5(String input) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("MD5");
+            return new BigInteger(1, md.digest(input.getBytes())).toString(16);
+        } catch (Exception e) {
+            App.log.error("Failed to hash using MD5", e);
+            return null;
+        }
+    }
+
+    public static String bcrypt(String input) {
+        return BCrypt.hashpw(input, BCrypt.gensalt());
     }
 }

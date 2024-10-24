@@ -86,7 +86,7 @@ function loadTurnstileIfPresent() {
             console.log("Rendering Turnstile");
             try {
                 turnstileId = turnstile.render("#turnstile", {
-                sitekey: "${turnstilePublic}",
+                sitekey: turnstileToken,
                 callback: function (token) {
                 },
             });

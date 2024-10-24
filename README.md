@@ -15,16 +15,15 @@ The new version of Shiina for **bancho.py**
 - ✅ Clan Leaderboard with some compatitive statistics
 - ✅ Clan Page
 - ❌ Search
-- ❌ Authorization
+- ✅ User Page (w. first places, best/last scores, playcount graph and achievements)
+- ✅ Authorization
+- ✅ Beatmap Search page
 - ❌ Admin Panel
 - ❌ Beatmap Request
-
-- ❌ User Page
 - ❌ Profile Edit
 - ❌ Sitemap Generation
 - ❌ SEO
 - ❌ Donate
-- ❌ Password recovery
 
 ### **Technical:**
 

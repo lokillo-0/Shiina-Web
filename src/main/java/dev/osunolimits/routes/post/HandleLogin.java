@@ -15,7 +15,7 @@ import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
 
-public class Login extends Shiina {
+public class HandleLogin extends Shiina {
 
 
     @Override

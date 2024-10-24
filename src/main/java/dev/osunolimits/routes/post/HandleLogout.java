@@ -7,7 +7,7 @@ import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import spark.Request;
 import spark.Response;
 
-public class Logout extends Shiina {
+public class HandleLogout extends Shiina {
 
 
     @Override
