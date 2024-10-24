@@ -1,0 +1,40 @@
+<#include "assets/base.html">
+<div class="container my-5">
+    <div class="card w-100">
+        <div class="bg-secondary border-0 card-header text-body d-flex justify-content-between align-items-center py-4">
+            <span class="h1 fw-bold mb-0">User Settings</span>
+        </div>
+
+        <div class="card-body bg-body px-4">
+            <#if error??>
+            <div class="alert alert-danger" role="alert">
+                ${error}
+            </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    ${info}
+                </div>
+            </#if>
+
+            <div class="shiina-pill mb-2 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Profile Picture</span>
+            </div>
+            <div class="row">
+                <div class="col col-2 col-sm-1">
+                    <img src="${avatarServer}/${user.id}" class="w-100" alt="Avatar">
+                </div>
+                <div class="col col-auto">
+                    <form data-turbo="false" action="/settings/avatar" method="post" enctype="multipart/form-data" class="w-100">
+                        <div class="form-group">
+                            <input type="file" name="avatar" id="avatar" accept=".png" class="form-control">
+                        </div>
+                        <button type="submit" class="btn btn-primary mt-2">Upload</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<#include "assets/footer.html">

@@ -18,9 +18,10 @@ The new version of Shiina for **bancho.py**
 - ✅ User Page (w. first places, best/last scores, playcount graph and achievements)
 - ✅ Authorization
 - ✅ Beatmap Search page
+- ✅ Profile picture change
 - ❌ Admin Panel
 - ❌ Beatmap Request
-- ❌ Profile Edit
+- ❌ Userpage w/ edit
 - ❌ Sitemap Generation
 - ❌ SEO
 - ❌ Donate
