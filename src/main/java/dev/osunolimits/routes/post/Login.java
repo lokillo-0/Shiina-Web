@@ -102,10 +102,9 @@ public class Login extends Shiina {
         }else {
             res.cookie("shiina", token);
         }
-        shiina.data.put("user", user);
-        shiina.data.put("loggedIn", true);
-        shiina.data.put("info", "Welcome back, " + validationRs.getString("name"));
-        return renderTemplate("login.html", shiina, res, req);
+        
+        res.redirect("/?login=success");
+        return null;
     }
 
     

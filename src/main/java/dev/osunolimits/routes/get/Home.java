@@ -44,6 +44,11 @@ public class Home extends Shiina {
                 shiina.data.put("startup", statsResultSet.getString("startup"));
             }
         }
+
+        if(req.queryParams("login") != null && shiina.loggedIn == true) {
+            shiina.data.put("info", "You have successfully logged in");
+        }
+
         shiina.data.put("customCount", customCountResponse);
         return renderTemplate("home.html", shiina, res, req);
     }

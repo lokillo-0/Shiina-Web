@@ -1,5 +1,6 @@
 let tooltipList = []; // Keep track of initialized tooltips
 var out;
+var turnstileId = null;
 
 const bsPrimary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
 
@@ -8,6 +9,8 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
 
     const nodesWithTimestamp = document.querySelectorAll('[data-timestamp]');
     const nodesArray = Array.from(nodesWithTimestamp);
+
+    loadTurnstileIfPresent();
     
     if (document.getElementById('video') != undefined) {
         const video = document.getElementById('video');
@@ -56,6 +59,8 @@ unloadEventTurbo = document.addEventListener("turbo:before-cache", function () {
         out = null; // Clear reference
     }
 
+    unloadTurnstileIfPresent();
+
     // Clean up event listeners
     window.removeEventListener('resize', winEvent);
     document.removeEventListener("turbo:load", loadEventTurbo);
@@ -65,7 +70,33 @@ unloadEventTurbo = document.addEventListener("turbo:before-cache", function () {
     document.removeEventListener("turbo:before-render", beforeRenderTurbo);
 });
 
+function unloadTurnstileIfPresent() {
+    if(turnstileId != null && document.getElementById("turnstile")) {
+        if(document.getElementById("turnstile").innerHTML.length > 0) {
+            console.log("Removing Turnstile");
+            turnstile.remove(turnstileId);
+        }
+    }
+}
 
+function loadTurnstileIfPresent() {
+    if (document.getElementById("turnstile")) {
+        turnstile.ready(function () {
+        if (document.getElementById("turnstile").innerHTML.length == 0) {
+            console.log("Rendering Turnstile");
+            try {
+                turnstileId = turnstile.render("#turnstile", {
+                sitekey: "${turnstilePublic}",
+                callback: function (token) {
+                },
+            });
+            } catch (error) {
+                
+            }
+        }
+    });
+    }
+}
 
 function loadFirstPlaces(apiUrl, firstLoad = true) {
     let offset = document.getElementById('offsetFirstPlaces');

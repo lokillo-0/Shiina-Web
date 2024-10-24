@@ -1,7 +1,15 @@
 <#include "assets/base.html">
-    <style>
-        
-    </style>
+<div class="container my-5">  <#if error??>
+    <div class="alert alert-danger" role="alert">
+        ${error}
+    </div>
+</#if>
+<#if info??>
+    <div class="alert alert-primary" role="alert">
+        ${info}
+    </div>
+</#if></div>
+          
     <div style="min-height: 600px;" class="container desktop my-5">
         <div style="min-height: 600px;" class="home-video d-flex flex-grow-1 mb-4">
 
