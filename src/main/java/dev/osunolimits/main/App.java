@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
-import dev.osunolimits.routes.ap.*;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.System;
