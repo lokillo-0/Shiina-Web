@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.get.ap;
+package dev.osunolimits.routes.ap.get;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;

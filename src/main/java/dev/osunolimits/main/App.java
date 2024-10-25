@@ -7,6 +7,12 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
+import dev.osunolimits.routes.ap.*;
+import dev.osunolimits.routes.ap.get.Multiaccounts;
+import dev.osunolimits.routes.ap.get.Start;
+import dev.osunolimits.routes.ap.get.System;
+import dev.osunolimits.routes.ap.get.Themes;
+import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.get.Beatmap;
@@ -17,9 +23,6 @@ import dev.osunolimits.routes.get.Home;
 import dev.osunolimits.routes.get.Leaderboard;
 import dev.osunolimits.routes.get.Score;
 import dev.osunolimits.routes.get.User;
-import dev.osunolimits.routes.get.ap.Multiaccounts;
-import dev.osunolimits.routes.get.ap.Start;
-import dev.osunolimits.routes.get.ap.System;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.get.simple.Login;
 import dev.osunolimits.routes.get.simple.Register;
@@ -60,6 +63,7 @@ public class App {
         webServer = new WebServer();
         init.initializeWebServer(webServer);
         init.initializeOkHttpCacheReset();
+
         WebServer.get("/", new Home());
         WebServer.get("/beatmaps", new Beatmaps());
         WebServer.get("/leaderboard", new Leaderboard());
@@ -82,7 +86,10 @@ public class App {
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/start", new Start());
+        WebServer.get("/ap/themes", new Themes());
         WebServer.get("/ap/system", new System());
+
+        WebServer.post("/ap/themes/change", new ChangeTheme());
 
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();

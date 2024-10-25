@@ -1,12 +1,16 @@
 package dev.osunolimits.modules;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.Yaml;
 
 import ch.qos.logback.classic.Logger;
-
+import dev.osunolimits.main.App;
 import dev.osunolimits.models.Theme;
 
 public class ThemeLoader {
@@ -44,5 +48,20 @@ public class ThemeLoader {
             logger.error("Themes directory does not exist.");
         }
 
+    }
+
+    public static void selectTheme(String theme) {
+        for (Theme t : themes) {
+            if (t.getName().equals(theme)) {
+                App.customization.put("theme", t.getName());
+                Yaml yaml = new Yaml();
+                String newCustomizations = yaml.dumpAsMap(App.customization);
+                try {
+                    Files.writeString(Paths.get(".config/customization.yml"), newCustomizations);
+                } catch (IOException e) {
+                    logger.error("Failed to apply theme change to customizations.yml");
+                }
+            }
+        }
     }
 }
