@@ -19,7 +19,8 @@ The new version of Shiina for **bancho.py**
 - ✅ Authorization
 - ✅ Beatmap Search page
 - ✅ Profile picture change
-- ❌ Admin Panel
+- ✅ Theming
+- ✅ Admin Panel (But not much content)
 - ❌ Beatmap Request
 - ❌ Userpage w/ edit
 - ❌ Sitemap Generation
