@@ -36,6 +36,7 @@ public class ShiinaRoute {
                 request.data.put("userPriv", PermissionHelper.Privileges.fromInt(user.priv));
             }
         }
+        request.data.put("currentTheme", ThemeLoader.currentTheme);
         request.data.put("assetsUrl", App.env.get("ASSETSURL"));
         request.data.put("apiUrlPub", App.env.get("APIURLPUBLIC"));
         request.data.put("apiUrl", App.env.get("APIURL"));
