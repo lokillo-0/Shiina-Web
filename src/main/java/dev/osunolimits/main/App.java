@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
+import dev.osunolimits.modules.ThemeLoader;
 import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.get.Beatmap;
@@ -53,6 +54,9 @@ public class App {
         init.initializeDatabase();
         init.initializeJedis();
         customization = init.initializeCustomizations();
+
+        ThemeLoader.loadThemes();
+
         webServer = new WebServer();
         init.initializeWebServer(webServer);
         init.initializeOkHttpCacheReset();
