@@ -8,6 +8,7 @@ import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
 import dev.osunolimits.utils.Auth;
+import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
 
@@ -32,6 +33,7 @@ public class ShiinaRoute {
                 request.loggedIn = true;
                 request.user = user;
                 request.data.put("user", user);
+                request.data.put("userPriv", PermissionHelper.Privileges.fromInt(user.priv));
             }
         }
         request.data.put("assetsUrl", App.env.get("ASSETSURL"));

@@ -69,15 +69,13 @@
 
                             <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                                 <small>Rank</small>
-                                <h2>#<#if u.player.stats[mode?string].rank==0>-<#else>
-                                            ${u.player.stats[mode?string].rank}</#if>
+                                <h2>#<#if u.player.stats[mode?string].rank==0>-<#else>${u.player.stats[mode?string].rank}</#if>
                                 </h2>
                             </div>
                             <div class="col-12 col-md-6 d-flex flex-column align-items-center">
                                 <small>Country Rank <img class="flag rounded" width="20" height="15"
                                         src="/img/flags/${u.player.info.country}.svg" alt=""></small>
-                                <h2>#<#if u.player.stats[mode?string].country_rank==0>-<#else>
-                                            ${u.player.stats[mode?string].country_rank}</#if>
+                                <h2>#<#if u.player.stats[mode?string].country_rank==0>-<#else>${u.player.stats[mode?string].country_rank}</#if>
                                 </h2>
                             </div>
                         </div>

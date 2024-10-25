@@ -67,7 +67,7 @@ public class HandleAvatarChange extends Shiina {
                         res.header("Cache-Control", "no-cache, no-store, must-revalidate");
                         res.header("Pragma", "no-cache");
                         res.header("Expires", "0");
-                        res.redirect("/settings?info=Avatar uploaded successfully!");
+                        res.redirect("/settings?info=Avatar uploaded successfully! If it didn't update, hit CTRL+F5");
                     } else {
                         res.redirect("/settings?error=Invalid file type or size exceeds limit.");
                     }

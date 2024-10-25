@@ -61,7 +61,7 @@ public class WebServer extends Spark {
             App.log.error("Error injecting OsuConverter into Freemarker");
         }
         after((req, res) -> {
-            res.header("Server", "Shiina-Web");
+            res.header("Server", "ShiinaONL");
             
             LOG.info(req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.url() + " | " + req.userAgent() + " | " + req.headers("Referer"));
         });
