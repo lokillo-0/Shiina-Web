@@ -16,6 +16,7 @@ import dev.osunolimits.routes.get.Home;
 import dev.osunolimits.routes.get.Leaderboard;
 import dev.osunolimits.routes.get.Score;
 import dev.osunolimits.routes.get.User;
+import dev.osunolimits.routes.get.ap.Start;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.get.simple.Login;
 import dev.osunolimits.routes.get.simple.Register;
@@ -72,6 +73,8 @@ public class App {
 
         WebServer.get("/api/v1/get_first_places", new GetFirstPlaces());
         WebServer.get("/api/v1/get_player_scores", new GetPlayerScores());
+
+        WebServer.get("/ap/start", new Start());
 
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();
