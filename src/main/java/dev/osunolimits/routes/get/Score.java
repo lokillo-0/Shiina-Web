@@ -22,13 +22,13 @@ public class Score extends Shiina {
         }
 
         if(id == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         ScoreQuery scoreQuery = new ScoreQuery(shiina.mysql);
         Object o = scoreQuery.getScore(id);
         if(o == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         shiina.data.put("score", o);

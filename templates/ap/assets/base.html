@@ -52,6 +52,11 @@
                         <i class="fa-solid fa-house me-2"></i> Start
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a href="/ap/commands" class="nav-link <#if actNav == 2>active</#if>">
+                        <i class="fa-solid fa-terminal me-2"></i> Commands
+                    </a>
+                </li>
 
                 <!-- Administrator Section (If Applicable) -->
                 <#if userPriv?seq_contains("ADMINISTRATOR")>

@@ -110,7 +110,7 @@ public class HandleRegister extends Shiina {
         
         // Redirect to success page
         res.redirect("/?register=success");
-        return null;
+        return notFound(res, shiina);
     }
     
 }

@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 
 import dev.osunolimits.api.UserQuery;
 import dev.osunolimits.api.UserStatusQuery;
-import dev.osunolimits.main.App;
 import dev.osunolimits.models.FullUser;
 import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.models.FullUser.Player;
@@ -42,18 +41,18 @@ public class User extends Shiina {
         }
 
         if (id == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         FullUser user = new UserQuery().getUser(id);
         if (user == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         Player player = user.getPlayer();
 
         if (player == null)
-            return null;
+            return notFound(res, shiina);
 
         EnumSet<PermissionHelper.Privileges> playerPrivileges = PermissionHelper.Privileges
                 .fromInt(player.getInfo().getPriv());
@@ -64,18 +63,15 @@ public class User extends Shiina {
 
         if (isRestricted) {
             if (shiina.user == null) {
-                App.log.error("User isn't logged in");
-                return null;
+                return notFound(res, shiina);
             }
 
             if (String.valueOf(shiina.user.id).equals(String.valueOf(id))) {
                 shiina.data.put("self", true);
-                App.log.info("Restricted user accessing their own profile.");
             } else {
                 if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
-                    App.log.error(shiina.user.id + "|" + id
-                            + "|User is restricted and trying to access another user's profile");
-                    return null;
+                    return notFound(res, shiina);
+
                 } else {
                     shiina.data.put("self", false);
                 }

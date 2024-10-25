@@ -29,7 +29,7 @@ public class Clan extends Shiina {
         }
 
         if(id == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         shiina.data.put("mode", mode);
@@ -39,7 +39,7 @@ public class Clan extends Shiina {
         SingleClanResponse response = clanQuery.getClan(mode, id);
 
         if(response == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         shiina.data.put("clan", response);

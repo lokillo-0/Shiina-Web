@@ -104,7 +104,7 @@ public class HandleLogin extends Shiina {
         }
         
         res.redirect("/?login=success");
-        return null;
+        return notFound(res, shiina);
     }
 
     

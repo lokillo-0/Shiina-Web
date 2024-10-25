@@ -82,7 +82,7 @@
                                 <#list leaderboard as player>
 
                                     <li style="list-style: none;">
-                                        <a href="/u/${player.playerId}" class="bg-secondary m-2 p-3 row leaderboard-panel style="border-radius: 5px;">
+                                        <a href="/u/${player.playerId}?mode=${mode}" class="bg-secondary m-2 p-3 row leaderboard-panel style="border-radius: 5px;">
                                             <span class="col-auto d-flex align-items-center"><img class="flag"
                                                 src="${avatarServer}/${player.playerId}"
                                                 alt=""></span>

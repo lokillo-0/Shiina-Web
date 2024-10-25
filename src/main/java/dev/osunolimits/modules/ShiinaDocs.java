@@ -109,7 +109,7 @@ public class ShiinaDocs {
                         return renderTemplate("docs.html", shiina, res, req);
                     }
                 }
-                return null;
+                return notFound(res, shiina);
             }
         };
     }

@@ -19,12 +19,12 @@ public class Start extends Shiina {
 
         if(!shiina.loggedIn) {
             res.redirect("/login");
-            return null;
+            return notFound(res, shiina);
         }
 
         if(!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.STAFF)) {
             res.redirect("/");
-            return null;
+            return notFound(res, shiina);
         }
 
         ResultSet statsResultSet = shiina.mysql.Query("SELECT COUNT(`id`) AS `active_map_requests`, (SELECT COUNT(`id`) FROM `ingame_logins` WHERE DATE(`datetime`) = CURDATE()) AS `logins_today`, (SELECT COUNT(`id`) FROM `users`) AS `total_users`, (SELECT COUNT(`id`) FROM `users` WHERE `priv` != 1) AS `verified_users`, (SELECT COUNT(`rating`) FROM `ratings`) AS `map_ratings` FROM `map_requests` WHERE `active` = 1;");

@@ -27,7 +27,7 @@ public class Beatmap extends Shiina {
         }
 
         if(id == null) {
-            return null;
+            return notFound(res, shiina);
         }
 
         Integer mode = 0;
@@ -49,13 +49,13 @@ public class Beatmap extends Shiina {
         fullBeatmap.setDiffs(diffs.toArray(new FullBeatmap.MapDiff[0]));
 
         if(diffs.size() == 0) {
-            return null;
+            return notFound(res, shiina);
         }
 
         ResultSet beatmapQuery = shiina.mysql.Query("SELECT `md5`, `set_id`, `title`, `status`, `artist`, `version`, `creator`, `last_update`, `total_length`, `max_combo`, `plays`, `passes`, `mode`, `bpm`, `cs`, `ar`, `od`, `hp`, `diff` FROM `maps` WHERE `id` = ?", id);
 
         if(!beatmapQuery.next()) {
-            return null;
+            return notFound(res, shiina);
         }
 
         fullBeatmap.setMd5(beatmapQuery.getString("md5"));

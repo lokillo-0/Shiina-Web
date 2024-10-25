@@ -34,7 +34,7 @@ public class HandleAvatarChange extends Shiina {
 
         if (!shiina.loggedIn) {
             res.redirect("/login");
-            return null;
+            return notFound(res, shiina);
         }
 
         int userId = shiina.user.id;
@@ -81,6 +81,6 @@ public class HandleAvatarChange extends Shiina {
             res.redirect("/settings?error=Error processing the upload: " + e.getMessage());
         }
 
-        return null;
+        return notFound(res, shiina);
     }
 }

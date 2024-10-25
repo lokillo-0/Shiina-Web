@@ -17,12 +17,12 @@ public class ChangeTheme extends Shiina {
 
         if(!shiina.loggedIn) {
             res.redirect("/login");
-            return null;
+            return notFound(res, shiina);
         }
 
         if(!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
             res.redirect("/");
-            return null;
+            return notFound(res, shiina);
         }
 
         String theme = req.queryParams("name");
@@ -30,7 +30,7 @@ public class ChangeTheme extends Shiina {
         ThemeLoader.selectTheme(theme);
 
         res.redirect("/ap/themes");
-        return null;
+        return notFound(res, shiina);
     }
     
 }

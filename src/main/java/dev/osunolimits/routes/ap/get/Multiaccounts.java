@@ -23,12 +23,12 @@ public class Multiaccounts extends Shiina {
 
         if(!shiina.loggedIn) {
             res.redirect("/login");
-            return null;
+            return notFound(res, shiina);
         }
 
         if(!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
             res.redirect("/");
-            return null;
+            return notFound(res, shiina);
         }
         int page = 0;
         if(req.queryParams("page") != null) {

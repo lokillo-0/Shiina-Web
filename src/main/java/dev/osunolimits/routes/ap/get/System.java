@@ -21,12 +21,12 @@ public class System extends Shiina {
 
         if (!shiina.loggedIn) {
             res.redirect("/login");
-            return null;
+            return notFound(res, shiina);
         }
 
         if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
             res.redirect("/");
-            return null;
+            return notFound(res, shiina);
         }
 
         // System and application statistics

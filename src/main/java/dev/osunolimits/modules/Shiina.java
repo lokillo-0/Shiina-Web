@@ -40,4 +40,11 @@ public class Shiina implements Route {
 
     }
 
+    public Object notFound(Response response, ShiinaRequest shiina) {
+        response.status(404);
+        shiina.mysql.close();
+        return null;
+        
+    }
+
 }

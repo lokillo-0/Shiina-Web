@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
+import dev.osunolimits.routes.ap.get.Commands;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.System;
@@ -85,6 +86,7 @@ public class App {
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/start", new Start());
+        WebServer.get("/ap/commands", new Commands());
         WebServer.get("/ap/themes", new Themes());
         WebServer.get("/ap/system", new System());
 
