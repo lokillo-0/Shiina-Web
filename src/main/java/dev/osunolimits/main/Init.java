@@ -29,6 +29,7 @@ public class Init {
                     Integer.parseInt(App.env.get("MAX_THREAS")), Integer.parseInt(App.env.get("TIMEOUT_MS")));
         } catch (Exception e) {
             log.warn("Failed to set WebServer Thread Configuration");
+            System.exit(1);
         }
 
         webServer.createDefaultDirectories();
@@ -37,13 +38,14 @@ public class Init {
             webServer.setTemplateUpdateDelay(Integer.parseInt(App.env.get("TEMPLATE_UPDATE_DELAY")));
         } catch (Exception e) {
             log.warn("Failed to set Template Update Delay (Caching)");
+            System.exit(1);
         }
 
         try {
             webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("PORT")), 3000);
         } catch (Exception e) {
             log.error("Failed to ignite WebServer", e);
-            return;
+            System.exit(1);
         }
     }
 
@@ -67,6 +69,7 @@ public class Init {
             return obj;
         } catch (IOException e) {
             log.error("Failed to load customization.yml", e);
+            System.exit(1);
             return null;
         }
     }
@@ -109,7 +112,7 @@ public class Init {
                     ServerTimezone.UTC);
         } catch (Exception e) {
             log.error("Failed to configure Database", e);
-            return;
+            System.exit(1);
         }
     }
 
@@ -131,7 +134,7 @@ public class Init {
 
         } catch (Exception e) {
             log.error("Failed to configure Jedis", e);
-            return;
+            System.exit(1);
         }
     }
 

@@ -727,3 +727,7 @@
     border-color: gray;
     margin: 0 10px;
 }
+
+.page-link {
+    user-select: none;
+}

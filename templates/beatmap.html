@@ -97,6 +97,31 @@
 </div>
 <div class="container mb-4">
     <div class="card mt-2 p-3">
+        <!-- Nav-fill -->
+        <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+            <button class="nav-link <#if sort = 'pp'>active</#if>" onclick="removeParam('sort')" href="#">Performance</button>
+            </li>
+            <li class="nav-item">
+            <button class="nav-link <#if sort = 'score'>active</#if>" onclick="selectParam('sort', 'score')" href="#">Score</button>
+            </li>
+
+        </ul>
+        <div class="col col-12">
+            <div class="row">
+                <div class="col col-auto">
+                    <button onclick="selectParam('page', '${page - 1}')"
+                        class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
+                        page==1>disabled</#if>><i
+                            class="fa-solid fa-arrow-left pagination-icon"></i></button>
+                </div>
+                <div class="col ms-auto col-auto">
+                    <button onclick="selectParam('page', '${page + 1}')"
+                        class="pagination-button bg-secondary m-2 <#if !hasNextPage>disabled</#if>" <#if !hasNextPage>disabled</#if>><i
+                            class="fa-solid fa-arrow-right pagination-icon"></i></button>
+                </div>
+            </div>
+        </div>
         <#list beatmap.scores as score>
         <div class="col col-12 member-entry">
             <a href="/scores/${score.id?c}" class="bg-secondary m-2 p-3 row leaderboard-panel" style="border-radius: 5px;">
@@ -112,7 +137,7 @@
                         <img class="flag" src="/img/flags/${score.country}.svg" alt="${score.country} Flag">
                     </span>
                     <span class="m-1 col-5 ms-4 d-flex align-items-center">
-                        <span class="h3">#${score?index + 1}</span>
+                        <span class="h3">#${(score?index + 1) + (50 * (page - 1))}</span>
                     </span>
                 </div>
 
@@ -132,7 +157,12 @@
                     </div>
                     <!-- PP -->
                     <div class="d-flex align-items-center">
-                        ${score.pp?string("0")}pp
+                        <#if sort == 'pp'>
+                            ${score.pp?string("0")}pp
+                        <#elseif sort == 'score'>
+                            ${score.score}
+                        </#if>
+                        
                     </div>
                 </div>
             </a>
@@ -140,6 +170,21 @@
         <#else>
         <h1>No scores set on this beatmap</h1>
         </#list>
+        <div class="col col-12">
+            <div class="row">
+                <div class="col col-auto">
+                    <button onclick="selectParam('page', '${page - 1}')"
+                        class="pagination-button bg-secondary m-2 <#if page ==1>disabled</#if>" <#if
+                        page==1>disabled</#if>><i
+                            class="fa-solid fa-arrow-left pagination-icon"></i></button>
+                </div>
+                <div class="col ms-auto col-auto">
+                    <button onclick="selectParam('page', '${page + 1}')"
+                        class="pagination-button bg-secondary m-2 <#if !hasNextPage>disabled</#if>" <#if !hasNextPage>disabled</#if>><i
+                            class="fa-solid fa-arrow-right pagination-icon"></i></button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
