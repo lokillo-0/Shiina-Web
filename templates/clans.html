@@ -77,7 +77,7 @@
                                 <#assign clanC=0>
                                 <#list clans as clan>
                                     <li style="list-style: none;">
-                                        <a href="/clan/${clan.id}" class="bg-secondary m-2 p-3 row clan-panel" style="border-radius: 5px;">
+                                        <a href="/clan/${clan.id}?mode=${mode}" class="bg-secondary m-2 p-3 row clan-panel" style="border-radius: 5px;">
                                             <span class="col-auto" style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${offset + clanC}</span>
                                             <span class="col col-auto d-flex align-items-center">
                                                 <button class="clan-badge btn btn-primary">[${clan.tag}]</button>

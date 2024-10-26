@@ -31,6 +31,8 @@ import dev.osunolimits.routes.post.HandleAvatarChange;
 import dev.osunolimits.routes.post.HandleLogin;
 import dev.osunolimits.routes.post.HandleLogout;
 import dev.osunolimits.routes.post.HandleRegister;
+import dev.osunolimits.routes.redirects.GucchoBmRedirect;
+import dev.osunolimits.routes.redirects.GucchoUserRedirect;
 import io.github.cdimascio.dotenv.Dotenv;
 import redis.clients.jedis.JedisPooled;
 
@@ -63,6 +65,9 @@ public class App {
         webServer = new WebServer();
         init.initializeWebServer(webServer);
         init.initializeOkHttpCacheReset();
+
+        WebServer.get("/user/:handle", new GucchoUserRedirect());
+        WebServer.get("/beatmapset/:set", new GucchoBmRedirect());
 
         WebServer.get("/", new Home());
         WebServer.get("/beatmaps", new Beatmaps());
