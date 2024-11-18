@@ -40,6 +40,13 @@ public class Shiina implements Route {
 
     }
 
+    public Object redirect(Response response, ShiinaRequest shiina, String location) {
+        response.status(302);
+        response.redirect(location);
+        shiina.mysql.close();
+        return null;
+    }
+
     public Object notFound(Response response, ShiinaRequest shiina) {
         response.status(404);
         shiina.mysql.close();

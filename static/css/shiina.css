@@ -40,6 +40,11 @@
     border-radius: 25%;
 }
 
+.no-a {
+    text-decoration: none;
+    color: inherit;
+}
+
 .shiina-online-status {
     display: flex; /* Use flexbox for alignment */
     align-items: center; /* Vertically center the items */
@@ -171,8 +176,21 @@
     transition: transform 0.2s ease-in-out; /* Transition for both hover and unhover */
 }
 
+.shiina-ver {
+    font-size: 25px; 
+    text-decoration: none;
+    padding: 7.5px;
+    transition: all 0.2s ease-in-out; 
+    border-radius: 5px;
+    background-color: var(--bs-sable-bg-subtle);
+}
+
+.shiina-ver:hover {
+    background-color: var(--bs-action-border-color);
+}
+
 .shiina-versel {
-    font-size: 30px!important;
+    background-color: var(--bs-action-border-color);
 }
 
 .leaderboard-panel:hover,

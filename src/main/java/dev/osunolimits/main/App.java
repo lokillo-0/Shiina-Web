@@ -5,6 +5,7 @@ import java.util.Map;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import dev.osunolimits.models.Action;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
 import dev.osunolimits.routes.ap.get.Commands;
@@ -12,7 +13,11 @@ import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.System;
 import dev.osunolimits.routes.ap.get.Themes;
+import dev.osunolimits.routes.ap.get.groups.ManageGroup;
+import dev.osunolimits.routes.ap.get.groups.Groups;
 import dev.osunolimits.routes.ap.post.ChangeTheme;
+import dev.osunolimits.routes.ap.post.ProcessManageGroup;
+import dev.osunolimits.routes.api.get.GetBmThumbnail;
 import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.get.Beatmap;
@@ -48,15 +53,19 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.0sh";
+    public static String version = "1.1rc1";
+    public static String dbVersion = "1.0";
 
     public static void main(String[] args) {
         log.info("Shiina-Web Rewrite "+version);
 
         Init init = new Init();
+        init.initializeDataDirectory();
         init.initializeRedisConfiguration();
         init.initializeJettyLogging();
         init.initializeDatabase();
+        init.initializeConnectionWatcher();
+        init.initializeAutorunSQL();
         init.initializeJedis();
         customization = init.initializeCustomizations();
 
@@ -88,12 +97,18 @@ public class App {
 
         WebServer.get("/api/v1/get_first_places", new GetFirstPlaces());
         WebServer.get("/api/v1/get_player_scores", new GetPlayerScores());
+        WebServer.get("/api/v1/thumb", new GetBmThumbnail());
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/start", new Start());
         WebServer.get("/ap/commands", new Commands());
         WebServer.get("/ap/themes", new Themes());
         WebServer.get("/ap/system", new System());
+        WebServer.get("/ap/groups", new Groups());
+        WebServer.get("/ap/groups/create", new ManageGroup(Action.CREATE));
+        WebServer.get("/ap/groups/edit", new ManageGroup(Action.EDIT));
+        WebServer.get("/ap/groups/delete", new ManageGroup(Action.DELETE));
+        WebServer.post("/ap/groups/manage", new ProcessManageGroup());
 
         WebServer.post("/ap/themes/change", new ChangeTheme());
 

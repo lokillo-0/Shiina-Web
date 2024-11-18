@@ -1,3 +1,4 @@
+.target/*.sql
 .target/*.xml
 
 # Compiled class file
@@ -28,6 +29,7 @@
 themes/onl
 .cache/
 .logs/
+data/
 static/css/theme.css
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
@@ -35,3 +37,4 @@ hs_err_pid*
 replay_pid*
 .vscode/
 target/classes/logback.xml
+target/classes/

@@ -2,6 +2,8 @@ package dev.osunolimits.common;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import ch.qos.logback.classic.Logger;
 
 public class Database {
     private static Logger log = (Logger) LoggerFactory.getLogger(Database.class);
+    public static List<MySQL> runningConnections = new ArrayList<MySQL>();
     private HikariConfig hikariConfig;
     public static HikariDataSource dataSource;
     private int connectionTimeout;

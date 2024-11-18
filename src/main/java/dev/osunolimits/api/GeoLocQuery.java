@@ -35,6 +35,6 @@ public class GeoLocQuery {
         } catch (IOException e) {
             App.log.error("Failed to request country code from geoloc");
         }
-        return null; 
+        return "XX"; 
     }
 }

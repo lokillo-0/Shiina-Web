@@ -20,7 +20,8 @@ public class Clans extends Shiina {
 
         ClanQuery clanQuery = new ClanQuery(shiina.mysql);
         int page = 1;
-        int pageSize = 10;
+        boolean hasNext = false;
+        int pageSize = 11;
         int offset = 0;
         if (req.queryParams("page") != null && Validation.isNumeric(req.queryParams("page"))) { 
             page = Integer.parseInt(req.queryParams("page"));
@@ -42,8 +43,14 @@ public class Clans extends Shiina {
         
 
         List<ClanResponse> clans = clanQuery.getClan(ClanQuery.CompetitionType.fromName(sort), mode, pageSize, offset);
+        if(clans.size() == pageSize) {
+            hasNext = true;
+            clans.remove(clans.size() - 1);
+        }
+        
         shiina.data.put("clans", clans);
         shiina.data.put("pageSize", clans.size());
+        shiina.data.put("hasNext", hasNext);
         shiina.data.put("totalPageSize", pageSize);
         shiina.data.put("page", page);
         shiina.data.put("mode", mode);

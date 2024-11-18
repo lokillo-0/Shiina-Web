@@ -18,6 +18,8 @@ public final class MySQL {
 
 	private static Logger log = (Logger) LoggerFactory.getLogger(MySQL.class);
 
+	public long connectionCreated;
+
 	private final int COLUMN_WIDTH = 20;
 
     private void printResultSet(ResultSet resultSet) {
@@ -45,7 +47,8 @@ public final class MySQL {
 	private Connection currentCon;
 
 	public MySQL(Connection currentCon) {
-
+		this.connectionCreated = System.currentTimeMillis();
+		Database.runningConnections.add(this);
 		this.currentCon = currentCon;
 	}
 
@@ -122,6 +125,7 @@ public final class MySQL {
 		try {
 			if (!currentCon.isClosed()) {
 				Database.currentConnections--;
+				Database.runningConnections.remove(this);
 				currentCon.close();
 			}
 		} catch (Exception ex) {

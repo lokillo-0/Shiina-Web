@@ -2,6 +2,7 @@ package dev.osunolimits.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -11,10 +12,15 @@ import java.util.Map;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
+import com.google.gson.Gson;
+
 import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import dev.osunolimits.common.Database;
 import dev.osunolimits.common.Database.ServerTimezone;
+import dev.osunolimits.common.MySQL;
+import dev.osunolimits.models.DbVersion;
+import dev.osunolimits.utils.SQLFileLoader;
 import redis.clients.jedis.DefaultJedisClientConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisPooled;
@@ -136,6 +142,61 @@ public class Init {
             log.error("Failed to configure Jedis", e);
             System.exit(1);
         }
+    }
+
+    public void initializeAutorunSQL() {
+        MySQL mysql = Database.getConnection();
+
+        try {
+           for (String s : new SQLFileLoader("autorun_sql/").loadSQLFiles()) {
+                mysql.Exec(s);
+           }
+        } catch (IOException | URISyntaxException e) {
+            log.error("Failed to autorun sql files", e);
+        }
+        mysql.close();
+    }
+
+    public void initializeConnectionWatcher() {
+        new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(1000 * 30);
+                } catch (InterruptedException e) {
+                    log.error("ConnectionWatcher Thread interrupted", e);
+                    return;
+                }
+    
+                for (MySQL con : Database.runningConnections) {
+                    if (System.currentTimeMillis() - con.connectionCreated > 1000 * 30) { // 30 seconds
+                        con.close();
+                    }
+                }
+            }
+        }).start();
+    }    
+
+    public void initializeDataDirectory() {
+        try {
+            if (!Files.exists(Paths.get("data"))) {
+                Files.createDirectories(Paths.get("data"));
+            }
+
+            if (!Files.exists(Paths.get("data/dbversion.json"))) {
+                
+                Gson gson = new Gson();
+                DbVersion dbVersion = new DbVersion();
+                dbVersion.setVersion(App.version);
+                dbVersion.setDbVersion(App.dbVersion);
+
+                Files.writeString(Paths.get("data/dbversion.json"), gson.toJson(dbVersion));
+            }
+        } catch (IOException e) {
+            log.error("Failed to create .data directory", e);
+            System.exit(1);
+        }
+
+
     }
 
 }

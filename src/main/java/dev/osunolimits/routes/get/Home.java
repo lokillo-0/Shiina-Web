@@ -14,7 +14,7 @@ import spark.Response;
 public class Home extends Shiina {
 
     private final String STATS_SQL = "SELECT (SELECT COUNT(`id`) FROM `scores`) AS `scores`,(SELECT COUNT(`id`) FROM `maps`) AS `maps`, (SELECT COUNT(`id`) FROM `clans`) AS `clans`;";
-    private final String ADD_STATS_SQL = "SELECT (SELECT COUNT(`id`) FROM `scores`) AS `scores`, (SELECT COUNT(`id`) FROM `ingame_logins`) AS `total_logins`, (SELECT COUNT(`id`) FROM `ingame_logins` WHERE DATE(`datetime`) = CURDATE()) AS `logins_today`, (SELECT COUNT(`id`) FROM `maps`) AS `maps`, (SELECT COUNT(`id`) FROM `clans`) AS `clans`, (SELECT MAX(`datetime`) FROM `startups`) AS `startup`, (SELECT COUNT(`id`) FROM `users` WHERE (`priv` & (4096 | 8192 | 16384 | 2048 | 1024)) > 0) AS `staff_count`, (SELECT COUNT(`id`) FROM `users` WHERE (`priv` & 32768) > 0) AS `banned_count`;";
+    private final String ADD_STATS_SQL = "SELECT (SELECT COUNT(`id`) FROM `scores`) AS `scores`, (SELECT COUNT(`id`) FROM `ingame_logins`) AS `total_logins`, (SELECT COUNT(`id`) FROM `ingame_logins` WHERE DATE(`datetime`) = CURDATE()) AS `logins_today`, (SELECT COUNT(`id`) FROM `maps`) AS `maps`, (SELECT COUNT(`id`) FROM `clans`) AS `clans`, (SELECT MAX(`datetime`) FROM `startups`) AS `startup`, (SELECT COUNT(`id`) FROM `users` WHERE (`priv` & (4096 | 8192 | 16384 | 2048 | 1024)) > 0) AS `staff_count`;";
     @Override
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
@@ -40,7 +40,6 @@ public class Home extends Shiina {
                 customCountResponse.setTotalLogins(statsResultSet.getInt("total_logins"));
                 customCountResponse.setLoginsToday(statsResultSet.getInt("logins_today"));
                 customCountResponse.setStaff(statsResultSet.getInt("staff_count"));
-                customCountResponse.setRestricted(statsResultSet.getInt("banned_count"));
                 shiina.data.put("startup", statsResultSet.getString("startup"));
             }
         }

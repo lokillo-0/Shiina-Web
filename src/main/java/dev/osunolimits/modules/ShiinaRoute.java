@@ -29,7 +29,7 @@ public class ShiinaRoute {
             String userJson = App.jedisPool.get("shiina:" + req.cookie("shiina"));
             Gson gson = new Gson();
             Auth.User user = gson.fromJson(userJson, Auth.User.class);
-            if(user != null) {
+            if(user != null && user.priv != null) {
                 request.loggedIn = true;
                 request.user = user;
                 request.data.put("user", user);

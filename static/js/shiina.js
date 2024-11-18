@@ -373,7 +373,7 @@ function initPlayCountGraph() {
 }
 
 function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, setId, scoreId, mods) {
-    var output = '';
+    let output = '';
 
     output += '<div class="col col-12 act-entry d-flex flex-column mb-1">';
 
@@ -381,9 +381,11 @@ function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, 
     output += '<div class="score-container bg-secondary score-panel d-flex flex-grow-1 position-relative" style="border-radius: 5px;">';
     output += '<div class="d-block d-lg-flex flex-grow-1">';
 
+    beatmapImg = '/api/v1/thumb?setId=' + setId;
+
     // Beatmap cover image
     output += '<div class="col-12 col-lg-3 d-flex justify-content-center">';
-    output += '<img style="object-fit: cover; height: 100%;" class="img-fluid rounded-2 w-100" src="https://assets.ppy.sh/beatmaps/' + setId + '/covers/card.jpg" alt="">';
+    output += '<img src="' + beatmapImg + '" style="object-fit: cover; height: 100%;" class="img-fluid rounded-2 w-100" alt="">';
     output += '</div>';
 
     // Score details
