@@ -16,7 +16,7 @@ public class HandleLogout extends Shiina {
         shiina.data.put("actNav", 0);
 
         if(req.cookie("shiina") != null) {
-            App.jedisPool.del("shiina:" + req.cookie("shiina"));
+            App.jedisPool.del("shiina:auth:" + req.cookie("shiina"));
             shiina.loggedIn = false;
             shiina.data.remove("user");
             res.removeCookie("shiina");

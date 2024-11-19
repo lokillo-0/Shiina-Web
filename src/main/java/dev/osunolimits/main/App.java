@@ -1,5 +1,6 @@
 package dev.osunolimits.main;
 
+import java.sql.SQLException;
 import java.util.Map;
 
 import org.slf4j.LoggerFactory;
@@ -8,13 +9,15 @@ import ch.qos.logback.classic.Logger;
 import dev.osunolimits.models.Action;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
+import dev.osunolimits.modules.UserInfoCache;
 import dev.osunolimits.routes.ap.get.Commands;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.System;
 import dev.osunolimits.routes.ap.get.Themes;
-import dev.osunolimits.routes.ap.get.groups.ManageGroup;
 import dev.osunolimits.routes.ap.get.groups.Groups;
+import dev.osunolimits.routes.ap.get.groups.ManageGroup;
+import dev.osunolimits.routes.ap.get.users.Users;
 import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.ap.post.ProcessManageGroup;
 import dev.osunolimits.routes.api.get.GetBmThumbnail;
@@ -56,7 +59,7 @@ public class App {
     public static String version = "1.1rc1";
     public static String dbVersion = "1.0";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         log.info("Shiina-Web Rewrite "+version);
 
         Init init = new Init();
@@ -109,8 +112,11 @@ public class App {
         WebServer.get("/ap/groups/edit", new ManageGroup(Action.EDIT));
         WebServer.get("/ap/groups/delete", new ManageGroup(Action.DELETE));
         WebServer.post("/ap/groups/manage", new ProcessManageGroup());
-
+        WebServer.get("/ap/users", new Users());
         WebServer.post("/ap/themes/change", new ChangeTheme());
+
+        UserInfoCache userInfoCache = new UserInfoCache();
+        userInfoCache.populateIfNeeded();
 
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();

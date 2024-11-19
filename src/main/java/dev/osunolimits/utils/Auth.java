@@ -22,6 +22,13 @@ public class Auth {
         public Integer created;
     }
 
+    @Data
+    public class SessionUser {
+        public Integer id;
+        public Integer created;
+        public String ip;
+    }
+
     private static final SecureRandom secureRandom = new SecureRandom(); 
     private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); 
 

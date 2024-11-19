@@ -3,11 +3,14 @@ package dev.osunolimits.routes.ap.get;
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.ThreadMXBean;
+import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import dev.osunolimits.common.Database;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.routes.api.get.GetBmThumbnail;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -39,6 +42,16 @@ public class System extends Shiina {
         shiina.data.put("os_version", osBean.getVersion());
         shiina.data.put("available_processors", osBean.getAvailableProcessors());
         shiina.data.put("system_load_average", osBean.getSystemLoadAverage());
+
+
+        HashMap<String, byte[]> thumbnailCache = GetBmThumbnail.thumbnailCache;
+        AtomicInteger thumbnailCacheSizeBytes = new AtomicInteger(0);
+        thumbnailCache.forEach((k, v) -> {
+            thumbnailCacheSizeBytes.addAndGet(v.length);
+        });
+
+        shiina.data.put("shiina_thumbnails", thumbnailCacheSizeBytes.get() / 1024 / 1024 + " MB (" + thumbnailCache.size() + " thumbnails)");
+
 
         // JVM memory usage
         shiina.data.put("jvm_total_memory", runtime.totalMemory());

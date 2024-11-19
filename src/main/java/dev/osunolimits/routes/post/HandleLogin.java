@@ -9,7 +9,9 @@ import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.UserInfoCache;
 import dev.osunolimits.utils.Auth;
+import dev.osunolimits.utils.Auth.SessionUser;
 import dev.osunolimits.utils.Auth.User;
 import okhttp3.OkHttpClient;
 import spark.Request;
@@ -25,9 +27,11 @@ public class HandleLogin extends Shiina {
     
         String captchaResponse = req.queryParams("cf-turnstile-response");
 
-        if(req.cookie("shiina") != null && App.jedisPool.get("shiina:" + req.cookie("shiina")) != null) {
-            shiina.data.put("info", "You are already logged in");
-            return renderTemplate("login.html", shiina, res, req);
+        if(req.cookie("shiina") != null) {
+            if(App.jedisPool.get("shiina:auth:" + req.cookie("shiina")) != null) {
+                shiina.data.put("info", "You are already logged in");
+                return renderTemplate("login.html", shiina, res, req);
+            }
         }
 
         if(captchaResponse == null || captchaResponse.isEmpty()) {
@@ -62,8 +66,8 @@ public class HandleLogin extends Shiina {
         }
 
         String selectSql = "";
-        String mailSql = "SELECT `safe_name`, `pw_bcrypt`, `name`, `id`, `priv` FROM `users` WHERE `email` = ?";
-        String nameSql = "SELECT `safe_name`, `pw_bcrypt`, `name`, `id`, `priv` FROM `users` WHERE `name` = ?";
+        String mailSql = "SELECT `safe_name`, `pw_bcrypt`, `name`, `id`, `priv`, `email` FROM `users` WHERE `email` = ?";
+        String nameSql = "SELECT `safe_name`, `pw_bcrypt`, `name`, `id`, `priv`, `email` FROM `users` WHERE `name` = ?";
 
         if(input.matches(emailRegex)) {
             selectSql = mailSql;
@@ -84,18 +88,20 @@ public class HandleLogin extends Shiina {
         }
 
         String token = Auth.generateNewToken();
-        User user = new Auth().new User();
+
+        int userId = validationRs.getInt("id");
+        UserInfoCache userInfoCache = new UserInfoCache();
+        userInfoCache.reloadUserIfNotPresent(userId);
+
+        SessionUser user = new Auth().new SessionUser();
         user.id = validationRs.getInt("id");
-        user.name = validationRs.getString("name");
-        user.email = input;
-        user.priv = validationRs.getInt("priv");
         user.created = (int) (System.currentTimeMillis() / 1000L);
-        user.safe_name = validationRs.getString("safe_name");
+        user.ip = req.ip();
 
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
 
-        App.jedisPool.set("shiina:"+token, userJson);
+        App.jedisPool.set("shiina:auth:"+token, userJson);
 
         if(rememberMe) {
             res.cookie("shiina", token, 604800);

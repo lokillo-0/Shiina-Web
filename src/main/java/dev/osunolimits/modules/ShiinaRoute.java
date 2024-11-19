@@ -7,12 +7,21 @@ import com.google.gson.Gson;
 import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
+import dev.osunolimits.models.UserInfoObject;
+import dev.osunolimits.models.FullUser.UserInfo;
+import dev.osunolimits.routes.get.User;
 import dev.osunolimits.utils.Auth;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
 
 public class ShiinaRoute {
+
+    private Gson gson;
+
+    public ShiinaRoute () {
+        gson = new Gson();
+    }
 
     public class ShiinaRequest {
         public MySQL mysql;
@@ -26,14 +35,24 @@ public class ShiinaRoute {
         ShiinaRequest request = new ShiinaRequest();
         request.mysql = Database.getConnection();
         if(req.cookie("shiina") != null) {
-            String userJson = App.jedisPool.get("shiina:" + req.cookie("shiina"));
-            Gson gson = new Gson();
-            Auth.User user = gson.fromJson(userJson, Auth.User.class);
-            if(user != null && user.priv != null) {
+            String userJson = App.jedisPool.get("shiina:auth:" + req.cookie("shiina"));
+           
+            Auth.SessionUser user = gson.fromJson(userJson, Auth.SessionUser.class);
+            
+            if(user != null) {
+                Auth.User referenceUser = new Auth(). new User();
+                String userInfoJson = App.jedisPool.get("shiina:user:" + user.id);
+                UserInfoObject infoObject = gson.fromJson(userInfoJson, UserInfoObject.class);
+                referenceUser.id = user.id;
+                referenceUser.name = infoObject.name;
+                referenceUser.priv = infoObject.priv;
+                referenceUser.safe_name = infoObject.safe_name;
+    
+                App.log.info(userJson + userInfoJson);
                 request.loggedIn = true;
-                request.user = user;
-                request.data.put("user", user);
-                request.data.put("userPriv", PermissionHelper.Privileges.fromInt(user.priv));
+                request.user = referenceUser;
+                request.data.put("user", referenceUser);
+                request.data.put("userPriv", PermissionHelper.Privileges.fromInt(referenceUser.priv));
             }
         }
         request.data.put("currentTheme", ThemeLoader.currentTheme);

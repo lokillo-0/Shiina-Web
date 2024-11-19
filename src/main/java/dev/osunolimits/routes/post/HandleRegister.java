@@ -9,8 +9,10 @@ import dev.osunolimits.externals.TurnstileQuery;
 import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
+import dev.osunolimits.modules.UserInfoCache;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.utils.Auth;
+import dev.osunolimits.utils.Auth.SessionUser;
 import dev.osunolimits.utils.Auth.User;
 import okhttp3.OkHttpClient;
 import spark.Request;
@@ -95,15 +97,18 @@ public class HandleRegister extends Shiina {
         }        
 
         String token = Auth.generateNewToken();
-        User user = new Auth().new User();
+
+        UserInfoCache userInfoCache = new UserInfoCache();
+        userInfoCache.reloadUser(userId);
+
+        SessionUser user = new Auth().new SessionUser();
         user.id = userId;
-        user.name = username;
-        user.email = email;
         user.created = (int) (System.currentTimeMillis() / 1000L);
+        user.ip = req.ip();
     
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
-        App.jedisPool.set("shiina:" + token, userJson);
+        App.jedisPool.set("shiina:auth:" + token, userJson);
     
         // Set cookie
         res.cookie("shiina", token);
