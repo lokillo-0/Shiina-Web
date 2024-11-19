@@ -32,3 +32,6 @@ The new version of Shiina for **bancho.py**
 - ✅ API Request Caching
 - ✅ Error/Request Logger with configutaion at `.config/logger.env`
 - ✅ Easy customization with `.config/customization.yml`
+
+
+![Structure](/static/img/shiina-structure.png)
