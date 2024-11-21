@@ -759,3 +759,29 @@
 .page-link {
     user-select: none;
 }
+
+
+.search-result {
+    margin-bottom: 1rem;
+}
+
+.search-result a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.search-result img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.search-result h5 {
+    margin-bottom: 0.5rem;
+}
+
+.search-result p {
+    margin-bottom: 0;
+    color: #6c757d;
+}

@@ -35,10 +35,29 @@
         <div class="d-none d-md-none d-lg-flex">
             <div class="line-vert shiina-border"></div>
         </div>
-        <form class="d-flex  my-2 my-lg-0 shiina-search-form" role="search">
-          <input class="form-control me-2 shiina-search-input" type="search" placeholder="Search ${c.serverName}" aria-label="Search">
-          <button class="btn btn-primary shiina-search-btn" type="submit">Search</button>
+        <form class="d-flex my-2 my-lg-0 shiina-search-form" role="search">
+          <input 
+            class="form-control me-2 shiina-search-input" 
+            oninput="searchShiina(this.value)" 
+            type="search" 
+            placeholder="Search ${c.serverName}" 
+            aria-label="Search">
+          <div id="shiina-search" class="d-none bg-secondary"></div>
+          <style>
+            #shiina-search {
+            position: absolute; 
+            top: calc(100%); 
+            left: 0;
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            z-index: 1050;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+          }
+          </style>
         </form>
+        
         <div class="d-none d-md-none d-lg-flex">
             <div class="line-vert shiina-border"></div>
         </div>
