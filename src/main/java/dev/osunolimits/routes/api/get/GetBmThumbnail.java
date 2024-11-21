@@ -1,11 +1,14 @@
 package dev.osunolimits.routes.api.get;
 
 import okhttp3.OkHttpClient;
-
+import okhttp3.ResponseBody;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
 
 public class GetBmThumbnail implements Route {
@@ -31,16 +34,27 @@ public class GetBmThumbnail implements Route {
                 .build();
 
         okhttp3.Response response = client.newCall(request).execute();
-        byte[] imageBytes;
-        if (response.code() == 200) {
-            imageBytes = response.body().bytes();
-        } else {
-            java.nio.file.Path imagePath = java.nio.file.Paths.get("static/img/nobeatmapicon.png");
-            imageBytes = java.nio.file.Files.readAllBytes(imagePath);
+        byte[] imageBytes = null;
+        try {
+            if (response.code() == 200) {
+                ResponseBody responseBody = response.body();
+                if (responseBody != null) {
+                    imageBytes = responseBody.bytes();
+                }
+            } else {
+                Path imagePath = Paths.get("static/img/nobeatmapicon.png");
+                imageBytes = Files.readAllBytes(imagePath);
+            }
+        } finally {
+            response.close(); // Ensure the response is closed
         }
-        thumbnailCache.put(setId, imageBytes);
 
-        res.type("image/jpeg");
-        return imageBytes;
+        if (imageBytes != null) {
+            thumbnailCache.put(setId, imageBytes);
+            res.type("image/jpeg");
+            return imageBytes;
+        } else {
+            return "Failed to retrieve image";
+        }
     }
 }

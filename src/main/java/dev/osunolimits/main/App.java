@@ -7,16 +7,20 @@ import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.models.Action;
+import dev.osunolimits.modules.GroupRegistry;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
 import dev.osunolimits.modules.UserInfoCache;
 import dev.osunolimits.routes.ap.get.Commands;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
-import dev.osunolimits.routes.ap.get.System;
 import dev.osunolimits.routes.ap.get.Themes;
 import dev.osunolimits.routes.ap.get.groups.Groups;
 import dev.osunolimits.routes.ap.get.groups.ManageGroup;
+import dev.osunolimits.routes.ap.get.groups.ProcessGroup;
+import dev.osunolimits.routes.ap.get.system.System;
+import dev.osunolimits.routes.ap.get.system.SystemConnections;
+import dev.osunolimits.routes.ap.get.users.ApUser;
 import dev.osunolimits.routes.ap.get.users.Users;
 import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.ap.post.ProcessManageGroup;
@@ -107,13 +111,18 @@ public class App {
         WebServer.get("/ap/commands", new Commands());
         WebServer.get("/ap/themes", new Themes());
         WebServer.get("/ap/system", new System());
+        WebServer.get("/ap/system/cons", new SystemConnections());
         WebServer.get("/ap/groups", new Groups());
         WebServer.get("/ap/groups/create", new ManageGroup(Action.CREATE));
         WebServer.get("/ap/groups/edit", new ManageGroup(Action.EDIT));
         WebServer.get("/ap/groups/delete", new ManageGroup(Action.DELETE));
         WebServer.post("/ap/groups/manage", new ProcessManageGroup());
+        WebServer.get("/ap/groups/process", new ProcessGroup());
         WebServer.get("/ap/users", new Users());
+        WebServer.get("/ap/user", new ApUser());
         WebServer.post("/ap/themes/change", new ChangeTheme());
+
+        GroupRegistry.revalidate();
 
         UserInfoCache userInfoCache = new UserInfoCache();
         userInfoCache.populateIfNeeded();

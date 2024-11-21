@@ -1,0 +1,18 @@
+<#include "/ap/assets/base.html">
+<div class="container-fluid my-3">
+    <#list connections as con>
+        <div class="row align-items-center mb-3">
+            <div class="col-auto">
+                <p>Created: ${con.connectionCreated}</p>
+                
+                <p>Connection
+                <#list con.callers as caller>
+                 (${con.caller})
+                </#list></p>
+            </div>
+        </div>
+    </#list>
+</div>
+
+</body>
+</html>

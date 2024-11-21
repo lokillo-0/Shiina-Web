@@ -5,9 +5,13 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 
+import com.google.gson.Gson;
+
 import dev.osunolimits.api.UserQuery;
 import dev.osunolimits.api.UserStatusQuery;
+import dev.osunolimits.main.App;
 import dev.osunolimits.models.FullUser;
+import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.models.FullUser.Player;
 import dev.osunolimits.modules.Shiina;
@@ -22,6 +26,11 @@ import spark.Request;
 import spark.Response;
 
 public class User extends Shiina {
+    private Gson gson;
+
+    public User() {
+        gson = new Gson();
+    }
 
     private final String ACH_QUERY = "SELECT `achievements`.`file`, `achievements`.`name`, `achievements`.`desc` FROM `user_achievements` LEFT JOIN `achievements` ON `user_achievements`.`achid` = `achievements`.`id` WHERE `user_achievements`.`userid` = ? AND (`achievements`.`file` LIKE ? OR `achievements`.`file` LIKE 'all%');";
 
@@ -81,6 +90,8 @@ public class User extends Shiina {
             shiina.data.put("self", shiina.user != null && shiina.user.id == id); // Set self flag based on ID
         }
 
+        UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + id), UserInfoObject.class);
+
         UserStatusQuery userStatusQuery = new UserStatusQuery();
         UserStatus userStatus = userStatusQuery.getUserStatus(id);
 
@@ -104,6 +115,7 @@ public class User extends Shiina {
 
         }
 
+        shiina.data.put("groups", userInfo.getGroups());
         shiina.data.put("achievements", achievements);
         shiina.data.put("id", id);
         shiina.data.put("level",

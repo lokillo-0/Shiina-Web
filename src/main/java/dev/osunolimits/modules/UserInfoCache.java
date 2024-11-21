@@ -15,7 +15,6 @@ import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.Group;
 import dev.osunolimits.models.UserInfoObject;
-import lombok.Data;
 
 public class UserInfoCache {
 

@@ -12,7 +12,6 @@ import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.UserInfoCache;
 import dev.osunolimits.utils.Auth;
 import dev.osunolimits.utils.Auth.SessionUser;
-import dev.osunolimits.utils.Auth.User;
 import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;

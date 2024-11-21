@@ -1,6 +1,7 @@
 package dev.osunolimits.api;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
@@ -11,6 +12,8 @@ import com.google.gson.annotations.SerializedName;
 
 import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
+import dev.osunolimits.models.Group;
+import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.utils.CacheInterceptor;
 import lombok.Data;
 import okhttp3.Cache;
@@ -20,6 +23,9 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class LeaderboardQuery {
+
+    private Gson gson;
+
 
     @Data
     public class LeaderboardResponse {
@@ -82,6 +88,8 @@ public class LeaderboardQuery {
 
         @SerializedName("clan_tag")
         private String clanTag;
+
+        private List<Group> groups;
     }
 
     private OkHttpClient client;
@@ -91,6 +99,7 @@ public class LeaderboardQuery {
                 .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
                 .cache(new Cache(new File(".cache/leaderboard"), 100L * 1024L * 1024L))
                 .connectionPool(new ConnectionPool(50, 20, TimeUnit.SECONDS)).build();
+        gson = new Gson();
     }
 
     private int parameter = 0;
@@ -121,7 +130,14 @@ public class LeaderboardQuery {
         try {
             Response response = client.newCall(request).execute();
             JsonElement element = JsonParser.parseString(response.body().string());
-            LeaderboardResponse leaderboardResponse = new Gson().fromJson(element, LeaderboardResponse.class);
+            LeaderboardResponse leaderboardResponse = gson.fromJson(element, LeaderboardResponse.class);
+            for (LeaderboardItem item : leaderboardResponse.getLeaderboard()) {
+                UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + item.getPlayerId()),
+                        UserInfoObject.class);
+                if(userInfo != null) {
+                    item.setGroups(userInfo.getGroups());
+                }
+            }
             return leaderboardResponse;
 
         } catch (Exception e) {

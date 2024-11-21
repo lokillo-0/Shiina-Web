@@ -1,4 +1,4 @@
-<#include "assets/base.html">
+<#include "/ap/assets/base.html">
 <div class="container-fluid my-3">
     <!-- Page Header -->
     <div class="row align-items-center mb-3">
@@ -78,7 +78,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title"><i class="fa-solid fa-user-ninja"></i> SQL current connections</h5>
-                    <p class="card-text">${sql_con}</p>
+                    <p class="card-text">${sql_con} [${sql_con_list}] <a href="/ap/system/cons">(view)</a></p>
                 </div>
             </div>
         </div>

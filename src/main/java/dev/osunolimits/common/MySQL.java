@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
@@ -13,12 +14,15 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.main.App;
 import dev.osunolimits.utils.Validation;
+import lombok.Data;
 
+@Data
 public final class MySQL {
 
 	private static Logger log = (Logger) LoggerFactory.getLogger(MySQL.class);
 
 	public long connectionCreated;
+	public List<String> callers = new ArrayList<>();
 
 	private final int COLUMN_WIDTH = 20;
 
@@ -48,6 +52,9 @@ public final class MySQL {
 
 	public MySQL(Connection currentCon) {
 		this.connectionCreated = System.currentTimeMillis();
+		for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
+			callers.add(element.getClassName());
+		}
 		Database.runningConnections.add(this);
 		this.currentCon = currentCon;
 	}

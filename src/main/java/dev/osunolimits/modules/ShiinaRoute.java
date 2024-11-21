@@ -8,8 +8,6 @@ import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.models.FullUser.UserInfo;
-import dev.osunolimits.routes.get.User;
 import dev.osunolimits.utils.Auth;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;

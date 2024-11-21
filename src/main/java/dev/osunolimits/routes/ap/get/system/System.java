@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.ap.get;
+package dev.osunolimits.routes.ap.get.system;
 
 import java.lang.management.ManagementFactory;
 import java.lang.management.OperatingSystemMXBean;
@@ -59,12 +59,13 @@ public class System extends Shiina {
         shiina.data.put("jvm_max_memory", runtime.maxMemory());
 
         shiina.data.put("sql_con", Database.currentConnections);
+        shiina.data.put("sql_con_list", Database.runningConnections.size());
 
         // Thread statistics
         shiina.data.put("thread_count", threadMXBean.getThreadCount());
         shiina.data.put("peak_thread_count", threadMXBean.getPeakThreadCount());
         shiina.data.put("daemon_thread_count", threadMXBean.getDaemonThreadCount());
 
-        return renderTemplate("ap/system.html", shiina, res, req);
+        return renderTemplate("ap/system/system.html", shiina, res, req);
     }
 }

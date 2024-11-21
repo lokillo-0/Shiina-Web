@@ -41,7 +41,7 @@ public class GetPlayerScores extends Shiina {
         // Get scope (recent or best)
         String scope = req.queryParams("scope");
         if (scope == null || (!scope.equals("recent") && !scope.equals("best"))) {
-            return "Invalid scope parameter";
+            return notFound(res, shiina);
         }
 
         // Get mode, user_id, limit, and offset from request
@@ -62,7 +62,7 @@ public class GetPlayerScores extends Shiina {
                 : 5;
 
         if (id == null) {
-            return "Invalid ID";
+            return notFound(res, shiina);
         }
 
         // Determine the correct SQL query based on the scope

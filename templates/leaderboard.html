@@ -96,7 +96,7 @@
                                                 <#if player.clanTag?? && player.clanId??>
                                                     <button class="clan-badge btn btn-primary" >[${player.clanTag}]</button>
                                                 </#if>
-                                                <span class="ms-2">${player.name}</span>
+                                                <span class="mx-2">${player.name}</span>  <#if player.groups??> <#list player.groups as group><span class="groupDiv">${group.emoji} ${group.name}</span></#list></#if>
                                             </span>
 
                                             <div class="col-auto ms-auto d-flex align-items-center">

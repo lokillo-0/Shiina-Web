@@ -50,7 +50,7 @@ public class GetFirstPlaces extends Shiina {
         }
 
         if (id == null) {
-            return "Invalid ID";
+            return notFound(res, shiina);
         }
 
         // Fetch first places

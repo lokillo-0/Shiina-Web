@@ -1,0 +1,208 @@
+<#include "/ap/assets/base.html">
+
+<div class="container-fluid my-3">
+  <div class="row align-items-center mb-3">
+    <div class="col-auto">
+      <h5 class="mb-0">
+        <i class="fa-solid fa-user-group"></i> Admin - User Details
+      </h5>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+  
+  <div class="row">
+    <div class="col-5">
+      <div class="card-header d-flex align-items-center">
+        <img
+          src="${avatarServer}/${id}"
+          alt="${aname} avatar"
+          class="rounded-circle me-2"
+          style="width: 60px; height: 60px;"
+        />
+        <div>
+          <h5 class="mb-0">${aname} <small>(${safe_name})</small></h5>
+          <small class="text-muted">${country}</small>
+        </div>
+      </div>
+      <div class="card shadow-sm mt-3">
+        <div class="card-body">
+          <h6 class="text-uppercase">User Details</h6>
+          <p>ID: ${id}</p>
+          <p>Privileges: ${privLevel?c}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-7">
+  <!-- User Profile Section -->
+  <div class="card shadow-sm">
+      
+    <div class="card-body">
+      <h6 class="text-uppercase">Privileges</h6>
+      <ul class="list-unstyled mb-3">
+        <#list priv as appriv>
+          <li>${appriv}</li>
+        </#list>
+      </ul>
+      <h6 class="text-uppercase">Groups</h6>
+      <ul class="list-unstyled mb-3">
+        <#list groups as group>
+          <li>${group.emoji} ${group.name}</li>
+        <#else>
+          <li>None</li>
+        </#list>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- User Activity Section -->
+  <div class="card shadow-sm mt-3">
+  <div class="card-body">
+    <h6 class="text-uppercase">Activity</h6>
+    <p>Last Active: 
+      <span data-timestamp-format="unix" data-timestamp="${latest_activity}">
+        ${latest_activity}
+      </span>
+    </p>
+    <p>Account Created: 
+      <span data-timestamp-format="unix" data-timestamp="${creation_time}">
+        ${creation_time}
+      </span>
+    </p>
+    <#if silence_end?? && (silence_end != "0")>
+      <p>Silence Ends: 
+        <span data-timestamp-format="unix" data-timestamp="${silence_end}">
+          ${silence_end}
+        </span>
+      </p>
+    </#if>
+    <#if donor_end?? && (donor_end != "0")>
+      <p>Donor Ends: 
+        <span data-timestamp-format="unix" data-timestamp="${donor_end}">
+          ${donor_end?c}
+        </span>
+      </p>
+    </#if>
+  </div>
+  </div>
+  
+  
+  <!-- Clan Section -->
+  <#if clan_id?? && (clan_id != "0")>
+    <div class="card shadow-sm mt-3">
+      <div class="card-body">
+        <h6 class="text-uppercase">Clan</h6>
+        <p>Clan ID: ${clan_id}</p>
+        <p>Clan Name: ${clan_name}</p>
+        <p>Clan Tag: ${clan_tag}</p>
+        <p>Clan Privileges: ${clan_priv}</p>
+      </div>
+    </div>
+  </#if>
+  
+
+  
+
+
+
+  </div>
+
+  
+  
+  <div class="static-bottom">
+    <a target="_blank" href="/u/${id}" class="btn btn-primary">
+      <i class="fa-solid fa-chevron-left"></i> Go to profile
+    </a>
+    <button type="button"
+    data-bs-toggle="modal"
+    data-bs-target="#groupModal" class="btn btn-warning">
+      <i class="fa-solid fa-star"></i> Edit groups
+    </button>
+  </div>
+</div>
+
+<!-- Group Modal -->
+<div
+  class="modal fade"
+  id="groupModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="modalTitleId"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalTitleId">
+          Change groups for ${aname}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <ul class="list-group list-group-numbered">
+          <#list allGroups as group>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <span>${group.emoji} ${group.name}</span>
+              <#if groups?seq_contains(group)>
+              <a
+                class="btn btn-danger btn-sm"
+                href="/ap/groups/process?id=${id}&group=${group.id}&action=remove"
+                role="button"
+              >
+                Remove
+              </a>
+              <#else>
+                <a
+                  class="btn btn-primary btn-sm"
+                  href="/ap/groups/process?id=${id}&group=${group.id}&action=add"
+                  role="button"
+                >
+                  Add
+                </a>
+              </#if>
+            </li>
+          </#list>
+        </ul>
+        
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+      
+      </div>
+    </div>
+  </div>
+
+
+  
+  </div>
+
+
+<style>
+  .card {
+    border: none;
+    border-radius: 10px;
+    background-color: var(--body-bg);
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem;
+  }
+
+</style>

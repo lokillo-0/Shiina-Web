@@ -2,8 +2,15 @@ package dev.osunolimits.routes.ap.get.groups;
 
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 
+import com.google.gson.Gson;
+
+import dev.osunolimits.main.App;
 import dev.osunolimits.models.Action;
+import dev.osunolimits.models.UserInfoObject;
+import dev.osunolimits.modules.GroupRegistry;
+import dev.osunolimits.modules.GroupRegistry.Group;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -14,9 +21,11 @@ import spark.Response;
 public class ManageGroup extends Shiina {
 
     private Action action;
+    private Gson gson;
 
     public ManageGroup(Action action) {
         this.action = action;
+        gson = new Gson();
     }
 
 
@@ -53,7 +62,33 @@ public class ManageGroup extends Shiina {
                 return notFound(res, shiina);
             }
             shiina.mysql.Exec("DELETE FROM `sh_groups` WHERE `id` = ?", id);
-            
+            shiina.mysql.Exec("DELETE FROM `sh_groups_users` WHERE `group_id` = ?", id);
+            ArrayList<Group> groups = new GroupRegistry().getCurrentGroupRegistry();
+
+            for(Group g : groups) {
+                if(g.id == Integer.parseInt(req.queryParams("id"))) {
+                    for (Integer uid : g.getUserIds()) {
+                        App.log.debug("Try Removing group from user: " + uid + " group: " + id);
+                        UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + uid), UserInfoObject.class);
+                        for(int i = 0; i < userInfo.groups.size(); i++) {
+                            if(userInfo.groups.get(i).id == Integer.parseInt(id)) {
+                                userInfo.groups.remove(i);
+                                App.log.debug("Removed group from user: " + uid + " group: " + id);
+                            }
+                        }
+                        App.jedisPool.set("shiina:user:" + uid, gson.toJson(userInfo));
+                    }
+                   
+                }
+            }
+
+            for(int i = 0; i < groups.size(); i++) {
+                if(groups.get(i).id == Integer.parseInt(id)) {
+                    groups.remove(i);
+                }
+            }
+
+            App.jedisPool.set("shiina:groupRegistry", gson.toJson(groups));
             return redirect(res, shiina, "/ap/groups");
         }
 

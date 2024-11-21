@@ -40,7 +40,7 @@
                 </div>
                 <!-- Player Name -->
                 <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
-                    <h1 class="fw-bold">${u.player.info.name}</h1>
+                    <div><span class="display-3 fw-bold">${u.player.info.name} </span> <#list groups as group><span class="groupDiv">${group.emoji} ${group.name}</span></#list></div>
                     <#if status.player_status.online==true>
                         <div class="shiina-online-status rounded">
                             <span class="shiina-online-status-circle"></span>
@@ -134,6 +134,10 @@
                                 <tr>
                                     <td>Playcount:</td>
                                     <td>${u.player.stats[mode?string].plays}</td>
+                                </tr>
+                                <tr>
+                                    <td>Replay views:</td>
+                                    <td>${u.player.stats[mode?string].replay_views}</td>
                                 </tr>
                                 <tr>
                                     <td>Total Score:</td>

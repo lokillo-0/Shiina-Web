@@ -8,5 +8,4 @@ public class Group {
     public String name;
     public String emoji;
     public String desc;
-    public int users;
 }
