@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.get.simple;
+package dev.osunolimits.routes.get.user;
 
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
@@ -27,7 +27,7 @@ public class Settings extends Shiina {
             shiina.data.put("error", req.queryParams("error"));
         }   
         
-        return renderTemplate("settings.html", shiina, res, req);
+        return renderTemplate("user/settings.html", shiina, res, req);
     }
     
 }

@@ -3,12 +3,10 @@
     <#list connections as con>
         <div class="row align-items-center mb-3">
             <div class="col-auto">
-                <p>Created: ${con.connectionCreated}</p>
+                <p data-timestamp-format="unix" data-timestamp="${con.connectionCreated?c}">Created: ${con.connectionCreated?c}</p>
                 
-                <p>Connection
-                <#list con.callers as caller>
-                 (${con.caller})
-                </#list></p>
+                <p>Connection (${con.caller})
+                </p>
             </div>
         </div>
     </#list>

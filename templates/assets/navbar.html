@@ -43,19 +43,7 @@
             placeholder="Search ${c.serverName}" 
             aria-label="Search">
           <div id="shiina-search" class="d-none bg-secondary"></div>
-          <style>
-            #shiina-search {
-            position: absolute; 
-            top: calc(100%); 
-            left: 0;
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1050;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 
-          }
-          </style>
         </form>
         
         <div class="d-none d-md-none d-lg-flex">
@@ -69,7 +57,7 @@
         </button>
         <ul class="dropdown-menu dropdown-menu-lg-end">
             <li><a class="dropdown-item" href="/u/${user.id}">Profile</a></li>
-           
+            <li><a class="dropdown-item" href="/friends">Friends</a></li>
             <li><a class="dropdown-item" href="/settings">Profile Settings</a></li>
             <#if userPriv?seq_contains("STAFF")>
             <li><a class="dropdown-item" data-turbo="false" href="/ap/start">Admin Panel</a></li>

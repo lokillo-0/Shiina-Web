@@ -1,0 +1,75 @@
+<#include "/assets/base.html">
+<div class="container my-5">
+    <div class="card w-100">
+        <div class="bg-secondary border-0 card-header text-body d-flex justify-content-between align-items-center py-4">
+            <span class="h1 fw-bold mb-0">Relationships</span>
+        </div>
+
+        <div class="card-body bg-body px-4">
+            <#if error??>
+            <div class="alert alert-danger" role="alert">
+                ${error}
+            </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    ${info}
+                </div>
+            </#if>
+
+
+                <#if relations?has_content>
+                    <div class="row">
+                        <#list relations as relation>
+                            <div class="col-md-4 mb-3">
+                                <div class="card shadow-sm">
+                                    <div class="card-body">
+                                        <a href="/u/${relation.id}" class="d-flex r-card-header text-decoration-none align-items-center mb-3">
+                                            <img 
+                                                src="${avatarServer}/${relation.id}" 
+                                                alt="${relation.name}" 
+                                                class="rounded-circle me-3" 
+                                                style="width: 50px; height: 50px; object-fit: cover;"
+                                            >
+                                            <div>
+                                                <h6 class="mb-0 text-primary">${relation.name}</h6>
+                                                <small class="text-muted">
+                                                    <span>Last Seen: </span><span 
+                                                        data-timestamp-format="unix" 
+                                                        data-timestamp="${relation.latest_activity?c}">
+                                                    </span>
+                                                </small>
+                                            </div>
+                                        </a>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <#if relation.relationship_status == "mutual">
+                                                    <i data-bs-toggle="tooltip" data-bs-original-title="Mutual" class="fa-solid fa-heart text-danger"></i>
+                                                <#else>
+                                                    <i data-bs-toggle="tooltip" data-bs-original-title="Friend" class="fa-solid fa-address-card text-primary"></i>
+                                                </#if>
+                                            </div>
+
+                                            <a 
+                                                class="btn btn-danger btn-sm" 
+                                                href="#" 
+                                                role="button">
+                                                <i class="fa-solid fa-heart-crack"></i> Unfriend
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </#list>
+                    </div>
+                <#else>
+                    <div class="text-center py-5">
+                        <h5 class="text-muted">You don't have any relationships yet.</h5>
+                    </div>
+                </#if>
+        </div>
+            
+    </div>
+</div>
+
+<#include "/assets/footer.html">

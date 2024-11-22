@@ -1,12 +1,10 @@
 package dev.osunolimits.routes.get;
 
-import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import dev.osunolimits.api.LeaderboardQuery;
 import dev.osunolimits.api.LeaderboardQuery.LeaderboardResponse;
+import dev.osunolimits.cache.CountryLeaderboardCache;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -53,13 +51,7 @@ public class Leaderboard extends Shiina {
 
         LeaderboardResponse leaderboardResponse = leaderboardQuery.getLeaderboard(sort, mode, 50, offset, country);
 
-        List<String> countries = new ArrayList<>();
-        ResultSet countriesResultSet = shiina.mysql.Query("SELECT COUNT(`id`) AS `people`, `country` FROM `users` WHERE `id` IN ( SELECT `userid` FROM `scores` WHERE `mode` = ? AND `scores`.`status`!= 0 ) GROUP BY `country` ORDER BY `people` DESC;", String.valueOf(mode));
-        while (countriesResultSet.next()) {
-            countries.add(countriesResultSet.getString("country"));
-        }
-
-        shiina.data.put("countries", countries);
+        shiina.data.put("countries", CountryLeaderboardCache.getOrPut(mode, shiina.mysql));
         shiina.data.put("leaderboard", leaderboardResponse.getLeaderboard());
 
         shiina.data.put("sort", sort);

@@ -18,6 +18,12 @@ import spark.Response;
 
 public class HandleLogin extends Shiina {
 
+    private final Gson GSON;
+
+    public HandleLogin() {
+        GSON = new Gson();
+    }
+
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
@@ -97,8 +103,7 @@ public class HandleLogin extends Shiina {
         user.created = (int) (System.currentTimeMillis() / 1000L);
         user.ip = req.ip();
 
-        Gson gson = new Gson();
-        String userJson = gson.toJson(user);
+        String userJson = GSON.toJson(user);
 
         App.jedisPool.set("shiina:auth:"+token, userJson);
 
@@ -107,9 +112,8 @@ public class HandleLogin extends Shiina {
         }else {
             res.cookie("shiina", token);
         }
-        
-        res.redirect("/?login=success");
-        return notFound(res, shiina);
+
+        return redirect(res, shiina, "/?login=success");
     }
 
     

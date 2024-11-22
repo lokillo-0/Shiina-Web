@@ -39,7 +39,8 @@ import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.get.simple.Login;
 import dev.osunolimits.routes.get.simple.Register;
-import dev.osunolimits.routes.get.simple.Settings;
+import dev.osunolimits.routes.get.user.Relations;
+import dev.osunolimits.routes.get.user.Settings;
 import dev.osunolimits.routes.post.HandleAvatarChange;
 import dev.osunolimits.routes.post.HandleLogin;
 import dev.osunolimits.routes.post.HandleLogout;
@@ -95,6 +96,7 @@ public class App {
         WebServer.get("/b/:id", new Beatmap());
         WebServer.get("/u/:id", new User());
         WebServer.get("/settings", new Settings());
+        WebServer.get("/friends", new Relations());
         WebServer.post("/settings/avatar", new HandleAvatarChange());
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());

@@ -14,7 +14,7 @@ The new version of Shiina for **bancho.py**
 - ✅ Homepage with statistics
 - ✅ Clan Leaderboard with some compatitive statistics
 - ✅ Clan Page
-- ❌ Search
+- ✅ Search
 - ✅ User Page (w. first places, best/last scores, playcount graph and achievements)
 - ✅ Authorization
 - ✅ Beatmap Search page
@@ -30,7 +30,7 @@ The new version of Shiina for **bancho.py**
 ### **Technical:**
 
 - ✅ API Request Caching
-- ✅ Error/Request Logger with configutaion at `.config/logger.env`
+- ✅ Error/Request Logger with configuration at `.config/logger.env`
 - ✅ Easy customization with `.config/customization.yml`
 
 

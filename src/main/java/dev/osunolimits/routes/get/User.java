@@ -26,12 +26,12 @@ import spark.Request;
 import spark.Response;
 
 public class User extends Shiina {
-    private Gson gson;
-
+    
     public User() {
         gson = new Gson();
     }
 
+    private final Gson gson;
     private final String ACH_QUERY = "SELECT `achievements`.`file`, `achievements`.`name`, `achievements`.`desc` FROM `user_achievements` LEFT JOIN `achievements` ON `user_achievements`.`achid` = `achievements`.`id` WHERE `user_achievements`.`userid` = ? AND (`achievements`.`file` LIKE ? OR `achievements`.`file` LIKE 'all%');";
 
     @Override

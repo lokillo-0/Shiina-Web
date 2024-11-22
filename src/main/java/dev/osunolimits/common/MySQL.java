@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.LoggerFactory;
@@ -22,7 +21,7 @@ public final class MySQL {
 	private static Logger log = (Logger) LoggerFactory.getLogger(MySQL.class);
 
 	public long connectionCreated;
-	public List<String> callers = new ArrayList<>();
+	public String caller;
 
 	private final int COLUMN_WIDTH = 20;
 
@@ -51,10 +50,8 @@ public final class MySQL {
 	private Connection currentCon;
 
 	public MySQL(Connection currentCon) {
-		this.connectionCreated = System.currentTimeMillis();
-		for (StackTraceElement element : Thread.currentThread().getStackTrace()) {
-			callers.add(element.getClassName());
-		}
+		this.connectionCreated = System.currentTimeMillis() / 1000;
+		caller = Thread.currentThread().getStackTrace()[4].getClassName();
 		Database.runningConnections.add(this);
 		this.currentCon = currentCon;
 	}

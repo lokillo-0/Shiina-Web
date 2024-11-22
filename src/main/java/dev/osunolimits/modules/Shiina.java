@@ -20,12 +20,12 @@ public class Shiina implements Route {
     public String renderTemplate(String template, ShiinaRequest shiina, Response res, Request req) {
         res.header("Content-Encoding", "gzip");
         res.header("Content-Type", "text/html; charset=utf-8");
+        if(shiina.mysql != null) shiina.mysql.close();
 
         shiina.data.put("docs",ShiinaDocs.docs);
         try {
             Template templateFree = WebServer.freemarkerCfg.getTemplate(template);
             try (StringWriter out = new StringWriter()) {
-                shiina.mysql.close();
                 templateFree.process(shiina.data, out);
                 return out.toString();
             } catch (TemplateException e) {
@@ -41,15 +41,15 @@ public class Shiina implements Route {
     }
 
     public Object redirect(Response response, ShiinaRequest shiina, String location) {
+        if(shiina.mysql != null) shiina.mysql.close();
         response.status(302);
         response.redirect(location);
-        shiina.mysql.close();
         return null;
     }
 
     public Object notFound(Response response, ShiinaRequest shiina) {
+        if(shiina.mysql != null) shiina.mysql.close();
         response.status(404);
-        shiina.mysql.close();
         return null;
         
     }

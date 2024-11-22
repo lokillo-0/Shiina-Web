@@ -1,6 +1,8 @@
 .tooltip-inner {
-  background-color: var(--bs-body-bg) !important; /* Set box color to red */
-  color: var(--bs-card-title-color) !important; /* Set text color to black */
+    background-color: var(--bs-body-bg) !important;
+    /* Set box color to red */
+    color: var(--bs-card-title-color) !important;
+    /* Set text color to black */
 }
 
 .wrapper {
@@ -9,7 +11,7 @@
 
 .clan-panel {
     cursor: pointer;
-    transition: transform 0.2s ease-in-out; 
+    transition: transform 0.2s ease-in-out;
 }
 
 .clan-panel:hover,
@@ -21,7 +23,7 @@
     border-color: var(--bs-action-border-color) !important;
 }
 
-.groupDiv{
+.groupDiv {
     padding: 2.5px;
     padding-left: 5px;
     padding-right: 5px;
@@ -56,8 +58,10 @@
 }
 
 .shiina-online-status {
-    display: flex; /* Use flexbox for alignment */
-    align-items: center; /* Vertically center the items */
+    display: flex;
+    /* Use flexbox for alignment */
+    align-items: center;
+    /* Vertically center the items */
     padding: 10px;
     background-color: #00000050;
     max-width: 300px;
@@ -67,13 +71,15 @@
     min-width: 10px;
     min-height: 10px;
     border-radius: 50%;
-    display: inline-block; /* This can be removed since flexbox is used */
+    display: inline-block;
+    /* This can be removed since flexbox is used */
     margin-right: 5px;
     background-color: #07ad07;
 }
 
 .shiina-level-bar {
-    height: 40px; /* Adjusted height for better alignment */
+    height: 40px;
+    /* Adjusted height for better alignment */
 }
 
 .shiina-level-bar-level {
@@ -83,12 +89,15 @@
 }
 
 .hexagon {
-    width: 60px; /* Width of the hexagon */
-    height: 34.64px; /* Height to maintain hexagon proportion */
+    width: 60px;
+    /* Width of the hexagon */
+    height: 34.64px;
+    /* Height to maintain hexagon proportion */
     background-color: var(--bs-primary);
     position: relative;
     text-align: center;
-    line-height: 34.64px; /* Center text vertically */
+    line-height: 34.64px;
+    /* Center text vertically */
     color: black;
     font-weight: bold;
     margin: 0 5px;
@@ -96,7 +105,8 @@
     user-select: none;
 }
 
-.hexagon::before, .hexagon::after {
+.hexagon::before,
+.hexagon::after {
     content: "";
     position: absolute;
     width: 0;
@@ -154,7 +164,8 @@
 
     display: flex;
     align-items: center;
-    font-size: 25px; text-decoration: none;
+    font-size: 25px;
+    text-decoration: none;
     padding: 5px;
     border-radius: 5px;
     border: 1px solid var(--bs-content-border-color);
@@ -162,11 +173,14 @@
 
 .shiina-osubtn {
     background-color: #E6649F;
-    color: #000000!important;
-    border:0 none;
+    color: #000000 !important;
+    border: 0 none;
 }
 
-.shiina-osubtn:hover, .shiina-osubtn:focus , .shiina-osubtn:active, .shiina-osubtn.active {
+.shiina-osubtn:hover,
+.shiina-osubtn:focus,
+.shiina-osubtn:active,
+.shiina-osubtn.active {
     background-color: #FE7CB6;
 }
 
@@ -175,7 +189,7 @@
 }
 
 
-.shiina-modeshow span{
+.shiina-modeshow span {
     font-family: var(--bs-font-sans-serif);
     font-weight: normal;
     margin-left: 5px;
@@ -183,14 +197,15 @@
 }
 
 .leaderboard-panel {
-    transition: transform 0.2s ease-in-out; /* Transition for both hover and unhover */
+    transition: transform 0.2s ease-in-out;
+    /* Transition for both hover and unhover */
 }
 
 .shiina-ver {
-    font-size: 25px; 
+    font-size: 25px;
     text-decoration: none;
     padding: 7.5px;
-    transition: all 0.2s ease-in-out; 
+    transition: all 0.2s ease-in-out;
     border-radius: 5px;
     background-color: var(--bs-sable-bg-subtle);
 }
@@ -551,37 +566,40 @@
 
 /* BM CARD */
 
-  /* Ensures images maintain the same height and aspect ratio */
-  .card-img {
-    height: 100%; /* Ensures full height of the card column */
-    object-fit: cover; /* Crops the image without distortion */
-  }
+/* Ensures images maintain the same height and aspect ratio */
+.card-img {
+    height: 100%;
+    /* Ensures full height of the card column */
+    object-fit: cover;
+    /* Crops the image without distortion */
+}
 
 
 
 
 
-  .card-img {
+.card-img {
     display: none;
-  }
+}
 
-  /* Once the image is loaded, it will be displayed */
-  .card-img.loaded {
+/* Once the image is loaded, it will be displayed */
+.card-img.loaded {
     display: block;
-  }
+}
 
-  /* Placeholder for loading state (Optional) */
-  .image-placeholder {
-    background-color: #1c1c1c; /* Placeholder background color */
+/* Placeholder for loading state (Optional) */
+.image-placeholder {
+    background-color: #1c1c1c;
+    /* Placeholder background color */
     height: 100%;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-  }
+}
 
-  .video-container {
+.video-container {
     position: relative;
     width: 100%;
     height: auto;
@@ -592,8 +610,10 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 5px solid #f3f3f3; /* Light gray */
-    border-top: 5px solid #3498db; /* Blue */
+    border: 5px solid #f3f3f3;
+    /* Light gray */
+    border-top: 5px solid #3498db;
+    /* Blue */
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -601,15 +621,21 @@
 }
 
 @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 .video {
     display: block;
     width: 100%;
     height: auto;
-    visibility: hidden; /* Initially hidden */
+    visibility: hidden;
+    /* Initially hidden */
 }
 
 .loaded {
@@ -648,10 +674,10 @@
     background: #000000;
     z-index: 200;
     cursor: pointer;
-    -webkit-transition: background 1s ease-out;  
-    -moz-transition: background 1s ease-out;  
-    -o-transition: background 1s ease-out;  
-    transition: background 1s ease-out;  
+    -webkit-transition: background 1s ease-out;
+    -moz-transition: background 1s ease-out;
+    -o-transition: background 1s ease-out;
+    transition: background 1s ease-out;
 }
 
 
@@ -672,11 +698,12 @@
     top: 77px;
     left: -10%;
     height: 3px;
-    background: var(--bs-primary); 
+    background: var(--bs-primary);
 
 
-  }
-  .score-panel {
+}
+
+.score-panel {
     position: relative;
     overflow: hidden;
     cursor: pointer;
@@ -688,7 +715,8 @@
     right: -120px;
     transform: translateY(-50%);
     z-index: 2;
-    transition: right 0.3s ease; /* Apply transition here */
+    transition: right 0.3s ease;
+    /* Apply transition here */
 }
 
 .icon-link-score {
@@ -709,13 +737,14 @@
 }
 
 .shiina-card {
-    cursor:pointer;
+    cursor: pointer;
     user-select: none;
 }
 
 .stat-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .stat-card:hover {
     transform: scale(1.05);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
@@ -724,14 +753,17 @@
 .shiina-up-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
 .shiina-up-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
 .shiina-up-card-title {
     font-weight: 600;
     font-size: 1.25rem;
 }
+
 .shiina-up-card-text a:hover {
     text-decoration: underline;
 }
@@ -760,9 +792,15 @@
     user-select: none;
 }
 
+.r-card-header {
+    padding: 5px;
+    border-radius: 3px;
+    transition: background-color 0.3s ease;
+    background-color: var(--bs-sable-bg-subtle)!important;
+}
 
-.search-result {
-    margin-bottom: 1rem;
+.r-card-header:hover {
+    background-color: var(--bs-content-border-color)!important;
 }
 
 .search-result a {
@@ -784,4 +822,15 @@
 .search-result p {
     margin-bottom: 0;
     color: #6c757d;
+}
+
+#shiina-search {
+    position: absolute;
+    top: calc(100%);
+    left: 0;
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1050;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
