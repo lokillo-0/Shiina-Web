@@ -20,6 +20,7 @@ import dev.osunolimits.routes.ap.get.groups.ManageGroup;
 import dev.osunolimits.routes.ap.get.groups.ProcessGroup;
 import dev.osunolimits.routes.ap.get.system.System;
 import dev.osunolimits.routes.ap.get.system.SystemConnections;
+import dev.osunolimits.routes.ap.get.system.SystemThreads;
 import dev.osunolimits.routes.ap.get.users.ApUser;
 import dev.osunolimits.routes.ap.get.users.Users;
 import dev.osunolimits.routes.ap.post.ChangeTheme;
@@ -116,6 +117,7 @@ public class App {
         WebServer.get("/ap/themes", new Themes());
         WebServer.get("/ap/system", new System());
         WebServer.get("/ap/system/cons", new SystemConnections());
+        WebServer.get("/ap/system/threads", new SystemThreads());
         WebServer.get("/ap/groups", new Groups());
         WebServer.get("/ap/groups/create", new ManageGroup(Action.CREATE));
         WebServer.get("/ap/groups/edit", new ManageGroup(Action.EDIT));

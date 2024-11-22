@@ -14,7 +14,12 @@ import spark.Response;
 
 public class GetPlayerScores extends Shiina {
 
-    // SQL queries with support for different scopes (recent/best)
+    private final Gson GSON;
+
+    public GetPlayerScores() {
+        GSON = new Gson();
+    }
+
     private final String GET_PLAYER_SCORES_RECENT =
         "SELECT s.id AS score_id, s.userid, s.map_md5, m.id AS map_id, " +
         "m.set_id AS map_set_id, m.filename AS map_name, s.score AS max_score, " +
@@ -30,7 +35,7 @@ public class GetPlayerScores extends Shiina {
         "s.pp, s.acc, s.mods, s.grade, s.play_time " +
         "FROM scores s " +
         "JOIN maps m ON s.map_md5 = m.md5 " +
-        "WHERE s.userid = ? AND s.mode = ? AND s.status = 2 AND m.status = 2 " +  // Filter for status = 2
+        "WHERE s.userid = ? AND s.mode = ? AND s.status = 2 AND m.status = 2 " + 
         "ORDER BY s.pp DESC LIMIT ? OFFSET ?;";
     
 
@@ -91,11 +96,11 @@ public class GetPlayerScores extends Shiina {
             score.setPlay_time(scoresQuery.getString("play_time"));
             playerScores.add(score);
         }
+        shiina.mysql.close();
 
-        // Check if there is a next page
         if (playerScores.size() > limit) {
             hasNextPage = true;
-            playerScores.remove((int) limit);  // Remove extra entry
+            playerScores.remove((int) limit); 
         }
 
         response.setScores(playerScores.toArray(new PlayerScore[0]));
@@ -103,9 +108,8 @@ public class GetPlayerScores extends Shiina {
         response.setHasNextPage(hasNextPage);
 
         res.type("application/json");
-        Gson gson = new Gson();
-        shiina.mysql.close();
-        return gson.toJson(response);
+        
+        return GSON.toJson(response);
     }
 
     @Data

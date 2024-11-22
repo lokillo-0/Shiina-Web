@@ -23,13 +23,11 @@ public class System extends Shiina {
         shiina.data.put("actNav", 10);
 
         if (!shiina.loggedIn) {
-            res.redirect("/login");
-            return notFound(res, shiina);
+            return redirect(res, shiina, "/");
         }
 
         if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
-            res.redirect("/");
-            return notFound(res, shiina);
+            return redirect(res, shiina, "/");
         }
 
         // System and application statistics
