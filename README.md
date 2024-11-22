@@ -5,7 +5,13 @@ The new version of Shiina for **bancho.py**
 
 > ⚠️ Shiina-Web isn't ready to use in production
 
-> ⚠️ For building there is no official way yet
+### **Requirements**
+> ⚠️ You will need to have a local API Endpoint to bancho.py's api to have it run in full-speed
+
+### **Installation:**
+1. `make install` - will install and compile the project
+2. edit files in `config/` and replace all filenames with `.example`
+3. `make run` - to start the frontend
 
 ### **Feature List:**
 

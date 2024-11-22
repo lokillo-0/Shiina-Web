@@ -158,7 +158,7 @@ public class Init {
     }
 
     public void initializeConnectionWatcher() {
-        new Thread(() -> {
+        Thread t = new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(1000 * 30);
@@ -173,7 +173,9 @@ public class Init {
                     }
                 }
             }
-        }).start();
+        });
+        t.setName("ConnectionWatcher (shiina)");
+        t.start();
     }    
 
     public void initializeDataDirectory() {

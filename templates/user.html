@@ -275,6 +275,15 @@
     var apiUrl = "${apiUrlPub}";
     var reqUrl = "/api/v1/get_first_places?id=${id}&mode=${mode}&offset=";
     var reqUrlScores = "/api/v1/get_player_scores?id=${id}&mode=${mode}&offset=";
-    var data = [<#list playCountGraph?keys as value>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#list>];
-    var values = [<#list playCountGraph?values as value>${value}<#if value?index != playCountGraph?size - 1>,</#if></#list>];
+    var data = [
+    <#list playCountGraph?keys as value>
+        <#if value?has_content>'${value}'<#if value?index != playCountGraph?size - 1>,</#if></#if>
+    </#list>
+    ];
+
+    var values = [
+        <#list playCountGraph?values as value>
+            <#if value?has_content>${value}<#if value?index != playCountGraph?size - 1>,</#if></#if>
+        </#list>
+    ];
 </script>
