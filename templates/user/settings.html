@@ -23,7 +23,7 @@
             </div>
             <div class="row">
                 <div class="col col-2 col-sm-1">
-                    <img src="${avatarServer}/${user.id}" class="w-100" alt="Avatar">
+                    <img src="${avatarServer}/${user.id?c}" class="w-100" alt="Avatar">
                 </div>
                 <div class="col col-auto">
                     <form id="avatar-upload-form" action="/settings/avatar" method="post" enctype="multipart/form-data" class="w-100" onsubmit="return handleAvatarUpload(event)">
