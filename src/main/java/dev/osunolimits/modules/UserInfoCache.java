@@ -74,11 +74,10 @@ public class UserInfoCache {
                     App.jedisPool.set("shiina:user:" + user.id, gson.toJson(user));
                 }
             }
-
-            mysql.close();
         } catch (SQLException e) {
             log.error("SQL Error: ", e);
         }
+        mysql.close();
 
     }
 
@@ -108,17 +107,19 @@ public class UserInfoCache {
                 }
     
                 App.jedisPool.set("shiina:user:" + user.id, gson.toJson(user));
-                mysql.close();
+                
             }
         } catch (SQLException e) {
             log.error("SQL Error: ", e);
         }
-       
+        mysql.close();
     }
 
     public void reloadUserIfNotPresent(int userId) {
         if (App.jedisPool.get("shiina:user:" + userId) == null) {
             reloadUser(userId);
+        }else {
+            mysql.close();
         }
     }
 

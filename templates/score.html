@@ -99,7 +99,7 @@
                     <ul class="list-group">
                         <li class="list-group-item">Play Time: ${score.playTime}</li>
                         <li class="list-group-item">Grade: ${score.grade}</li>
-                        <#if score.status><li class="list-group-item">Status: ${convertScoreStatus(score.status)}</li></#if>
+                        <#if score.status??><li class="list-group-item">Status: ${convertScoreStatus(score.status)}</li></#if>
                     </ul>
     
                     <!-- Player Avatar and Info -->

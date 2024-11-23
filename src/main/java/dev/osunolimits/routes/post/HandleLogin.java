@@ -113,7 +113,8 @@ public class HandleLogin extends Shiina {
             res.cookie("shiina", token);
         }
 
-        return redirect(res, shiina, "/?login=success");
+        res.redirect("/?register=success");
+        return notFound(res, shiina);
     }
 
     
