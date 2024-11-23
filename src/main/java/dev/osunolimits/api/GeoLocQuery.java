@@ -20,12 +20,13 @@ public class GeoLocQuery {
     }
 
     public String getCountryCode(String ip) {
+        
         String url = URL.replace("%ip%", ip);
         Request request = new Request.Builder().url(url).build();
         
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
-                return null; // Handle error cases
+                return "XX";
             }
             String responseBody = response.body().string();
             JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();

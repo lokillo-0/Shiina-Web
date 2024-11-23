@@ -153,6 +153,7 @@ public class Init {
            }
         } catch (IOException | URISyntaxException e) {
             log.error("Failed to autorun sql files", e);
+            System.exit(1);
         }
         mysql.close();
     }
