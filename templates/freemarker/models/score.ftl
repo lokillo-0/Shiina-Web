@@ -14,15 +14,16 @@
         </div>
     </div>
     </#if>
+
+    <#assign name = score.mapFilename?replace(".osu", "")>
+
     <div class="score-container bg-secondary score-panel d-flex flex-grow-1 position-relative" style="border-radius: 5px;">
         <div class="d-block d-lg-flex flex-grow-1">
             <div class="col-12 col-lg-3 d-flex justify-content-center">
-                <img style="object-fit: cover; height: 100%;" class="img-fluid rounded-2 w-100" src="https://assets.ppy.sh/beatmaps/${score.set_id?c}/covers/card.jpg" alt="">
+                <img style="object-fit: cover; height: 100%;" class="img-fluid rounded-2 w-100" src="/api/v1/thumb?setId=${score.set_id?c}" alt="${name}">
             </div>
             <div class="col-12 d-flex p-2 mt-2 mt-lg-0 col-lg-7 mx-2 d-flex flex-column justify-content-start justify-content-sm-between">
                 <#assign passedMods=score.mods>
-                <#assign name = score.mapFilename?replace(".osu", "")>
-
                 <span class="ms-2 text-wrap">
                     ${name}
                     <#include "/freemarker/modconvert.ftl">

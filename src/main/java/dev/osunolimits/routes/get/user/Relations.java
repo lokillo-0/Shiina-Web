@@ -12,7 +12,7 @@ import spark.Response;
 
 public class Relations extends Shiina {
 
-    private final String RELATION_QUERY = "SELECT r.`user2` AS `id`, u.`latest_activity`, u.name, CASE WHEN EXISTS ( SELECT 1 FROM `relationships` r2 WHERE r2.`type` = 'friend' AND r2.`user1` = r.`user2` AND r2.`user2` = r.`user1` ) THEN 'mutual' ELSE \"friend\" END AS `relationship_status` FROM `relationships` r JOIN `users` u ON r.`user2` = u.`id` WHERE r.`type` = 'friend' AND (r.`user1` = ? OR r.`user2` = ?) AND r.`user1` < r.`user2` ORDER BY `relationship_status` DESC;";
+    private final String RELATION_QUERY = "SELECT DISTINCT CASE WHEN EXISTS ( SELECT 1 FROM relationships r2 WHERE r2.user1 = r.user2 AND r2.user2 = r.user1 ) THEN 'mutual' WHEN r.user1 = ? THEN 'known' ELSE 'follower' END AS status, CASE WHEN r.user1 = ? THEN r.user2 ELSE r.user1 END AS id, CASE WHEN r.user1 = ? THEN u2.name ELSE u1.name END AS name, CASE WHEN r.user1 = ? THEN u2.latest_activity ELSE u1.latest_activity END AS latest_activity FROM relationships r LEFT JOIN `users` u1 ON r.user1 = u1.id LEFT JOIN `users` u2 ON r.user2 = u2.id WHERE r.user1 = ? OR r.user2 = ? ORDER BY `status` DESC;";
 
     @Data
     public class Relation {
@@ -40,14 +40,14 @@ public class Relations extends Shiina {
             shiina.data.put("error", req.queryParams("error"));
         }   
 
-        ResultSet relations = shiina.mysql.Query(RELATION_QUERY, shiina.user.id, shiina.user.id);
+        ResultSet relations = shiina.mysql.Query(RELATION_QUERY, shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id);
         ArrayList<Relation> relationsList = new ArrayList<>();
         while(relations.next()) {
             Relation relation = new Relation();
             relation.id = relations.getInt("id");
             relation.name = relations.getString("name");
             relation.latest_activity = relations.getLong("latest_activity");
-            relation.relationship_status = relations.getString("relationship_status");
+            relation.relationship_status = relations.getString("status");
             relationsList.add(relation);
         }
 

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 
+import javax.naming.spi.DirStateFactory.Result;
+
 import com.google.gson.Gson;
 
 import dev.osunolimits.api.UserQuery;
@@ -112,9 +114,26 @@ public class User extends Shiina {
             ach.setName(achRs.getString("name"));
             ach.setDesc(achRs.getString("desc"));
             achievements.add(ach);
-
         }
 
+        ResultSet followerRs = shiina.mysql.Query("SELECT COUNT(*) AS followers FROM relationships WHERE user2 = ? AND user1 != user2;", id);
+        int follower = 0;
+        if (followerRs.next()) {
+            follower = followerRs.getInt("followers");
+        }
+
+        if(shiina.loggedIn) {
+            
+            ResultSet statusRs = shiina.mysql.Query("SELECT CASE WHEN EXISTS ( SELECT 1 FROM relationships r2 WHERE r2.user1 = r.user2 AND r2.user2 = r.user1 ) THEN 'mutual' WHEN r.user1 = ? THEN 'known' ELSE 'follower' END AS status, CASE WHEN r.user1 =? THEN r.user2 ELSE r.user1 END AS id, CASE WHEN r.user1 =? THEN u2.name ELSE u1.name END AS name, CASE WHEN r.user1 = ? THEN u2.latest_activity ELSE u1.latest_activity END AS latest_activity FROM relationships r LEFT JOIN `users` u1 ON r.user1 = u1.id LEFT JOIN `users` u2 ON r.user2 = u2.id WHERE (r.user1 = ? AND r.user2 = ?) OR (r.user1 = ? AND r.user2 = ?) LIMIT 1;", shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, id, shiina.user.id, id);
+
+            if(statusRs.next()) {
+                shiina.data.put("relationship", statusRs.getString("status"));
+            }else {
+                shiina.data.put("relationship", "none");
+            }
+        }
+
+        shiina.data.put("follower", follower);
         shiina.data.put("groups", userInfo.getGroups());
         shiina.data.put("achievements", achievements);
         shiina.data.put("id", id);

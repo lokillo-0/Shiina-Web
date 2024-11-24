@@ -29,6 +29,7 @@ import dev.osunolimits.routes.api.get.GetBmThumbnail;
 import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.api.get.Search;
+import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Clan;
@@ -110,6 +111,8 @@ public class App {
         WebServer.get("/api/v1/get_player_scores", new GetPlayerScores());
         WebServer.get("/api/v1/search", new Search());
         WebServer.get("/api/v1/thumb", new GetBmThumbnail());
+
+        WebServer.get("/api/v1/update_rel", new UpdateRelationship());
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/start", new Start());

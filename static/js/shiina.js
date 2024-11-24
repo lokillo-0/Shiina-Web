@@ -10,6 +10,11 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
     const nodesWithTimestamp = document.querySelectorAll('[data-timestamp]');
     const nodesArray = Array.from(nodesWithTimestamp);
 
+    let relNodes = document.querySelectorAll('[data-shiina-call]');
+    const relArray = Array.from(relNodes);
+
+    handleRelUpdate(relArray);
+
     loadTurnstileIfPresent();
     
     if (document.getElementById('video') != undefined) {
@@ -25,6 +30,19 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
 
     updateTooltips();
 });
+
+function handleRelUpdate(relArray) {
+    relArray.forEach(node => {
+        let user = node.getAttribute('data-user');
+        node.onclick = function () {
+            fetch("/api/v1/update_rel?u="+user) 
+            .then(response => response.text())
+            .then(response => {
+                Turbo.visit(window.location.href);
+            })
+        }
+    });
+}
 
 submitStartTurbo = document.addEventListener('turbo:submit-start', function () {
     Turbo.navigator.delegate.adapter.showProgressBar();

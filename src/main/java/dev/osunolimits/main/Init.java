@@ -159,24 +159,24 @@ public class Init {
     }
 
     public void initializeConnectionWatcher() {
-        Thread t = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(1000 * 30);
-                } catch (InterruptedException e) {
-                    log.error("ConnectionWatcher Thread interrupted", e);
-                    return;
-                }
+        // Thread t = new Thread(() -> {
+        //     while (true) {
+        //         try {
+        //             Thread.sleep(1000 * 30);
+        //         } catch (InterruptedException e) {
+        //             log.error("ConnectionWatcher Thread interrupted", e);
+        //             return;
+        //         }
     
-                for (MySQL con : Database.runningConnections) {
-                    if (System.currentTimeMillis() - con.connectionCreated > 1000 * 30) { // 30 seconds
-                        con.close();
-                    }
-                }
-            }
-        });
-        t.setName("ConnectionWatcher (shiina)");
-        t.start();
+        //         for (MySQL con : Database.runningConnections) {
+        //             if (System.currentTimeMillis() - con.connectionCreated > 1000 * 30) { // 30 seconds
+        //                 con.close();
+        //             }
+        //         }
+        //     }
+        // });
+        // t.setName("ConnectionWatcher (shiina)");
+        // t.start();
     }    
 
     public void initializeDataDirectory() {

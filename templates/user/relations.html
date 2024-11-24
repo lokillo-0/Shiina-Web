@@ -24,9 +24,9 @@
                             <div class="col-md-4 mb-3">
                                 <div class="card shadow-sm">
                                     <div class="card-body">
-                                        <a href="/u/${relation.id}" class="d-flex r-card-header text-decoration-none align-items-center mb-3">
+                                        <a href="/u/${relation.id?c}" class="d-flex r-card-header text-decoration-none align-items-center mb-3">
                                             <img 
-                                                src="${avatarServer}/${relation.id}" 
+                                                src="${avatarServer}/${relation.id?c}" 
                                                 alt="${relation.name}" 
                                                 class="rounded-circle me-3" 
                                                 style="width: 50px; height: 50px; object-fit: cover;"
@@ -45,17 +45,39 @@
                                             <div>
                                                 <#if relation.relationship_status == "mutual">
                                                     <i data-bs-toggle="tooltip" data-bs-original-title="Mutual" class="fa-solid fa-heart text-danger"></i>
+                                                <#elseif relation.relationship_status == "known">
+                                                    <i data-bs-toggle="tooltip" data-bs-original-title="You follow" class="fa-solid fa-address-card text-primary"></i>
                                                 <#else>
-                                                    <i data-bs-toggle="tooltip" data-bs-original-title="Friend" class="fa-solid fa-address-card text-primary"></i>
+                                                    <i data-bs-toggle="tooltip" data-bs-original-title="Follows you" class="fa-solid fa-heart text-success"></i>
                                                 </#if>
                                             </div>
-
+                                            <#if relation.relationship_status == "follower">
+                                            <a 
+                                                class="btn btn-success btn-sm" 
+                                                data-user="${relation.id?c}"
+                                                data-shiina-call="relationship"
+                                                role="button">
+                                            
+                                                <i class="fa-solid fa-user-plus"></i> Follow
+                                            </a>
+                                            <#elseif relation.relationship_status == "mutual">
                                             <a 
                                                 class="btn btn-danger btn-sm" 
-                                                href="#" 
+                                                data-user="${relation.id?c}"
+                                                data-shiina-call="relationship"
                                                 role="button">
-                                                <i class="fa-solid fa-heart-crack"></i> Unfriend
+                                            
+                                                <i class="fa-solid fa-heart-crack"></i> Unmutual
                                             </a>
+                                            <#else>
+                                            <a 
+                                                class="btn shiina-btn-follow btn-primary btn-sm" 
+                                                data-user="${relation.id?c}"
+                                                data-shiina-call="relationship"
+                                                role="button">
+                                                <i class="fa-solid fa-circle-xmark"></i> Unfollow
+                                            </a>
+                                            </#if>
                                         </div>
                                     </div>
                                 </div>
