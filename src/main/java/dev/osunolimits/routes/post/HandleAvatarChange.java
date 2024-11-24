@@ -8,13 +8,12 @@ import spark.Request;
 import spark.Response;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardCopyOption;
 
 import javax.servlet.MultipartConfigElement;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 public class HandleAvatarChange extends Shiina {
 
@@ -52,7 +51,7 @@ public class HandleAvatarChange extends Shiina {
                             avatarDir.mkdirs();
                         }
 
-                        Path avatarPath = Path.of(AVATAR_DIR + userId + ".png");
+                        Path finalAvatarPath = Path.of(AVATAR_DIR, userId + ".png");
 
                         for (File file : avatarDir.listFiles()) {
                             if (file.getName().equals(userId + ".png") || file.getName().matches(userId + "\\.(jpg|gif)")) {
@@ -60,10 +59,14 @@ public class HandleAvatarChange extends Shiina {
                             }
                         }
 
-                        try (InputStream input = part.getInputStream();
-                             FileOutputStream output = new FileOutputStream(avatarPath.toFile())) {
-                            Files.copy(input, avatarPath, StandardCopyOption.REPLACE_EXISTING);
+                        // Resize directly from the InputStream and write to the final path
+                        try (InputStream input = part.getInputStream()) {
+                            Thumbnails.of(input)
+                                    .size(500, 500)
+                                    .outputFormat("png")
+                                    .toFile(finalAvatarPath.toFile());
                         }
+
                         res.header("Cache-Control", "no-cache, no-store, must-revalidate");
                         res.header("Pragma", "no-cache");
                         res.header("Expires", "0");

@@ -52,6 +52,11 @@
       <version>5.2.0</version>
     </dependency>
     <dependency>
+      <groupId>net.coobird</groupId>
+      <artifactId>thumbnailator</artifactId>
+      <version>0.4.20</version>
+    </dependency>  
+    <dependency>
       <groupId>com.github.bowika</groupId>
       <artifactId>spark</artifactId>
       <version>40e9a4fc7e</version>
