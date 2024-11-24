@@ -28,7 +28,7 @@ import spark.Request;
 import spark.Response;
 
 public class User extends Shiina {
-    
+
     public User() {
         gson = new Gson();
     }
@@ -89,7 +89,16 @@ public class User extends Shiina {
             }
         } else {
             shiina.data.put("restricted", false);
-            shiina.data.put("self", shiina.user != null && shiina.user.id == id); // Set self flag based on ID
+            if (shiina.user != null) {
+                if (String.valueOf(shiina.user.id).equals(String.valueOf(id))) {
+                    shiina.data.put("self", true);
+                } else {
+                    shiina.data.put("self", false);
+                }
+            } else {
+                shiina.data.put("self", false);
+            }
+
         }
 
         UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + id), UserInfoObject.class);
@@ -116,19 +125,23 @@ public class User extends Shiina {
             achievements.add(ach);
         }
 
-        ResultSet followerRs = shiina.mysql.Query("SELECT COUNT(*) AS followers FROM relationships WHERE user2 = ? AND user1 != user2;", id);
+        ResultSet followerRs = shiina.mysql
+                .Query("SELECT COUNT(*) AS followers FROM relationships WHERE user2 = ? AND user1 != user2;", id);
         int follower = 0;
         if (followerRs.next()) {
             follower = followerRs.getInt("followers");
         }
 
-        if(shiina.loggedIn) {
-            
-            ResultSet statusRs = shiina.mysql.Query("SELECT CASE WHEN EXISTS ( SELECT 1 FROM relationships r2 WHERE r2.user1 = r.user2 AND r2.user2 = r.user1 ) THEN 'mutual' WHEN r.user1 = ? THEN 'known' ELSE 'follower' END AS status, CASE WHEN r.user1 =? THEN r.user2 ELSE r.user1 END AS id, CASE WHEN r.user1 =? THEN u2.name ELSE u1.name END AS name, CASE WHEN r.user1 = ? THEN u2.latest_activity ELSE u1.latest_activity END AS latest_activity FROM relationships r LEFT JOIN `users` u1 ON r.user1 = u1.id LEFT JOIN `users` u2 ON r.user2 = u2.id WHERE (r.user1 = ? AND r.user2 = ?) OR (r.user1 = ? AND r.user2 = ?) LIMIT 1;", shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, id, shiina.user.id, id);
+        if (shiina.loggedIn) {
 
-            if(statusRs.next()) {
+            ResultSet statusRs = shiina.mysql.Query(
+                    "SELECT CASE WHEN EXISTS ( SELECT 1 FROM relationships r2 WHERE r2.user1 = r.user2 AND r2.user2 = r.user1 ) THEN 'mutual' WHEN r.user1 = ? THEN 'known' ELSE 'follower' END AS status, CASE WHEN r.user1 =? THEN r.user2 ELSE r.user1 END AS id, CASE WHEN r.user1 =? THEN u2.name ELSE u1.name END AS name, CASE WHEN r.user1 = ? THEN u2.latest_activity ELSE u1.latest_activity END AS latest_activity FROM relationships r LEFT JOIN `users` u1 ON r.user1 = u1.id LEFT JOIN `users` u2 ON r.user2 = u2.id WHERE (r.user1 = ? AND r.user2 = ?) OR (r.user1 = ? AND r.user2 = ?) LIMIT 1;",
+                    shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, shiina.user.id, id, shiina.user.id,
+                    id);
+
+            if (statusRs.next()) {
                 shiina.data.put("relationship", statusRs.getString("status"));
-            }else {
+            } else {
                 shiina.data.put("relationship", "none");
             }
         }

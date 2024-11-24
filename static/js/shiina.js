@@ -4,6 +4,30 @@ var turnstileId = null;
 
 const bsPrimary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
 
+document.addEventListener("turbo:visit", (event) => {
+    const content = document.getElementById("wrapper");
+
+    content.classList.add("fade-out");
+
+    event.preventDefault();
+
+    content.addEventListener('transitionend', () => {
+        Turbo.visit(event.detail.url);
+    });
+});
+
+document.addEventListener("turbo:render", () => {
+    const content = document.getElementById("wrapper");
+
+    // Remove the exit animation and trigger an entry animation
+    content.classList.remove("fade-out");
+    content.classList.add("fade-in");
+
+    setTimeout(() => {
+        content.classList.remove("fade-in");
+    }, 300); // Match the animation duration
+});
+
 loadEventTurbo = document.addEventListener("turbo:load", function () {
     loadUserPage();
 
