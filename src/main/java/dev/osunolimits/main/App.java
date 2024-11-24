@@ -15,6 +15,7 @@ import dev.osunolimits.routes.ap.get.Commands;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.Themes;
+import dev.osunolimits.routes.ap.get.api.RecoverAccount;
 import dev.osunolimits.routes.ap.get.groups.Groups;
 import dev.osunolimits.routes.ap.get.groups.ManageGroup;
 import dev.osunolimits.routes.ap.get.groups.ProcessGroup;
@@ -40,12 +41,14 @@ import dev.osunolimits.routes.get.Score;
 import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.get.simple.Login;
+import dev.osunolimits.routes.get.simple.Recover;
 import dev.osunolimits.routes.get.simple.Register;
 import dev.osunolimits.routes.get.user.Relations;
 import dev.osunolimits.routes.get.user.Settings;
 import dev.osunolimits.routes.post.HandleAvatarChange;
 import dev.osunolimits.routes.post.HandleLogin;
 import dev.osunolimits.routes.post.HandleLogout;
+import dev.osunolimits.routes.post.HandleRecovery;
 import dev.osunolimits.routes.post.HandleRegister;
 import dev.osunolimits.routes.redirects.GucchoBmRedirect;
 import dev.osunolimits.routes.redirects.GucchoUserRedirect;
@@ -102,6 +105,8 @@ public class App {
         WebServer.post("/settings/avatar", new HandleAvatarChange());
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());
+        WebServer.get("/auth/recover", new Recover());
+        WebServer.post("/recover", new HandleRecovery());
         WebServer.post("/register", new HandleRegister());
         WebServer.post("/login", new HandleLogin());
         WebServer.post("/logout", new HandleLogout());
@@ -113,6 +118,8 @@ public class App {
         WebServer.get("/api/v1/thumb", new GetBmThumbnail());
 
         WebServer.get("/api/v1/update_rel", new UpdateRelationship());
+
+        WebServer.get("/ap/users/recovery", new RecoverAccount());
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/start", new Start());

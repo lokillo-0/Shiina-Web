@@ -50,11 +50,11 @@
                         <#list multiAccountDetections as detection>
                             <tr>
                                 <td>
-                                    <img src="${avatarServer}/${detection.user1}" alt="${detection.user1_name}'s Avatar" class="avatar">
+                                    <img src="${avatarServer}/${detection.user1?c}" alt="${detection.user1_name}'s Avatar" class="avatar">
                                     ${detection.user1_name}
                                 </td>
                                 <td>
-                                    <img src="${avatarServer}/${detection.user2}" alt="${detection.user2_name}'s Avatar" class="avatar">
+                                    <img src="${avatarServer}/${detection.user2?c}" alt="${detection.user2_name}'s Avatar" class="avatar">
                                     ${detection.user2_name}
                                 </td>
                                 <td>${detection.user1} & ${detection.user2}</td>
@@ -75,8 +75,8 @@
                                 </td>
                                 <td>${detection.latest_time}</td>
                                 <td>
-                                    <a href="/u/${detection.user1}" class="btn btn-sm btn-primary">Profile</a>
-                                    <a href="/u/${detection.user2}" class="btn btn-sm btn-primary">Profile</a>
+                                    <a href="/u/${detection.user1?c}" class="btn btn-sm btn-primary">Profile</a>
+                                    <a href="/u/${detection.user2?c}" class="btn btn-sm btn-primary">Profile</a>
                                 </td>
                             </tr>
                         </#list>

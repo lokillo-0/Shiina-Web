@@ -116,25 +116,84 @@
     </a>
     <button type="button"
     data-bs-toggle="modal"
-    data-bs-target="#groupModal" class="btn btn-warning">
+    data-bs-target="#groupModal" class="btn btn-primary">
       <i class="fa-solid fa-star"></i> Edit groups
+    </button>
+    <button type="button"
+    data-bs-toggle="modal"
+    data-bs-target="#recoveryModal" class="btn btn-danger">
+      <i class="fa-solid fa-link"></i> Generate Recovery URL
     </button>
   </div>
 </div>
 
+<!-- Recovery Modal -->
+<div
+  class="modal modal-lg fade"
+  id="recoveryModal"
+  tabindex="-1"
+  role="dialog"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">
+          Generate recovery url for ${aname}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <div class="mb-3">
+          <label for="" class="form-label">Recovery URL</label>
+          <input
+            type="text"
+            class="form-control"
+            id="recoveryUrlInput"
+            aria-describedby="helpId"
+            placeholder="Click generate to get the URL"
+            readonly
+          />
+          <small id="helpId" class="form-text text-muted">⚠️ With this URL the user can change the password and login to thier Account</small>
+        </div>
+        
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+        >
+          Close
+        </button>
+        <button
+        type="button"
+        class="btn btn-danger"
+        onclick="generateRecoveryUrl(document.getElementById('recoveryUrlInput'))"
+      >
+        Generate
+      </button>
+      </div>
+    </div>
+  </div>
+</div>
 <!-- Group Modal -->
 <div
   class="modal fade"
   id="groupModal"
   tabindex="-1"
   role="dialog"
-  aria-labelledby="modalTitleId"
   aria-hidden="true"
 >
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="modalTitleId">
+        <h5 class="modal-title">
           Change groups for ${aname}
         </h5>
         <button
@@ -187,7 +246,15 @@
 
   
   </div>
-
+<script>
+  function generateRecoveryUrl(input) {
+    fetch("/ap/users/recovery?id=${id}")
+      .then((res) => res.json())
+      .then((data) => {
+        input.value = 'https://' + window.location.host + data.url;
+      });
+  }
+</script>
 
 <style>
   .card {

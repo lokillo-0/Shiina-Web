@@ -15,6 +15,7 @@
     <#switch status>
         <#case 0><#return "Not submitted"><#break>
         <#case 2><#return "Submitted"><#break>
+        <#default><#return "Unknown"><#break>
     </#switch>
 </#function>
 
