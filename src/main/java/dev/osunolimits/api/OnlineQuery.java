@@ -9,39 +9,52 @@ import com.google.gson.JsonParser;
 
 import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
-import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.utils.CacheInterceptor;
+import lombok.Data;
 import okhttp3.Cache;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
+public class OnlineQuery {
 
-public class UserStatusQuery {
     private OkHttpClient client;
 
-    public UserStatusQuery() {
+    public OnlineQuery() {
         client = new OkHttpClient.Builder()
-        .addNetworkInterceptor(new CacheInterceptor(15, TimeUnit.MINUTES))
-        .cache(new Cache(new File(".cache/status"), 100L * 1024L * 1024L))
-        .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
+    .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
+    .cache(new Cache(new File(".cache/users"), 100L * 1024L * 1024L))
+    .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
     }
 
-    public UserStatus getUserStatus(int id) {
-        String url = "/v1/get_player_status?id=" + id;
+
+    public OnlineResponse getOnline() {
+        String url = "/v1/online";
         Request request = APIRequest.build(url);
         try {
             Response response = client.newCall(request).execute();
             JsonElement element = JsonParser.parseString(response.body().string());
-            UserStatus userStatus = new Gson().fromJson(element, UserStatus.class);
-            return userStatus;
+            OnlineResponse userResponse = new Gson().fromJson(element, OnlineResponse.class);
+            return userResponse;
 
         } catch (Exception e) {
-            App.log.error("Failed to get User Status", e);
+            App.log.error("Failed to get Online EX", e);
         }
         return null;
     }
 
+    @Data
+    public class OnlineUser {
+        private int id;
+        private String name;
+    }
+
+    @Data
+    public class OnlineResponse {
+        private String status;
+        private OnlineUser[] players;
+        private OnlineUser[] bots;
+    }
 
 }

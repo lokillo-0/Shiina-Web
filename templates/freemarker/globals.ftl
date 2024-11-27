@@ -60,6 +60,21 @@
     </#switch>
 </#function>
 
+<#function convertModeToNumber modeString>
+    <#switch modeString?upper_case>
+        <#case "OSU"><#return 0><#break>
+        <#case "OSURX"><#return 4><#break>
+        <#case "OSUAP"><#return 8><#break>
+        <#case "TAIKO"><#return 1><#break>
+        <#case "CATCH"><#return 2><#break>
+        <#case "MANIA"><#return 3><#break>
+        <#case "TAIKORX"><#return 5><#break>
+        <#case "CATCHRX"><#return 6><#break>
+        <#default><#return -1><#break>
+    </#switch>
+</#function>
+
+
 <#function convertModeIcon toIcon>
     <#switch mode>
         <#case 1><#return "/img/modes/taiko.svg"><#break>

@@ -4,10 +4,13 @@ import java.util.List;
 
 import dev.osunolimits.api.ClanQuery;
 import dev.osunolimits.api.ClanQuery.ClanResponse;
+import dev.osunolimits.main.App;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.utils.Validation;
+import dev.osunolimits.utils.osu.OsuConverter;
 import spark.Request;
 import spark.Response;
 
@@ -49,6 +52,7 @@ public class Clans extends Shiina {
         }
         
         shiina.data.put("clans", clans);
+        shiina.data.put("seo", new SEOBuilder("Clan Leaderboard | " + OsuConverter.convertModeBack(String.valueOf(mode)) + " | " + sort.toUpperCase(), App.customization.get("homeDescription").toString()));
         shiina.data.put("pageSize", clans.size());
         shiina.data.put("hasNext", hasNext);
         shiina.data.put("totalPageSize", pageSize);

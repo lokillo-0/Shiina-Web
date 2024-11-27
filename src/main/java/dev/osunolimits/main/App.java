@@ -11,10 +11,12 @@ import dev.osunolimits.modules.GroupRegistry;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ThemeLoader;
 import dev.osunolimits.modules.UserInfoCache;
+import dev.osunolimits.routes.ap.get.Bancho;
 import dev.osunolimits.routes.ap.get.Commands;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.Themes;
+import dev.osunolimits.routes.ap.get.api.PubSubHandler;
 import dev.osunolimits.routes.ap.get.api.RecoverAccount;
 import dev.osunolimits.routes.ap.get.groups.Groups;
 import dev.osunolimits.routes.ap.get.groups.ManageGroup;
@@ -37,7 +39,7 @@ import dev.osunolimits.routes.get.Clan;
 import dev.osunolimits.routes.get.Clans;
 import dev.osunolimits.routes.get.Home;
 import dev.osunolimits.routes.get.Leaderboard;
-import dev.osunolimits.routes.get.Score;
+import dev.osunolimits.routes.get.UserScore;
 import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.get.simple.Login;
@@ -97,7 +99,7 @@ public class App {
         WebServer.get("/leaderboard", new Leaderboard());
         WebServer.get("/clans", new Clans());
         WebServer.get("/clan/:id", new Clan());
-        WebServer.get("/scores/:id", new Score());
+        WebServer.get("/scores/:id", new UserScore());
         WebServer.get("/b/:id", new Beatmap());
         WebServer.get("/u/:id", new User());
         WebServer.get("/settings", new Settings());
@@ -120,6 +122,9 @@ public class App {
         WebServer.get("/api/v1/update_rel", new UpdateRelationship());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
+        
+        WebServer.get("/ap/bancho", new Bancho());
+        WebServer.get("/ap/api/handler", new PubSubHandler());
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/start", new Start());

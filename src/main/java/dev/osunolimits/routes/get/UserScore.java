@@ -1,6 +1,9 @@
 package dev.osunolimits.routes.get;
 
 import dev.osunolimits.api.ScoreQuery;
+import dev.osunolimits.api.ScoreQuery.Score;
+import dev.osunolimits.main.App;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -8,7 +11,7 @@ import dev.osunolimits.utils.Validation;
 import spark.Request;
 import spark.Response;
 
-public class Score extends Shiina {
+public class UserScore extends Shiina {
 
 
     @Override
@@ -26,14 +29,15 @@ public class Score extends Shiina {
         }
 
         ScoreQuery scoreQuery = new ScoreQuery(shiina.mysql);
-        Object o = scoreQuery.getScore(id);
-        if(o == null) {
+        Score s = scoreQuery.getScore(id);
+        if(s == null) {
             return notFound(res, shiina);
         }
 
-        shiina.data.put("score", o);
+        shiina.data.put("score", s);
 
         
+        shiina.data.put("seo", new SEOBuilder(s.getUsername() + " on " + s.getBeatmap().getFilename().replace(".osu", ""),  App.customization.get("homeDescription").toString()));
         return renderTemplate("score.html", shiina, res, req);
     }
     

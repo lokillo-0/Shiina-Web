@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="/css/apstyle.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <script src="/js/apscript.js"></script>
+    <#include "/freemarker/globals.ftl">
+
 </head>
 
 <body class="ps-xxl-sbwidth">
@@ -64,6 +66,11 @@
                 <li class="mt-4">
                     <h6 class="sidebar-header text-uppercase">Administrator</h6>
                     <hr class="sidebar-divider my-1">
+                </li>
+                <li class="nav-item">
+                    <a href="/ap/bancho" class="nav-link <#if actNav == 16>active</#if>">
+                        <i class="fa-solid fa-server me-2"></i> Bancho
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a href="/ap/system" class="nav-link <#if actNav == 10>active</#if>">

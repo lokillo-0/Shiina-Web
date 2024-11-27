@@ -4,7 +4,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import dev.osunolimits.main.App;
 import dev.osunolimits.models.FullBeatmap;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -136,6 +138,8 @@ public class Beatmap extends Shiina {
         }
 
         fullBeatmap.setScores(scores.toArray(new FullBeatmap.BeatmapScore[0]));
+        SEOBuilder seo = new SEOBuilder(fullBeatmap.getTitle(), App.customization.get("homeDescription").toString(), App.env.get("DOMAIN") + "/api/v1/thumb?setId=" + fullBeatmap.getSetId());
+        shiina.data.put("seo", seo);
         shiina.data.put("beatmap", fullBeatmap);
         shiina.data.put("id", id);
         shiina.data.put("mode", mode);

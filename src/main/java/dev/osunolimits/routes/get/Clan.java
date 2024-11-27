@@ -2,10 +2,13 @@ package dev.osunolimits.routes.get;
 
 import dev.osunolimits.api.ClanQuery;
 import dev.osunolimits.api.ClanQuery.SingleClanResponse;
+import dev.osunolimits.main.App;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.utils.Validation;
+import dev.osunolimits.utils.osu.OsuConverter;
 import spark.Request;
 import spark.Response;
 
@@ -42,6 +45,7 @@ public class Clan extends Shiina {
             return notFound(res, shiina);
         }
 
+        shiina.data.put("seo", new SEOBuilder(response.getName() + " | Clan | " + OsuConverter.convertModeBack(String.valueOf(mode)), App.customization.get("homeDescription").toString()));
         shiina.data.put("clan", response);
         shiina.data.put("members", clanQuery.getMembers(id));
         shiina.data.put("activity", clanQuery.getClanActivity(id, mode));

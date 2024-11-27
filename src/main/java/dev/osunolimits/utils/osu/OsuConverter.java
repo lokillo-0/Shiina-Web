@@ -242,6 +242,25 @@ public class OsuConverter {
                     return null;
             }
         }
+
+        public static String convertSortBack(String sort) {
+            switch (sort.toLowerCase()) {
+                case "tscore":
+                    return "Total Score";
+                case "rscore":
+                    return "Ranked Score";
+                case "pp":
+                    return "PP";
+                case "acc":
+                    return "ACC";
+                case "plays":
+                    return "Plays";
+                case "playtime":
+                    return "Playtime";
+                default:
+                    return null;
+            }
+        }
     }
 
 }

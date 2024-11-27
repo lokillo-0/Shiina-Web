@@ -4,6 +4,8 @@ import java.util.Optional;
 
 import dev.osunolimits.api.BeatmapQuery;
 import dev.osunolimits.api.BeatmapQuery.BeatmapResponse;
+import dev.osunolimits.main.App;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -53,6 +55,8 @@ public class Beatmaps extends Shiina {
         if (artist.isPresent()) {
             shiina.data.put("artist", artist.get());
         }
+        SEOBuilder seo = new SEOBuilder("Beatmap Listing", App.customization.get("homeDescription").toString());
+        shiina.data.put("seo", seo);
         shiina.data.put("entries", beatmapResponse.getMeta().getTotal());
         shiina.data.put("page", beatmapResponse.getMeta().getPage());
         return renderTemplate("beatmaps.html", shiina, res, req);

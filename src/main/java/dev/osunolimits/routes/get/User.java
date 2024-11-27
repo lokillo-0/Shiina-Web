@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
 
-import javax.naming.spi.DirStateFactory.Result;
-
 import com.google.gson.Gson;
 
 import dev.osunolimits.api.UserQuery;
@@ -16,6 +14,7 @@ import dev.osunolimits.models.FullUser;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.models.FullUser.Player;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -158,6 +157,8 @@ public class User extends Shiina {
         shiina.data.put("u", user);
         shiina.data.put("mode", mode);
         shiina.data.put("status", userStatus);
+        SEOBuilder seo = new SEOBuilder("Profile of " + userInfo.getName(), App.customization.get("homeDescription").toString(), App.env.get("AVATARSRV") + "/" + id);
+        shiina.data.put("seo", seo);
         return renderTemplate("user.html", shiina, res, req);
     }
 

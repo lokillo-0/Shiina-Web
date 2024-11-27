@@ -3,6 +3,8 @@ package dev.osunolimits.routes.get.user;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import dev.osunolimits.main.App;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -50,7 +52,7 @@ public class Relations extends Shiina {
             relation.relationship_status = relations.getString("status");
             relationsList.add(relation);
         }
-
+shiina.data.put("seo", new SEOBuilder("Relations", App.customization.get("homeDescription").toString()));
         shiina.data.put("relations", relationsList);
         return renderTemplate("user/relations.html", shiina, res, req);
     }

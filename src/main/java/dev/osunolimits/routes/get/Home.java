@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import dev.osunolimits.api.BanchoStats;
 import dev.osunolimits.api.BanchoStats.CustomCountResponse;
 import dev.osunolimits.main.App;
+import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -47,7 +48,8 @@ public class Home extends Shiina {
         if(req.queryParams("login") != null && shiina.loggedIn == true) {
             shiina.data.put("info", "You have successfully logged in");
         }
-
+        SEOBuilder seo = new SEOBuilder("Home", App.customization.get("homeDescription").toString());
+        shiina.data.put("seo", seo);
         shiina.data.put("customCount", customCountResponse);
         return renderTemplate("home.html", shiina, res, req);
     }

@@ -1,10 +1,7 @@
 package dev.osunolimits.routes.ap.get.api;
 
-import java.sql.ResultSet;
-
 import com.google.gson.Gson;
 
-import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;

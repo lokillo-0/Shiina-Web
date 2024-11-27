@@ -25,7 +25,7 @@
                             </span>
                         </div>
                         <div class="card-creator">
-                            <small class="card-text">created by ${beatmap.creator}
+                            <small class="card-text">mapped by ${beatmap.creator}
                             </small>
                         </div>
                         <div class="my-2">

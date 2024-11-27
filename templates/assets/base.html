@@ -17,6 +17,24 @@
     <#if !currentTheme.included>
     <link rel="stylesheet" href="/css/theme.css">
     </#if>
+
+    <#if seo??>
+    <title>${seo.title}</title>
+    <meta property="og:title" content="${seo.title}">
+    <meta name="twitter:title" content="${seo.title}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary">
+    <!-- <meta property="og:url" content="" />
+    <meta name="twitter:url" content="" />
+    <link rel="canonical" href=""/> -->
+    <meta name="description" content="${seo.description}">
+    <meta property="og:description" content="${seo.description}">
+    <meta name="twitter:description" content="${seo.description}">
+    <meta property="og:image" content="${seo.image}">
+    <meta name="twitter:image" content="${seo.image}">
+    <meta name="keywords" content='${seo.keywords?join(",")}'>
+    </#if>
 </head>
 
 <body>
