@@ -36,7 +36,7 @@ public class ApUser extends Shiina {
             return redirect(res, shiina, "/login");
         }
 
-        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
             return redirect(res, shiina, "/");
         }
 

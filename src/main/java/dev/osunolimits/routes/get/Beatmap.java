@@ -6,10 +6,10 @@ import java.util.List;
 
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.FullBeatmap;
-import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.SEOBuilder;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.OsuConverter;
 import spark.Request;

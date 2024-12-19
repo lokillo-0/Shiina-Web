@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import dev.osunolimits.modules.ShiinaTemplateException;
+import dev.osunolimits.modules.utils.ShiinaTemplateException;
 import dev.osunolimits.utils.osu.OsuConverter;
 import freemarker.cache.NullCacheStorage;
 import freemarker.template.Configuration;

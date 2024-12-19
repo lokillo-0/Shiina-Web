@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.ap.get.api;
+package dev.osunolimits.routes.ap.api;
 
 import lombok.Data;
 
@@ -52,5 +52,17 @@ public class PubSubModels {
     public class RemovePrivInput {
         public int id;
         public String[] privs; // Privileges: normal, verified, whitelisted, etc.
+    }
+
+    @Data
+    public class CountryChangeInput {
+        public int id;
+        public String country;
+    }
+
+    @Data 
+    public class NameChangeInput {
+        public int id;
+        public String name;
     }
 }

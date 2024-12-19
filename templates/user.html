@@ -1,7 +1,7 @@
 <#include "assets/base.html">
 <div class="container">
     <!-- Mode Selector Card -->
-    <div class="card mt-4">
+    <div class="card shiina-user-card">
         <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
             <#include "/freemarker/selector.ftl">
             <div class="my-2 col-12 col-md-auto my-lg-0 col-auto d-flex align-items-center justify-content-center">
@@ -30,7 +30,7 @@
     </#if>
 
     <!-- Profile Section -->
-    <div class="card my-4">
+    <div class="card my-4 shiina-user-card">
         <div class="bg-secondary rounded-top">
             <div class="row p-4">
                 <!-- Profile Picture -->
@@ -40,7 +40,21 @@
                 </div>
                 <!-- Player Name -->
                 <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
-                    <div><span class="display-3 fw-bold">${u.player.info.name} </span> <#list groups as group><span class="groupDiv">${group.emoji} ${group.name}</span></#list></div>
+                    <div><span class='display-3 fw-bold shiina-player-name <#if uprivs?seq_contains("SUPPORTER")>supporter</#if>'>${u.player.info.name} 
+
+                    </span> 
+                        <div class="groupPlace">
+                            <#list groups as group><span class="groupDiv"><span class="groupEmoji">${group.emoji}</span>${group.name}</span></#list>
+                           
+                        </div>
+                       
+                    </div>
+                    <style>
+                        .groupEmoji {
+                            width: 20px;
+                            display:inline-block;
+                        }
+                    </style>
                     <#if status.player_status.online==true>
                         <div class="shiina-online-status rounded">
                             <span class="shiina-online-status-circle"></span>
@@ -53,11 +67,12 @@
                 </div>
             </div>
         </div>
-        <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
-            <div class="shiina-pill-icon"></div>
-            <span>Rankings</span>
-        </div>
-        <div class="m-2 my-4">
+ 
+        <div class="m-1 mb-4">
+            <div class="shiina-pill mx-1 mb-4 my-2 mx-md-4 d-flex align-items-center">
+                <div class="shiina-pill-icon"></div>
+                <span>Rankings</span>
+            </div>
             <div class="row">
                 <div class="col col-12 col-sm-12 col-lg-6">
                     <div class="row mx-4 justify-content-center align-items-center">
@@ -67,7 +82,7 @@
                             </h2>
                         </div>
                         <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                            <small>Country Rank <img class="flag rounded" width="20" height="15"
+                            <small>Country Rank <img data-bs-toggle="tooltip" data-bs-placement="top" aria-label="${ucountry}" data-bs-original-title="${ucountry}" class="flag rounded" width="20" height="15"
                                     src="/img/flags/${u.player.info.country}.svg" alt=""></small>
                             <h2>#<#if u.player.stats[mode?string].country_rank==0>-<#else>${u.player.stats[mode?string].country_rank}</#if>
                             </h2>
@@ -199,7 +214,7 @@
     
                 .shiina-btn-follow {
                     margin-top: 0.5rem;
-                    margin-right: 0.5rem;
+                    margin-right: var(--bs-spacer-1)!important;
                 }
             </style>
        <div class="d-inline-flex mx-0 mx-sm-0 mx-lg-3">
@@ -240,11 +255,32 @@
             </div>
            
         </span>
-
-       </div>
+        <#if uprivs?seq_contains("SUPPORTER")>
+        <span class="shiina-follower-count mx-1">
+            <div class="shiina-follower-count-icon">
+                <i class="fa-solid fa-heart supporterColor"></i>
+            </div>
+            <div class="shiina-follower-count-body">
+                Supporter
+            </div>
            
-            
+        </span>
+
+        </#if>
+       </div>
         </div>
+
+        <#if userpage??>
+        <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
+            <div class="shiina-pill-icon"></div>
+            <span>Userpage</span>
+        </div>
+        <div class="row mx-1 mx-md-3 pb-4 pt-1">
+            <span>
+                ${userpage}
+            </span>
+        </div>
+        </#if>
 
         <!-- BEST SCORES -->
         <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
@@ -299,7 +335,7 @@
                 <button onclick="loadMore()" id="firstPlacesButton" class="btn btn-primary btn-lg">Load More</button>
             </div>
         </div>
-
+        <#if playCountGraph?size != 0>
         <!-- PLAYCOUNT GRAPH -->
         <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
             <div class="shiina-pill-icon"></div>
@@ -308,6 +344,7 @@
         <div class="row p-1 p-md-4">
             <canvas id="myChart"></canvas>
         </div>
+        </#if>
 
         <!-- ACHIEVEMENTS -->
         <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">

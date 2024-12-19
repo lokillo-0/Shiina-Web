@@ -3,7 +3,7 @@ package dev.osunolimits.routes.ap.post;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.modules.ThemeLoader;
+import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;

@@ -9,10 +9,10 @@ import com.google.gson.Gson;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.Group;
 import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.modules.GroupRegistry;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.GroupRegistry;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -72,7 +72,7 @@ public class ProcessGroup extends Shiina {
             userInfo.groups.add(g);
             App.jedisPool.set("shiina:user:" + id, gson.toJson(userInfo));
             GroupRegistry groupRegistry = new GroupRegistry();
-            ArrayList<dev.osunolimits.modules.GroupRegistry.Group> groups = groupRegistry.getCurrentGroupRegistry();
+            ArrayList<dev.osunolimits.modules.utils.GroupRegistry.Group> groups = groupRegistry.getCurrentGroupRegistry();
             boolean foundMatch = false;
             for(int i = 0; i < groups.size(); i++) {
                 if(groups.get(i).id == Integer.parseInt(groupId)) {
@@ -82,7 +82,7 @@ public class ProcessGroup extends Shiina {
                 }
             }
             if(!foundMatch) {
-                dev.osunolimits.modules.GroupRegistry.Group group = groupRegistry.new Group();
+                dev.osunolimits.modules.utils.GroupRegistry.Group group = groupRegistry.new Group();
                 group.id = Integer.parseInt(groupId);
                 group.userIds = new ArrayList<>();
                 group.userIds.add(Integer.parseInt(id));
@@ -104,7 +104,7 @@ public class ProcessGroup extends Shiina {
             App.jedisPool.set("shiina:user:" + id, gson.toJson(userInfo));
 
             GroupRegistry groupRegistry = new GroupRegistry();
-            ArrayList<dev.osunolimits.modules.GroupRegistry.Group> groups = groupRegistry.getCurrentGroupRegistry();
+            ArrayList<dev.osunolimits.modules.utils.GroupRegistry.Group> groups = groupRegistry.getCurrentGroupRegistry();
             for(int i = 0; i < groups.size(); i++) {
                 if(groups.get(i).id == Integer.parseInt(groupId)) {
                     groups.get(i).userIds.remove((Object)Integer.parseInt(id));

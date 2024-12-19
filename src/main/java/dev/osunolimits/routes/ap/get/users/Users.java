@@ -45,7 +45,7 @@ public class Users extends Shiina {
             return notFound(res, shiina);
         }
 
-        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
             res.redirect("/");
             return notFound(res, shiina);
         }

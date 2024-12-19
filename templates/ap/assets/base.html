@@ -61,6 +61,29 @@
                     </a>
                 </li>
 
+                 <!-- Administrator Section (If Applicable) -->
+                 <#if userPriv?seq_contains("MODERATOR")>
+                 <li class="mt-4">
+                     <h6 class="sidebar-header text-uppercase">Moderation</h6>
+                     <hr class="sidebar-divider my-1">
+                 </li>
+                 <li class="nav-item">
+                     <a href="/ap/bancho" class="nav-link <#if actNav == 16>active</#if>">
+                         <i class="fa-solid fa-server me-2"></i> Bancho
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/ap/multiaccs" class="nav-link <#if actNav == 11>active</#if>">
+                         <i class="fa-solid fa-users me-2"></i> Multi Accounts
+                     </a>
+                 </li>
+                 <li class="nav-item">
+                     <a href="/ap/users" class="nav-link <#if actNav == 14>active</#if>">
+                         <i class="fa-solid fa-user-group me-3"></i> Users
+                     </a>
+                 </li>
+                 </#if>
+
                 <!-- Administrator Section (If Applicable) -->
                 <#if userPriv?seq_contains("ADMINISTRATOR")>
                 <li class="mt-4">
@@ -68,18 +91,8 @@
                     <hr class="sidebar-divider my-1">
                 </li>
                 <li class="nav-item">
-                    <a href="/ap/bancho" class="nav-link <#if actNav == 16>active</#if>">
-                        <i class="fa-solid fa-server me-2"></i> Bancho
-                    </a>
-                </li>
-                <li class="nav-item">
                     <a href="/ap/system" class="nav-link <#if actNav == 10>active</#if>">
                         <i class="fa-solid fa-cog me-2"></i> System
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/ap/multiaccs" class="nav-link <#if actNav == 11>active</#if>">
-                        <i class="fa-solid fa-users me-2"></i> Multi Accounts
                     </a>
                 </li>
                 <li class="nav-item">
@@ -92,11 +105,7 @@
                         <i class="fa-solid fa-star me-3"></i> Groups
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/ap/users" class="nav-link <#if actNav == 14>active</#if>">
-                        <i class="fa-solid fa-user-group me-3"></i> Users
-                    </a>
-                </li>
+                
                 </#if>
 
                 <!-- Other Section -->

@@ -3,6 +3,9 @@ ICON=fa-solid fa-spider
 ROUTE=frontend
 SHORT=Shiina-Web
 TITLE=Shiina-Web Beta
+NAVBAR=true
+FOOTER=false
+BEHINDLOGIN=false
 -->
 * * *
 

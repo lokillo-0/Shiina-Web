@@ -3,6 +3,9 @@ ICON=fa-solid fa-server
 ROUTE=connect
 SHORT=Connect
 TITLE=Connect to osuNoLimits
+NAVBAR=true
+FOOTER=false
+BEHINDLOGIN=false
 -->
 * * *
 

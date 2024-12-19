@@ -11,6 +11,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+import dev.osunolimits.modules.Shiina;
+
 public class GetBmThumbnail implements Route {
 
     private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3";
@@ -22,6 +24,8 @@ public class GetBmThumbnail implements Route {
         String setId = req.queryParams("setId");
         if (setId == null) return "Invalid set ID";
 
+        Shiina.setCachePolicy(res, 7);
+        
         if (thumbnailCache.containsKey(setId)) {
             res.type("image/jpeg");
             return thumbnailCache.get(setId);

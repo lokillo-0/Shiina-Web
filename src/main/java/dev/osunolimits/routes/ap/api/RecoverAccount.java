@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.ap.get.api;
+package dev.osunolimits.routes.ap.api;
 
 import com.google.gson.Gson;
 

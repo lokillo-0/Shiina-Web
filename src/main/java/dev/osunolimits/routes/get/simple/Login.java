@@ -1,10 +1,10 @@
 package dev.osunolimits.routes.get.simple;
 
 import dev.osunolimits.main.App;
-import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.SEOBuilder;
 import spark.Request;
 import spark.Response;
 

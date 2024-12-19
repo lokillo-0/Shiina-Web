@@ -4,6 +4,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
 
 import com.google.gson.Gson;
 
@@ -14,10 +16,11 @@ import dev.osunolimits.models.FullUser;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.models.FullUser.Player;
-import dev.osunolimits.modules.SEOBuilder;
+import dev.osunolimits.models.Group;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.SEOBuilder;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.LevelCalculator;
 import dev.osunolimits.utils.osu.OsuConverter;
@@ -113,6 +116,11 @@ public class User extends Shiina {
             userStats.put(playCountGraphRs.getString("month"), playCountGraphRs.getInt("play_count"));
         }
 
+        ResultSet userpageRs = shiina.mysql.Query("SELECT * FROM `userpages` WHERE `user_id` = ?", id);
+        if(userpageRs.next()) {
+            shiina.data.put("userpage", userpageRs.getString("html"));
+        }
+
         ResultSet achRs = shiina.mysql.Query(ACH_QUERY, id,
                 OsuConverter.convertModeBackNoRx(String.valueOf(mode)).toLowerCase() + "%");
         ArrayList<Achievements> achievements = new ArrayList<>();
@@ -144,10 +152,26 @@ public class User extends Shiina {
                 shiina.data.put("relationship", "none");
             }
         }
+        EnumSet<PermissionHelper.Privileges> userPriv = PermissionHelper.Privileges.fromInt(user.getPlayer().getInfo().getPriv());
+        List<Group> groups = userInfo.getGroups();
 
         shiina.data.put("follower", follower);
+
+        if(userPriv.contains(PermissionHelper.Privileges.SUPPORTER)) {
+            groups.add(new Group("Supporter", "🌟", "Supporter"));
+        }
+
         shiina.data.put("groups", userInfo.getGroups());
         shiina.data.put("achievements", achievements);
+        
+        shiina.data.put("uprivs", userPriv);
+        Locale locale = Locale.of("", user.getPlayer().getInfo().getCountry().toUpperCase());
+        if(!locale.getDisplayName().equals("XX")) {
+            shiina.data.put("ucountry", locale.getDisplayCountry());
+        } else {
+            shiina.data.put("ucountry", "Unknown");
+        }
+
         shiina.data.put("id", id);
         shiina.data.put("level",
                 LevelCalculator.getLevelPrecise(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));

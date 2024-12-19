@@ -6,11 +6,11 @@ import com.google.gson.Gson;
 
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.modules.GroupRegistry;
-import dev.osunolimits.modules.GroupRegistry.Group;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.GroupRegistry;
+import dev.osunolimits.modules.utils.GroupRegistry.Group;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;

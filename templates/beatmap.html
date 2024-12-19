@@ -1,7 +1,7 @@
 <#include "assets/base.html">
 
 <div class="container">
-    <div class="card mt-4">
+    <div class="card">
         <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
             
             <#include "/freemarker/selector.ftl">
@@ -142,7 +142,7 @@
 <div class="container mb-4">
     <div class="card mt-2 p-3">
         <!-- Nav-fill -->
-        <ul class="nav nav-pills nav-fill">
+        <ul class="nav nav-pills nav-fill mb-1">
             <li class="nav-item">
             <button class="nav-link <#if sort = 'pp'>active</#if>" onclick="removeParam('sort')" href="#">Performance</button>
             </li>

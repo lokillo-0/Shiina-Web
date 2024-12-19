@@ -5,10 +5,10 @@ import java.sql.ResultSet;
 import dev.osunolimits.api.BanchoStats;
 import dev.osunolimits.api.BanchoStats.CustomCountResponse;
 import dev.osunolimits.main.App;
-import dev.osunolimits.modules.SEOBuilder;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.SEOBuilder;
 import spark.Request;
 import spark.Response;
 
@@ -42,6 +42,14 @@ public class Home extends Shiina {
                 customCountResponse.setLoginsToday(statsResultSet.getInt("logins_today"));
                 customCountResponse.setStaff(statsResultSet.getInt("staff_count"));
                 shiina.data.put("startup", statsResultSet.getString("startup"));
+            }
+        }
+
+        if(req.queryParams("payment") != null) {
+            if(req.queryParams("payment").equals("success")) {
+                shiina.data.put("info", "Payment successful");
+            } else if(req.queryParams("payment").equals("cancel")) {
+                shiina.data.put("error", "Payment cancelled");
             }
         }
 

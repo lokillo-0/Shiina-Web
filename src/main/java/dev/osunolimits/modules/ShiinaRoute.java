@@ -8,6 +8,7 @@ import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.UserInfoObject;
+import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.utils.Auth;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
@@ -45,6 +46,7 @@ public class ShiinaRoute {
                 referenceUser.name = infoObject.name;
                 referenceUser.priv = infoObject.priv;
                 referenceUser.safe_name = infoObject.safe_name;
+                
     
                 App.log.info(userJson + userInfoJson);
                 request.loggedIn = true;

@@ -16,7 +16,7 @@ import dev.osunolimits.utils.Validation;
 import lombok.Data;
 
 @Data
-public final class MySQL {
+public final class MySQL implements AutoCloseable{
 
 	private static Logger log = (Logger) LoggerFactory.getLogger(MySQL.class);
 

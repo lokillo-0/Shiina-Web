@@ -1,4 +1,4 @@
-package dev.osunolimits.modules;
+package dev.osunolimits.modules.utils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -17,7 +17,6 @@ public class PermissionHelper {
         MODERATOR(1 << 12),
         ADMINISTRATOR(1 << 13),
         DEVELOPER(1 << 14),
-        DONATOR(SUPPORTER.value | PREMIUM.value),
         STAFF(MODERATOR.value | ADMINISTRATOR.value | DEVELOPER.value);
 
         private final int value;
@@ -32,14 +31,21 @@ public class PermissionHelper {
 
         public static EnumSet<Privileges> fromInt(int privileges) {
             EnumSet<Privileges> result = EnumSet.noneOf(Privileges.class);
+        
             for (Privileges priv : Privileges.values()) {
-                if ((privileges & priv.value) == priv.value) {
+                if ((priv.value & privileges) == priv.value) {
                     result.add(priv);
                 }
             }
+
+            if(!result.contains(STAFF) && result.contains(MODERATOR)) {
+                result.add(STAFF);
+            }
+        
             return result;
         }
-
+        
+        
         public static int fromPrivs(Privileges... privs) {
             int result = 0;
             for (Privileges priv : privs) {

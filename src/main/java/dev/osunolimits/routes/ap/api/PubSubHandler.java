@@ -1,16 +1,18 @@
-package dev.osunolimits.routes.ap.get.api;
+package dev.osunolimits.routes.ap.api;
 
 import java.io.File;
 
 import com.google.gson.Gson;
 
 import dev.osunolimits.main.App;
-import dev.osunolimits.modules.AuditLogger;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.routes.ap.get.api.PubSubModels.*;
-import dev.osunolimits.utils.osu.OsuConverter;
+import dev.osunolimits.modules.utils.AuditLogger;
+import dev.osunolimits.modules.utils.UserInfoCache;
+import dev.osunolimits.plugins.events.OnAddDonorEvent;
+import dev.osunolimits.plugins.events.OnRankBeatmapEvent;
+import dev.osunolimits.routes.ap.api.PubSubModels.*;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -42,7 +44,7 @@ public class PubSubHandler extends Shiina {
             return redirect(res, shiina, "/login");
         }
 
-        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.STAFF)) {
             return redirect(res, shiina, "/");
         }
 
@@ -65,15 +67,24 @@ public class PubSubHandler extends Shiina {
         
         switch (type) {
             case RANK: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.NOMINATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 RankOutput rankOutput = models.new RankOutput();
                 rankOutput.setBeatmap_id(Integer.parseInt(req.queryParams("beatmap_id")));
                 rankOutput.setStatus(Integer.parseInt(req.queryParams("status")));
                 rankOutput.setFrozen(Boolean.parseBoolean(req.queryParams("frozen")));
                 auditLogger.rankMap(shiina.user, rankOutput.getBeatmap_id(), rankOutput.getStatus());
+                
+                new OnRankBeatmapEvent(rankOutput.beatmap_id, rankOutput.status, rankOutput.frozen, shiina.user.id).callListeners();;
+                
                 App.jedisPool.publish("rank", GSON.toJson(rankOutput));
                 break;
             }
             case RESTRICT: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 RestrictInput restrictInput = models.new RestrictInput();
                 restrictInput.setId(Integer.parseInt(req.queryParams("id")));
                 restrictInput.setUserId(shiina.user.id);
@@ -83,6 +94,9 @@ public class PubSubHandler extends Shiina {
                 break;
             }
             case UNRESTRICT: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 UnrestrictInput unrestrictInput = models.new UnrestrictInput();
                 unrestrictInput.setId(Integer.parseInt(req.queryParams("id")));
                 unrestrictInput.setUserId(shiina.user.id);
@@ -93,6 +107,9 @@ public class PubSubHandler extends Shiina {
                 break;
             }
             case WIPE:
+            if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
+                return redirect(res, shiina, "/");
+            }
                 WipeInput wipeInput = models.new WipeInput();
                 wipeInput.setId(Integer.parseInt(req.queryParams("id")));
                 wipeInput.setMode(Integer.parseInt(req.queryParams("mode")));
@@ -102,6 +119,9 @@ public class PubSubHandler extends Shiina {
                 App.jedisPool.publish("wipe", GSON.toJson(wipeInput));
                 break;
             case ALERT_ALL: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 AlertAllInput alertAllInput = models.new AlertAllInput();
                 alertAllInput.setMessage(req.queryParams("message"));
                 auditLogger.alertAll(shiina.user, alertAllInput.getMessage());
@@ -110,15 +130,25 @@ public class PubSubHandler extends Shiina {
                 break;
             }
             case GIVEDONATOR: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 GiveDonatorInput giveDonatorInput = models.new GiveDonatorInput();
                 giveDonatorInput.setId(Integer.parseInt(req.queryParams("id")));
                 giveDonatorInput.setDuration(req.queryParams("duration"));
                 auditLogger.giveDonator(shiina.user, giveDonatorInput.getId(), giveDonatorInput.getDuration());
+                UserInfoCache cache = new UserInfoCache();
+                cache.reloadUser(giveDonatorInput.getId());
 
+                new OnAddDonorEvent(giveDonatorInput.getDuration(), giveDonatorInput.getId(), shiina.user.id).callListeners();
+                
                 App.jedisPool.publish("givedonator", GSON.toJson(giveDonatorInput));
                 break;
             }
             case ADDPRIV: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 AddPrivInput addPrivInput = models.new AddPrivInput();
                 addPrivInput.setId(Integer.parseInt(req.queryParams("id")));
                 addPrivInput.setPrivs(req.queryParamsValues("privs"));
@@ -128,6 +158,9 @@ public class PubSubHandler extends Shiina {
                 break;
             }
             case REMOVEPRIV: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 RemovePrivInput removePrivInput = models.new RemovePrivInput();
                 removePrivInput.setId(Integer.parseInt(req.queryParams("id")));
                 removePrivInput.setPrivs(req.queryParamsValues("privs"));
@@ -139,6 +172,9 @@ public class PubSubHandler extends Shiina {
             }
 
             case RMPB: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
+                    return redirect(res, shiina, "/");
+                }
                 int userId = Integer.parseInt(req.queryParams("id"));
                 String reasonPb = req.queryParams("reason");
                 File avatarDir = new File(App.env.get("AVATARFOLDER"));

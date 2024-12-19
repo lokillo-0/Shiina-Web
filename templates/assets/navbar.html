@@ -27,7 +27,9 @@
             </a>
             <ul class="dropdown-menu mt-lg-2 rounded-top-0">
               <#list docs as doc>
+                <#if doc.navbar == "true">
                 <li><a class="dropdown-item" href="/docs/${doc.route}">${doc.krz}</a></li>
+                </#if>
                 </#list>
             </ul>
           </li>

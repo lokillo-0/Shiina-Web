@@ -5,16 +5,15 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
-import dev.osunolimits.modules.Shiina;
-import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.MySQLRoute;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.OsuConverter;
 import lombok.Data;
 import spark.Request;
 import spark.Response;
 
-public class GetFirstPlaces extends Shiina {
+public class GetFirstPlaces extends MySQLRoute {
 
     private final String GET_FIRST_PLACES = "SELECT s.id AS score_id, s.userid, s.map_md5, m.id AS map_id, m.set_id AS map_set_id, m.filename AS map_name, s.score AS max_score, s.pp, s.acc, s.mods, s.grade, s.play_time " +
                                             "FROM scores s " +
@@ -32,7 +31,7 @@ public class GetFirstPlaces extends Shiina {
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
-        ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
+        ShiinaRequest shiina = getRequest();
 
         int mode = 0;
         if (req.queryParams("mode") != null && Validation.isNumeric(req.queryParams("mode"))) {
@@ -50,6 +49,7 @@ public class GetFirstPlaces extends Shiina {
         }
 
         if (id == null) {
+            shiina.mysql.close();
             return notFound(res, shiina);
         }
 

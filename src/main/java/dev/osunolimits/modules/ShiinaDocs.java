@@ -37,7 +37,10 @@ public class ShiinaDocs {
         private String icon;
         private String route;
         private String krz;
+        private String navbar;
         private String title;
+        private String footer;
+        private String behindLogin;
     }
 
     public static DocsModel extractComments(String markdown) {
@@ -49,6 +52,9 @@ public class ShiinaDocs {
         model.route = lines[2].substring(6);
         model.krz = lines[3].substring(6);
         model.title = lines[4].substring(6);
+        model.navbar = lines[5].substring(7);
+        model.footer = lines[6].substring(7);
+        model.behindLogin = lines[7].substring(12);
         return model;
     }
 
@@ -106,6 +112,14 @@ public class ShiinaDocs {
                         shiina.data.put("icon", model.icon);
                         shiina.data.put("krz", model.krz);
                         shiina.data.put("content", model.content);
+                        shiina.data.put("navbar", model.navbar);
+                        shiina.data.put("footer", model.footer);
+                        shiina.data.put("behindLogin", model.behindLogin);
+
+                        if (model.behindLogin.equals("true") && !shiina.loggedIn) {
+                            return redirect(res, shiina, "/login?path=" + req.pathInfo());
+                        }
+
                         return renderTemplate("docs.html", shiina, res, req);
                     }
                 }
@@ -120,7 +134,7 @@ public class ShiinaDocs {
             Parser parser = Parser.builder().build();
             try {
                 Logger log = (Logger) LoggerFactory.getLogger(ShiinaDocs.class);
-                log.info("Watching direcotry docs/ for changes");
+                log.info("Watching dir docs/ for changes");
                 Path directoryPath = Paths.get("docs");
                 WatchService watchService = FileSystems.getDefault().newWatchService();
 
@@ -180,7 +194,11 @@ public class ShiinaDocs {
                                         doc.icon = model.icon;
                                         doc.krz = model.krz;
                                         doc.title = model.title;
+                                        doc.navbar = model.navbar;
+                                        doc.footer = model.footer;
+                                        doc.behindLogin = model.behindLogin;
                                         doc.filename = event.context().toString();
+                                        
                                         Node document = parser.parse(sb);
                                         HtmlRenderer renderer = HtmlRenderer.builder().build();
                                         doc.content = renderer.render(document);

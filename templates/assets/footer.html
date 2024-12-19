@@ -12,7 +12,26 @@
                        ${c.footerDescription}
                     </p>
                     <p class="rights mt-3">
-                        ${c.footerCopyright}
+                        ${c.footerCopyright} | 
+                        <#assign footerDocs = [] />
+                        <#list docs as doc>
+                            <#if doc.footer == "true">
+                                <#if doc.behindLogin == "true">
+                                    <#if user??>
+                                        <#assign footerDocs += [doc] />
+                                    </#if>
+                                <#else>
+                                    <#assign footerDocs += [doc] />
+                                </#if>
+                            </#if>
+                        </#list>
+                        
+                        <#list footerDocs as doc>
+                            <a href="/docs/${doc.route}">${doc.krz}</a>
+                            <#if doc?has_next> ● </#if>
+                        </#list>
+                        
+                        
                     </p>
                 </div>
             </div>
@@ -29,6 +48,8 @@
         </div>
     </div>
 </footer>
+
 <script>
         var avatarServer = '${avatarServer}';
+
 </script>

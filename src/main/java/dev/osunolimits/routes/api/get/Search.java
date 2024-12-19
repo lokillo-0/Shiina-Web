@@ -5,15 +5,14 @@ import java.util.ArrayList;
 
 import com.google.gson.Gson;
 
-import dev.osunolimits.modules.Shiina;
-import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.MySQLRoute;
 import dev.osunolimits.utils.Validation;
 import lombok.Data;
 import spark.Request;
 import spark.Response;
 
-public class Search extends Shiina {
+public class Search extends MySQLRoute {
 
     public Search() {
         GSON = new Gson();
@@ -33,10 +32,11 @@ public class Search extends Shiina {
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
-        ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
+        ShiinaRequest shiina = getRequest();
 
         String query = req.queryParams("query");
         if (query == null || (query.length() == 0)) {
+            shiina.mysql.close();
             return notFound(res, shiina);
         }
         int page = 1;

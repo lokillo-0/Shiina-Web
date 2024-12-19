@@ -39,12 +39,15 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
 
     handleRelUpdate(relArray);
 
+    loadContrySelectorIfPresent();
     loadTurnstileIfPresent();
     
     if (document.getElementById('video') != undefined) {
         const video = document.getElementById('video');
         loadVideoWithDelay(video);
     }
+
+    initUserpageEditor();
 
     nodesArray.forEach(node => {
         let format;
@@ -54,6 +57,48 @@ loadEventTurbo = document.addEventListener("turbo:load", function () {
 
     updateTooltips();
 });
+
+function initUserpageEditor() {
+    if(document.getElementById('editor') != undefined) {
+        if(document.getElementsByClassName('wysibb').length == 0) {
+            var wbbOpt = {
+                buttons: "bold,italic,underline,|,img,link,|,table,removeFormat",
+            };
+            $("#editor").wysibb(wbbOpt);
+        }
+    }
+}
+
+function loadContrySelectorIfPresent() {
+    if (document.getElementById('country-selector') != undefined) {
+        $('#country-selector').select2({
+            templateResult: formatCountry,
+            templateSelection: formatCountry,
+            minimumResultsForSearch: Infinity // Hide search if unnecessary
+        });
+
+        function formatCountry(country) {
+            // Ensure country.id is valid
+            if (!country.id) {
+                return country.text;
+            }
+
+            // Get the flag URL
+            var flagUrl = $(country.element).data('flag');
+            var countryName = country.text;
+
+            // Create the HTML using jQuery parseHTML or native DOM
+            var $countryHtml = $(
+                '<span class="text-white">' +
+                '<img src="' + flagUrl + '" style="width: 20px; height: 15px; margin-right: 8px;">' +
+                countryName +
+                '</span>'
+            );
+
+            return $countryHtml;
+        }
+    }
+}
 
 function handleRelUpdate(relArray) {
     relArray.forEach(node => {
@@ -201,7 +246,7 @@ function loadBestScores(apiUrl, firstLoad = true) {
             data.scores.forEach(firstPlace => {
      
                 let element = document.createElement('div');
-                element.innerHTML = loadScorePanel(firstPlace.grade, firstPlace.map_id, firstPlace, firstPlace.pp, firstPlace.acc, firstPlace.max_combo, firstPlace.play_time, firstPlace.map_name, firstPlace.map_set_id, firstPlace.score_id,firstPlace.mods);
+                element.innerHTML = loadScorePanel(firstPlace.grade, firstPlace.map_id, firstPlace, firstPlace.pp, firstPlace.acc, firstPlace.max_combo, firstPlace.play_time, firstPlace.map_name, firstPlace.map_set_id, firstPlace.score_id,firstPlace.mods, firstPlace.weight, firstPlace.weight_pp);
                 container.appendChild(element);
             });
             updateTooltips();
@@ -414,7 +459,7 @@ function initPlayCountGraph() {
     }
 }
 
-function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, setId, scoreId, mods) {
+function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, setId, scoreId, mods, weight = 0, weight_pp = 0) {
     let output = '';
 
     output += '<div class="col col-12 act-entry d-flex flex-column mb-1">';
@@ -431,7 +476,7 @@ function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, 
     output += '</div>';
 
     // Score details
-    output += '<div class="col-12 d-flex p-2 mt-2 mt-lg-0 col-lg-7 mx-2 d-flex flex-column justify-content-start justify-content-sm-between">';
+    output += '<div class="col-12 d-flex p-2 mt-2 mt-lg-0 col-lg-9 mx-2 d-flex flex-column justify-content-start justify-content-sm-between">';
     output += '<span class="ms-2 text-wrap">' + name.replace('.osu', '');
 
     if (mods.length > 0) {
@@ -445,7 +490,10 @@ function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, 
     if (grade.toLowerCase() === 'f') {
         output += '<i class="fas fa-f fs-4 ms-1" style="height: 25px;"></i>';
     } else {
-        output += '<img src="/img/ranking/ranking-' + grade + '.png" alt="Grade" class="img-fluid me-3" style="height: 30px;">';
+        output += '<img src="/img/ranking/ranking-' + grade + '.png" alt="Grade" class="img-fluid me-1" style="height: 30px;">';
+    }
+    if (weight > 0) {
+        output += '<span class="fs-6 float-end me-4">weighted ' + weight + '% (' + weight_pp + 'pp)</span>';
     }
 
     output += '</span></div>';

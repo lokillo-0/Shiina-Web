@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-import dev.osunolimits.modules.ThemeLoader;
+import dev.osunolimits.modules.utils.ThemeLoader;
 import lombok.Data;
 
 @Data

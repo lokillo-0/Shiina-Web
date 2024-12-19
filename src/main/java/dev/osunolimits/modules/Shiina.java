@@ -40,6 +40,10 @@ public class Shiina implements Route {
 
     }
 
+    public static void setCachePolicy(Response res, int days) {
+        res.header("Cache-Control", "public, max-age=" + (days * 86400));
+    }
+
     public Object redirect(Response response, ShiinaRequest shiina, String location) {
         if(shiina.mysql != null) shiina.mysql.close();
         response.status(302);

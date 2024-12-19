@@ -2,17 +2,18 @@ package dev.osunolimits.routes.api.get;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+
 import com.google.gson.Gson;
-import dev.osunolimits.modules.Shiina;
-import dev.osunolimits.modules.ShiinaRoute;
+
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.MySQLRoute;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.OsuConverter;
 import lombok.Data;
 import spark.Request;
 import spark.Response;
 
-public class GetPlayerScores extends Shiina {
+public class GetPlayerScores extends MySQLRoute {
 
     private final Gson GSON;
 
@@ -41,11 +42,11 @@ public class GetPlayerScores extends Shiina {
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
-        ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
-
+        ShiinaRequest shiina = getRequest();
         // Get scope (recent or best)
         String scope = req.queryParams("scope");
         if (scope == null || (!scope.equals("recent") && !scope.equals("best"))) {
+            shiina.mysql.close();
             return notFound(res, shiina);
         }
 
@@ -67,6 +68,7 @@ public class GetPlayerScores extends Shiina {
                 : 5;
 
         if (id == null) {
+            shiina.mysql.close();
             return notFound(res, shiina);
         }
 
@@ -77,11 +79,18 @@ public class GetPlayerScores extends Shiina {
         ArrayList<PlayerScore> playerScores = new ArrayList<>();
         PlayerScoresResponse response = new PlayerScoresResponse();
         boolean hasNextPage = false;
-
+        boolean isBest = scope.equals("best");
+        int iteration = offset;
         // Execute the query to fetch scores
         ResultSet scoresQuery = shiina.mysql.Query(getScoresQuery, id, mode, limit + 1, offset);
         while (scoresQuery.next()) {
+          
             PlayerScore score = new PlayerScore();
+            if (isBest) {
+                score.setWeight(Math.floor(Math.pow(0.95, iteration) * 100));
+                score.setWeight_pp(Math.round(Math.pow(0.95, iteration) * scoresQuery.getInt("pp")));
+            }
+            
             score.setScore_id(scoresQuery.getInt("score_id"));
             score.setUser_id(scoresQuery.getInt("userid"));
             score.setMap_md5(scoresQuery.getString("map_md5"));
@@ -95,6 +104,8 @@ public class GetPlayerScores extends Shiina {
             score.setGrade(scoresQuery.getString("grade"));
             score.setPlay_time(scoresQuery.getString("play_time"));
             playerScores.add(score);
+            iteration++;
+           
         }
         shiina.mysql.close();
 
@@ -108,6 +119,7 @@ public class GetPlayerScores extends Shiina {
         response.setHasNextPage(hasNextPage);
 
         res.type("application/json");
+        shiina.mysql.close();
         
         return GSON.toJson(response);
     }
@@ -127,6 +139,8 @@ public class GetPlayerScores extends Shiina {
         private int map_id;
         private int map_set_id;
         private String map_name;
+        private double weight;
+        private double weight_pp;
         private int max_score;
         private int pp;
         private int acc;

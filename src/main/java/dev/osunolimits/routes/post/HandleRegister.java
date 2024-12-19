@@ -9,8 +9,9 @@ import dev.osunolimits.externals.TurnstileQuery;
 import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
-import dev.osunolimits.modules.UserInfoCache;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.UserInfoCache;
+import dev.osunolimits.plugins.events.OnRegisterEvent;
 import dev.osunolimits.utils.Auth;
 import dev.osunolimits.utils.Auth.SessionUser;
 import okhttp3.OkHttpClient;
@@ -93,7 +94,9 @@ public class HandleRegister extends Shiina {
             String insertStatsSql = "INSERT INTO `stats`(`id`, `mode`, `tscore`, `rscore`, `pp`, `plays`, `playtime`, `acc`, `max_combo`, `total_hits`, `replay_views`, `xh_count`, `x_count`, `sh_count`, `s_count`, `a_count`) " +
                                     "VALUES (?, ?, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)";
             shiina.mysql.Exec(insertStatsSql, userId, i);
-        }        
+        }    
+        
+        new OnRegisterEvent(userId, email, country, username, safeName, curUnixTime).callListeners();
 
         String token = Auth.generateNewToken();
 
