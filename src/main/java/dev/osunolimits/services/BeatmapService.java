@@ -28,7 +28,7 @@ public class BeatmapService implements AutoCloseable {
         
         int affectedRows = MYSQL.Exec("UPDATE beatmaps SET status = ?, frozen = ? WHERE id = ?", newStatus, newFrozenStatus  ? 1 : 0, beatmapId);
         if (affectedRows == 0) {
-            throw new RuntimeException("Failed to update beatmap status of beatmap with id " + beatmapId);
+            App.log.error("Failed to update beatmap status for beatmap id: " + beatmapId);
         }
 
         PubSubModels models = new PubSubModels();
@@ -39,7 +39,7 @@ public class BeatmapService implements AutoCloseable {
 
         long subscribers = App.jedisPool.publish("rank", GSON.toJson(rankOutput));
         if (subscribers == 0) {
-            throw new RuntimeException("No subscribers found for rank pubsub");
+            App.log.error("No subscribers for rank pubsub");
         }
     }
 
