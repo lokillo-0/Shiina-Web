@@ -5,7 +5,6 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.monetization.StripeMethod;
-import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
 
