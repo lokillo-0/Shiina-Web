@@ -22,6 +22,8 @@
 *.tar.gz
 *.rar
 
+target/*
+
 # Shiina-Web
 /.config/logger.env
 /.config/.env
