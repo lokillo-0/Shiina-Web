@@ -105,10 +105,19 @@ public class UserInfoCache {
                         user.groups.add(group);
                     }
                 }
+
+                if (user.id == 0) {
+                    log.error("User ID is 0, skipping reload");
+                    return;
+                }
     
                 App.jedisPool.set("shiina:user:" + user.id, gson.toJson(user));
                 
+            }else {
+                log.error("User not found in database: " + userId);
             }
+
+
         } catch (SQLException e) {
             log.error("SQL Error: ", e);
         }
