@@ -75,8 +75,8 @@ import spark.Spark;
  */
 public class App {
     public static final Logger log = (Logger) LoggerFactory.getLogger(App.class);
-    public static final Dotenv loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
-    public static final Dotenv env = Dotenv.configure().directory(".config/").load();
+    public static Dotenv loggerEnv;
+    public static Dotenv env;
     public static Map<String, Object> customization;
     public static JedisPooled jedisPool;
     public static WebServer webServer;
@@ -85,6 +85,8 @@ public class App {
     public static String dbVersion = "1.0";
 
     public static void main(String[] args) throws SQLException {
+        env = Dotenv.configure().directory(".config/").load();
+        loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
         log.info("Shiina-Web Rewrite "+version);
         Init init = new Init();
         init.initializeDataDirectory();
