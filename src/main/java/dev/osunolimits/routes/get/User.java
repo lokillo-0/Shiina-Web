@@ -110,10 +110,10 @@ public class User extends Shiina {
 
         LinkedHashMap<String, Integer> userStats = new LinkedHashMap<>();
         ResultSet playCountGraphRs = shiina.mysql.Query(
-                "WITH RECURSIVE month_list AS ( SELECT DATE_FORMAT(DATE_SUB(MIN(play_time), INTERVAL 1 MONTH), '%Y-%m-01') AS month FROM scores WHERE userid = 391 UNION ALL SELECT DATE_ADD(month, INTERVAL 1 MONTH) FROM month_list WHERE month < DATE_FORMAT(CURRENT_DATE, '%Y-%m-01') ) SELECT ml.month, COALESCE(COUNT(s.play_time), 0) AS play_count FROM month_list ml LEFT JOIN scores s ON DATE_FORMAT(s.play_time, '%Y-%m') = DATE_FORMAT(ml.month, '%Y-%m') AND s.userid = ? AND s.`mode` = ? GROUP BY ml.month ORDER BY ml.month ASC;",
+                "WITH RECURSIVE months AS ( SELECT 1 AS month UNION ALL SELECT month + 1 FROM months WHERE month < 12 ) SELECT MONTHNAME(DATE(CONCAT(YEAR(CURDATE()), '-', m.month, '-01'))) AS month_name, COALESCE(COUNT(s.play_time), 0) AS play_count FROM months m LEFT JOIN scores s ON MONTH(s.play_time) = m.month AND YEAR(s.play_time) = YEAR(CURDATE()) AND s.userid = ? AND s.mode = ? WHERE DATE(CONCAT(YEAR(CURDATE()), '-', m.month, '-01')) <= CURDATE() GROUP BY m.month ORDER BY m.month;",
                 id, mode);
         while (playCountGraphRs.next()) {
-            userStats.put(playCountGraphRs.getString("month"), playCountGraphRs.getInt("play_count"));
+            userStats.put(playCountGraphRs.getString("month_name"), playCountGraphRs.getInt("play_count"));
         }
 
         ResultSet userpageRs = shiina.mysql.Query("SELECT * FROM `userpages` WHERE `user_id` = ?", id);

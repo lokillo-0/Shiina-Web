@@ -393,7 +393,7 @@
 
     var values = [
         <#list playCountGraph?values as value>
-            <#if value?has_content>${value}<#if value?index != playCountGraph?size - 1>,</#if></#if>
+            <#if value?has_content>${value?c}<#if value?index != playCountGraph?size - 1>,</#if></#if>
         </#list>
     ];
 </script>
