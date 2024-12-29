@@ -10,6 +10,7 @@ import com.stripe.Stripe;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.models.Action;
 import dev.osunolimits.modules.ShiinaDocs;
+import dev.osunolimits.modules.ShiinaRankCache;
 import dev.osunolimits.modules.utils.GroupRegistry;
 import dev.osunolimits.modules.utils.RobotJsonConfig;
 import dev.osunolimits.modules.utils.ThemeLoader;
@@ -181,6 +182,8 @@ public class App {
 
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();
+
+        new ShiinaRankCache();
 
         try {
             shiinaDocs.watchDirectory();

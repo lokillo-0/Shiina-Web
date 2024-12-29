@@ -204,7 +204,7 @@
                         <#if sort == 'pp'>
                             ${score.pp?string("0")}pp
                         <#elseif sort == 'score'>
-                            ${score.score}
+                            ${score.score?c}
                         </#if>
                         
                     </div>

@@ -110,7 +110,7 @@ public class Init {
     public void initializeDatabase() {
         try {
             Database database = new Database();
-            database.setDefaultSettings();
+            database.setOptimizedSettings();
             database.setMaximumPoolSize(Integer.parseInt(App.env.get("POOLSIZE")));
             database.setConnectionTimeout(Integer.parseInt(App.env.get("TIMEOUT")));
             database.connectToMySQL(App.env.get("DBHOST"), App.env.get("DBUSER"), App.env.get("DBPASS"),

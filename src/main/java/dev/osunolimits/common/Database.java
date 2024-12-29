@@ -78,6 +78,36 @@ public class Database {
         hikariConfig.addDataSourceProperty("autoReconnect", true);
     }
 
+    public void setOptimizedSettings() {
+        hikariConfig.addDataSourceProperty("cachePrepStmts", true);  // Use prepared statements cache
+        hikariConfig.addDataSourceProperty("prepStmtCacheSize", 250);  // Size of the cache
+        hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", 2048);  // Max SQL size in the cache
+        hikariConfig.addDataSourceProperty("autoReconnect", true);  // Automatically reconnect
+        hikariConfig.addDataSourceProperty("useServerPrepStmts", true);  // Use server-side prepared statements
+        hikariConfig.addDataSourceProperty("useLocalSessionState", true);  // Reduces traffic by caching session state on the server
+        hikariConfig.addDataSourceProperty("rewriteBatchedStatements", true);  // Optimize batch inserts/updates
+        hikariConfig.addDataSourceProperty("cacheResultSetMetadata", true);  // Cache metadata of result sets for improved performance
+        hikariConfig.addDataSourceProperty("cacheStatements", true);  // Enable statement cache (reduces the number of allocations)
+        
+        // MySQL-specific optimizations (for example)
+        hikariConfig.addDataSourceProperty("useSSL", false);  // Disable SSL if not required
+        hikariConfig.addDataSourceProperty("requireSSL", false);  // Disable SSL if not required
+        hikariConfig.addDataSourceProperty("characterEncoding", "UTF-8");  // Ensure correct encoding
+        hikariConfig.addDataSourceProperty("connectionTimeout", 30000);  // 30 seconds connection timeout
+        hikariConfig.addDataSourceProperty("idleTimeout", 600000);  // 10 minutes idle timeout
+        hikariConfig.addDataSourceProperty("maxLifetime", 1800000);  // 30 minutes max lifetime per connection
+        hikariConfig.addDataSourceProperty("minimumIdle", 5);  // Minimum number of idle connections in the pool
+        hikariConfig.addDataSourceProperty("maximumPoolSize", 20);  // Maximum pool size, can be adjusted based on load
+        hikariConfig.addDataSourceProperty("validationTimeout", 5000);  // Timeout for validation queries (in ms)
+        hikariConfig.addDataSourceProperty("leakDetectionThreshold", 5000);  // Leak detection threshold (in ms)
+    
+        // Additional tuning options (optional)
+        hikariConfig.addDataSourceProperty("allowPoolSuspension", true);  // Allow suspending the pool (to avoid connections from leaking)
+        hikariConfig.addDataSourceProperty("initializationFailTimeout", 1);  // Fail fast on initialization failure
+        hikariConfig.addDataSourceProperty("autoCommit", true);  // Auto commit transactions by default (unless you manage this manually)
+    }
+    
+
     /**
      * Constructs a new Database object with default settings.
      */
