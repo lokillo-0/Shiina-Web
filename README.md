@@ -1,12 +1,8 @@
-# **Shiina-Web**
-The new version of Shiina for **bancho.py**
-
-`Shiina-Web isn't compatible with gulag use latest bancho.py if possible`
-
-> ⚠️ Shiina-Web isn't ready to use in production
+**Shiina-Web:**
+The new version of shiina for **bancho.py**
 
 ### **Requirements**
-> ⚠️ You will need to have a local API Endpoint to bancho.py's api to have it run in full-speed
+> ⚠️ Your bancho server needs to be [bancho.py-ex](https://github.com/osu-NoLimits/bancho.py-ex) at the moment. Everything else will break
 
 ### **Installation:**
 1. `make install` - will install and compile the project
@@ -26,12 +22,20 @@ The new version of Shiina for **bancho.py**
 - ✅ Beatmap Search page
 - ✅ Profile picture change
 - ✅ Theming
-- ✅ Admin Panel (But not much content)
+- ✅ Admin Panel (expandable)
+- ✅ Userpage w/ edit
+- 🧩 Java Plugin Loader w/ Events
+- 🧩 SEO
+- 🧩 Donate
 - ❌ Beatmap Request
-- ❌ Userpage w/ edit
 - ❌ Sitemap Generation
-- ❌ SEO
-- ❌ Donate
+
+### **Trusted by:**
+<img width="25" src="https://osu-server-list.com/res/servers/osuNoLimits.webp"></img> osuNoLimits - [osunolimits.dev](https://osunolimits.dev)
+
+<img width="25" src="https://osu-server-list.com/res/servers/4ayo.webp"></img> 4ayo - [4ayo.ovh](https://4ayo.ovh)
+
+<img width="25" src="https://osu-server-list.com/res/servers/Miausu.webp"></img> Miausu - [miausu.pw](https://miausu.pw)
 
 ### **Technical:**
 
@@ -41,3 +45,4 @@ The new version of Shiina for **bancho.py**
 
 
 ![Structure](/static/img/shiina-structure.png)
+_Structure has changed this is outdated_
