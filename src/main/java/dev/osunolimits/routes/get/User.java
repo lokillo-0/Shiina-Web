@@ -61,7 +61,7 @@ public class User extends Shiina {
         if (user == null) {
             return notFound(res, shiina);
         }
-
+        
         Player player = user.getPlayer();
 
         if (player == null)
@@ -163,6 +163,8 @@ public class User extends Shiina {
 
         shiina.data.put("groups", userInfo.getGroups());
         shiina.data.put("achievements", achievements);
+
+        
         
         shiina.data.put("uprivs", userPriv);
         Locale locale = Locale.of("", user.getPlayer().getInfo().getCountry().toUpperCase());

@@ -182,6 +182,10 @@
                                 <#list convertPlaytime(playTime)?keys as key>
                                     <span class="shiina-playtime-value">${convertPlaytime(playTime)[key]}</span>
                                     <span class="shiina-playtime-type">${key}</span>
+                                    
+                                <#else>
+                                    <span class="shiina-playtime-value">0</span>
+                                    <span class="shiina-playtime-type">minutes</span>
                                 </#list>
                             </small>
                         </div>
