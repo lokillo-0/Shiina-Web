@@ -42,6 +42,7 @@ import dev.osunolimits.routes.api.get.Search;
 import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
+import dev.osunolimits.routes.get.Bot;
 import dev.osunolimits.routes.get.Clan;
 import dev.osunolimits.routes.get.Clans;
 import dev.osunolimits.routes.get.Home;
@@ -118,7 +119,9 @@ public class App {
         WebServer.get("/clan/:id", new Clan());
         WebServer.get("/scores/:id", new UserScore());
         WebServer.get("/b/:id", new Beatmap());
+        WebServer.get("/u/1", new Bot());
         WebServer.get("/u/:id", new User());
+     
         WebServer.get("/settings", new Settings());
         WebServer.get("/friends", new Relations());
         WebServer.post("/settings/avatar", new HandleAvatarChange());
