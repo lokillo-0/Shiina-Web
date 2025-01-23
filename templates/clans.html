@@ -48,8 +48,8 @@
          
                         <div class="col ms-auto col-auto">
                             <button onclick="selectParam('page', '${page + 1}')"
-                                class="pagination-button bg-secondary m-2 <#if pageSize != totalPageSize>disabled</#if>"
-                                <#if pageSize != totalPageSize>disabled</#if>>
+                                class="pagination-button bg-secondary m-2 <#if !hasNext>disabled</#if>"
+                                <#if !hasNext>disabled</#if>>
                                 <i class="fa-solid fa-arrow-right pagination-icon"></i>
                             </button>
                         </div>
@@ -103,8 +103,8 @@
          
                         <div class="col ms-auto col-auto">
                             <button onclick="selectParam('page', '${page + 1}')"
-                                class="pagination-button bg-secondary m-2 <#if pageSize != totalPageSize>disabled</#if>"
-                                <#if pageSize != totalPageSize>disabled</#if>>
+                                class="pagination-button bg-secondary m-2 <#if !hasNext>disabled</#if>"
+                                <#if !hasNext>disabled</#if>>
                                 <i class="fa-solid fa-arrow-right pagination-icon"></i>
                             </button>
                         </div>

@@ -20,19 +20,18 @@ public class Clans extends Shiina {
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
         shiina.data.put("actNav", 4);
-
+    
         ClanQuery clanQuery = new ClanQuery(shiina.mysql);
         int page = 1;
-        boolean hasNext = false;
-        int pageSize = 11;
+        Boolean hasNext = false;
+        int pageSize = 10;
         int offset = 0;
-        if (req.queryParams("page") != null && Validation.isNumeric(req.queryParams("page"))) { 
+
+        if (req.queryParams("page") != null && Validation.isNumeric(req.queryParams("page"))) {
             page = Integer.parseInt(req.queryParams("page"));
         }
 
-        if(page != 1) {
-            offset = (page - 1) * pageSize;
-        }
+        offset = (page - 1) * pageSize;
 
         int mode = 0;
         if (req.queryParams("mode") != null && Validation.isNumeric(req.queryParams("mode"))) {
@@ -40,17 +39,17 @@ public class Clans extends Shiina {
         }
 
         String sort = "totalpp";
-        if (req.queryParams("sort") != null && ClanQuery.CompetitionType.fromName(sort) != null) {
+        if (req.queryParams("sort") != null && ClanQuery.CompetitionType.fromName(req.queryParams("sort")) != null) {
             sort = req.queryParams("sort");
         }
-        
 
-        List<ClanResponse> clans = clanQuery.getClan(ClanQuery.CompetitionType.fromName(sort), mode, pageSize, offset);
-        if(clans.size() == pageSize) {
+        List<ClanResponse> clans = clanQuery.getClan(ClanQuery.CompetitionType.fromName(sort), mode, pageSize + 1, offset);
+
+        if (clans.size() > pageSize) {
             hasNext = true;
-            clans.remove(clans.size() - 1);
+            clans = clans.subList(0, pageSize);
         }
-        
+
         shiina.data.put("clans", clans);
         shiina.data.put("seo", new SEOBuilder("Clan Leaderboard | " + OsuConverter.convertModeBack(String.valueOf(mode)) + " | " + sort.toUpperCase(), App.customization.get("homeDescription").toString()));
         shiina.data.put("pageSize", clans.size());
@@ -60,10 +59,7 @@ public class Clans extends Shiina {
         shiina.data.put("mode", mode);
         shiina.data.put("sort", sort);
         shiina.data.put("offset", offset + 1);
-
-
-
+    
         return renderTemplate("clans.html", shiina, res, req);
     }
-    
 }
