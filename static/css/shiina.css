@@ -984,3 +984,7 @@
     font-style: oblique;
     color: var(--bs-primary-600);
 }
+
+.shiina-userpage-container span img {
+    max-width: 200px;
+}
