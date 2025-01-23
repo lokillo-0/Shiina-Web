@@ -84,18 +84,27 @@
     </#switch>
 </#function>
 
-<#function convertPlaytime(totalMinutes)>
-    <#assign days = (totalMinutes / (24 * 60)) / 60 />
-    <#assign hours = (totalMinutes % (24 * 60)) / 60 />
-    <#assign minutes = (totalMinutes % 60) / 60 />
-    
-    <#return {
-        "days": days?int,      
-        "hours": hours?int,  
-        "minutes": minutes?int 
-    }>
-</#function>
+<#function convertPlaytime totalSeconds>
+    <#assign days = (totalSeconds / (24 * 60 * 60))?int /> <#-- Total seconds in a day -->
+    <#assign hours = ((totalSeconds % (24 * 60 * 60)) / (60 * 60))?int /> <#-- Total seconds in an hour -->
+    <#assign minutes = ((totalSeconds % (60 * 60)) / 60)?int /> <#-- Total seconds in a minute -->
 
+    <#local result = {} />
+    
+    <#if days gt 0>
+        <#local result = result + {"days": days} />
+    </#if>
+    
+    <#if hours gt 0>
+        <#local result = result + {"hours": hours} />
+    </#if>
+    
+    <#if minutes gt 0>
+        <#local result = result + {"minutes": minutes} />
+    </#if>
+    
+    <#return result />
+</#function>
 <#function convertModeToRelax(mode)>
     <#switch mode>
         <#case 0><#return 4><#break>

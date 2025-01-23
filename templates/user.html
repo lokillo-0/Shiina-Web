@@ -176,13 +176,16 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <#assign playTime=u.player.stats[mode?string].playtime>
-                            <small class="mt-4">Played for
+                        <div class="shiina-playtime-show">
+                            <#assign playTime=u.player.stats[mode?string].playtime>
+                            <small class="mt-4">Played for: 
                                 <#list convertPlaytime(playTime)?keys as key>
-                                    ${convertPlaytime(playTime)[key]}
-                                    ${key}
+                                    <span class="shiina-playtime-value">${convertPlaytime(playTime)[key]}</span>
+                                    <span class="shiina-playtime-type">${key}</span>
                                 </#list>
                             </small>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
