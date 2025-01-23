@@ -85,9 +85,9 @@
 </#function>
 
 <#function convertPlaytime(totalMinutes)>
-    <#assign days = totalMinutes / (24 * 60) />
+    <#assign days = (totalMinutes / (24 * 60)) / 60 />
     <#assign hours = (totalMinutes % (24 * 60)) / 60 />
-    <#assign minutes = totalMinutes % 60 />
+    <#assign minutes = (totalMinutes % 60) / 60 />
     
     <#return {
         "days": days?int,      
