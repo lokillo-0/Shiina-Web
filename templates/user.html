@@ -67,12 +67,12 @@
                 </div>
             </div>
         </div>
- 
+        <div class="shiina-pill mx-1 mb-4 my-2 mx-md-4 d-flex align-items-center">
+            <div class="shiina-pill-icon"></div>
+            <span>Rankings</span>
+        </div>
         <div class="m-1 mb-4">
-            <div class="shiina-pill mx-1 mb-4 my-2 mx-md-4 d-flex align-items-center">
-                <div class="shiina-pill-icon"></div>
-                <span>Rankings</span>
-            </div>
+            
             <div class="row">
                 <div class="col col-12 col-sm-12 col-lg-6">
                     <div class="row mx-4 justify-content-center align-items-center">
@@ -186,37 +186,6 @@
                     </div>
                 </div>
             </div>
-            <style>
-                .shiina-follower-count {
-                    display: flex;
-                    align-items: center;
-                    margin-top: 0.5rem;
-                    text-decoration: none;
-                    color: white;
-                    user-select: none;
-                }
-
-                .shiina-follower-count-icon {
-                    display: inline-block;
-                    padding: 5px;
-                    background-color: var(--bs-action-border-color);
-                    border-top-left-radius: 5px;
-                    border-bottom-left-radius: 5px;
-                }
-                .shiina-follower-count-body {
-                    display: inline-block;
-                    padding: 5px;
-                    background-color: var(--bs-sable-bg-subtle);
-                    border-top-right-radius: 5px;
-                    border-bottom-right-radius: 5px;
-                    transition: background-color 0.2s;
-                }
-    
-                .shiina-btn-follow {
-                    margin-top: 0.5rem;
-                    margin-right: var(--bs-spacer-1)!important;
-                }
-            </style>
        <div class="d-inline-flex mx-0 mx-sm-0 mx-lg-3">
         <#if user?? && !self>
         <#if relationship == "mutual">
@@ -269,7 +238,7 @@
         </#if>
        </div>
         </div>
-
+        
         <#if userpage??>
         <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
             <div class="shiina-pill-icon"></div>

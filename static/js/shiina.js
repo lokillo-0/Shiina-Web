@@ -472,7 +472,7 @@ function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, 
 
     // Beatmap cover image
     output += '<div class="col-12 col-lg-3 d-flex justify-content-center">';
-    output += '<img src="' + beatmapImg + '" style="object-fit: cover; height: 100%;" class="img-fluid rounded-2 w-100" alt="">';
+    output += '<img src="' + beatmapImg + '" class="img-fluid shiina-beatmap-thumb-user w-100" alt="">';
     output += '</div>';
 
     // Score details

@@ -168,38 +168,27 @@
         </div>
         <#list beatmap.scores as score>
         <div class="col col-12 member-entry">
-            <a href="/scores/${score.id?c}" class="bg-secondary m-2 p-3 row leaderboard-panel" style="border-radius: 5px;">
-                <!-- Column for avatar and flag horizontally aligned -->
+            <a href="/scores/${score.id?c}" class="bg-secondary m-2 mb-1 mt-1 p-2 row leaderboard-panel" style="border-radius: 5px;">
                 <div class="col-auto d-flex align-items-center me-4">
-                    
-                    <!-- Avatar -->
                     <span class="m-1">
                         <img class="flag" src="${avatarServer}/${score.userId?c}" alt="">
                     </span>
-                    <!-- Flag aligned next to the avatar -->
                     <span class="m-1 ms-4">
                         <img class="flag" src="/img/flags/${score.country}.svg" alt="${score.country} Flag">
                     </span>
-
                     <span class="col-auto ms-4"
                                                 style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${(score?index + 1) + (50 * (page - 1))}</span>
                 </div>
-
-                <!-- Player name -->
                 <div class="col d-flex align-items-center">
                     <span class="ms-2">
                         <#assign passedMods = score.mods>
                         ${score.name} <#include "/freemarker/modconvert.ftl">  
                     </span>
                 </div>
-
-                <!-- Grade and PP aligned to the right -->
                 <div class="col-auto ms-auto d-flex align-items-center">
-                    <!-- Grade -->
                     <div class="me-3 d-flex align-items-center">
                         <#assign height=30> <#include "/freemarker/gradeconvert.ftl">
                     </div>
-                    <!-- PP -->
                     <div class="d-flex align-items-center">
                         <#if sort == 'pp'>
                             ${score.pp?string("0")}pp

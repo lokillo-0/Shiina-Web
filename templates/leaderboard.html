@@ -82,14 +82,14 @@
                                 <#list leaderboard as player>
 
                                     <li style="list-style: none;">
-                                        <a href="/u/${player.playerId?c}?mode=${mode}" class="bg-secondary m-2 p-3 row leaderboard-panel style="border-radius: 5px;">
+                                        <a href="/u/${player.playerId?c}?mode=${mode}" class="bg-secondary m-2 p-2 row leaderboard-panel style="border-radius: 5px;">
                                             <span class="col-auto d-flex align-items-center"><img class="flag"
                                                 src="${avatarServer}/${player.playerId?c}"
                                                 alt=""></span>
                                             <span class="col-auto d-flex align-items-center"><img class="flag"
                                                     src="/img/flags/${player.country}.svg"
                                                     alt=""></span>
-                                            <span class="col-auto"
+                                            <span class="col-auto d-flex align-items-center"
                                                 style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);">#${offset
                                                 + leaderboardC}</span>
                                             <span class="col-auto d-flex align-items-center">
