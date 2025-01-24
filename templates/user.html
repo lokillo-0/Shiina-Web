@@ -193,6 +193,7 @@
                     </div>
                 </div>
             </div>
+            
        <div class="d-inline-flex mx-0 mx-sm-0 mx-lg-3">
         <#if user?? && !self>
         <#if relationship == "mutual">
@@ -245,7 +246,11 @@
         </#if>
        </div>
         </div>
-        
+        <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
+            <div class="shiina-pill-icon"></div>
+            <span>Rank Graph</span>
+        </div>
+        <canvas style="max-height: 100px;" id="rankChart" height="200"></canvas>
         <#if userpage??>
         <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
             <div class="shiina-pill-icon"></div>
@@ -361,4 +366,5 @@
     var reqUrl = "/api/v1/get_first_places?id=${id?c}&mode=${mode?c}&offset=";
     var reqUrlScores = "/api/v1/get_player_scores?id=${id?c}&mode=${mode?c}&offset=";
     var playCountGraphUrl = "/api/v1/get_playcount_graph?id=${id?c}&mode=${mode?c}";
+    var rankGraphUrl = "/api/v1/get_rank_cache?id=${id?c}&mode=${mode?c}";
 </script>

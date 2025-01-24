@@ -1,5 +1,6 @@
 let tooltipList = []; // Keep track of initialized tooltips
 var out;
+var out2;
 var turnstileId = null;
 
 document.addEventListener("turbo:visit", (event) => {
@@ -407,11 +408,61 @@ function loadUserPage() {
 
 function initPlayCountGraph() {
 
+    fetch(rankGraphUrl)
+    .then(response => response.json())
+    .then(data => {
+
+        let values = [];
+        let dataLabels = [];
+
+        data.forEach(element => {
+            values.push(element.rank);
+            dataLabels.push(element.date);
+        });
+
+        let ctx = document.getElementById('rankChart');
+        if(out2) {
+            out2.destroy();
+        }
+        
+        out2 = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dataLabels,
+                datasets: [{
+                    label: 'Rank',
+                    data: values,
+                    borderColor: getBsPrimaryColor(),
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    tooltip: {
+                        mode: 'nearest',
+                        intersect: false
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        display: false
+                    },
+                    y: {
+                        display: false,
+                        reverse: true
+                    }
+                }
+            }
+        });
+    });
+
     fetch(playCountGraphUrl) 
     .then(response => response.json())
     .then(data => {
-        console.log(data);
-
         let values = [];
         let dataLabels = [];
 
@@ -462,6 +513,10 @@ function initPlayCountGraph() {
                     }
                 },
                 plugins: {
+                    tooltip: {
+                        mode: 'nearest',
+                        intersect: false
+                    },
                     legend: {
                         display: false
                     }
