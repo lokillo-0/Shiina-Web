@@ -2,8 +2,6 @@ let tooltipList = []; // Keep track of initialized tooltips
 var out;
 var turnstileId = null;
 
-const bsPrimary = getComputedStyle(document.documentElement).getPropertyValue('--bs-primary').trim();
-
 document.addEventListener("turbo:visit", (event) => {
     const content = document.getElementById("wrapper");
 
@@ -408,21 +406,34 @@ function loadUserPage() {
 }
 
 function initPlayCountGraph() {
-    if (data.length > 0 && values.length > 0) {
-        let ctx = document.getElementById('myChart');
+
+    fetch(playCountGraphUrl) 
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+
+        let values = [];
+        let dataLabels = [];
+
+        data.forEach(element => {
+            values.push(element.plays);
+            dataLabels.push(element.date);
+        });
+
+        let ctx = document.getElementById('playCountGraph');
 
         if (out) {
-            out.destroy(); // Destroy previous instance if it exists
+            out.destroy(); 
         }
 
         out = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: data,
+                labels: dataLabels,
                 datasets: [{
                     label: '# of Plays',
                     data: values,
-                    borderColor: bsPrimary,
+                    borderColor: getBsPrimaryColor(),
                     borderWidth: 2,
                     tension: 0.1,
                 }]
@@ -456,7 +467,11 @@ function initPlayCountGraph() {
                     }
                 }
             }});
-    }
+
+    });
+
+
+    
 }
 
 function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, setId, scoreId, mods, weight = 0, weight_pp = 0) {
@@ -507,6 +522,13 @@ function loadScorePanel(grade, mapId, score, pp, acc, maxCombo, playTime, name, 
     output += '</div></div></div>';
 
     return output;
+}
+
+function getBsPrimaryColor() {
+    const element = document.getElementsByClassName('bg-primary')[0];
+    const computedStyle = window.getComputedStyle(element);
+    console.log(computedStyle.backgroundColor);
+    return computedStyle.backgroundColor;
 }
 
 function getBootstrapTextColor() {

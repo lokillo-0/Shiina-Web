@@ -108,14 +108,6 @@ public class User extends Shiina {
         UserStatusQuery userStatusQuery = new UserStatusQuery();
         UserStatus userStatus = userStatusQuery.getUserStatus(id);
 
-        LinkedHashMap<String, Integer> userStats = new LinkedHashMap<>();
-        ResultSet playCountGraphRs = shiina.mysql.Query(
-                "WITH RECURSIVE months AS ( SELECT 1 AS month UNION ALL SELECT month + 1 FROM months WHERE month < 12 ) SELECT MONTHNAME(DATE(CONCAT(YEAR(CURDATE()), '-', m.month, '-01'))) AS month_name, COALESCE(COUNT(s.play_time), 0) AS play_count FROM months m LEFT JOIN scores s ON MONTH(s.play_time) = m.month AND YEAR(s.play_time) = YEAR(CURDATE()) AND s.userid = ? AND s.mode = ? WHERE DATE(CONCAT(YEAR(CURDATE()), '-', m.month, '-01')) <= CURDATE() GROUP BY m.month ORDER BY m.month;",
-                id, mode);
-        while (playCountGraphRs.next()) {
-            userStats.put(playCountGraphRs.getString("month_name"), playCountGraphRs.getInt("play_count"));
-        }
-
         ResultSet userpageRs = shiina.mysql.Query("SELECT * FROM `userpages` WHERE `user_id` = ?", id);
         if(userpageRs.next()) {
             shiina.data.put("userpage", userpageRs.getString("html"));
@@ -179,7 +171,6 @@ public class User extends Shiina {
                 LevelCalculator.getLevelPrecise(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
         shiina.data.put("levelProgress", LevelCalculator
                 .getPercentageToNextLevel(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
-        shiina.data.put("playCountGraph", userStats);
         shiina.data.put("u", user);
         shiina.data.put("mode", mode);
         shiina.data.put("status", userStatus);

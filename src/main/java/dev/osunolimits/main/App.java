@@ -37,7 +37,9 @@ import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.ap.post.ProcessManageGroup;
 import dev.osunolimits.routes.api.get.GetBmThumbnail;
 import dev.osunolimits.routes.api.get.GetFirstPlaces;
+import dev.osunolimits.routes.api.get.GetPlaycountGraph;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
+import dev.osunolimits.routes.api.get.GetRankCache;
 import dev.osunolimits.routes.api.get.Search;
 import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
 import dev.osunolimits.routes.get.Beatmap;
@@ -139,6 +141,8 @@ public class App {
 
         WebServer.get("/api/v1/get_first_places", new GetFirstPlaces());
         WebServer.get("/api/v1/get_player_scores", new GetPlayerScores());
+        WebServer.get("/api/v1/get_rank_cache", new GetRankCache());
+        WebServer.get("/api/v1/get_playcount_graph", new GetPlaycountGraph());
         WebServer.get("/api/v1/search", new Search());
         WebServer.get("/api/v1/thumb", new GetBmThumbnail());
 
