@@ -938,6 +938,10 @@
     }
 }
 
+.shiina-rank-font {
+    font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);
+}
+
 .shiina-follower-count {
     display: flex;
     align-items: center;

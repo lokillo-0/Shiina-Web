@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.get;
+package dev.osunolimits.routes.get.clans;
 
 import java.util.List;
 
@@ -60,6 +60,6 @@ public class Clans extends Shiina {
         shiina.data.put("sort", sort);
         shiina.data.put("offset", offset + 1);
     
-        return renderTemplate("clans.html", shiina, res, req);
+        return renderTemplate("clans/clans.html", shiina, res, req);
     }
 }

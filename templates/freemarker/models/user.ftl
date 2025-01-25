@@ -3,9 +3,11 @@
         <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
             <img class="flag" src="${avatarServer}/${u.id?c}" alt="">
         </span>
+        <#if u.country??>
         <span class="m-1 m-sm-0 col-auto d-none d-lg-flex align-items-center">
             <img class="flag" src="/img/flags/${u.country}.svg" alt="${u.country} Flag">
         </span>
+        </#if>
         <#if u.isOwner??>
             <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
                 <i class="fa-solid fa-crown fa-2xl"></i>

@@ -1,4 +1,4 @@
-CREATE TABLE `userpages` (
+CREATE TABLE IF NOT EXISTS `userpages` (
   `id` int NOT NULL,
   `user_id` int NOT NULL,
   `html` text,

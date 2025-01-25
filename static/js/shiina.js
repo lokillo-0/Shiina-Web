@@ -420,6 +420,10 @@ function initPlayCountGraph() {
             dataLabels.push(element.date);
         });
 
+        if(data.length == 0) {
+            document.getElementById('rankDiv').innerHTML = "<p class='text-center'>No rank data available</p>";
+        }
+
         let ctx = document.getElementById('rankChart');
         if(out2) {
             out2.destroy();
@@ -458,6 +462,7 @@ function initPlayCountGraph() {
                 }
             }
         });
+
     });
 
     fetch(playCountGraphUrl) 
@@ -657,4 +662,20 @@ function loadMoreScoresLast() {
         // Remove loader after loading process (1 second delay before executing)
         removeLoader(button, originalText);
     }, 500); // 1-second delay
+}
+
+function handleClanManage(userid, clanid, action) {
+    fetch('/api/v1/manage_cl?userid=' + userid + '&clanid=' + clanid + "&action=" + action)
+        .then(response => response.text())
+        .then(response => {
+            Turbo.visit(window.location.href);
+        });
+}
+
+function handleClanJoinRequest(clanid, action) {
+    fetch('/api/v1/join_clan?clanid=' + clanid + "&action=" + action)
+        .then(response => response.text())
+        .then(response => {
+            Turbo.visit(window.location.href);
+        });
 }

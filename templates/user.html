@@ -250,7 +250,16 @@
             <div class="shiina-pill-icon"></div>
             <span>Rank Graph</span>
         </div>
-        <canvas style="max-height: 100px;" id="rankChart" height="200"></canvas>
+        <div style="max-height: 100px;" class="position-relative mb-4">
+            <!-- Canvas Element -->
+            <canvas style="max-height: 100px;" id="rankChart" height="200" class="w-100"></canvas>
+          
+            <!-- Overlay -->
+            <div id="rankDiv" class="position-absolute top-50 start-50 translate-middle text-center text-white" style="pointer-events: none;">
+              
+            </div>
+          </div>
+          
         <#if userpage??>
         <div class="shiina-pill mx-1 mx-md-4 d-flex align-items-center">
             <div class="shiina-pill-icon"></div>

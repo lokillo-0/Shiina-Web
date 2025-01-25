@@ -1,4 +1,4 @@
-<#include "assets/base.html">
+<#include "/assets/base.html">
 
     <div class="container">
         <div class="card">
@@ -24,8 +24,13 @@
             <div class="card-body">  
                 <div class="row border-bottom mb-2 py-4">
                     <div class="col col-12 col-md-6 d-flex align-items-center">
-                        <h2 class="card-title m-2">${clan.name} <span class="btn btn-primary user-select-none">[${clan.tag}]</span></h2>
+                        <div>
+                            <h2 class="card-title m-2">${clan.name} <span class="btn btn-primary user-select-none">[${clan.tag}]</span></h2>
+                        </div>
+                        
+                        
                     </div>
+                 
                     <div class="col col-12 col-md-6">
                         <#assign u = {
                             "id": clan.owner,
@@ -117,13 +122,75 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <#if clanRel??>  
+                    <div class="d-inline-flex mx-0 mx-sm-0 mb-3">
+                         
+                        <#if clanRel.userInThisClan>
+                        <span class="shiina-follower-count mx-1">
+                            <div class="shiina-follower-count-icon">
+                                <i class="fa-solid fa-shield"></i>
+                            </div>
+                            <div class="shiina-follower-count-body">
+                                Member
+                            </div>
+                        </span>
+                        <#elseif clanRel.clanIdCheck>
 
-                <div class="row" id="leaderboard">
-                    <#list members as u>
-                        <#assign index=u?index>
-                        <#include "/freemarker/models/user.ftl"> 
-                    </#list>
+                        <button type="button"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="top" 
+                        title="You are already in a clan" 
+                        class="btn btn-secondary">Request joining</button>
+                        <#elseif clanRel.inShClanPending>
+
+                        <button type="button"
+                        data-bs-toggle="tooltip" 
+                        data-bs-placement="top" 
+                        title="Join request pending" 
+                        onclick="handleClanJoinRequest('${clan.id}', 'REVOKE')"
+                        class="btn btn-secondary">Revoke request</button>
+
+                        <#elseif clanRel.inShClanDenied>
+                        <span class="shiina-follower-count mx-1">
+                            <div class="shiina-follower-count-icon">
+                                <i class="fa-solid fa-shield red"></i>
+                            </div>
+                            <div class="shiina-follower-count-body">
+                                Denied from joining
+                            </div>
+                        </span>
+                        <#else>
+                        <button type="button"
+                        onclick="handleClanJoinRequest('${clan.id}', 'REQUEST')"
+                        class="btn btn-success">Request joining</button>
+
+                    </#if>
+                    <#if clan.owner == user.id>
+                    <span class="shiina-follower-count mx-1">
+                        <div class="shiina-follower-count-icon">
+                            <i class="fa-solid fa-shield text-primary"></i>
+                        </div>
+                        <div class="shiina-follower-count-body">
+                            Owner
+                        </div>
+                    </span>
+                    </#if>
+                    <#if clan.owner == user.id>
+                    <a href="/clan/${clan.id}/settings" type="button"
+          
+                    class="btn btn-secondary mt-2"><i class="fa-solid fa-gear me-2"></i>Clan Management</a>
+                    </#if>
+                    </div>
+                    <div class="row" id="leaderboard">
+                        <#list members as u>
+                            <#assign index=u?index>
+                            <#include "/freemarker/models/user.ftl"> 
+                        </#list>
+                    </div>
+                    </#if>
                 </div>
+               
 
                 <#if (members?size> 4)>
                     <div class="text-center mt-4">
@@ -153,7 +220,7 @@
         </div>
     </div>
 
-    <#include "assets/footer.html">
+    <#include "/assets/footer.html">
     <script>
         var loadMoreBtn = document.getElementById('loadMoreBtn');
         var loadMoreBtnAct = document.getElementById('loadMoreBtnAct');

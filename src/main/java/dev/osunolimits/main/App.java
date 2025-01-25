@@ -41,16 +41,19 @@ import dev.osunolimits.routes.api.get.GetPlaycountGraph;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.api.get.GetRankCache;
 import dev.osunolimits.routes.api.get.Search;
+import dev.osunolimits.routes.api.get.auth.HandleClanAction;
+import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Bot;
-import dev.osunolimits.routes.get.Clan;
-import dev.osunolimits.routes.get.Clans;
 import dev.osunolimits.routes.get.Home;
 import dev.osunolimits.routes.get.Leaderboard;
 import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.UserScore;
+import dev.osunolimits.routes.get.clans.Clan;
+import dev.osunolimits.routes.get.clans.Clans;
+import dev.osunolimits.routes.get.clans.ManageClan;
 import dev.osunolimits.routes.get.errors.NotFound;
 import dev.osunolimits.routes.get.simple.Donate;
 import dev.osunolimits.routes.get.simple.Login;
@@ -117,8 +120,10 @@ public class App {
         WebServer.get("/", new Home());
         WebServer.get("/beatmaps", new Beatmaps());
         WebServer.get("/leaderboard", new Leaderboard());
+
         WebServer.get("/clans", new Clans());
         WebServer.get("/clan/:id", new Clan());
+        WebServer.get("/clan/:id/settings", new ManageClan());
         WebServer.get("/scores/:id", new UserScore());
         WebServer.get("/b/:id", new Beatmap());
         WebServer.get("/u/1", new Bot());
@@ -146,6 +151,8 @@ public class App {
         WebServer.get("/api/v1/search", new Search());
         WebServer.get("/api/v1/thumb", new GetBmThumbnail());
 
+        WebServer.get("/api/v1/manage_cl", new HandleClanAction());
+        WebServer.get("/api/v1/join_clan", new HandleClanRequest());
         WebServer.get("/api/v1/update_rel", new UpdateRelationship());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
