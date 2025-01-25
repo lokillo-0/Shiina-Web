@@ -74,9 +74,10 @@ public class HandleClanAction extends Shiina {
                 break;
             default:
                 res.status(400);
+                shiina.mysql.close();
                 return "invalid action";
         }
-
+        shiina.mysql.close();
         return "success";
     }
 }
