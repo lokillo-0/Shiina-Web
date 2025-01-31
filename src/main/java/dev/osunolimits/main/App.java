@@ -40,7 +40,9 @@ import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.api.get.GetPlaycountGraph;
 import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.api.get.GetRankCache;
+import dev.osunolimits.routes.api.get.Health;
 import dev.osunolimits.routes.api.get.Search;
+import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
@@ -55,6 +57,7 @@ import dev.osunolimits.routes.get.clans.Clan;
 import dev.osunolimits.routes.get.clans.Clans;
 import dev.osunolimits.routes.get.clans.ManageClan;
 import dev.osunolimits.routes.get.errors.NotFound;
+import dev.osunolimits.routes.get.modular.ModularPage;
 import dev.osunolimits.routes.get.simple.Donate;
 import dev.osunolimits.routes.get.simple.Login;
 import dev.osunolimits.routes.get.simple.Recover;
@@ -88,8 +91,8 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.1rc1";
-    public static String dbVersion = "1.0";
+    public static String version = "1.3bt";
+    public static String dbVersion = "1.5";
 
     public static void main(String[] args) throws SQLException {
         env = Dotenv.configure().directory(".config/").load();
@@ -114,6 +117,8 @@ public class App {
         RobotJsonConfig robotJsonConfig = new RobotJsonConfig();
         robotJsonConfig.updateRobotsTxt();
 
+        WebServer.get("/health", new Health());
+
         WebServer.get("/user/:handle", new GucchoUserRedirect());
         WebServer.get("/beatmapset/:set", new GucchoBmRedirect());
 
@@ -135,6 +140,9 @@ public class App {
         WebServer.post("/settings/country", new HandleFlagChange());
         WebServer.post("/settings/name", new HandleNameChange());
         WebServer.post("/settings/userpage", new HandleUserpageChange());
+
+        WebServer.get("/modular", new ModularPage());
+
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());
         WebServer.get("/auth/recover", new Recover());
@@ -154,6 +162,7 @@ public class App {
         WebServer.get("/api/v1/manage_cl", new HandleClanAction());
         WebServer.get("/api/v1/join_clan", new HandleClanRequest());
         WebServer.get("/api/v1/update_rel", new UpdateRelationship());
+        WebServer.post("/api/v1/handle_favorite", new HandleBeatmapFavorite());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
         
