@@ -8,29 +8,22 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.utils.SEOBuilder;
-import dev.osunolimits.routes.get.modular.home.BigHeader;
-import dev.osunolimits.routes.get.modular.home.MoreInfos;
+
 import spark.Request;
 import spark.Response;
 
-public class ModularPage extends Shiina {
-
-    private List<Module> modules = new ArrayList<>();
-
-    public ModularPage() {
-        modules.add(new BigHeader());
-        modules.add(Module.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
-        modules.add(new MoreInfos());
-    }
+public class Home extends Shiina {
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
-        shiina.data.put("actNav", 0);
+        shiina.data.put("actNav", 1);
+
+ 
 
         List<String> modulesRaw = new ArrayList<>();
 
-        for (Module module : modules) {
+        for (ShiinaModule module : ModuleRegister.getModulesForPage("home")) {
             modulesRaw.add(module.handle(req, res, shiina));
         }
 

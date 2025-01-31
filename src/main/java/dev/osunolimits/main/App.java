@@ -49,7 +49,7 @@ import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Bot;
-import dev.osunolimits.routes.get.Home;
+
 import dev.osunolimits.routes.get.Leaderboard;
 import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.UserScore;
@@ -57,7 +57,11 @@ import dev.osunolimits.routes.get.clans.Clan;
 import dev.osunolimits.routes.get.clans.Clans;
 import dev.osunolimits.routes.get.clans.ManageClan;
 import dev.osunolimits.routes.get.errors.NotFound;
-import dev.osunolimits.routes.get.modular.ModularPage;
+import dev.osunolimits.routes.get.modular.Home;
+import dev.osunolimits.routes.get.modular.ModuleRegister;
+import dev.osunolimits.routes.get.modular.ShiinaModule;
+import dev.osunolimits.routes.get.modular.home.BigHeader;
+import dev.osunolimits.routes.get.modular.home.MoreInfos;
 import dev.osunolimits.routes.get.simple.Donate;
 import dev.osunolimits.routes.get.simple.Login;
 import dev.osunolimits.routes.get.simple.Recover;
@@ -80,9 +84,10 @@ import redis.clients.jedis.JedisPooled;
 import spark.Spark;
 
 /**
- * Shiina a attemp to make a modular bancho.py full stack application
+ * shiina - a modern osu! private server frontend for the web
  * By Marc Andre Herpers
  */
+
 public class App {
     public static final Logger log = (Logger) LoggerFactory.getLogger(App.class);
     public static Dotenv loggerEnv;
@@ -117,6 +122,10 @@ public class App {
         RobotJsonConfig robotJsonConfig = new RobotJsonConfig();
         robotJsonConfig.updateRobotsTxt();
 
+        ModuleRegister.registerDefaultModule("home", new BigHeader());
+        ModuleRegister.registerDefaultModule("home", ShiinaModule.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
+        ModuleRegister.registerDefaultModule("home", new MoreInfos());
+
         WebServer.get("/health", new Health());
 
         WebServer.get("/user/:handle", new GucchoUserRedirect());
@@ -140,8 +149,6 @@ public class App {
         WebServer.post("/settings/country", new HandleFlagChange());
         WebServer.post("/settings/name", new HandleNameChange());
         WebServer.post("/settings/userpage", new HandleUserpageChange());
-
-        WebServer.get("/modular", new ModularPage());
 
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());
@@ -205,6 +212,8 @@ public class App {
 
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();
+
+        ModuleRegister.reloadModuleConfigurations();
 
         new ShiinaRankCache();
 

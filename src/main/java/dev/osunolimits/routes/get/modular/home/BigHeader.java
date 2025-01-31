@@ -7,11 +7,11 @@ import dev.osunolimits.api.BanchoStats;
 import dev.osunolimits.api.BanchoStats.CustomCountResponse;
 import dev.osunolimits.main.App;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.routes.get.modular.Module;
+import dev.osunolimits.routes.get.modular.ShiinaModule;
 import spark.Request;
 import spark.Response;
 
-public class BigHeader extends Module{
+public class BigHeader extends ShiinaModule{
 
     private final String STATS_SQL = "SELECT (SELECT COUNT(`id`) FROM `scores`) AS `scores`,(SELECT COUNT(`id`) FROM `maps`) AS `maps`, (SELECT COUNT(`id`) FROM `clans`) AS `clans`;";
 

@@ -11,7 +11,7 @@ import freemarker.template.TemplateException;
 import spark.Request;
 import spark.Response;
 
-public abstract class Module {
+public abstract class ShiinaModule {
 
     public abstract String moduleName();
     public abstract String moduleDescription();
@@ -34,8 +34,8 @@ public abstract class Module {
         }
     }
 
-    public static Module fromRawHtml(String name, String desc, String rawHtmlFile) {
-        Module module = new Module() {
+    public static ShiinaModule fromRawHtml(String name, String desc, String rawHtmlFile) {
+        ShiinaModule module = new ShiinaModule() {
             @Override
             public String moduleName() {
                 return name;
