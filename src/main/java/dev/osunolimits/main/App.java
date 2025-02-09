@@ -89,7 +89,7 @@ import spark.Spark;
  */
 public class App {
     
-    public static final Logger log = (Logger) LoggerFactory.getLogger(App.class);
+    public static final Logger log = (Logger) LoggerFactory.getLogger("Shiina-Web");
     public static Dotenv loggerEnv;
     public static Dotenv env;
     public static Map<String, Object> customization;
