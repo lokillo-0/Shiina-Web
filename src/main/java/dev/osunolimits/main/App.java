@@ -87,8 +87,8 @@ import spark.Spark;
  * shiina - a modern osu! private server frontend for the web
  * By Marc Andre Herpers
  */
-
 public class App {
+    
     public static final Logger log = (Logger) LoggerFactory.getLogger(App.class);
     public static Dotenv loggerEnv;
     public static Dotenv env;
