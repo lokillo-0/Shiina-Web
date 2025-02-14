@@ -219,12 +219,6 @@ public class App {
         new ShiinaRankCache();
         new ShiinaMultiDetection();
 
-        try {
-            shiinaDocs.watchDirectory();
-        } catch (Exception e) {
-            log.error("Error while running docs", e);
-        }
-
     }
 
     
