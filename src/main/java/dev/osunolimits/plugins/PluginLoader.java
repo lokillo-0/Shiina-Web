@@ -24,9 +24,6 @@ public class PluginLoader {
     private static final String PLUGINS_DIR = "plugins/";
     private static Logger log = (Logger) LoggerFactory.getLogger("PluginLoader");
 
-    // Map to store shared classloaders for plugins with dependencies
-    private final Map<String, URLClassLoader> sharedClassLoaders = new HashMap<>();
-
     public void loadPlugins() {
         try {
             Path pluginsPath = Paths.get(PLUGINS_DIR);
@@ -145,7 +142,7 @@ public class PluginLoader {
             }
 
             // Step 2: Load the plugin itself
-            loadAndEnablePlugin(metadata, pluginMetadataMap, logger);
+            loadAndEnablePlugin(metadata, logger);
             loadedPlugins.add(metadata.name);
             logger.info("Successfully loaded plugin: " + metadata.name);
         } catch (Exception e) {
@@ -167,24 +164,10 @@ public class PluginLoader {
         }
     }
 
-    private void loadAndEnablePlugin(PluginMetadata metadata, Map<String, PluginMetadata> pluginMetadataMap, Logger logger) {
+    private void loadAndEnablePlugin(PluginMetadata metadata, Logger logger) {
         try {
-            Set<String> jarPaths = new HashSet<>();
-            collectDependencies(metadata, pluginMetadataMap, jarPaths);
-
-            URL[] urls = new URL[jarPaths.size()];
-            int i = 0;
-            for (String path : jarPaths) {
-                urls[i++] = Paths.get(path).toUri().toURL();
-            }
-
-            // Use a shared classloader if the plugin has dependencies
-            URLClassLoader classLoader;
-            if (!metadata.dependencies.isEmpty()) {
-                classLoader = new URLClassLoader(urls, getSharedClassLoader(metadata.dependencies, pluginMetadataMap));
-            } else {
-                classLoader = new URLClassLoader(urls, PluginLoader.class.getClassLoader());
-            }
+            URL[] urls = { Paths.get(metadata.jarFilePath).toUri().toURL() };
+            URLClassLoader classLoader = new URLClassLoader(urls, PluginLoader.class.getClassLoader());
 
             Class<?> clazz = Class.forName(metadata.mainClass, true, classLoader);
 
@@ -199,47 +182,5 @@ public class PluginLoader {
         } catch (Exception e) {
             logger.error("Error loading and enabling plugin: ", e);
         }
-    }
-
-    private void collectDependencies(PluginMetadata metadata, Map<String, PluginMetadata> pluginMetadataMap, Set<String> jarPaths) {
-        if (jarPaths.contains(metadata.jarFilePath)) {
-            return;
-        }
-        jarPaths.add(metadata.jarFilePath);
-        for (String dep : metadata.dependencies) {
-            PluginMetadata depMetadata = pluginMetadataMap.get(dep.trim());
-            if (depMetadata != null) {
-                collectDependencies(depMetadata, pluginMetadataMap, jarPaths);
-            }
-        }
-    }
-
-    private URLClassLoader getSharedClassLoader(List<String> dependencies, Map<String, PluginMetadata> pluginMetadataMap) throws Exception {
-        // Create a unique key for the set of dependencies
-        String key = String.join(",", dependencies);
-
-        // Return an existing shared classloader if it exists
-        if (sharedClassLoaders.containsKey(key)) {
-            return sharedClassLoaders.get(key);
-        }
-
-        // Create a new shared classloader for these dependencies
-        Set<String> jarPaths = new HashSet<>();
-        for (String dep : dependencies) {
-            PluginMetadata depMetadata = pluginMetadataMap.get(dep.trim());
-            if (depMetadata != null) {
-                collectDependencies(depMetadata, pluginMetadataMap, jarPaths);
-            }
-        }
-
-        URL[] urls = new URL[jarPaths.size()];
-        int i = 0;
-        for (String path : jarPaths) {
-            urls[i++] = Paths.get(path).toUri().toURL();
-        }
-
-        URLClassLoader sharedClassLoader = new URLClassLoader(urls, PluginLoader.class.getClassLoader());
-        sharedClassLoaders.put(key, sharedClassLoader);
-        return sharedClassLoader;
     }
 }
