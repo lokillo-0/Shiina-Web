@@ -43,11 +43,15 @@ public class HandleNameChange extends Shiina {
         if(shiina.mysql.Query(usernameCheckSql, newName).next()) {
             return redirect(res, shiina, "/settings?error=Name already taken");
         }
+        
         UserInfoObject obj = GSON.fromJson(App.jedisPool.get("shiina:user:" + shiina.user.id), UserInfoObject.class); 
         obj.name = newName;
         obj.safe_name = newSafeName;
         String userJson = GSON.toJson(obj);
         App.jedisPool.set("shiina:user:" + shiina.user.id, userJson);
+
+        shiina.mysql.Exec("UPDATE `users` SET `name`=?,`safe_name`=? WHERE `id` = ?", newName, newSafeName, shiina.user.id);
+
         NameChangeInput input = new PubSubModels().new NameChangeInput();
         input.id = shiina.user.id;
         input.name = newName;
