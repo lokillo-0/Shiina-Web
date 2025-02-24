@@ -21,6 +21,7 @@ import dev.osunolimits.monetization.StripeMethod;
 import dev.osunolimits.plugins.PluginLoader;
 import dev.osunolimits.routes.ap.api.PubSubHandler;
 import dev.osunolimits.routes.ap.api.RecoverAccount;
+import dev.osunolimits.routes.ap.get.Audit;
 import dev.osunolimits.routes.ap.get.Bancho;
 import dev.osunolimits.routes.ap.get.ChatExplorer;
 import dev.osunolimits.routes.ap.get.Commands;
@@ -181,6 +182,7 @@ public class App {
         WebServer.get("/ap/api/handler", new PubSubHandler());
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
+        WebServer.get("/ap/audit", new Audit());
         WebServer.get("/ap/chat", new ChatExplorer());
         WebServer.get("/ap/start", new Start());
         WebServer.get("/ap/commands", new Commands());
