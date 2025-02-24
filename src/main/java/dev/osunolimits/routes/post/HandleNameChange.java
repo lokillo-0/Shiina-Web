@@ -8,6 +8,7 @@ import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.plugins.events.actions.OnUserNameChangeEvent;
 import dev.osunolimits.routes.ap.api.PubSubModels;
 import dev.osunolimits.routes.ap.api.PubSubModels.NameChangeInput;
 import dev.osunolimits.utils.osu.PermissionHelper;
@@ -57,6 +58,8 @@ public class HandleNameChange extends Shiina {
         input.name = newName;
         App.jedisPool.publish("name_change", GSON.toJson(input));
         
+        new OnUserNameChangeEvent(shiina.user.id, shiina.user.name, newName).callListeners();
+
         return redirect(res, shiina, "/settings?info=Name was changed successfully");
     }
 }
