@@ -636,7 +636,7 @@ function loadScorePanel(
                         <a href="/scores/${scoreId}" class="action-button view-button bg-dark bg-opacity-50 text-light" title="View Score">
                             <i class="fas fa-eye"></i>
                         </a>
-                        <a href="/api/v1/get_replay?id=${scoreId}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
+                        <a href="${apiUrl}/v1/get_replay?id=${scoreId}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
                             <i class="fas fa-download"></i>
                         </a>
                     </div>

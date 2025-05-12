@@ -35,16 +35,16 @@
         <div class="score-details text-light">
             <!-- Action buttons moved to top-right of details section with higher z-index -->
             <div class="score-actions">
-                <a href="/scores/${score.id}" class="action-button view-button bg-dark bg-opacity-50 text-light" title="View Score">
+                <a href="/scores/${score.id?c}" class="action-button view-button bg-dark bg-opacity-50 text-light" title="View Score">
                     <i class="fas fa-eye"></i>
                 </a>
-                <a href="/v1/get_replay?id=${score.id}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
+                <a href="${apiUrlPub}/v1/get_replay?id=${score.id?c}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
                     <i class="fas fa-download"></i>
                 </a>
             </div>
             
             <!-- Title with increased right padding to avoid buttons -->
-            <div class="beatmap-title fw-medium">${sanitizedName}<span class="mod-pill badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25">${score.mods?join(", ")}</span></div>
+            <div class="beatmap-title fw-medium">${sanitizedName} <span class="mod-pill badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25">${score.mods?join(", ")}</span></div>
             
             <div class="score-stats">
                 <div class="main-stats">
