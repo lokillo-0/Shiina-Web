@@ -80,7 +80,8 @@
                             <h1 class="mb-3">
                                 You will need <span class="supporter text-warning fw-bold">Supporter</span> for further customizations
                             </h1>
-                            <#include "/freemarker/donor.ftl">
+                            <#assign maxDonorFeatures = 3>
+                            <#include "/freemarker/donorlite.ftl">
                             <a href="/donate" class="btn btn-primary mt-2 btn-lg px-4 py-2 rounded-pill">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
                                     <path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 5.68 1.33 7.88 2.5 9.42l7.5 9 7.5-9c1.17-1.54 1.04-3.74-.08-4.84z"></path>

@@ -22,29 +22,39 @@
 *.tar.gz
 *.rar
 
-target/*
+# Unknown
+hs_err_pid*
+replay_pid*
 
-# Shiina-Web
+# Java / Maven
+target/*
+target/maven-archiver/pom.properties
+dependency-reduced-pom.xml
+target/classes/logback.xml
+target/classes/
+createdFiles.lst
+inputFiles.lst
+
+# VS Code
+.vscode/
+
+# shiina-web
+
+#.config/
 /.config/logger.env
 /.config/.env
 /.config/customization.yml
-/themes/onl
+
+# theming
+/themes/*
+static/css/theme-*.css
+
+# data
 .cache/
 .logs/
 data/
-static/css/theme-*.css
-createdFiles.lst
-inputFiles.lst
-target/maven-archiver/pom.properties
+
+# modular
 /plugins/
-static/robots.txt
 templates/modules/plugins
-
-
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
-hs_err_pid*
-replay_pid*
-.vscode/
-target/classes/logback.xml
-target/classes/
-dependency-reduced-pom.xml
+static/robots.txt
