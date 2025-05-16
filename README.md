@@ -1,51 +1,84 @@
-**Shiina-Web:**
+# **Shiina-Web**
 
-[![](https://dcbadge.limes.pink/api/server/Dr79DU9kbD)](https://discord.gg/Dr79DU9kbD)
+[![](https://dcbadge.limes.pink/api/server/Dr79DU9kbD)](https://discord.gg/Dr79DU9kbD) ![Contributors](https://img.shields.io/github/contributors/osu-NoLimits/Shiina-Web?style=for-the-badge) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](http://makeapullrequest.com)
 
-The new version of shiina for **bancho.py**
+A Java-based web frontend for **bancho.py-ex** osu! private servers, with extensive features and plugin support.
 
-### **Requirements**
-> ⚠️ Your bancho server needs to be [bancho.py-ex](https://github.com/osu-NoLimits/bancho.py-ex) at the moment. Everything else will break
+## **Requirements**
+- Java 21 (OpenJDK 21)
+- Maven
+- [bancho.py-ex](https://github.com/osu-NoLimits/bancho.py-ex) (standard bancho.py is not currently supported)
 
-### **Installation:**
-1. `make install` - will install and compile the project
-2. edit files in `config/` and replace all filenames with `.example`
-3. `make run` - to start the frontend
+## **Installation**
+1. `make install` - installs dependencies and compiles the project
+2. Copy all files in `.config/` with `.example` extension and remove the `.example` suffix
+   ```
+   cp .config/.env.example .config/.env
+   cp .config/customization.yml.example .config/customization.yml
+   cp .config/logger.env.example .config/logger.env
+   ```
+3. Configure the files in `.config/` directory according to your needs
+4. `make run` - starts the Shiina web frontend
 
-### **Feature List:**
+## **Feature List**
 
-- ✅ Leaderboards based on API
-- ✅ Country Leaderboards based on API
-- ✅ Homepage with statistics
-- ✅ Clan Leaderboard with some compatitive statistics
-- ✅ Clan Page
-- ✅ Search
-- ✅ User Page (w. first places, best/last scores, playcount graph and achievements)
-- ✅ Authorization
-- ✅ Beatmap Search page
-- ✅ Profile picture change
-- ✅ Theming
-- ✅ Admin Panel (expandable)
-- ✅ Userpage w/ edit
-- 🧩 Java Plugin Loader w/ Events
-- 🧩 SEO
-- 🧩 Donate
-- ❌ Beatmap Request
-- ❌ Sitemap Generation
+### Core Features
+- ✅ User authentication and authorization
+- ✅ Homepage with server statistics
+- ✅ User profiles with customizable userpages
+- ✅ Profile picture changing
+- ✅ Beatmap browsing and search
+- ✅ Comprehensive leaderboard system
+  - Global leaderboards
+  - Country-specific leaderboards
+  - Clan leaderboards with competitive statistics
+- ✅ Score tracking and display
+  - First place scores
+  - Personal best scores
+  - Most recent scores
+  - Playcount graphs
+- ✅ Admin panel with extensible functionality
 
-### **Trusted by:**
-<img width="25" src="https://osu-server-list.com/res/servers/osuNoLimits.webp"></img> osuNoLimits - [osunolimits.dev](https://osunolimits.dev)
+### Customization & Extensibility
+- ✅ Multiple theme support (Classic, Modern, Elegant) seen in [THEMING](https://github.com/osu-NoLimits/Shiina-Web/wiki/Theming)
+- ✅ Java plugin system with event hooks
+- ✅ Extensive API integration
+- ✅ Donation system (Kofi)
 
-<img width="25" src="https://osu-server-list.com/res/servers/M1PPosu.webp"></img> M1PPosu - [m1pposu.dev](https://m1pposu.dev)
+### Technical Features
+- ✅ API request caching for improved performance
+- ✅ Configurable error and request logging
+- ✅ Easy customization via `.config/customization.yml`
+- ✅ Multiple webhook support
 
-<img width="25" src="https://osu-server-list.com/res/servers/4ayo.webp"></img> 4ayo - [4ayo.ovh](https://4ayo.ovh)
+### In Progress
+- 🧩 SEO optimization
 
-### **Technical:**
+## **Plugin System**
 
-- ✅ API Request Caching
-- ✅ Error/Request Logger with configuration at `.config/logger.env`
-- ✅ Easy customization with `.config/customization.yml`
+Shiina features a Java plugin system that allows extending functionality without modifying the core codebase.
 
+Custom plugins can be added to the `/plugins` directory. To learn making plugins for shiina check out [PLUGINS](https://github.com/osu-NoLimits/Shiina-Web/wiki/Plugins)
 
-![Structure](/static/img/shiina-structure.png)
-_Structure has changed this is outdated_
+## **Project Structure**
+
+```
+shiina/
+├── .config/         # Configuration files
+├── data/            # Application data storage
+├── docs/            # Documentation
+├── logs/            # Application logs
+├── plugins/         # Java plugins and configurations
+├── src/             # Source code
+├── static/          # Static web assets (CSS, JS, images)
+├── target/          # Compiled output
+└── templates/       # HTML templates
+```
+
+## **License**
+
+This project is licensed under the MIT LICENSE found in the [LICENSE](/LICENSE) file.
+
+## **Contributing**
+
+Contributions are welcome! Please feel free to submit a Pull Request.
