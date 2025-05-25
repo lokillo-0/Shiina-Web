@@ -31,37 +31,44 @@
 
     <!-- Profile Section -->
     <div class="card my-4">
-        <div class="bg-secondary rounded-top">
-            <div class="row p-4">
+         <div class="bg-gradient position-relative" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="row p-4 position-relative">
                 <!-- Profile Picture -->
-                <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
-                    <img src="${avatarServer}/${u.player.info.id?c}" alt="Profile picture"
-                        class="img-fluid rounded" style="max-width: 150px; min-width: 150px;">
+                <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                    <div class="position-relative">
+                        <img src="${avatarServer}/${u.player.info.id?c}" alt="Profile picture"
+                            class="img-fluid rounded-circle shadow-lg" 
+                            style="width: 150px; height: 150px; object-fit: cover;">
+                        <#if status.player_status.online==true>
+                            <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-white border-2" 
+                                 style="width: 30px; height: 30px;"></div>
+                        </#if>
+                    </div>
                 </div>
                 <!-- Player Name -->
-                <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
-                    <div><span class='display-3 fw-bold shiina-player-name <#if uprivs?seq_contains("SUPPORTER")>supporter</#if>'>${u.player.info.name} 
-
-                    </span> 
-                        <div class="groupPlace">
-                            <#list groups as group><span class="groupDiv"><span class="groupEmoji">${group.emoji}</span>${group.name}</span></#list>
-                           
+                <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-white">
+                    <div class="mb-2">
+                        <h1 class="display-4 fw-bold mb-2 shiina-player-name <#if uprivs?seq_contains("SUPPORTER")>supporter</#if>">
+                            ${u.player.info.name}
+                        </h1>
+                        <div class="groupPlace d-flex flex-wrap gap-2 mt-2 mb-3">
+                            <#list groups as group>
+                                <span class="badge bg-light bg-opacity-25 text-white px-3 py-2 rounded-pill">
+                                    <span class="groupEmoji me-1">${group.emoji}</span>
+                                    ${group.name}
+                                </span>
+                            </#list>
                         </div>
-                       
                     </div>
-                    <style>
-                        .groupEmoji {
-                            width: 20px;
-                            display:inline-block;
-                        }
-                    </style>
                     <#if status.player_status.online==true>
-                        <div class="shiina-online-status rounded">
-                            <span class="shiina-online-status-circle"></span>
-                            <span class="shiina-online-status-text">
-                                <#if status.player_status.status.action==0>Idle<#elseif
-                                        status.player_status.status.action==1>Online<#else>Playing
-                                            ${status.player_status.status.info_text}</#if>
+                        <div class="d-flex align-items-center bg-white bg-opacity-20 rounded-pill px-3 py-2 w-fit">
+                            <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px;"></div>
+                            <span class="fw-medium">
+                                <#if status.player_status.status.action==0>Idle
+                                <#elseif status.player_status.status.action==1>Online
+                                <#else>Playing ${status.player_status.status.info_text}
+                                </#if>
+                            </span>
                         </div>
                     </#if>
                 </div>
