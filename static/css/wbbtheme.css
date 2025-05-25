@@ -152,7 +152,6 @@ html{height:100% !important;}
   line-height:28px;
   text-shadow:0px 1px 0px #fff;
   text-align:center;
-  speak: none;
 }
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn:hover .fonticon{
   color:#000;
@@ -160,9 +159,6 @@ html{height:100% !important;}
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.on .fonticon{
   text-shadow:none;
   color:#000;
-}
-.wysibb .wysibb-toolbar .modeSwitch .wysibb-toolbar-btn{
-  /* width:46px; */
 }
 .modesw{
   font-weight:bold;
@@ -255,9 +251,7 @@ html{height:100% !important;}
   padding-right:10px;
 /*   background-position: 14px -399px; */
 }
-.wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-dropdown.dis,.wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn.wbb-dropdown.dis:hover{
-/*   padding-right:9px; */
-}
+
 .wysibb .wysibb-toolbar .wysibb-toolbar-container .wysibb-toolbar-btn .wbb-list{
   display:none;
   position:fixed;
@@ -272,7 +266,6 @@ html{height:100% !important;}
   overflow:auto;
   z-index:1000;
 }
-/* END DROPDOWN */
 
 /* COLORPICKER */
 .ve-tlb-colorpick .cp-line {
@@ -289,7 +282,7 @@ html{height:100% !important;}
   width: 23%;
   height: 30px;
   margin: 0 0 1% 1%;
-  display: inline-block;*display:inline;zoom: 1;
+  display: inline-block;display:inline;zoom: 1;
   cursor: pointer;
   border:1px solid #fff;
 }
@@ -410,7 +403,7 @@ html{height:100% !important;}
   height: 16px;
   line-height:20px;
   padding: 5px;
-  display: inline-block;*display:inline;zoom: 1;
+  display: inline-block;display:inline;zoom: 1;
   cursor: pointer;
   vertical-align:middle;
 }
@@ -525,7 +518,7 @@ html{height:100% !important;}
   background:#f1f1f1;
 }
 #wbbmodal button{
-  display:inline-block;*display:inline;zoom: 1;
+  display:inline-block;display:inline;zoom: 1;
   font-size:14px;
   padding:3px 15px;
 }
@@ -760,7 +753,7 @@ html{height:100% !important;}
 	  width: 16px;
 	  height: 16px;
 	  margin: 0 0 1px 1px;
-	  display: inline-block;*display:inline;zoom: 1;
+	  display: inline-block;display:inline;zoom: 1;
 	  cursor: pointer;
 	  border:1px solid #fff;
 	}
