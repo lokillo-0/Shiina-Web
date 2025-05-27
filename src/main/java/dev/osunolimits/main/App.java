@@ -1,11 +1,14 @@
 package dev.osunolimits.main;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import dev.osunolimits.common.Database;
+import dev.osunolimits.common.MySQL;
 import dev.osunolimits.models.Action;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ShiinaMultiDetection;
@@ -107,10 +110,16 @@ public class App {
     public static String dbVersion = "1.6";
 
     public static boolean devMode = false;
+    
+    public static ShiinaRankCache rankCache;
+    public static ShiinaMultiDetection multiDetection;
 
     public static void main(String[] args) throws SQLException {
 
-        if(args[0].equals("-dev")) {
+        // Register shutdown hook early
+        Runtime.getRuntime().addShutdownHook(new Shutdown());
+
+        if(args.length > 0 && args[0].equals("-dev")) {
             devMode = true;
             log.info("Running shiina in development mode, do not use this in production!"); 
         }
@@ -236,8 +245,8 @@ public class App {
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.loadPlugins();
 
-            new ShiinaRankCache();
-            new ShiinaMultiDetection();
+            rankCache = new ShiinaRankCache();
+            multiDetection = new ShiinaMultiDetection();
         }
 
         ModuleRegister.reloadModuleConfigurations();

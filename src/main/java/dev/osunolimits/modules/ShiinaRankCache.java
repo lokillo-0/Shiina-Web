@@ -67,4 +67,23 @@ public class ShiinaRankCache {
         return Duration.between(now, nextRun).getSeconds();
     }
     
+    /**
+     * Shuts down the scheduler, attempting a graceful shutdown first,
+     * then forcing termination if tasks don't complete within the timeout.
+     */
+    public void shutdown() {
+        scheduler.shutdown();
+        try {
+            // Wait for tasks to complete or timeout after 60 seconds
+            if (!scheduler.awaitTermination(60, TimeUnit.SECONDS)) {
+                // Force shutdown if tasks don't terminate in time
+                scheduler.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            // If current thread is interrupted, force shutdown
+            scheduler.shutdownNow();
+            // Preserve interrupt status
+            Thread.currentThread().interrupt();
+        }
+    }
 }
