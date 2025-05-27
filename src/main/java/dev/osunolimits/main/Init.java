@@ -48,7 +48,12 @@ public class Init {
         }
 
         try {
-            webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("PORT")), 3000);
+            if(App.devMode) {
+                webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("DEV_PORT")), 3010);
+            }else{
+                webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("PORT")), 3000);
+            }
+            
         } catch (Exception e) {
             log.error("Failed to ignite WebServer", e);
             System.exit(1);
@@ -97,6 +102,7 @@ public class Init {
             // Disable logging for Jetty
             Logger jettyLogger = loggerContext.getLogger("org.eclipse.jetty");
             jettyLogger.setLevel(ch.qos.logback.classic.Level.OFF);
+
 
             // Optionally, disable specific Jetty components if needed
             Logger serverLogger = loggerContext.getLogger("org.eclipse.jetty.server");

@@ -103,10 +103,18 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.5stage";
-    public static String dbVersion = "1.5";
+    public static String version = "1.6prod";
+    public static String dbVersion = "1.6";
+
+    public static boolean devMode = false;
 
     public static void main(String[] args) throws SQLException {
+
+        if(args[0].equals("-dev")) {
+            devMode = true;
+            log.info("Running shiina in development mode, do not use this in production!"); 
+        }
+
         env = Dotenv.configure().directory(".config/").load();
         loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
         log.info("Shiina-Web Rewrite "+version);
@@ -224,16 +232,16 @@ public class App {
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();
 
-        PluginLoader pluginLoader = new PluginLoader();
-        pluginLoader.loadPlugins();
+        if(!devMode) {
+            PluginLoader pluginLoader = new PluginLoader();
+            pluginLoader.loadPlugins();
+
+            new ShiinaRankCache();
+            new ShiinaMultiDetection();
+        }
 
         ModuleRegister.reloadModuleConfigurations();
 
-        new ShiinaRankCache();
-        new ShiinaMultiDetection();
-
     }
-
-    
 
 }

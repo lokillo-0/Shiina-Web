@@ -58,3 +58,5 @@ data/
 /plugins/
 templates/modules/plugins
 static/robots.txt
+
+old/
