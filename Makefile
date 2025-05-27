@@ -1,4 +1,6 @@
 install:
+	@git submodule init
+	@git submodule update
 	@if [ -f /etc/debian_version ]; then \
 		echo "Detected Debian/Ubuntu system. Installing dependencies..."; \
 		sudo apt install -y openjdk-21-jdk maven && \
