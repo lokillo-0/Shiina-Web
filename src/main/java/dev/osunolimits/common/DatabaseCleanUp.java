@@ -26,7 +26,9 @@ public class DatabaseCleanUp extends Thread {
                         try {
                             mysql.close();
                             Database.runningConnections.remove(i);
+                            i--;
                             trashed++;
+                            continue;
                         } catch (Exception e) {
                             logger.error("Failed to close MySQL connection", e);
                         }
