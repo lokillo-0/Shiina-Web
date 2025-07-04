@@ -48,6 +48,7 @@ inputFiles.lst
 # theming
 /themes/*
 static/css/theme-*.css
+static/css/themedev-*.css
 
 # data
 .cache/

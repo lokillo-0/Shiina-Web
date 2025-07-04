@@ -67,6 +67,11 @@ public class ThemeLoader {
     }
 
     public static void notIncluded(Theme theme) {
+
+        String themeName = "theme";
+        if(App.devMode) 
+            themeName += "dev";
+
         logger.info("Loading style.css for theme [" + theme.getName() + "]");
 
         generatedIdent = Validation.randomString(5);
@@ -77,7 +82,7 @@ public class ThemeLoader {
             File[] files = new File("static/css/").listFiles();
             if (files != null) {
                 for (File file : files) {
-                    if (file.getName().startsWith("theme-")) {
+                    if (file.getName().startsWith(themeName + "-")) {
                         file.delete();
                     }
                 }
@@ -85,7 +90,7 @@ public class ThemeLoader {
 
             Reader input = new FileReader(style);
             Minifier min = new CSSMinifier(input);
-            FileWriter output = new FileWriter("static/css/theme-"+generatedIdent+".css");
+            FileWriter output = new FileWriter("static/css/" + themeName + "-" + generatedIdent + ".css");
             min.minify(output);
         } catch (IOException e) {
             logger.error("Failed to copy style-{}.css for theme [" + theme.getName() + "]", generatedIdent);

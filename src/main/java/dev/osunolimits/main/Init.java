@@ -29,7 +29,9 @@ public class Init {
 
     public final Logger log = (Logger) LoggerFactory.getLogger("Igniter");
 
+
     public void initializeWebServer(WebServer webServer) {
+
         try {
             webServer.setThreadPool(Integer.parseInt(App.env.get("MIN_THREADS")),
                     Integer.parseInt(App.env.get("MAX_THREAS")), Integer.parseInt(App.env.get("TIMEOUT_MS")));
@@ -48,12 +50,12 @@ public class Init {
         }
 
         try {
-            if(App.devMode) {
+            if (App.devMode) {
                 webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("DEV_PORT")), 3010);
-            }else{
+            } else {
                 webServer.ignite(App.env.get("HOST"), Integer.parseInt(App.env.get("PORT")), 3000);
             }
-            
+
         } catch (Exception e) {
             log.error("Failed to ignite WebServer", e);
             System.exit(1);
@@ -102,7 +104,6 @@ public class Init {
             // Disable logging for Jetty
             Logger jettyLogger = loggerContext.getLogger("org.eclipse.jetty");
             jettyLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-
 
             // Optionally, disable specific Jetty components if needed
             Logger serverLogger = loggerContext.getLogger("org.eclipse.jetty.server");
@@ -154,36 +155,15 @@ public class Init {
         MySQL mysql = Database.getConnection();
 
         try {
-           for (String s : new SQLFileLoader("autorun_sql/").loadSQLFiles()) {
+            for (String s : new SQLFileLoader("autorun_sql/").loadSQLFiles()) {
                 mysql.Exec(s);
-           }
+            }
         } catch (IOException | URISyntaxException e) {
             log.error("Failed to autorun sql files", e);
             System.exit(1);
         }
         mysql.close();
     }
-
-    public void initializeConnectionWatcher() {
-        // Thread t = new Thread(() -> {
-        //     while (true) {
-        //         try {
-        //             Thread.sleep(1000 * 30);
-        //         } catch (InterruptedException e) {
-        //             log.error("ConnectionWatcher Thread interrupted", e);
-        //             return;
-        //         }
-    
-        //         for (MySQL con : Database.runningConnections) {
-        //             if (System.currentTimeMillis() - con.connectionCreated > 1000 * 30) { // 30 seconds
-        //                 con.close();
-        //             }
-        //         }
-        //     }
-        // });
-        // t.setName("ConnectionWatcher (shiina)");
-        // t.start();
-    }    
 
     public void initializeDataDirectory() {
         try {
@@ -192,7 +172,7 @@ public class Init {
             }
 
             if (!Files.exists(Paths.get("data/dbversion.json"))) {
-                
+
                 Gson gson = new Gson();
                 DbVersion dbVersion = new DbVersion();
                 dbVersion.setVersion(App.version);
@@ -205,7 +185,7 @@ public class Init {
             System.exit(1);
         }
 
-
     }
+
 
 }

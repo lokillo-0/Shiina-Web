@@ -25,7 +25,7 @@
 
     <link rel="stylesheet" href="/css/wysibb-theme.css">
     <#if !currentTheme.included>
-    <link rel="stylesheet" href="/css/theme-${themeIdent}.css">
+    <link rel="stylesheet" href="/css/theme<#if devMode>dev</#if>-${themeIdent}.css">
     </#if>
 
     <#if seo??>

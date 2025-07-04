@@ -65,27 +65,38 @@ public class ShiinaDocs {
         File[] files = new File("docs/").listFiles();
         Parser parser = Parser.builder().build();
         for (File file : files) {
-            if (file.getName().endsWith("md")) {
-                try {
-                    String sb = readDocsFile(file.getName());
-                    DocsModel model = ShiinaDocs.extractComments(sb);
-                    if (model == null) {
-                        App.log.warn("File docs/" + file.getName() + " does not contain comments");
-                        continue;
-                    }
 
-                    Node document = parser.parse(sb);
-                    HtmlRenderer renderer = HtmlRenderer.builder().build();
-
-                    model.content = renderer.render(document);
-                    model.filename = file.getName();
-                    docs.add(model);
-                } catch (IOException e) {
-                    App.log.warn("Failed to read file docs/" + file.getName());
-                }
-            } else {
-                App.log.warn("File docs/" + file.getName() + " is not a markdown file");
+            if (file.isDirectory()) {
+                continue;
             }
+
+            if (file.getName().equalsIgnoreCase("README.md") || file.getName().equalsIgnoreCase(".git")) {
+                continue;
+            }
+
+            if (!file.getName().endsWith("md")) {
+                App.log.warn("File docs/" + file.getName() + " is not a markdown file");
+                continue;
+            }
+
+            try {
+                String sb = readDocsFile(file.getName());
+                DocsModel model = ShiinaDocs.extractComments(sb);
+                if (model == null) {
+                    App.log.warn("File docs/" + file.getName() + " does not contain comments");
+                    continue;
+                }
+
+                Node document = parser.parse(sb);
+                HtmlRenderer renderer = HtmlRenderer.builder().build();
+
+                model.content = renderer.render(document);
+                model.filename = file.getName();
+                docs.add(model);
+            } catch (IOException e) {
+                App.log.warn("Failed to read file docs/" + file.getName());
+            }
+
         }
         WebServer.get("/docs/:route", getDocsRoute());
     }

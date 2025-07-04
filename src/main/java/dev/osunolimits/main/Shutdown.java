@@ -28,6 +28,11 @@ public class Shutdown extends Thread {
             App.multiDetection.shutdown();
         }
 
+        if(App.databaseCleanUp != null) {
+            log.info("Shutting down database cleanup thread...");
+            App.databaseCleanUp.interrupt();
+        }
+
         log.info("Closing active MySQL connections (" + Database.runningConnections.size() + " connections)...");
         for (MySQL connection : new ArrayList<>(Database.runningConnections)) {
             try {
@@ -49,8 +54,19 @@ public class Shutdown extends Thread {
 
         if (App.webServer != null) {
             log.info("Stopping web server...");
-            Spark.stop();
             Spark.awaitStop();
+            App.webServer.shutdown();
+            App.webServer = null;
+        }
+
+        // Force JVM to perform garbage collection to release any lingering resources
+        System.gc();
+
+        // Additional delay to ensure all resources are properly cleaned up
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
         log.info("Shutdown completed successfully in " + (System.currentTimeMillis() - startTime) + " ms.");

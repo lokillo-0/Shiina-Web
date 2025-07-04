@@ -1,14 +1,12 @@
 package dev.osunolimits.main;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import dev.osunolimits.common.Database;
-import dev.osunolimits.common.MySQL;
+import dev.osunolimits.common.DatabaseCleanUp;
 import dev.osunolimits.models.Action;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ShiinaMultiDetection;
@@ -113,6 +111,7 @@ public class App {
     
     public static ShiinaRankCache rankCache;
     public static ShiinaMultiDetection multiDetection;
+    public static DatabaseCleanUp databaseCleanUp;
 
     public static void main(String[] args) throws SQLException {
 
@@ -122,6 +121,7 @@ public class App {
         if(args.length > 0 && args[0].equals("-dev")) {
             devMode = true;
             log.info("Running shiina in development mode, do not use this in production!"); 
+            log.info("Also some stuff will not work when not running a prod instance in the bg!"); 
         }
 
         env = Dotenv.configure().directory(".config/").load();
@@ -132,9 +132,8 @@ public class App {
         init.initializeRedisConfiguration();
         init.initializeJettyLogging();
         init.initializeDatabase();
-        init.initializeConnectionWatcher();
-        init.initializeAutorunSQL();
         init.initializeJedis();
+        if(!devMode) init.initializeAutorunSQL();
         customization = init.initializeCustomizations();
 
         ThemeLoader.loadThemes();
@@ -247,6 +246,12 @@ public class App {
 
             rankCache = new ShiinaRankCache();
             multiDetection = new ShiinaMultiDetection();
+            databaseCleanUp = new DatabaseCleanUp();
+            databaseCleanUp.setName("ShiinaDatabaseCleanUp");
+            databaseCleanUp.start();
+            
+
+           
         }
 
         ModuleRegister.reloadModuleConfigurations();

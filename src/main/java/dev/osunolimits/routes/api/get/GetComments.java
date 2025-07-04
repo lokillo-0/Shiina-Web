@@ -4,10 +4,9 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 import dev.osunolimits.main.App;
-import dev.osunolimits.models.Group;
 import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.modules.ShiinaSupporterBadge;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.ShiinaSupporterBadge;
 import dev.osunolimits.modules.utils.MySQLRoute;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.PermissionHelper;

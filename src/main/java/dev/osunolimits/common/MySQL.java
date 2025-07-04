@@ -131,6 +131,7 @@ public final class MySQL implements AutoCloseable{
 				Database.currentConnections--;
 				Database.runningConnections.remove(this);
 				currentCon.close();
+				currentCon = null;
 			}
 		} catch (Exception ex) {
 			logSQL("Failed to close connection");

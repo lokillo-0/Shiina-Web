@@ -70,4 +70,37 @@ public class WebServer extends Spark {
         LOG.info("WebServer ignited on -> " +   ip + ":" + port + ")");
     }
 
+
+    /**
+     * Properly shuts down the web server and releases all resources.
+     * This method ensures that the Spark server and all associated resources are
+     * properly cleaned up to prevent port binding issues on restart.
+     */
+    public void shutdown() {
+        LOG.info("Performing thorough web server shutdown sequence");
+        
+        try {
+            // Get port for debugging
+            int currentPort = Spark.port();
+            LOG.info("Shutting down server on port: " + currentPort);
+     
+            // Stop accepting new requests
+            Spark.stop();
+            LOG.info("Stopped accepting new requests");
+            
+           
+            
+            // Allow current requests to finish processing
+            LOG.info("Waiting for ongoing requests to complete...");
+            Spark.awaitStop();
+            
+
+            System.gc();
+            
+            
+            LOG.info("Web server shutdown complete");
+        } catch (Exception e) {
+            LOG.error("Error during web server shutdown: " + e.getMessage(), e);
+        }
+    }
 }

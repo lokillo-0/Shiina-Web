@@ -35,6 +35,7 @@ public class Shiina implements Route {
         shiina.data.put("docs", ShiinaDocs.docs);
         shiina.data.put("analytics", analytics);
         shiina.data.put("domain", domain);
+        shiina.data.put("devMode", App.devMode);
         shiina.data.put("themeIdent", ThemeLoader.generatedIdent);
         try {
             Template templateFree = WebServer.freemarkerCfg.getTemplate(template);
