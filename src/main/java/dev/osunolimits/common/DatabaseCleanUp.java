@@ -36,7 +36,7 @@ public class DatabaseCleanUp extends Thread {
                 }
             }
 
-            if (cleanedUp > 0) {
+            if (cleanedUp > 0 || trashed > 0) {
                 logger.info("Cleaned up {} and trashed {} MySQL connections", cleanedUp, trashed);
             }
 

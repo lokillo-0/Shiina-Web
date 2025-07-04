@@ -22,8 +22,34 @@ public final class MySQL implements AutoCloseable{
 
 	public long connectionCreated;
 	public String caller;
+	private Connection currentCon;
 
 	private final int COLUMN_WIDTH = 20;
+
+	public MySQL(Connection currentCon) {
+		open(currentCon);
+	}
+
+	public synchronized void open(Connection currentCon) {
+		this.connectionCreated = System.currentTimeMillis();
+		caller = Thread.currentThread().getStackTrace()[4].getClassName();
+		Database.runningConnections.add(this);
+		this.currentCon = currentCon;
+	}
+
+	public synchronized void close() {
+		try {
+			if (!currentCon.isClosed()) {
+				Database.currentConnections--;
+				Database.runningConnections.remove(this);
+				currentCon.close();
+				currentCon = null;
+			}
+		} catch (Exception ex) {
+			logSQL("Failed to close connection");
+		}
+
+	}
 
     private void printResultSet(ResultSet resultSet) {
         try {
@@ -47,14 +73,6 @@ public final class MySQL implements AutoCloseable{
             e.printStackTrace();
         }
     }
-	private Connection currentCon;
-
-	public MySQL(Connection currentCon) {
-		this.connectionCreated = System.currentTimeMillis() / 1000;
-		caller = Thread.currentThread().getStackTrace()[4].getClassName();
-		Database.runningConnections.add(this);
-		this.currentCon = currentCon;
-	}
 
 	public ResultSet Query(String sql, Object... args) {
 		try {
@@ -124,20 +142,6 @@ public final class MySQL implements AutoCloseable{
 			return -1;
 		}
 	}	
-
-	public void close() {
-		try {
-			if (!currentCon.isClosed()) {
-				Database.currentConnections--;
-				Database.runningConnections.remove(this);
-				currentCon.close();
-				currentCon = null;
-			}
-		} catch (Exception ex) {
-			logSQL("Failed to close connection");
-		}
-
-	}
 
     
     private void logSQL(String message) {
