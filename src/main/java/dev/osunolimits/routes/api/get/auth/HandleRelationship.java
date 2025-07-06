@@ -10,7 +10,7 @@ import dev.osunolimits.utils.Validation;
 import spark.Request;
 import spark.Response;
 
-public class UpdateRelationship extends Shiina {
+public class HandleRelationship extends Shiina {
 
     private final String SEARCH_QUERY = "SELECT * FROM `relationships` WHERE `user1` = ? AND `user2` = ?";
     private final String DEL_QUERY = "DELETE FROM `relationships` WHERE `user1` = ? AND `user2` = ?";

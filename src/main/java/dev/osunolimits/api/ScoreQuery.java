@@ -8,7 +8,6 @@ import com.google.gson.Gson;
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.Beatmap;
-import dev.osunolimits.models.Group;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.ShiinaSupporterBadge;
 import dev.osunolimits.utils.osu.OsuConverter;

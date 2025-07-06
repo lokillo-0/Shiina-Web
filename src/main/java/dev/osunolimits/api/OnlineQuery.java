@@ -23,9 +23,9 @@ public class OnlineQuery {
 
     public OnlineQuery() {
         client = new OkHttpClient.Builder()
-    .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
-    .cache(new Cache(new File(".cache/users"), 100L * 1024L * 1024L))
-    .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
+            .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
+            .cache(new Cache(new File(".cache/users"), 100L * 1024L * 1024L))
+            .connectionPool(new ConnectionPool(200, 10, TimeUnit.SECONDS)).build(); 
     }
 
 

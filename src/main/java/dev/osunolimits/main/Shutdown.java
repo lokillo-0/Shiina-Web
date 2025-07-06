@@ -33,6 +33,11 @@ public class Shutdown extends Thread {
             App.databaseCleanUp.interrupt();
         }
 
+        if(App.hourlyPlayerStatsThread != null) {
+            log.info("Shutting down hourly player stats thread...");
+            App.hourlyPlayerStatsThread.interrupt();
+        }
+
         log.info("Closing active MySQL connections (" + Database.runningConnections.size() + " connections)...");
         for (MySQL connection : new ArrayList<>(Database.runningConnections)) {
             try {

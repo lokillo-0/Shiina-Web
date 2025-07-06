@@ -19,6 +19,10 @@
     transform: translateX(20px);
 }
 
+.beatmap-title {
+    min-height:70px
+}
+
 .shiina-border {
     border-color: var(--bs-action-border-color) !important;
 }

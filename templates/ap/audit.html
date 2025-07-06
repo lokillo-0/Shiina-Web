@@ -12,7 +12,7 @@
 
     <ul class="list-group ">
     <#list auditLog as log>
-    <li class="list-group-item"> <img src="${avatarServer}/${log.userId}" class="img-fluid" width="20"> <a href="/ap/user?id=${log.userId}">${log.userName}</a> 
+    <li class="list-group-item"> <img src="${avatarServer}/${log.userId?c}" class="img-fluid" width="20"> <a href="/ap/user?id=${log.userId}">${log.userName}</a> 
     <#if log.action == "RESTRICT">
     restricted
     <#elseif log.action == "UNRESTRICT">
@@ -24,8 +24,8 @@
     <#elseif log.action == "RMPB">
     removed profile picture of
     </#if>
-    <img src="${avatarServer}/${log.targetId}" class="img-fluid" width="20">
-    <a href="/ap/user?id=${log.targetId}">${log.targetName}</a> 
+    <img src="${avatarServer}/${log.targetId?c}" class="img-fluid" width="20">
+    <a href="/ap/user?id=${log.targetId?c}">${log.targetName}</a> 
     for
     "${log.reason}"
     <#if log.action == "WIPE">

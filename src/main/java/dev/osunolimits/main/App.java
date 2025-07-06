@@ -6,8 +6,9 @@ import java.util.Map;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
-import dev.osunolimits.common.DatabaseCleanUp;
 import dev.osunolimits.models.Action;
+import dev.osunolimits.modules.DatabaseCleanUp;
+import dev.osunolimits.modules.HourlyPlayerStatsThread;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.ShiinaMultiDetection;
 import dev.osunolimits.modules.ShiinaRankCache;
@@ -52,7 +53,7 @@ import dev.osunolimits.routes.api.get.Search;
 import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
-import dev.osunolimits.routes.api.get.auth.UpdateRelationship;
+import dev.osunolimits.routes.api.get.auth.HandleRelationship;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Bot;
@@ -112,6 +113,7 @@ public class App {
     public static ShiinaRankCache rankCache;
     public static ShiinaMultiDetection multiDetection;
     public static DatabaseCleanUp databaseCleanUp;
+    public static HourlyPlayerStatsThread hourlyPlayerStatsThread;
 
     public static void main(String[] args) throws SQLException {
 
@@ -196,7 +198,7 @@ public class App {
 
         WebServer.get("/api/v1/manage_cl", new HandleClanAction());
         WebServer.get("/api/v1/join_clan", new HandleClanRequest());
-        WebServer.get("/api/v1/update_rel", new UpdateRelationship());
+        WebServer.get("/api/v1/update_rel", new HandleRelationship());
         WebServer.post("/api/v1/handle_favorite", new HandleBeatmapFavorite());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
@@ -241,17 +243,19 @@ public class App {
         shiinaDocs.initializeDocs();
 
         if(!devMode) {
+            
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.loadPlugins();
 
             rankCache = new ShiinaRankCache();
             multiDetection = new ShiinaMultiDetection();
-            databaseCleanUp = new DatabaseCleanUp();
-            databaseCleanUp.setName("ShiinaDatabaseCleanUp");
-            databaseCleanUp.start();
-            
 
-           
+            databaseCleanUp = new DatabaseCleanUp();
+            databaseCleanUp.start();
+
+            hourlyPlayerStatsThread = new HourlyPlayerStatsThread();
+            hourlyPlayerStatsThread.start();
+            
         }
 
         ModuleRegister.reloadModuleConfigurations();

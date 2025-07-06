@@ -1,12 +1,19 @@
-package dev.osunolimits.common;
+package dev.osunolimits.modules;
 
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import dev.osunolimits.common.Database;
+import dev.osunolimits.common.MySQL;
 
 public class DatabaseCleanUp extends Thread {
 
     private final Logger logger = (Logger) LoggerFactory.getLogger("DatabaseCleanUp-Web");
+
+    public DatabaseCleanUp() {
+        setName("DatabaseCleanUp");
+        setDaemon(true);
+    }
 
     @Override
     public void run() {

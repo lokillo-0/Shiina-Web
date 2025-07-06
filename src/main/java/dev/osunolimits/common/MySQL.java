@@ -143,7 +143,6 @@ public final class MySQL implements AutoCloseable{
 		}
 	}	
 
-    
     private void logSQL(String message) {
         if(App.loggerEnv.get("MYSQL_LOG").equalsIgnoreCase("TRUE")) {
             log.info(message);

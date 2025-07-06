@@ -23,6 +23,7 @@ public class ShiinaMultiDetection {
         ThreadFactory threadFactory = r -> {
             Thread thread = Executors.defaultThreadFactory().newThread(r);
             thread.setName("ShiinaMultiDetection");
+            thread.setDaemon(true);
             return thread;
         };
         

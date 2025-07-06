@@ -35,10 +35,10 @@
         <div class="score-details text-light">
             <!-- Action buttons moved to top-right of details section with higher z-index -->
             <div class="score-actions">
-                <a href="/scores/${score.id?c}" class="action-button view-button bg-dark bg-opacity-50 text-light" title="View Score">
+                <a href="/scores/${score.score_id?c}" class="action-button view-button bg-dark bg-opacity-50 text-light" title="View Score">
                     <i class="fas fa-eye"></i>
                 </a>
-                <a href="${apiUrlPub}/v1/get_replay?id=${score.id?c}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
+                <a href="${apiUrlPub}/v1/get_replay?id=${score.score_id?c}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
                     <i class="fas fa-download"></i>
                 </a>
             </div>
