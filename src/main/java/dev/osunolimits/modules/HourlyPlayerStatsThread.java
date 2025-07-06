@@ -3,7 +3,9 @@ package dev.osunolimits.modules;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.slf4j.LoggerFactory;
@@ -24,7 +26,7 @@ public class HourlyPlayerStatsThread extends Thread {
 
     public HourlyPlayerStatsStore getStore() {
         return store;
-    }  
+    }
 
     public HourlyPlayerStatsThread() {
         setName("HourlyPlayerStatsThread");
@@ -36,14 +38,14 @@ public class HourlyPlayerStatsThread extends Thread {
     public void run() {
         // Wait until the next hour boundary before starting collection
         waitUntilNextHour();
-        
+
         while (!isInterrupted()) {
             // Check for interruption before making API call
             if (isInterrupted()) {
                 log.info("HourlyPlayerStatsThread interrupted during loop, shutting down gracefully");
                 break;
             }
-            
+
             BanchoStats stats = new BanchoStats();
             PlayerCountResponse playerCount = stats.getPlayerCount();
             if (playerCount != null && !isInterrupted()) {
@@ -71,9 +73,9 @@ public class HourlyPlayerStatsThread extends Thread {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextHour = now.truncatedTo(ChronoUnit.HOURS).plusHours(1);
         long millisecondsUntilNextHour = ChronoUnit.MILLIS.between(now, nextHour);
-        
+
         log.info("Waiting {} ms until next hour boundary ({})", millisecondsUntilNextHour, nextHour);
-        
+
         try {
             Thread.sleep(millisecondsUntilNextHour);
         } catch (InterruptedException e) {
@@ -101,11 +103,19 @@ public class HourlyPlayerStatsThread extends Thread {
             }
         }
 
-        public List<Integer> getLast14Values() {
+        public List<Map<String, Object>> getLast14Values() {
             List<String> entries = App.jedisPool.zrange(REDIS_KEY, -14, -1);
-            return entries.stream()
-                    .map(entry -> Integer.parseInt(entry.split(":")[1]))
-                    .collect(Collectors.toList());
+
+            return entries.stream().map(entry -> {
+                String[] parts = entry.split(":");
+                long timestampSec = Long.parseLong(parts[0]);
+                int value = Integer.parseInt(parts[1]);
+
+                Map<String, Object> map = new HashMap<>();
+                map.put("time", timestampSec * 1000); // convert to milliseconds
+                map.put("value", value);
+                return map;
+            }).collect(Collectors.toList());
         }
     }
 

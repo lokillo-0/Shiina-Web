@@ -50,6 +50,7 @@ import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.api.get.GetRankCache;
 import dev.osunolimits.routes.api.get.Health;
 import dev.osunolimits.routes.api.get.Search;
+import dev.osunolimits.routes.api.get.auth.GetLastDayPlayerAdmin;
 import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
@@ -188,6 +189,7 @@ public class App {
         WebServer.post("/post/comment", new HandleComment());
         WebServer.notFound(new NotFound());
 
+        WebServer.get("/api/v1/get_ap_players", new GetLastDayPlayerAdmin());
         WebServer.get("/api/v1/get_comments", new GetComments());
         WebServer.get("/api/v1/get_first_places", new GetFirstPlaces());
         WebServer.get("/api/v1/get_player_scores", new GetPlayerScores());
