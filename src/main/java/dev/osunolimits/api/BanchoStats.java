@@ -39,7 +39,7 @@ public class BanchoStats {
 
     public BanchoStats() {
         client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
+                .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
                 .cache(new Cache(new File(".cache/stats"), 100L * 1024L * 1024L))
                 .connectionPool(new ConnectionPool(50, 30, TimeUnit.MINUTES)).build();
     }
