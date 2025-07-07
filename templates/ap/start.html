@@ -1,95 +1,170 @@
 <#include "assets/base.html">
-<div class="container-fluid my-3">
-    <!-- Page Header -->
-    <div class="row align-items-center mb-3">
-        <div class="col-auto">
-            <h5 class="mb-0">
-                <i class="fa-solid fa-house"></i> Start
-            </h5>
+    <div class="container-fluid my-3">
+        <!-- Page Header -->
+        <div class="row align-items-center mb-3">
+            <div class="col-auto">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-house"></i> Start
+                </h5>
+            </div>
         </div>
+
+        <!-- Statistic Cards -->
+        <div class="row g-3">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-map"></i> Active Map Requests</h6>
+                        <h4 class="card-text">${active_map_requests}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-sign-in-alt"></i> Logins Today</h6>
+                        <h4 class="card-text">${logins_today}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-users"></i> Total Users</h6>
+                        <h4 class="card-text">${total_users}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-check-circle"></i> Verified Users</h6>
+                        <h4 class="card-text">${verified_users}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-star"></i> Map Ratings</h6>
+                        <h4 class="card-text">${map_ratings}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-user-plus"></i> Registered Last Month
+                        </h6>
+                        <h4 class="card-text">${registered_last_month}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-user-clock"></i> Online Users</h6>
+                        <h4 class="card-text">${online_users}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-heart"></i> Donators</h6>
+                        <h4 class="card-text">${donators}</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted"><i class="fa-solid fa-ban"></i> Silenced Users</h6>
+                        <h4 class="card-text">${silenced_users}</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title mb-0"><i class="fa-solid fa-chart-line"></i> Player Activity</h6>
+                    </div>
+                    <div class="card-body">
+                        <div style="position: relative; height: 400px;">
+                            <canvas id="playerChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+                function initPlayerChart() {
+                    fetch("/api/v1/get_ap_players")
+                        .then(response => response.json())
+                        .then(data => {
+                            const ctx = document.getElementById('playerChart').getContext('2d');
+                            const labels = data.map(entry => new Date(entry.time).toLocaleString());
+                            const values = data.map(entry => entry.value);
+
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: labels,
+                                    datasets: [{
+                                        label: 'Player Count',
+                                        data: values,
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderWidth: 1,
+                                        fill: true
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false,
+                                    scales: {
+                                        x: {
+                                            type: 'category',
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Time'
+                                            }
+                                        },
+                                        y: {
+                                            beginAtZero: true,
+                                            display: true,
+                                            title: {
+                                                display: true,
+                                                text: 'Players'
+                                            }
+                                        }
+                                    },
+                                    plugins: {
+                                        legend: {
+                                            display: true,
+                                            position: 'top'
+                                        }
+                                    }
+                                }
+                            }); // <- was incorrectly closed outside
+                        });
+                }
+                initPlayerChart();
+            </script>
+
+        </div>
+
     </div>
-
-    <!-- Statistic Cards -->
-    <div class="row g-3">
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-map"></i> Active Map Requests</h6>
-                    <h4 class="card-text">${active_map_requests}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-sign-in-alt"></i> Logins Today</h6>
-                    <h4 class="card-text">${logins_today}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-users"></i> Total Users</h6>
-                    <h4 class="card-text">${total_users}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-check-circle"></i> Verified Users</h6>
-                    <h4 class="card-text">${verified_users}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-star"></i> Map Ratings</h6>
-                    <h4 class="card-text">${map_ratings}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-user-plus"></i> Registered Last Month</h6>
-                    <h4 class="card-text">${registered_last_month}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-user-clock"></i> Online Users</h6>
-                    <h4 class="card-text">${online_users}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-heart"></i> Donators</h6>
-                    <h4 class="card-text">${donators}</h4>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-4">
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title text-muted"><i class="fa-solid fa-ban"></i> Silenced Users</h6>
-                    <h4 class="card-text">${silenced_users}</h4>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
