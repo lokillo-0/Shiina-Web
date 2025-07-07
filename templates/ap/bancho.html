@@ -12,13 +12,15 @@
     </div>
 <div class="container my-5">
 
-       <div class="row">
+       <div class="row justify-content-center">
         <#list online.players as p>
         <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title d-inline-block"><img width="50" class="img-fluid img-thumbnail" src="${avatarServer}/${p.id?c}" alt=""></h5>
-                    <p class="card-text d-inline-block"><i class="ms-3 fa-solid text-success fa-circle me-3"></i><a target="_blank" href="/u/${p.id?c}">${p.name}</a></p>
+            <div class="card h-100 ">
+                <div class="card-body h-100 d-flex align-items-center">
+                    <img width="50" class="img-fluid img-thumbnail me-3" src="${avatarServer}/${p.id?c}" alt="">
+                    <div>
+                        <i class="fa-solid text-success fa-circle me-2"></i><a target="_blank" href="/ap/user?id=${p.id?c}">${p.name}</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -26,9 +28,11 @@
         <#list online.bots as p>
         <div class="col-md-4 mb-3">
             <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title d-inline-block"><img width="50" class="img-fluid img-thumbnail" src="${avatarServer}/${p.id?c}" alt=""></h5>
-                    <p class="card-text d-inline-block"><i class="ms-3 fa-solid text-success fa-circle me-3"></i> ${p.name}</p>
+                <div class="card-body d-flex align-items-center">
+                    <img width="50" class="img-fluid img-thumbnail me-3" src="${avatarServer}/${p.id?c}" alt="">
+                    <div>
+                        <i class="fa-solid text-success fa-circle me-2"></i> ${p.name}
+                    </div>
                 </div>
             </div>
         </div>
