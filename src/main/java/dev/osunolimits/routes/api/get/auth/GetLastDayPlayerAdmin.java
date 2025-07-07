@@ -26,9 +26,7 @@ public class GetLastDayPlayerAdmin extends Shiina {
         }
 
         ShiinaAPIHandler shiinaAPIHandler = new ShiinaAPIHandler();
-
-        res.type("application/json");
-        return shiinaAPIHandler.renderJSON(App.hourlyPlayerStatsThread.getStore().getLast14Values(), shiina, res);
+        return shiinaAPIHandler.renderJSON(App.hourlyPlayerStatsThread.getStore().getLast24Hours(), shiina, res);
     }
     
 }

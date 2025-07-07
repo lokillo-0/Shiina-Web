@@ -93,18 +93,22 @@ public class HourlyPlayerStatsThread extends Thread {
             // Add value with hour boundary timestamp as score
             App.jedisPool.zadd(REDIS_KEY, hourBoundary, entry);
 
-            // Remove entries older than 24 hours
-            App.jedisPool.zremrangeByScore(REDIS_KEY, 0, hourBoundary - ONE_DAY_SECONDS);
+            // Remove entries older than 24 hours (keep exactly 24 hours of data)
+            long cutoffTime = hourBoundary - ONE_DAY_SECONDS;
+            App.jedisPool.zremrangeByScore(REDIS_KEY, "-inf", String.valueOf(cutoffTime));
 
-            // Keep only the last 24 entries (24 hours)
+            // Additional safety: ensure we don't exceed 24 entries
             long count = App.jedisPool.zcard(REDIS_KEY);
             if (count > 24) {
                 App.jedisPool.zremrangeByRank(REDIS_KEY, 0, count - 25); // Keep last 24
             }
+            
+            log.debug("Stored hourly value {} at timestamp {}. Total entries: {}", value, hourBoundary, App.jedisPool.zcard(REDIS_KEY));
         }
 
-        public List<Map<String, Object>> getLast14Values() {
-            List<String> entries = App.jedisPool.zrange(REDIS_KEY, -14, -1);
+        public List<Map<String, Object>> getLast24Hours() {
+            // Get all entries (up to 24 hours)
+            List<String> entries = App.jedisPool.zrange(REDIS_KEY, 0, -1);
 
             return entries.stream().map(entry -> {
                 String[] parts = entry.split(":");
@@ -116,6 +120,10 @@ public class HourlyPlayerStatsThread extends Thread {
                 map.put("value", value);
                 return map;
             }).collect(Collectors.toList());
+        }
+
+        public int getStoredHoursCount() {
+            return (int) App.jedisPool.zcard(REDIS_KEY);
         }
     }
 

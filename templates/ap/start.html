@@ -115,8 +115,15 @@
                         .then(response => response.json())
                         .then(data => {
                             const ctx = document.getElementById('playerChart').getContext('2d');
-                            const labels = data.map(entry => new Date(entry.time).toLocaleString());
-                            const values = data.map(entry => entry.value);
+                            const labels = data.map(entry => {
+                                const date = new Date(entry.time);
+                                const hour = date.getHours();
+                                const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+                                const dayName = dayNames[date.getDay()];
+                                const hourString = hour.toString().padStart(2, '0');
+                                return dayName + ' ' + hourString + ':00';
+                            });
+                            const values = data.map(entry => Math.round(entry.value));
 
                             new Chart(ctx, {
                                 type: 'line',
@@ -125,8 +132,8 @@
                                     datasets: [{
                                         label: 'Player Count',
                                         data: values,
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: '#2e2c2a',
+                                        backgroundColor: '#635a51',
                                         borderWidth: 1,
                                         fill: true
                                     }]
@@ -139,23 +146,29 @@
                                             type: 'category',
                                             display: true,
                                             title: {
-                                                display: true,
-                                                text: 'Time'
+                                                display: false
                                             }
                                         },
                                         y: {
                                             beginAtZero: true,
                                             display: true,
                                             title: {
-                                                display: true,
-                                                text: 'Players'
+                                                display: false
+                                            },
+                                            ticks: {
+                                                callback: function(value) {
+                                                    return Math.round(value);
+                                                }
                                             }
                                         }
                                     },
                                     plugins: {
+                                        tooltip: {
+                                            mode: 'nearest',
+                                            intersect: false
+                                        },
                                         legend: {
-                                            display: true,
-                                            position: 'top'
+                                            display: false
                                         }
                                     }
                                 }
