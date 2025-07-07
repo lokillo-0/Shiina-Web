@@ -34,7 +34,7 @@ public class Init {
 
         try {
             webServer.setThreadPool(Integer.parseInt(App.env.get("MIN_THREADS")),
-                    Integer.parseInt(App.env.get("MAX_THREAS")), Integer.parseInt(App.env.get("TIMEOUT_MS")));
+                    Integer.parseInt(App.env.get("MAX_THREADS")), Integer.parseInt(App.env.get("TIMEOUT_MS")));
         } catch (Exception e) {
             log.warn("Failed to set WebServer Thread Configuration");
             System.exit(1);
