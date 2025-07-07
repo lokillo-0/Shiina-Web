@@ -21,7 +21,7 @@
                         title="View Score">
                         <i class="fas fa-eye"></i>
                     </a>
-                    <a href="https://osu.direct/api/d/${beatmap.set_id?c}"
+                    <a href="https://catboy.best/d/${beatmap.set_id?c}"
                         class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
                         <i class="fas fa-download"></i>
                     </a>
