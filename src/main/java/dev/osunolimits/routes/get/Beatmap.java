@@ -106,11 +106,14 @@ public class Beatmap extends Shiina {
     private String getSort(Request req) {
         String sort = "pp";
 
-        if (req.queryParams("sort") == null) {
-            return sort;
+        if(req.queryParams("sort") != null) {
+            String sortParam = req.queryParams("sort").toLowerCase();
+            if (sortParam.equals("pp") || sortParam.equals("score") || sortParam.equals("scorev2")) {
+                sort = sortParam;
+            }
         }
 
-        return req.queryParams("sort").equals("score") ? sort = "score" : sort;
+        return sort;
     }
 
     private int getPage(Request req) {
@@ -174,32 +177,52 @@ public class Beatmap extends Shiina {
     private List<FullBeatmap.BeatmapScore> getBeatmapScores(FullBeatmap fullBeatmap, int mode, String sort, int page,
             ShiinaRequest shiina) throws Exception {
         String query = getScoreQuery(sort);
+        if (query.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<FullBeatmap.BeatmapScore> scores = new ArrayList<>();
-        try (ResultSet scoreQuery = shiina.mysql.Query(query, fullBeatmap.getMd5(), mode, mode, pageSize + 1,
-                ((page - 1) * pageSize))) {
-            while (scoreQuery.next()) {
-                FullBeatmap.BeatmapScore score = new FullBeatmap().new BeatmapScore();
-                score.setId(scoreQuery.getInt("id"));
-                score.setPp(scoreQuery.getInt("pp"));
-                score.setScore(scoreQuery.getLong("score"));
-                score.setGrade(scoreQuery.getString("grade"));
-                score.setPlayTime(scoreQuery.getString("play_time"));
-                score.setMods(OsuConverter.convertMods(scoreQuery.getInt("mods")));
-                score.setUserId(scoreQuery.getInt("userid"));
-                score.setName(scoreQuery.getString("name"));
-                score.setCountry(scoreQuery.getString("country"));
-                UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + score.getUserId()),
-                        UserInfoObject.class);
-
-                if(PermissionHelper.hasPrivileges(userInfo.priv, PermissionHelper.Privileges.SUPPORTER)) {
-                    userInfo.groups.add(ShiinaSupporterBadge.getInstance().getGroup());
-                    score.setSupporter(true);
+        
+        if (sort.equals("scorev2")) {
+            // ScoreV2 query only needs 4 parameters
+            try (ResultSet scoreQuery = shiina.mysql.Query(query, fullBeatmap.getMd5(), mode, pageSize + 1, ((page - 1) * pageSize))) {
+                if (scoreQuery != null) {
+                    processScoreResults(scoreQuery, scores);
                 }
-                score.setUser(userInfo);
-                scores.add(score);
+            }
+        } else {
+            // PP and Score queries need 5 parameters (including the subquery mode parameter)
+            try (ResultSet scoreQuery = shiina.mysql.Query(query, fullBeatmap.getMd5(), mode, mode, pageSize + 1, ((page - 1) * pageSize))) {
+                if (scoreQuery != null) {
+                    processScoreResults(scoreQuery, scores);
+                }
             }
         }
+        
         return scores;
+    }
+
+    private void processScoreResults(ResultSet scoreQuery, List<FullBeatmap.BeatmapScore> scores) throws Exception {
+        while (scoreQuery.next()) {
+            FullBeatmap.BeatmapScore score = new FullBeatmap().new BeatmapScore();
+            score.setId(scoreQuery.getInt("id"));
+            score.setPp(scoreQuery.getInt("pp"));
+            score.setScore(scoreQuery.getLong("score"));
+            score.setGrade(scoreQuery.getString("grade"));
+            score.setPlayTime(scoreQuery.getString("play_time"));
+            score.setMods(OsuConverter.convertMods(scoreQuery.getInt("mods")));
+            score.setUserId(scoreQuery.getInt("userid"));
+            score.setName(scoreQuery.getString("name"));
+            score.setCountry(scoreQuery.getString("country"));
+            UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + score.getUserId()),
+                    UserInfoObject.class);
+
+            if(PermissionHelper.hasPrivileges(userInfo.priv, PermissionHelper.Privileges.SUPPORTER)) {
+                userInfo.groups.add(ShiinaSupporterBadge.getInstance().getGroup());
+                score.setSupporter(true);
+            }
+            score.setUser(userInfo);
+            scores.add(score);
+        }
     }
 
     private String getScoreQuery(String sort) {
@@ -211,6 +234,7 @@ public class Beatmap extends Shiina {
                         FROM scores AS s
                         LEFT JOIN users AS u ON s.userid = u.id
                         WHERE s.map_md5 = ? AND s.status = 2 AND s.mode = ?
+                        AND (s.mods & 536870912) = 0
                         AND s.pp = (
                             SELECT MAX(inner_s.pp)
                             FROM scores AS inner_s
@@ -218,6 +242,7 @@ public class Beatmap extends Shiina {
                             AND inner_s.userid = s.userid
                             AND inner_s.status = 2
                             AND inner_s.mode = ?
+                            AND (inner_s.mods & 536870912) = 0
                         )
                         ORDER BY s.pp DESC, s.play_time ASC
                         LIMIT ? OFFSET ?
@@ -230,6 +255,7 @@ public class Beatmap extends Shiina {
                         FROM scores AS s
                         LEFT JOIN users AS u ON s.userid = u.id
                         WHERE s.map_md5 = ? AND s.status = 2 AND s.mode = ?
+                        AND (s.mods & 536870912) = 0
                         AND s.score = (
                             SELECT MAX(inner_s.score)
                             FROM scores AS inner_s
@@ -237,13 +263,45 @@ public class Beatmap extends Shiina {
                             AND inner_s.userid = s.userid
                             AND inner_s.status = 2
                             AND inner_s.mode = ?
+                            AND (inner_s.mods & 536870912) = 0
                         )
                         ORDER BY s.score DESC, s.play_time ASC
                         LIMIT ? OFFSET ?
                         """;
 
+            case "scorev2":
+                return """
+                        SELECT s.id, s.pp, s.score, s.grade, s.play_time, s.userid, s.mods,
+                               u.name, u.country, u.priv
+                        FROM scores AS s
+                        LEFT JOIN users AS u ON s.userid = u.id
+                        WHERE s.map_md5 = ? AND s.status = 2 AND s.mode = ?
+                        AND (s.mods & 536870912) > 0
+                        ORDER BY s.score DESC, s.play_time ASC
+                        LIMIT ? OFFSET ?
+                        """;
+
             default:
-                return "";
+                // Default to PP leaderboard if sort parameter is invalid
+                return """
+                        SELECT s.id, s.pp, s.score, s.grade, s.play_time, s.userid, s.mods,
+                               u.name, u.country, u.priv
+                        FROM scores AS s
+                        LEFT JOIN users AS u ON s.userid = u.id
+                        WHERE s.map_md5 = ? AND s.status = 2 AND s.mode = ?
+                        AND (s.mods & 536870912) = 0
+                        AND s.pp = (
+                            SELECT MAX(inner_s.pp)
+                            FROM scores AS inner_s
+                            WHERE inner_s.map_md5 = s.map_md5
+                            AND inner_s.userid = s.userid
+                            AND inner_s.status = 2
+                            AND inner_s.mode = ?
+                            AND (inner_s.mods & 536870912) = 0
+                        )
+                        ORDER BY s.pp DESC, s.play_time ASC
+                        LIMIT ? OFFSET ?
+                        """;
         }
     }
 
