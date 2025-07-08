@@ -115,7 +115,7 @@ public class HandleRegister extends Shiina {
     
         Gson gson = new Gson();
         String userJson = gson.toJson(user);
-        App.jedisPool.set("shiina:auth:" + token, userJson);
+        App.jedisPool.setex("shiina:auth:"+token, 604800, userJson);
     
         // Set cookie
         res.cookie("shiina", token);
