@@ -1,9 +1,18 @@
 html {
     font-size: 80%;
 }
+
 body {
     font-family: "Martian Mono", monospace !important;
 }
+
 .shiina-ap-icon {
     width: 15px;
+}
+
+table {
+    table-layout: fixed;
+    /* Enforces fixed column widths */
+    width: 100%;
+    /* Makes the table span the container width */
 }
