@@ -9,7 +9,15 @@
         </div>
     </div>
 
-    <div class="container my-5">
+    <#if state??>
+    <div class="container">
+        <div class="alert alert-${state}" role="alert">
+            ${message}
+        </div>
+    </div>
+    </#if>
+
+    <div class="container">
         <div class="row justify-content-center">
             <#list modularSettings as setting>
             <form method="POST" action="/ap/settings/update?key=${setting.key}">

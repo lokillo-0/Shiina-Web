@@ -51,6 +51,12 @@ public class ModularSettings extends Shiina {
 
         shiina.data.put("modularSettings", modularSettings);
         shiina.data.put("themes", ThemeLoader.themes);
+
+        if(req.queryParams("state") != null && req.queryParams("message") != null) {
+            shiina.data.put("state", req.queryParams("state"));
+            shiina.data.put("message", req.queryParams("message"));
+        }
+
         return renderTemplate("ap/settings.html", shiina, res, req);
     }
 

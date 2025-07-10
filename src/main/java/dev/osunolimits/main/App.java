@@ -39,6 +39,7 @@ import dev.osunolimits.routes.ap.get.system.SystemConnections;
 import dev.osunolimits.routes.ap.get.system.SystemThreads;
 import dev.osunolimits.routes.ap.get.users.ApUser;
 import dev.osunolimits.routes.ap.get.users.Users;
+import dev.osunolimits.routes.ap.post.ChangeSetting;
 import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.ap.post.ProcessManageGroup;
 import dev.osunolimits.routes.api.get.GetBanner;
@@ -208,6 +209,7 @@ public class App {
         WebServer.get("/ap/bancho", new Bancho());
         WebServer.get("/ap/api/handler", new PubSubHandler());
         WebServer.get("/ap/settings", new ModularSettings());
+        
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/audit", new Audit());
         WebServer.get("/ap/chat", new ChatExplorer());
@@ -226,6 +228,7 @@ public class App {
         WebServer.get("/ap/users", new Users());
         WebServer.get("/ap/user", new ApUser());
         WebServer.post("/ap/themes/change", new ChangeTheme());
+        WebServer.post("/ap/settings/update", new ChangeSetting());
 
         WebServer.get("/banner/:id", new GetBanner());
         GroupRegistry.revalidate();
