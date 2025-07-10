@@ -1,0 +1,287 @@
+<!-- Remove profile picture Modal reason -->
+<div class="modal modal-lg fade" id="rmppModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remove Profile Picture of ${aname}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="" class="form-label">Reason</label>
+                    <input type="text" class="form-control" id="reasonInputPb" aria-describedby="helpId"
+                        placeholder="Reason for removing the profile picture" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-danger" onclick="removeProfilePicture(this)">
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wipe Modal -->
+<div class="modal modal-lg fade" id="wipeModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Wipe ${aname}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Mode</label>
+                        <select class="form-select form-select-lg" name="" id="modeInput">
+                            <#list allModes as allmode>
+                                <option value="${convertModeToNumber(allmode)}">${allmode}</option>
+                            </#list>
+                        </select>
+                    </div>
+
+                    <label for="" class="form-label">Reason</label>
+                    <input type="text" class="form-control" id="reasonInputWipe" aria-describedby="helpId"
+                        placeholder="Reason for wiping the user" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-danger" onclick="wipe(this)">
+                    Wipe
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Donator Modal -->
+<div class="modal modal-lg fade" id="donatorModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Give Donator to ${aname}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="" class="form-label">Duration</label>
+                    <input type="text" maxlength="5" class="form-control" id="durationInput" aria-describedby="helpId"
+                        placeholder="Duration in format (1w/1d/1m)" />
+                    <small id="helpId" class="form-text text-muted">⚠️ The user will be given donator for the specified
+                        duration</small>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-warning" onclick="givedonator(this)">
+                    Give Donator
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Restrict Modal -->
+<div class="modal modal-lg fade" id="restrictModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <#if priv?seq_contains("UNRESTRICTED")>Restrict<#else>Unrestrict</#if> ${aname}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="" class="form-label">Reason</label>
+                    <input type="text" class="form-control" id="reasonInput" aria-describedby="helpId"
+                        placeholder="Reason for restricting the user" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <#if priv?seq_contains("UNRESTRICTED")><button type="button" class="btn btn-danger"
+                        onclick="restrict(this)">
+                        <#else><button type="button" class="btn btn-danger" onclick="unrestrict(this)"></#if>
+
+                <#if priv?seq_contains("UNRESTRICTED")>Restrict<#else>Unrestrict</#if>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Recovery Modal -->
+<div class="modal modal-lg fade" id="recoveryModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Generate recovery url for ${aname}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="" class="form-label">Recovery URL</label>
+                    <input type="text" class="form-control" id="recoveryUrlInput" aria-describedby="helpId"
+                        placeholder="Click generate to get the URL" readonly />
+                    <small id="helpId" class="form-text text-muted">⚠️ With this URL the user can change the password
+                        and login to their Account</small>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-danger"
+                    onclick="generateRecoveryUrl(document.getElementById('recoveryUrlInput'))">
+                    Generate
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Group Modal -->
+<div class="modal fade" id="groupModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Change groups for ${aname}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group list-group-numbered">
+                    <#list allGroups as group>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${group.emoji} ${group.name}</span>
+                            <#if groups?seq_contains(group)>
+                                <a class="btn btn-danger btn-sm"
+                                    href="/ap/groups/process?id=${id}&group=${group.id}&action=remove" role="button">
+                                    Remove
+                                </a>
+                                <#else>
+                                    <a class="btn btn-primary btn-sm"
+                                        href="/ap/groups/process?id=${id}&group=${group.id}&action=add" role="button">
+                                        Add
+                                    </a>
+                            </#if>
+                        </li>
+                    </#list>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
+
+<script>
+
+    function removeProfilePicture(button) {
+        button.disabled = true;
+        temp = button.innerHTML;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        fetch("/ap/api/handler?type=rmpb&id=${id}&reason=" + document.getElementById('reasonInputPb').value)
+            .then((data) => {
+
+            });
+        setTimeout(() => {
+            button.disabled = false;
+            button.innerHTML = temp;
+            window.location.reload();
+        }, 2500);
+    }
+
+    function wipe(button) {
+        button.disabled = true;
+        temp = button.innerHTML;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        fetch("/ap/api/handler?type=wipe&id=${id}&mode=" + document.getElementById('modeInput').value + "&reason=" + document.getElementById('reasonInputWipe').value)
+            .then((data) => {
+
+            });
+        setTimeout(() => {
+            button.disabled = false;
+            button.innerHTML = temp;
+            window.location.reload();
+        }, 2500);
+    }
+
+    function givedonator(button) {
+        button.disabled = true;
+        temp = button.innerHTML;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        fetch("/ap/api/handler?type=givedonator&id=${id}&duration=" + document.getElementById('durationInput').value)
+            .then((data) => {
+
+            });
+        setTimeout(() => {
+            button.disabled = false;
+            button.innerHTML = temp;
+            window.location.reload();
+        }, 2500);
+    }
+
+    function restrict(button) {
+        button.disabled = true;
+        temp = button.innerHTML;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        fetch("/ap/api/handler?type=restrict&id=${id}&reason=" + document.getElementById('reasonInput').value)
+            .then((data) => {
+
+            });
+        setTimeout(() => {
+            button.disabled = false;
+            button.innerHTML = temp;
+            window.location.reload();
+        }, 2500);
+    }
+
+    function unrestrict(button) {
+        button.disabled = true;
+        temp = button.innerHTML;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+
+        fetch("/ap/api/handler?type=unrestrict&id=${id}&reason=" + document.getElementById('reasonInput').value)
+            .then((data) => {
+
+            });
+        setTimeout(() => {
+            button.disabled = false;
+            button.innerHTML = temp;
+            window.location.reload();
+        }, 2500);
+    }
+
+    function generateRecoveryUrl(input) {
+        fetch("/ap/users/recovery?id=${id}")
+            .then((res) => res.json())
+            .then((data) => {
+                input.value = 'https://' + window.location.host + data.url;
+            });
+    }
+</script>

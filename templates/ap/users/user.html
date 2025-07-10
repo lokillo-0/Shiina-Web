@@ -1,675 +1,213 @@
 <#include "/ap/assets/base.html">
 
-<div class="container-fluid my-3">
-  <div class="row align-items-center mb-3">
-    <div class="col-auto">
-      <h5 class="mb-0">
-        <i class="fa-solid fa-user-group"></i> Admin - User Details
-      </h5>
-    </div>
-  </div>
-</div>
-
-<div class="container-fluid">
-  
-  <div class="row" style="margin-bottom: 45px;">
-    <div class="col-5">
-      <div class="card-header d-flex align-items-center">
-        <img
-          src="${avatarServer}/${id}"
-          alt="${aname} avatar"
-          class="rounded-circle me-2"
-          style="width: 60px; height: 60px;"
-        />
-        <div>
-          <h5 class="mb-0">${aname} <small>(${safe_name})</small></h5>
-          <small class="text-muted">${country}</small>
-        </div>
-      </div>
-      <div class="card shadow-sm mt-3">
-        <div class="card-body">
-          <h6 class="text-uppercase">User Details</h6>
-          <p>ID: ${id}</p>
-          <p>Privileges: ${privLevel?c}</p>
-        </div>
-      </div>
-      <div class="card shadow-sm mt-3">
-        <div class="card-body">
-          <h6 class="text-uppercase">Standing</h6>
-
-          <ul class="list-group ">
-          <#list standings as standing>
-
-            <li class="list-group-item"> <img src="${avatarServer}/${standing.userId}" class="img-fluid" width="20"> <a href="/ap/user?id=${standing.userId}">${standing.userName}</a> 
-              <#if standing.action == "RESTRICT">
-              restricted
-              <#elseif standing.action == "UNRESTRICT">
-              unrestricted
-              <#elseif standing.action == "WIPE">
-              wiped
-              <#elseif standing.action == "RMPB">
-              removed profile picture of
-              </#if>
-              <img src="${avatarServer}/${standing.targetId}" class="img-fluid" width="20">
-              <a href="/ap/user?id=${standing.targetId}">${standing.targetName}</a> 
-              for
-              "${standing.reason}"
-              <#if standing.action == "WIPE">
-              on mode (${convertModeBack(standing.mode)?upper_case})
-              </#if>
-            </li>
-
-            <#else>
-            Account is in good standing
-            </#list>
-        </ul>
-        </div>
-      </div>
-      <div class="card shadow-sm mt-3">
-        <div class="card-body">
-          <h6 class="text-uppercase">Multi Accounts (${detections?size})</h6>
-
-          <ul class="list-group ">
-          <#list detections as detection>
-
-            <li class="list-group-item"> 
-              <img src="${avatarServer}/${detection.user1?c}" class="img-fluid" width="20">
-              <a href="/ap/user?id=${detection.user1?c}">${detection.user1_name}</a> 
-              with account
-              <img src="${avatarServer}/${detection.user2?c}" class="img-fluid" width="20">
-              <a href="/ap/user?id=${detection.user2?c}">${detection.user2_name}</a> 
-              Level (${detection.level})
-            </li>
-
-            <#else>
-            No Multiaccounts found
-            </#list>
-        </ul>
-        </div>
-      </div>
-    </div>
-    <div class="col-7">
-  <!-- User Profile Section -->
-  <div class="card shadow-sm">
-      
-    <div class="card-body">
-      <h6 class="text-uppercase">Privileges</h6>
-      <ul class="list-unstyled mb-3">
-        <#list priv as appriv>
-          <li>${appriv}</li>
-        </#list>
-      </ul>
-      <h6 class="text-uppercase">Groups</h6>
-      <ul class="list-unstyled mb-3">
-        <#list groups as group>
-          <li>${group.emoji} ${group.name}</li>
-        <#else>
-          <li>None</li>
-        </#list>
-      </ul>
-    </div>
-  </div>
-  
-  <!-- User Activity Section -->
-  <div class="card shadow-sm mt-3">
-  <div class="card-body">
-    <h6 class="text-uppercase">Activity</h6>
-    <p>Last Active: 
-      <span data-timestamp-format="unix" data-timestamp="${latest_activity}">
-        ${latest_activity}
-      </span>
-    </p>
-    <p>Account Created: 
-      <span data-timestamp-format="unix" data-timestamp="${creation_time}">
-        ${creation_time}
-      </span>
-    </p>
-    <#if silence_end?? && (silence_end != "0")>
-      <p>Silence Ends: 
-        <span data-timestamp-format="unix" data-timestamp="${silence_end}">
-          ${silence_end}
-        </span>
-      </p>
-    </#if>
-    <#if donor_end?? && (donor_end != "0")>
-      <p>Donor Ends: 
-        <span data-timestamp-format="unix" data-timestamp="${donor_end}">
-          ${donor_end}
-        </span>
-      </p>
-    </#if>
-
-    
-  <a type="button"
-  href="/ap/chat?search=${id}" class="btn btn-primary">
-    <i class="fa-solid fa-comment"></i> View in Chat Explorer
-  </a>
-
-  </div>
-
-
-  </div>
-
-
-  
-  
-  <!-- Clan Section -->
-  <#if clan_id?? && (clan_id != "0")>
-    <div class="card shadow-sm mt-3">
-      <div class="card-body">
-        <h6 class="text-uppercase">Clan</h6>
-        <p>Clan ID: ${clan_id}</p>
-        <p>Clan Name: ${clan_name}</p>
-        <p>Clan Tag: ${clan_tag}</p>
-        <p>Clan Privileges: ${clan_priv}</p>
-      </div>
-    </div>
-  </#if>
-  
-
-
-  </div>
-
-  
-  
-  
-</div>
-
-<div class="position-fixed bottom-0 p-2 bg-body-tertiary w-100">
-  <a target="_blank" href="/u/${id}" class="btn btn-primary">
-    <i class="fa-solid fa-chevron-left"></i> Go to profile
-  </a>
-
-  <#if priv?seq_contains("UNRESTRICTED")>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#restrictModal" class="btn btn-danger">
-  <i class="fa-solid fa-shield"></i> Restrict
-  </button>
-  <#else>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#restrictModal" class="btn btn-danger">
-  <i class="fa-solid fa-shield"></i> Unrestrict
-  </button>
-  </#if>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#wipeModal" class="btn btn-danger">
-  <i class="fa-solid fa-trash"></i> Wipe
-  </button>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#rmppModal" class="btn btn-danger">
-  <i class="fa-solid fa-trash"></i> Remove Profile Picture
-  </button>
-  <#if userPriv?seq_contains("ADMINISTRATOR")>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#groupModal" class="btn btn-danger">
-    <i class="fa-solid fa-star"></i> Edit groups
-  </button>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#recoveryModal" class="btn btn-danger">
-    <i class="fa-solid fa-link"></i> Generate Recovery URL
-  </button>
-  <button type="button"
-  data-bs-toggle="modal"
-  data-bs-target="#donatorModal" class="btn btn-warning">
-  <i class="fa-solid fa-gift"></i> Give Donator
-  </button>
-  </#if>
-</div>
-
-<!-- Remove profile picture Modal reason -->
-<div
-  class="modal modal-lg fade"
-  id="rmppModal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Remove Profile Picture of ${aname}</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="" class="form-label">Reason</label>
-          <input
-            type="text"
-            class="form-control"
-            id="reasonInputPb"
-            aria-describedby="helpId"
-            placeholder="Reason for removing the profile picture"
-            
-          />
-        </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          onclick="removeProfilePicture(this)"
-        >
-          Remove
-        </button>
+  <div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-user-group"></i> User Details of ${aname}
+        </h5>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Wipe Modal -->
-<div
-  class="modal modal-lg fade"
-  id="wipeModal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Wipe ${aname}</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <div class="mb-3">
-            <label for="" class="form-label">Mode</label>
-            <select
-              class="form-select form-select-lg"
-              name=""
-              id="modeInput"
-            >
-              <#list allModes as allmode>
-                <option value="${convertModeToNumber(allmode)}">${allmode}</option> 
-              </#list>
-            </select>
+  <div class="container-fluid mt-2">
+    <div class="row">
+      <div class="col-12 col-md-6">
+
+        <div class="card p-0">
+          <div class="card-header border-0">
+            <h5 class="mb-0 fw-bold">User Details</h5>
           </div>
-          
-          <label for="" class="form-label">Reason</label>
-          <input
-            type="text"
-            class="form-control"
-            id="reasonInputWipe"
-            aria-describedby="helpId"
-            placeholder="Reason for wiping the user"
-            
-          />
+          <div class="card-body">
+            <div class="d-flex align-items-center">
+              <img src="${avatarServer}/${id}" alt="${aname} avatar" class="me-2" style="width: 60px; height: 60px;" />
+              <div>
+                <h5 class="mb-0">${aname} <small>(${safe_name})</small></h5>
+                <small class="text-muted">${country}</small>
+              </div>
+            </div>
+            <div class="mt-2">
+              <p>ID: ${id}</p>
+              <p>Privileges: ${privLevel?c}</p>
+            </div>
+          </div>
         </div>
-        
+
+        <div class="card mt-2 p-0">
+          <div class="card-header border-0">
+            <h5 class="mb-0 fw-bold">Standing</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              <#list standings as standing>
+                <li class="list-group-item">
+                  <img src="${avatarServer}/${standing.userId}" class="img-fluid" width="20">
+                  <a href="/ap/user?id=${standing.userId}">${standing.userName}</a>
+                  <#if standing.action=="RESTRICT">
+                    restricted
+                    <#elseif standing.action=="UNRESTRICT">
+                      unrestricted
+                      <#elseif standing.action=="WIPE">
+                        wiped
+                        <#elseif standing.action=="RMPB">
+                          removed profile picture of
+                  </#if>
+                  <img src="${avatarServer}/${standing.targetId}" class="img-fluid" width="20">
+                  <a href="/ap/user?id=${standing.targetId}">${standing.targetName}</a>
+                  for
+                  "${standing.reason}"
+                  <#if standing.action=="WIPE">
+                    on mode (${convertModeBack(standing.mode)?upper_case})
+                  </#if>
+                </li>
+                <#else>
+                  <li class="list-group-item">Account is in good standing</li>
+              </#list>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card mt-2 p-0">
+          <div class="card-header border-0">
+            <h5 class="mb-0 fw-bold">Multi Accounts (${detections?size})</h5>
+          </div>
+          <div class="card-body">
+            <ul class="list-group">
+              <#list detections as detection>
+                <li class="list-group-item">
+                  <img src="${avatarServer}/${detection.user1?c}" class="img-fluid" width="20">
+                  <a href="/ap/user?id=${detection.user1?c}">${detection.user1_name}</a>
+                  with account
+                  <img src="${avatarServer}/${detection.user2?c}" class="img-fluid" width="20">
+                  <a href="/ap/user?id=${detection.user2?c}">${detection.user2_name}</a>
+                  Level (${detection.level})
+                </li>
+                <#else>
+                  <li class="list-group-item">No Multiaccounts found</li>
+              </#list>
+            </ul>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
+
+      <div class="col-12 col-md-6">
+
+        <div class="card p-0">
+          <div class="card-header border-0">
+            <h5 class="mb-0 fw-bold">Permissions</h5>
+          </div>
+          <div class="card-body">
+            <h6 class="text-uppercase">Privileges</h6>
+            <ul class="list-unstyled mb-3">
+              <#list priv as appriv>
+                <li>${appriv}</li>
+              </#list>
+            </ul>
+            <h6 class="text-uppercase">Groups</h6>
+            <ul class="list-unstyled mb-3">
+              <#list groups as group>
+                <li>${group.emoji} ${group.name}</li>
+                <#else>
+                  <li>None</li>
+              </#list>
+            </ul>
+          </div>
+        </div>
+
+
+        <div class="card mt-2 p-0">
+          <div class="card-header border-0">
+            <h5 class="mb-0 fw-bold">Activity</h5>
+          </div>
+          <div class="card-body">
+            <p>Last Active:
+              <span data-timestamp-format="unix" data-timestamp="${latest_activity}">
+                ${latest_activity}
+              </span>
+            </p>
+            <p>Account Created:
+              <span data-timestamp-format="unix" data-timestamp="${creation_time}">
+                ${creation_time}
+              </span>
+            </p>
+            <#if silence_end?? && (silence_end !="0" )>
+              <p>Silence Ends:
+                <span data-timestamp-format="unix" data-timestamp="${silence_end}">
+                  ${silence_end}
+                </span>
+              </p>
+            </#if>
+            <#if donor_end?? && (donor_end !="0" )>
+              <p>Donor Ends:
+                <span data-timestamp-format="unix" data-timestamp="${donor_end}">
+                  ${donor_end}
+                </span>
+              </p>
+            </#if>
+
+            <a type="button" href="/ap/chat?search=${id}" class="btn btn-outline-primary">
+              <i class="fa-solid fa-comment"></i> View in Chat Explorer
+            </a>
+          </div>
+        </div>
+
+        <#if clan_id?? && (clan_id !="0" )>
+          <div class="card mt-2 p-0">
+            <div class="card-header border-0">
+              <h5 class="mb-0 fw-bold">Clan</h5>
+            </div>
+            <div class="card-body">
+              <p>Clan ID: ${clan_id}</p>
+              <p>Clan Name: ${clan_name}</p>
+              <p>Clan Tag: ${clan_tag}</p>
+              <p>Clan Privileges: ${clan_priv}</p>
+            </div>
+          </div>
+        </#if>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-auto w-100 p-3 bg-body-tertiary border-top">
+    <div class="">
+      <a target="_blank" href="/u/${id}" class="btn btn-primary me-2">
+        <i class="fa-solid fa-chevron-left"></i> Go to profile
+      </a>
+
+      <#if priv?seq_contains("UNRESTRICTED")>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#restrictModal" class="btn btn-danger me-2">
+          <i class="fa-solid fa-shield"></i> Restrict
         </button>
-        <button
-        type="button"
-        class="btn btn-danger"
-        onclick="wipe(this)"
-      >
-        Wipe
+        <#else>
+          <button type="button" data-bs-toggle="modal" data-bs-target="#restrictModal" class="btn btn-danger me-2">
+            <i class="fa-solid fa-shield"></i> Unrestrict
+          </button>
+      </#if>
+
+      <button type="button" data-bs-toggle="modal" data-bs-target="#wipeModal" class="btn btn-danger me-2">
+        <i class="fa-solid fa-trash"></i> Wipe
       </button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Donator Modal -->
-<div
-  class="modal modal-lg fade"
-  id="donatorModal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Give Donator to ${aname}</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="" class="form-label">Duration</label>
-          <input
-            type="text"
-            maxlength="5"
-            class="form-control"
-            id="durationInput"
-            aria-describedby="helpId"
-            placeholder="Duration in format (1w/1d/1m)"
-          />
-          <small id="helpId" class="form-text text-muted">⚠️ The user will be given donator for the specified duration</small>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-warning"
-          onclick="givedonator(this)"
-        >
-          Give Donator
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Restrict Modal -->
-<div
-  class="modal modal-lg fade"
-  id="restrictModal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          <#if priv?seq_contains("UNRESTRICTED")>Restrict<#else>Unrestrict</#if> ${aname}
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="" class="form-label">Reason</label>
-          <input
-            type="text"
-            class="form-control"
-            id="reasonInput"
-            aria-describedby="helpId"
-            placeholder="Reason for restricting the user"
-            
-          />
-        </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
-        </button>
-        <#if priv?seq_contains("UNRESTRICTED")><button
-        type="button"
-        class="btn btn-danger"
-        onclick="restrict(this)"><#else><button
-        type="button"
-        class="btn btn-danger"
-        onclick="unrestrict(this)"></#if>
-        
-      <#if priv?seq_contains("UNRESTRICTED")>Restrict<#else>Unrestrict</#if>
+      <button type="button" data-bs-toggle="modal" data-bs-target="#rmppModal" class="btn btn-danger me-2">
+        <i class="fa-solid fa-trash"></i> Remove Profile Picture
       </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Recovery Modal -->
-<div
-  class="modal modal-lg fade"
-  id="recoveryModal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Generate recovery url for ${aname}
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="" class="form-label">Recovery URL</label>
-          <input
-            type="text"
-            class="form-control"
-            id="recoveryUrlInput"
-            aria-describedby="helpId"
-            placeholder="Click generate to get the URL"
-            readonly
-          />
-          <small id="helpId" class="form-text text-muted">⚠️ With this URL the user can change the password and login to their Account</small>
-        </div>
-        
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
+
+      <#if userPriv?seq_contains("ADMINISTRATOR")>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#groupModal" class="btn btn-danger me-2">
+          <i class="fa-solid fa-star"></i> Edit groups
         </button>
-        <button
-        type="button"
-        class="btn btn-danger"
-        onclick="generateRecoveryUrl(document.getElementById('recoveryUrlInput'))"
-      >
-        Generate
-      </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Group Modal -->
-<div
-  class="modal fade"
-  id="groupModal"
-  tabindex="-1"
-  role="dialog"
-  aria-hidden="true"
->
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">
-          Change groups for ${aname}
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <ul class="list-group list-group-numbered">
-          <#list allGroups as group>
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              <span>${group.emoji} ${group.name}</span>
-              <#if groups?seq_contains(group)>
-              <a
-                class="btn btn-danger btn-sm"
-                href="/ap/groups/process?id=${id}&group=${group.id}&action=remove"
-                role="button"
-              >
-                Remove
-              </a>
-              <#else>
-                <a
-                  class="btn btn-primary btn-sm"
-                  href="/ap/groups/process?id=${id}&group=${group.id}&action=add"
-                  role="button"
-                >
-                  Add
-                </a>
-              </#if>
-            </li>
-          </#list>
-        </ul>
-        
-      </div>
-      <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          data-bs-dismiss="modal"
-        >
-          Close
+
+        <button type="button" data-bs-toggle="modal" data-bs-target="#recoveryModal" class="btn btn-danger me-2">
+          <i class="fa-solid fa-link"></i> Generate Recovery URL
         </button>
-      
-      </div>
+
+        <button type="button" data-bs-toggle="modal" data-bs-target="#donatorModal" class="btn btn-warning">
+          <i class="fa-solid fa-gift"></i> Give Donator
+        </button>
+      </#if>
     </div>
   </div>
 
-
-  
-  </div>
-<script>
-
-  function removeProfilePicture(button) {
-    button.disabled = true;
-    temp = button.innerHTML;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-    fetch("/ap/api/handler?type=rmpb&id=${id}&reason=" + document.getElementById('reasonInputPb').value)
-      .then((data) => {
-        
-      });
-    setTimeout(() => {
-      button.disabled = false;
-      button.innerHTML = temp;
-      window.location.reload();
-    }, 2500);
-  }
-
-  function wipe(button) {
-    button.disabled = true;
-    temp = button.innerHTML;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-    fetch("/ap/api/handler?type=wipe&id=${id}&mode=" + document.getElementById('modeInput').value + "&reason=" + document.getElementById('reasonInputWipe').value)
-      .then((data) => {
-        
-      });
-    setTimeout(() => {
-      button.disabled = false;
-      button.innerHTML = temp;
-      window.location.reload();
-    }, 2500);
-  }
-
-  function givedonator(button) {
-    button.disabled = true;
-    temp = button.innerHTML;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-    fetch("/ap/api/handler?type=givedonator&id=${id}&duration=" + document.getElementById('durationInput').value)
-      .then((data) => {
-        
-      });
-    setTimeout(() => {
-      button.disabled = false;
-      button.innerHTML = temp;
-      window.location.reload();
-    }, 2500);
-  }
-
-  function restrict(button) {
-    button.disabled = true;
-    temp = button.innerHTML;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-    fetch("/ap/api/handler?type=restrict&id=${id}&reason=" + document.getElementById('reasonInput').value)
-      .then((data) => {
-        
-      });
-    setTimeout(() => {
-      button.disabled = false;
-      button.innerHTML = temp;
-      window.location.reload();
-    }, 2500);
-  }
-
-  function unrestrict(button) {
-    button.disabled = true;
-    temp = button.innerHTML;
-    button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
-
-    fetch("/ap/api/handler?type=unrestrict&id=${id}&reason=" + document.getElementById('reasonInput').value)
-      .then((data) => {
-        
-      });
-    setTimeout(() => {
-      button.disabled = false;
-      button.innerHTML = temp;
-      window.location.reload();
-    }, 2500);
-  }
-
-  function generateRecoveryUrl(input) {
-    fetch("/ap/users/recovery?id=${id}")
-      .then((res) => res.json())
-      .then((data) => {
-        input.value = 'https://' + window.location.host + data.url;
-      });
-  }
-</script>
-
-<style>
-  .card {
-    border: none;
-    border-radius: 10px;
-    background-color: var(--body-bg);
-  }
-
-  .card-header {
-    display: flex;
-    align-items: center;
-    background-color: var(--primary-bg);
-    color: var(--primary-text);
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem;
-  }
-
-</style>
+  <#include "/ap/users/modals.html">
