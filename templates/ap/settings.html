@@ -1,58 +1,61 @@
 <#include "assets/base.html">
-    <div class="container-fluid my-3">
-        <div class="row align-items-center mb-3">
-        <div class="col-auto">
-            <h5 class="mb-0">
-                <i class="fa-solid fa-screwdriver-wrench"></i> Settings
-            </h5>
-        </div>
+
+    <div class="container-fluid bg-body-tertiary border-bottom p-3">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Settings
+                </h5>
+            </div>
         </div>
     </div>
 
-    <#if state??>
-    <div class="container">
-        <div class="alert alert-${state}" role="alert">
-            ${message}
-        </div>
-    </div>
-    </#if>
-
-    <div class="container">
+    <div class="container mt-2">
+        <#if state??>
+            <div class="alert mb-0 mb-2 alert-${state}" role="alert">
+                ${message}
+            </div>
+        </#if>
         <div class="row justify-content-center">
             <#list modularSettings as setting>
-            <form method="POST" action="/ap/settings/update?key=${setting.key}">
-                <div class="card p-0 my-2">
-                    <div class="card-header border-0">
-                        <h5 class="mb-0 fw-bold">
-                            <i class="fa-solid fa-gear text-primary me-2"></i> ${setting.key}
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col">
-                                <#if setting.type == "boolean">
-                                    <select name="value" id="setting-${setting.key}" class="form-select">
-                                        <option value="true" <#if setting.value == "true">selected</#if>>Enabled</option>
-                                        <option value="false" <#if setting.value == "false">selected</#if>>Disabled</option>
-                                    </select>
-                                <#elseif setting.type == "number">
-                                    <input type="number" name="value" id="setting-${setting.key}" class="form-control" value="${setting.value}">
-                                <#else>
-                                    <input type="text" name="value" id="setting-${setting.key}" class="form-control" value="${setting.value}">
-                                </#if>
+                <div class="col-12 col-md-6 col-lg-6 mb-3">
+                    <form method="POST" action="/ap/settings/update?key=${setting.key}">
+                        <div class="card h-100">
+                            <div class="card-header border-0">
+                                <h5 class="mb-0 fw-bold">
+                                    <i class="fa-solid fa-gear text-primary me-2"></i> ${setting.key}
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <#if setting.type=="boolean">
+                                            <select name="value" id="setting-${setting.key}" class="form-select">
+                                                <option value="true" <#if setting.value=="true">selected</#if>>Enabled</option>
+                                                <option value="false" <#if setting.value=="false">selected</#if>>Disabled</option>
+                                            </select>
+                                        <#elseif setting.type=="number">
+                                            <input type="number" name="value" id="setting-${setting.key}"
+                                                class="form-control" value="${setting.value}">
+                                        <#else>
+                                            <input type="text" name="value" id="setting-${setting.key}"
+                                                class="form-control" value="${setting.value}">
+                                        </#if>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col">
+                                        <button type="submit" class="btn btn-primary">Save</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col">
-                                <button type="submit" class="btn btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
-            </form>
             </#list>
         </div>
     </div>
 
-</body>
-</html>
+    </body>
+
+    </html>
