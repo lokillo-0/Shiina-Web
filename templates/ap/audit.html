@@ -1,14 +1,18 @@
 <#include "assets/base.html">
-<div class="container-fluid my-3">
 
-    <!-- Page Header -->
-    <div class="row align-items-center mb-3">
-        <div class="col-auto">
-            <h5 class="mb-0">
-                <i class="fa-solid fa-list"></i> Audit Log
-            </h5>
-        </div>
+  <div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-list"></i> Audit Log
+        </h5>
+      </div>
     </div>
+  </div>
+
+<div class="container-fluid mt-2">
+
+
 
     <ul class="list-group ">
         <#list auditLog as log>
@@ -36,16 +40,9 @@
     </ul>
 
 
-    <div class="row position-fixed bottom-0 p-2 bg-body-tertiary align-items-center justify-content-center w-100">
-        <div class="col-12 text-center">
-            <a href="?page=${page - 1}" class="btn btn-primary <#if page == 0>disabled</#if>">
-                <i class="fa-solid fa-chevron-left"></i>
-            </a>
-            <a href="?page=${page + 1}" class="btn btn-primary <#if !hasNextPage>disabled</#if>">
-                <i class="fa-solid fa-chevron-right"></i>
-            </a>
-        </div>
-    </div>
+
+</div>
+    <#include "/ap/assets/pagination.html">
 
 </div>
 </body>
