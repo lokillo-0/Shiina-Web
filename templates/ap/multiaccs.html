@@ -1,29 +1,16 @@
 <#include "assets/base.html">
-<div class="container-fluid my-3">
-    <style>
-        .avatar {
-            width: 40px; /* Set the width */
-            height: 40px; /* Set the height */
-            border-radius: 50%; /* Circular avatars */
-            margin-right: 5px; /* Space between image and name */
-        }
-        .match {
-            height: 40px; /* Match line height */
-            width: 4px; /* Match line width */
-            background-color: red; /* Red line color */
-            display: inline-block; /* Inline block for alignment */
-            margin: 0 5px; /* Space around the line */
-        }
-    </style>
 
-    <!-- Page Header -->
-    <div class="row align-items-center mb-3">
-        <div class="col-auto">
-            <h5 class="mb-0">
-                <i class="fa-solid fa-users"></i> Multi-Account Detection
-            </h5>
-        </div>
+<div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-users"></i> Multi-Account Detection
+        </h5>
+      </div>
     </div>
+  </div>
+
+<div class="container-fluid my-3">
 
     <!-- Multi-Account Table -->
     <div class="row">
@@ -71,24 +58,10 @@
     </div>
 
 
-        <div class="row position-fixed bottom-0 p-2 bg-body-tertiary align-items-center justify-content-center w-100">
-            <div class="col-12 text-center">
-                <a href="?page=${page - 1}" class="btn btn-primary <#if page == 0>disabled</#if>">
-                    <i class="fa-solid fa-chevron-left"></i>
-                </a>
-                <a href="?page=${page + 1}" class="btn btn-primary <#if !hasNextPage>disabled</#if>">
-                    <i class="fa-solid fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
 
 </div>
+
+<#include "/ap/assets/pagination.html">
+
 </body>
 </html>
-<style>
-
-  table {
-    table-layout: fixed; /* Enforces fixed column widths */
-    width: 100%; /* Makes the table span the container width */
-  }
-</style>

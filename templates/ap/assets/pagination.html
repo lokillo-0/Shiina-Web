@@ -1,0 +1,25 @@
+<div class="mt-auto w-100 p-3 bg-body-tertiary border-top">
+    <div class="container">
+        <div class="d-flex justify-content-center align-items-center">
+            <nav aria-label="User pagination">
+                <ul class="pagination pagination-lg mb-0">
+                    <li class="page-item <#if page == 0>disabled</#if>">
+                        <a class="page-link" href="?page=${page - 1}" aria-label="Previous">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </a>
+                    </li>
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page ${page + 1}
+                        </span>
+                    </li>
+                    <li class="page-item <#if !hasNextPage>disabled</#if>">
+                        <a class="page-link" href="?page=${page + 1}" aria-label="Next">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>

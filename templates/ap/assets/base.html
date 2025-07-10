@@ -20,21 +20,9 @@
 </head>
 
 <body class="ps-xxl-sbwidth">
-    <!-- Top Navbar -->
-    <nav class="navbar navbar-expand-xxl bg-body-tertiary border-bottom border-opacity-25 d-flex d-xxl-none">
-        <div class="container-fluid">
-            <a href="/ap/start" class="navbar-brand d-flex align-items-center">
-                <img src="${c.otherLogoUrl}" alt="icon" width="24" height="24" class="me-2"> 
-                Admin Panel
-            </a>
-            <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
-                <i class="fa-solid fa-bars"></i>
-            </button>
-        </div>
-    </nav>
 
     <!-- Sidebar -->
-    <nav class="sidebar offcanvas-start offcanvas-xxl bg-dark text-light" id="sidebar" tabindex="-1">
+    <nav class="sidebar border-end offcanvas-start offcanvas-xxl bg-dark text-light" id="sidebar" tabindex="-1">
         <!-- Sidebar Header -->
         <div class="offcanvas-header bg-body-tertiary border-bottom border-opacity-25">
             <a class="sidebar-brand d-flex align-items-center" href="/ap/start">
@@ -135,5 +123,19 @@
                     </a>
                 </li>
             </ul>
+        </div>
+    </nav>
+
+<div class="d-flex flex-column min-vh-100">
+        <!-- Top Navbar -->
+    <nav class="navbar navbar-expand-xxl bg-body-tertiary border-bottom border-opacity-25 d-flex d-xxl-none">
+        <div class="container-fluid">
+            <a href="/ap/start" class="navbar-brand d-flex align-items-center">
+                <img src="${c.otherLogoUrl}" alt="icon" width="24" height="24" class="me-2"> 
+                Admin Panel
+            </a>
+            <button class="btn btn-secondary" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+                <i class="fa-solid fa-bars"></i>
+            </button>
         </div>
     </nav>
