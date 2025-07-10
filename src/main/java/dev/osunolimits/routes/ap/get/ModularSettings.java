@@ -1,8 +1,12 @@
 package dev.osunolimits.routes.ap.get;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import lombok.Data;
@@ -26,13 +30,28 @@ public class ModularSettings extends Shiina {
             return notFound(res, shiina);
         }
 
+        HashMap<String, Object> xmlSettings = XmlConfig.getInstance().getAll();
+        ArrayList<ModularSetting> modularSettings = new ArrayList<>();
+
+        for (String key : xmlSettings.keySet()) {
+            ModularSetting setting = new ModularSetting();
+            setting.setKey(key);
+            setting.setValue(xmlSettings.get(key).toString());
+
+            if(setting.getValue().equals("true") || setting.getValue().equals("false")) {
+                setting.setType("boolean");
+            } else if(setting.getValue().matches("\\d+")) {
+                setting.setType("number");
+            } else {
+                setting.setType("text");
+            }
+            
+            modularSettings.add(setting);
+        }
+
+        shiina.data.put("modularSettings", modularSettings);
         shiina.data.put("themes", ThemeLoader.themes);
         return renderTemplate("ap/settings.html", shiina, res, req);
-    }
-
-    @Data
-    public class ModularSettingCard {
-        private String title;
     }
 
     @Data

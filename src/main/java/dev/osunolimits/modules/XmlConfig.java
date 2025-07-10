@@ -61,8 +61,8 @@ public class XmlConfig {
         }
     }
 
-    public Map<String, String> getAllKeys() {
-        Map<String, String> keyValues = new HashMap<>();
+    public HashMap<String, Object> getAll() {
+        HashMap<String, Object> keyValues = new HashMap<>();
         Element root = document.getDocumentElement();
         NodeList nodes = root.getChildNodes();
 
