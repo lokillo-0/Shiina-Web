@@ -1,5 +1,7 @@
 package dev.osunolimits.modules.utils;
 
+import com.google.gson.Gson;
+
 import dev.osunolimits.common.MySQL;
 import dev.osunolimits.plugins.events.admin.OnAuditLogEvent;
 import dev.osunolimits.routes.ap.api.PubSubHandler.MessageType;
@@ -8,6 +10,7 @@ import dev.osunolimits.utils.Auth;
 public class AuditLogger {
     private MySQL mysql;
     private String type;
+    private static final Gson gson = new Gson();
 
     public AuditLogger(MySQL mysql, MessageType type) {
         this.mysql = mysql;
@@ -45,12 +48,12 @@ public class AuditLogger {
     }
 
     public void addPriv(Auth.User user, int targetId, String[] privs) {
-        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `privs`) VALUES (?,?,?,?);", type, user.id, targetId, privs.toString());
+        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `privs`) VALUES (?,?,?,?);", type, user.id, targetId, gson.toJson(privs));
         fire(user.id, targetId, privs, null, null, null);
     }
 
     public void removePriv(Auth.User user, int targetId, String[] privs) {
-        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `privs`) VALUES (?,?,?,?);", type, user.id, targetId, privs.toString());
+        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `privs`) VALUES (?,?,?,?);", type, user.id, targetId, gson.toJson(privs));
         fire(user.id, targetId, privs, null, null, null);
     }
 

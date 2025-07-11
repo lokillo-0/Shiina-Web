@@ -41,6 +41,36 @@ public class ApUser extends Shiina {
         gson = new Gson();
     }
 
+    public enum BanchoPyPrivs {
+        WHITELISTED(PermissionHelper.Privileges.WHITELISTED),
+        PREMIUM(PermissionHelper.Privileges.PREMIUM),
+        ALUMNI(PermissionHelper.Privileges.ALUMNI),
+        TOURNAMENT(PermissionHelper.Privileges.TOURNEY_MANAGER),
+        NOMINATOR(PermissionHelper.Privileges.NOMINATOR),
+        MOD(PermissionHelper.Privileges.MODERATOR),
+        ADMIN(PermissionHelper.Privileges.ADMINISTRATOR),
+        DEVELOPER(PermissionHelper.Privileges.DEVELOPER);
+
+        private final PermissionHelper.Privileges privilege;
+
+        BanchoPyPrivs(PermissionHelper.Privileges privilege) {
+            this.privilege = privilege;
+        }
+
+        public PermissionHelper.Privileges getPrivilege() {
+            return privilege;
+        }
+
+        public static BanchoPyPrivs fromPrivilege(PermissionHelper.Privileges priv) {
+            for (BanchoPyPrivs bp : values()) {
+                if (bp.privilege == priv) {
+                    return bp;
+                }
+            }
+            throw new IllegalArgumentException("Unknown privilege: " + priv);
+        }
+    }
+
     @Override
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
@@ -113,23 +143,14 @@ public class ApUser extends Shiina {
             groups.add(g);
         }
 
-        EnumSet<PermissionHelper.Privileges> allPrivs = EnumSet.noneOf(PermissionHelper.Privileges.class);
-        List<PermissionHelper.Privileges> ignoredPrivs = List.of(PermissionHelper.Privileges.STAFF, 
-                                    PermissionHelper.Privileges.SUPPORTER, 
-                                    PermissionHelper.Privileges.UNRESTRICTED, 
-                                    PermissionHelper.Privileges.VERIFIED);
-        for (PermissionHelper.Privileges priv : PermissionHelper.Privileges.values()) {
-            if(ignoredPrivs.contains(priv)) {
-                continue;
-            }
-            allPrivs.add(priv);
-        }
+        EnumSet<BanchoPyPrivs> allPrivs = EnumSet.allOf(BanchoPyPrivs.class);
 
         shiina.data.put("allGroups", groups);
         shiina.data.put("id", userId);
         shiina.data.put("aname", userInfo.name);
         shiina.data.put("priv", PermissionHelper.Privileges.fromInt(user.getInt("priv")));
         shiina.data.put("allPrivs", allPrivs);
+        shiina.data.put("privs", PermissionHelper.Privileges.fromInt(user.getInt("priv")));
         shiina.data.put("privLevel", user.getInt("priv"));
         shiina.data.put("safe_name", userInfo.safe_name);
         shiina.data.put("groups", userInfo.groups);
@@ -147,5 +168,6 @@ public class ApUser extends Shiina {
         shiina.data.put("clan_priv", user.getString("clan_priv"));
         return renderTemplate("ap/users/user.html", shiina, res, req);
     }
+
 
 }

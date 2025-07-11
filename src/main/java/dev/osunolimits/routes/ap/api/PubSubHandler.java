@@ -2,6 +2,7 @@ package dev.osunolimits.routes.ap.api;
 
 import java.io.File;
 import java.sql.ResultSet;
+import java.util.Arrays;
 
 import com.google.gson.Gson;
 
@@ -169,6 +170,16 @@ public class PubSubHandler extends Shiina {
                 auditLogger.addPriv(shiina.user, addPrivInput.getId(), addPrivInput.getPrivs());
 
                 App.jedisPool.publish("addpriv", GSON.toJson(addPrivInput));
+
+                Thread.sleep(500);
+
+                UserInfoObject obj = GSON.fromJson(App.jedisPool.get("shiina:user:" + addPrivInput.getId()), UserInfoObject.class);
+                ResultSet privRs = shiina.mysql.Query("SELECT `priv` FROM `users` WHERE `id` = ?", addPrivInput.getId());
+                obj.priv = privRs.next() ? privRs.getInt("priv") : 0;
+                String userJson = GSON.toJson(obj);
+                App.jedisPool.del("shiina:user:" + addPrivInput.getId());
+                App.jedisPool.set("shiina:user:" + addPrivInput.getId(), userJson);
+                res.redirect("/ap/user?id=" + addPrivInput.getId());
                 break;
             }
             case REMOVEPRIV: {
@@ -179,9 +190,19 @@ public class PubSubHandler extends Shiina {
                 removePrivInput.setId(Integer.parseInt(req.queryParams("id")));
                 removePrivInput.setPrivs(req.queryParamsValues("privs"));
 
-                auditLogger.removePriv(shiina.user, removePrivInput.getId(), removePrivInput.getPrivs());
-
                 App.jedisPool.publish("removepriv", GSON.toJson(removePrivInput));
+
+                Thread.sleep(500);
+                UserInfoObject obj = GSON.fromJson(App.jedisPool.get("shiina:user:" + removePrivInput.getId()), UserInfoObject.class);
+                ResultSet privRs = shiina.mysql.Query("SELECT `priv` FROM `users` WHERE `id` = ?", removePrivInput.getId());
+                obj.priv = privRs.next() ? privRs.getInt("priv") : 0;
+                String userJson = GSON.toJson(obj);
+                App.jedisPool.del("shiina:user:" + removePrivInput.getId());
+                App.jedisPool.set("shiina:user:" + removePrivInput.getId(), userJson);
+
+                auditLogger.removePriv(shiina.user, removePrivInput.getId(), removePrivInput.getPrivs());
+                res.redirect("/ap/user?id=" + removePrivInput.getId());
+              
                 break;
             }
 

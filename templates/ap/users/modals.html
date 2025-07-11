@@ -210,14 +210,15 @@
                     <#list allPrivs as apriv>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span>${apriv}</span>
-                            <#if priv?seq_contains(apriv)>
+                            <#if priv?seq_contains(apriv.privilege)>
                                 <a class="btn btn-danger btn-sm"
-                                    href="/ap/privileges/process?id=${id}&priv=${apriv}&action=remove" role="button">
+                                    href="/ap/api/handler?type=removepriv&id=${id}&privs=${apriv?lower_case}"
+                                    role="button">
                                     Remove
                                 </a>
                             <#else>
                                 <a class="btn btn-primary btn-sm"
-                                    href="/ap/privileges/process?id=${id}&priv=${apriv}&action=add" role="button">
+                                    href="/ap/api/handler?type=addpriv&id=${id}&privs=${apriv?lower_case}" role="button">
                                     Add
                                 </a>
                             </#if>
