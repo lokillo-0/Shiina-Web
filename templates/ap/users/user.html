@@ -62,8 +62,8 @@
             <ul class="list-group">
               <#list standings as standing>
                 <li class="list-group-item">
-                  <img src="${avatarServer}/${standing.userId}" class="img-fluid" width="20">
-                  <a href="/ap/user?id=${standing.userId}">${standing.userName}</a>
+                  <img src="${avatarServer}/${standing.userId?c}" class="img-fluid" width="20">
+                  <a href="/ap/user?id=${standing.userId?c}">${standing.userName}</a>
                   <#if standing.action=="RESTRICT">
                     restricted
                     <#elseif standing.action=="UNRESTRICT">
@@ -73,8 +73,8 @@
                         <#elseif standing.action=="RMPB">
                           removed profile picture of
                   </#if>
-                  <img src="${avatarServer}/${standing.targetId}" class="img-fluid" width="20">
-                  <a href="/ap/user?id=${standing.targetId}">${standing.targetName}</a>
+                  <img src="${avatarServer}/${standing.targetId?c}" class="img-fluid" width="20">
+                  <a href="/ap/user?id=${standing.targetId?c}">${standing.targetName}</a>
                   for
                   "${standing.reason}"
                   <#if standing.action=="WIPE">
