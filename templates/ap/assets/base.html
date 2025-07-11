@@ -51,6 +51,20 @@
                     </a>
                 </li>
 
+                <!-- Nominator Section (If Applicable) -->
+                <#if userPriv?seq_contains("NOMINATOR")>
+                <li class="mt-4">
+                     <h6 class="sidebar-header text-uppercase">Nomination</h6>
+                     <hr class="sidebar-divider my-1">
+                </li>
+
+                <li class="nav-item">
+                     <a href="/ap/maprequests" class="nav-link <#if actNav == 20>active</#if>">
+                         <i class="fa-solid fa-map shiina-ap-icon"></i> Map Requests
+                     </a>
+                 </li>
+                </#if>
+
                  <!-- Moderator Section (If Applicable) -->
                  <#if userPriv?seq_contains("MODERATOR")>
                  <li class="mt-4">
