@@ -2,6 +2,7 @@ package dev.osunolimits.routes.ap.get.users;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 
 import com.google.gson.Gson;
@@ -112,10 +113,23 @@ public class ApUser extends Shiina {
             groups.add(g);
         }
 
+        EnumSet<PermissionHelper.Privileges> allPrivs = EnumSet.noneOf(PermissionHelper.Privileges.class);
+        List<PermissionHelper.Privileges> ignoredPrivs = List.of(PermissionHelper.Privileges.STAFF, 
+                                    PermissionHelper.Privileges.SUPPORTER, 
+                                    PermissionHelper.Privileges.UNRESTRICTED, 
+                                    PermissionHelper.Privileges.VERIFIED);
+        for (PermissionHelper.Privileges priv : PermissionHelper.Privileges.values()) {
+            if(ignoredPrivs.contains(priv)) {
+                continue;
+            }
+            allPrivs.add(priv);
+        }
+
         shiina.data.put("allGroups", groups);
         shiina.data.put("id", userId);
         shiina.data.put("aname", userInfo.name);
         shiina.data.put("priv", PermissionHelper.Privileges.fromInt(user.getInt("priv")));
+        shiina.data.put("allPrivs", allPrivs);
         shiina.data.put("privLevel", user.getInt("priv"));
         shiina.data.put("safe_name", userInfo.safe_name);
         shiina.data.put("groups", userInfo.groups);

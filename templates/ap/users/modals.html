@@ -194,10 +194,48 @@
             </div>
         </div>
     </div>
-
-
-
 </div>
+<!-- Privileges Modal -->
+<div class="modal fade" id="privModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Change privileges for ${aname}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="list-group list-group-numbered">
+                    <#list allPrivs as apriv>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <span>${apriv}</span>
+                            <#if priv?seq_contains(apriv)>
+                                <a class="btn btn-danger btn-sm"
+                                    href="/ap/privileges/process?id=${id}&priv=${apriv}&action=remove" role="button">
+                                    Remove
+                                </a>
+                            <#else>
+                                <a class="btn btn-primary btn-sm"
+                                    href="/ap/privileges/process?id=${id}&priv=${apriv}&action=add" role="button">
+                                    Add
+                                </a>
+                            </#if>
+                        </li>
+                    </#list>
+                </ul>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <script>
 
