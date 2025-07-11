@@ -196,7 +196,6 @@
       <a target="_blank" href="/u/${id}" class="btn btn-primary me-2">
         <i class="fa-solid fa-chevron-left"></i> Go to profile
       </a>
-
       <#if priv?seq_contains("UNRESTRICTED")>
         <button type="button" data-bs-toggle="modal" data-bs-target="#restrictModal" class="btn btn-danger me-1">
           <i class="fa-solid fa-shield"></i> Restrict
@@ -206,28 +205,22 @@
             <i class="fa-solid fa-shield"></i> Unrestrict
           </button>
       </#if>
-
       <button type="button" data-bs-toggle="modal" data-bs-target="#wipeModal" class="btn btn-danger me-1">
         <i class="fa-solid fa-trash"></i> Wipe
       </button>
-
       <button type="button" data-bs-toggle="modal" data-bs-target="#rmppModal" class="btn btn-danger me-1">
         <i class="fa-solid fa-trash"></i> Remove Profile Picture
       </button>
-
       <#if userPriv?seq_contains("ADMINISTRATOR")>
         <button type="button" data-bs-toggle="modal" data-bs-target="#groupModal" class="btn btn-danger me-2">
           <i class="fa-solid fa-star"></i> Edit groups
         </button>
-
         <button type="button" data-bs-toggle="modal" data-bs-target="#privModal" class="btn btn-danger me-2">
           <i class="fa-solid fa-key"></i> Edit privileges
         </button>
-
         <button type="button" data-bs-toggle="modal" data-bs-target="#recoveryModal" class="btn btn-danger me-2">
           <i class="fa-solid fa-link"></i> Generate Recovery URL
         </button>
-
         <button type="button" data-bs-toggle="modal" data-bs-target="#donatorModal" class="btn btn-warning">
           <i class="fa-solid fa-gift"></i> Give Donator
         </button>

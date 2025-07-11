@@ -2,7 +2,6 @@ package dev.osunolimits.routes.ap.api;
 
 import java.io.File;
 import java.sql.ResultSet;
-import java.util.Arrays;
 
 import com.google.gson.Gson;
 

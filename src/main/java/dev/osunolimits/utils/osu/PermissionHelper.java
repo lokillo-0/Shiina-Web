@@ -38,7 +38,7 @@ public class PermissionHelper {
                 }
             }
 
-            if(!result.contains(STAFF) && (result.contains(MODERATOR) || result.contains(ADMINISTRATOR) || result.contains(DEVELOPER))) {
+            if(!result.contains(STAFF) && (result.contains(MODERATOR) || result.contains(ADMINISTRATOR) || result.contains(DEVELOPER) || result.contains(NOMINATOR))) {
                 result.add(STAFF);
             }
         
