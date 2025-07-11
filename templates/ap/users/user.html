@@ -14,21 +14,42 @@
     <div class="row">
       <div class="col-12 col-md-6">
 
-        <div class="card p-0">
-          <div class="card-header border-bottom border-0">
-            <h5 class="mb-0 fw-bold">User Details</h5>
+        <div class="card p-0 shadow-sm">
+          <div class="card-header bg-body-tertiary border-bottom text-white border-0">
+            <h5 class="mb-0 fw-bold">
+              <i class="fa-solid fa-user me-2"></i>User Details
+            </h5>
           </div>
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              <img src="${avatarServer}/${id}" alt="${aname} avatar" class="me-2" style="width: 60px; height: 60px;" />
-              <div>
-                <h5 class="mb-0">${aname} <small>(${safe_name})</small></h5>
-                <small class="text-muted">${country}</small>
+          <div class="card-body p-4">
+            <div class="d-flex align-items-center mb-4">
+              <div class="position-relative me-3">
+                <img src="${avatarServer}/${id}" alt="${aname} avatar" class="border" style="width: 80px; height: 80px; object-fit: cover;" />
+               
+              </div>
+              <div class="flex-grow-1">
+                <h4 class="mb-1 fw-bold text-primary">${aname}</h4>
+                <p class="mb-1 text-muted fs-6">${safe_name}</p>
+                <span class="badge bg-secondary">
+                  <i class="fa-solid fa-globe me-1"></i>${country}
+                </span>
               </div>
             </div>
-            <div class="mt-2">
-              <p>ID: ${id}</p>
-              <p>Privileges: ${privLevel?c}</p>
+            
+            <div class="row g-3">
+              <div class="col-md-6">
+                <div class="bg-secondary p-3 rounded">
+                  <small class="text-muted text-uppercase fw-semibold">User ID</small>
+                  <p class="mb-0 fw-bold fs-5">${id}</p>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="bg-secondary p-3 rounded">
+                  <small class="text-muted text-uppercase fw-semibold">Privileges</small>
+                  <p class="mb-0 fw-bold fs-5">
+                    <span class="badge bg-info">${privLevel?c}</span>
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
