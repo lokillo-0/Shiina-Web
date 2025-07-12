@@ -74,21 +74,6 @@ public class PubSubHandler extends Shiina {
         AuditLogger auditLogger = new AuditLogger(shiina.mysql, type);
         
         switch (type) {
-            case RANK: {
-                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.NOMINATOR)) {
-                    return redirect(res, shiina, "/");
-                }
-                RankOutput rankOutput = models.new RankOutput();
-                rankOutput.setBeatmap_id(Integer.parseInt(req.queryParams("beatmap_id")));
-                rankOutput.setStatus(Integer.parseInt(req.queryParams("status")));
-                rankOutput.setFrozen(Boolean.parseBoolean(req.queryParams("frozen")));
-                auditLogger.rankMap(shiina.user, rankOutput.getBeatmap_id(), rankOutput.getStatus());
-                
-                new OnRankBeatmapEvent(rankOutput.beatmap_id, rankOutput.status, rankOutput.frozen, shiina.user.id).callListeners();;
-                
-                App.jedisPool.publish("rank", GSON.toJson(rankOutput));
-                break;
-            }
             case RESTRICT: {
                 if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
                     return redirect(res, shiina, "/");
