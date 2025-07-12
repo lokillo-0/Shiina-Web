@@ -27,6 +27,7 @@ import dev.osunolimits.routes.ap.get.Audit;
 import dev.osunolimits.routes.ap.get.Bancho;
 import dev.osunolimits.routes.ap.get.ChatExplorer;
 import dev.osunolimits.routes.ap.get.Commands;
+import dev.osunolimits.routes.ap.get.MapRanking;
 import dev.osunolimits.routes.ap.get.MapRequests;
 import dev.osunolimits.routes.ap.get.ModularSettings;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
@@ -213,6 +214,7 @@ public class App {
         WebServer.get("/ap/settings", new ModularSettings());
 
         WebServer.get("/ap/maprequests", new MapRequests());
+        WebServer.get("/ap/mapranking", new MapRanking());
 
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/audit", new Audit());

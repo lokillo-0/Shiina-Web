@@ -1,0 +1,83 @@
+<#include "assets/base.html">
+
+  <div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row align-items-center">
+      <div class="col-auto">
+        <h5 class="mb-0">
+          <i class="fa-solid fa-location-crosshairs"></i> Map Ranking
+        </h5>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row">
+      <div class="col">
+        <form class="d-flex" action="/ap/mapranking" method="get">
+          <input type="text" name="search" class="form-control me-2" placeholder="Enter beatmap url..."
+            value="${search!}">
+          <button class="btn btn-outline-secondary" type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <#if map??>
+  <div class="container-fluid p-3">
+    <div class="row">
+      <div class="col">
+        <h5>
+          <i class="fa-solid fa-map"></i> ${map.title} by ${map.artist} (${map.creator})
+        </h5>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th>Version</th>
+              <th>Status</th>
+              <th>Mode</th>
+              <th>BPM</th>
+              <th>CS</th>
+              <th>AR</th>
+              <th>OD</th>
+              <th>HP</th>
+              <th>Diff</th>
+            </tr>
+          </thead>
+          <tbody>
+            <#list map.beatmaps as beatmap>
+            <tr>
+              <td>${beatmap.version}</td>
+              <td>${beatmap.status}</td>
+              <td>${beatmap.mode}</td>
+              <td>${beatmap.bpm}</td>
+              <td>${beatmap.cs}</td>
+              <td>${beatmap.ar}</td>
+              <td>${beatmap.od}</td>
+              <td>${beatmap.hp}</td>
+              <td>${beatmap.diff}</td>
+            </tr>
+            </#list>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <#else>
+  <div class="container-fluid p-3">
+    <div class="row">
+      <div class="col">
+        <div class="alert alert-info" role="alert">
+          <i class="fa-solid fa-info-circle"></i> No map found. Please enter
+          a valid beatmap URL or ID.
+        </div>
+      </div>
+    </div>
+  </div>
+  </#if>
+
+  </body>
+
+  </html>

@@ -1,73 +1,74 @@
 <#include "assets/base.html">
 
-    <div class="container-fluid bg-body-tertiary border-bottom p-3">
-        <div class="row align-items-center">
-            <div class="col-auto">
-                <h5 class="mb-0">
-                    <i class="fa-solid fa-map"></i> Map Requests
-                </h5>
-            </div>
+<div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-map"></i> Map Requests
+            </h5>
         </div>
     </div>
+</div>
 
-    <div class="container-fluid mt-2">
-        <div class="row g-3">
-            <#list mapRequests as mapRequest>
-                <div class="col-12 col-lg-6">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <div class="row g-3 align-items-center">
-                                <div class="col-auto">
-                                    <img class="img-fluid rounded" 
-                                         src="/api/v1/thumb?setId=${mapRequest.getSetId()?c}" 
-                                         alt="Beatmap thumbnail"
-                                         style="width: 80px; height: 60px; object-fit: cover;">
+<div class="container-fluid mt-2">
+    <div class="row g-3">
+        <#list mapRequests as mapRequest>
+            <div class="col-12 col-lg-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-auto">
+                                <img class="img-fluid rounded" 
+                                     src="/api/v1/thumb?setId=${mapRequest.getSetId()?c}" 
+                                     alt="Beatmap thumbnail"
+                                     style="width: 80px; height: 60px; object-fit: cover;">
+                            </div>
+                            <div class="col">
+                                <h6 class="card-title mb-2">
+                                    <a href="/b/${mapRequest.mapId?c}" target="_blank"
+                                       class="text-decoration-none text-primary fw-bold">
+                                        ${mapRequest.mapName}
+                                    </a>
+                                </h6>
+                                
+                                <div class="d-flex align-items-center mb-2">
+                                    <img src="${avatarServer}/${mapRequest.playerId?c}" 
+                                         class="img-fluid me-2" 
+                                         width="20" height="20"
+                                         alt="User avatar">
+                                    <a href="/ap/user?id=${mapRequest.playerId?c}" 
+                                       class="text-decoration-none fw-medium me-2">
+                                        ${mapRequest.playerName}
+                                    </a>
+                                    <small class="text-muted fst-italic" 
+                                           data-timestamp-format="date"
+                                           data-timestamp="${mapRequest.datetime}">
+                                        ${mapRequest.datetime}
+                                    </small>
                                 </div>
-                                <div class="col">
-                                    <h6 class="card-title mb-2">
-                                        <a href="/b/${mapRequest.mapId?c}" 
-                                           class="text-decoration-none text-primary fw-bold">
-                                            ${mapRequest.mapName}
-                                        </a>
-                                    </h6>
-                                    
-                                    <div class="d-flex align-items-center mb-2">
-                                        <img src="${avatarServer}/${mapRequest.playerId?c}" 
-                                             class="img-fluid me-2" 
-                                             width="20" height="20"
-                                             alt="User avatar">
-                                        <a href="/ap/user?id=${mapRequest.playerId?c}" 
-                                           class="text-decoration-none fw-medium me-2">
-                                            ${mapRequest.playerName}
-                                        </a>
-                                        <small class="text-muted fst-italic" 
-                                               data-timestamp-format="date"
-                                               data-timestamp="${mapRequest.datetime}">
-                                            ${mapRequest.datetime}
-                                        </small>
-                                    </div>
-                                    
-                                    <div class="d-flex align-items-center justify-content-between">
-                                        <div>
-                                            <#if mapRequest.active>
-                                                <span class="badge bg-success">
-                                                    <i class="fa-solid fa-check me-1"></i>Active
-                                                </span>
-                                            <#else>
-                                                <span class="badge bg-danger">
-                                                    <i class="fa-solid fa-times me-1"></i>Inactive
-                                                </span>
-                                            </#if>
-                                        </div>
+                                
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <div>
                                         <#if mapRequest.active>
+                                            <span class="badge bg-success">
+                                                <i class="fa-solid fa-check me-1"></i>Active
+                                            </span>
+                                        <#else>
+                                            <span class="badge bg-danger">
+                                                <i class="fa-solid fa-times me-1"></i>Inactive
+                                            </span>
+                                        </#if>
+                                    </div>
+                                    <#if mapRequest.active>
                                         <div class="btn-group btn-group-sm" role="group">
-                                            <form action="/mapranking" method="get" class="d-inline">
+                                            <form action="/ap/mapranking" method="get" class="d-inline">
                                                 <input type="hidden" name="reqId" value="${mapRequest.id?c}">
                                                 <input type="hidden" name="setId" value="${mapRequest.getSetId()?c}">
                                                 <button type="submit" 
                                                         class="btn btn-outline-primary"
                                                         title="Rank this specific map">
-                                                    <i class="fa-solid fa-star me-1"></i>Rank
+                                                    <i class="fa-solid fa-star me-1"></i>View in Ranking
+                                                </button>
                                             </form>
                                             <form action="/ap/maprequests/deny" method="post" class="ms-1">
                                                 <input type="hidden" name="reqId" value="${mapRequest.id?c}">
@@ -79,19 +80,18 @@
                                                 </button>
                                             </form>
                                         </div>
-                                        </#if>
-                                    </div>
+                                    </#if>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </#list>
-        </div>
+            </div>
+        </#list>
     </div>
+</div>
 
-    <#include "/ap/assets/pagination.html">
+<#include "/ap/assets/pagination.html">
 
-        </body>
-
-        </html>
+</body>
+</html>
