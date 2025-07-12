@@ -60,6 +60,11 @@ public class MapRanking extends Shiina {
             shiina.data.put("search", "https://osu.ppy.sh/beatmapsets/" + setId);
         }
 
+        String reqId = null;
+        if(req.queryParams("reqId") != null) {
+            reqId = req.queryParams("reqId");
+        } 
+
         if(search != null) {
             // Check if it's an osunolimits URL (e.g., https://osunolimits.dev/b/2813660)
             if (search.contains("/b/") || search.matches(".*/b/\\d+.*")) {
@@ -102,7 +107,7 @@ public class MapRanking extends Shiina {
                 shiina.data.put("mapSet", mapSet);
             }
 
-            ResultSet beatmapRs = shiina.mysql.Query("SELECT `id`, `set_id`, `version`, `status`, `mode`, `bpm`, `cs`, `ar`, `od`, `hp`, `diff` FROM `maps` WHERE `set_id` = ? ORDER BY `mode` ASC, `status` DESC", setId);
+            ResultSet beatmapRs = shiina.mysql.Query("SELECT `id`, `set_id`, `version`, `status`, `mode`, `bpm`, `cs`, `ar`, `od`, `hp`, `diff` FROM `maps` WHERE `set_id` = ? ORDER BY `maps`.`mode` ASC, `maps`.`diff` DESC", setId);
             List<MapRankingBeatmap> beatmaps = new ArrayList<>();
             while (beatmapRs.next()) {
                 MapRankingBeatmap beatmap = new MapRankingBeatmap();
@@ -124,6 +129,7 @@ public class MapRanking extends Shiina {
         }else {
             shiina.data.put("search", "");
         }
+        shiina.data.put("reqId", reqId);
 
         return renderTemplate("ap/mapranking.html", shiina, res, req);
     }

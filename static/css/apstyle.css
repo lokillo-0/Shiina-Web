@@ -16,3 +16,8 @@ table {
     width: 100%;
     /* Makes the table span the container width */
 }
+
+.clickable-row {
+    cursor: pointer;
+    user-select: none;
+}
