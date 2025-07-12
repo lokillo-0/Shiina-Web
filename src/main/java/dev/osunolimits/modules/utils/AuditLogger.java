@@ -17,9 +17,9 @@ public class AuditLogger {
         this.type = type.toString();
     }
 
-    public void rankMap(Auth.User user, int beatmapId, int status) {
-        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `status`) VALUES (?,?,?,?);", type, user.id, beatmapId, status);
-        fire(user.id, beatmapId, null, null, status, null);
+    public void rankMap(Auth.User user, int beatmapId, int status, String reason) {
+        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `status`, `reason`) VALUES (?,?,?,?,?);", type, user.id, beatmapId, status, reason);
+        fire(user.id, beatmapId, null, reason, status, null);
     }
 
     public void restrictUser(Auth.User user, int userId, String reason) {

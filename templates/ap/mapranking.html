@@ -110,6 +110,7 @@
               <option value="5">Loved</option>
               <option value="1">Pending</option>
             </select>
+            <input type="hidden" name="setId" value="${map.getSetId()?c}">
             <button type="submit" class="btn btn-outline-primary">Update selected</button>
           </form>
         </div>
@@ -187,8 +188,8 @@
           return;
         }
         
-        // Remove existing hidden inputs
-        form.querySelectorAll('input[type="hidden"]').forEach(input => input.remove());
+        // Remove existing hidden inputs for beatmapIds only, keep setId
+        form.querySelectorAll('input[type="hidden"][name="beatmapIds"]').forEach(input => input.remove());
         
         // Add selected beatmap IDs as hidden inputs
         selectedCheckboxes.forEach(checkbox => {

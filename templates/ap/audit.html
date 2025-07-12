@@ -1,5 +1,40 @@
 <#include "assets/base.html">
 
+<style>
+.audit-table {
+    font-size: 0.9rem;
+}
+
+.audit-table td {
+    vertical-align: middle;
+    padding: 0.75rem 0.5rem;
+}
+
+.audit-table .badge {
+    font-size: 0.75rem;
+    padding: 0.25em 0.5em;
+}
+
+@media (max-width: 768px) {
+    .audit-table {
+        font-size: 0.8rem;
+    }
+    
+    .audit-table td {
+        padding: 0.5rem 0.25rem;
+    }
+    
+    .audit-table img {
+        width: 16px;
+        height: 16px;
+    }
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.025);
+}
+</style>
+
   <div class="container-fluid bg-body-tertiary border-bottom p-3">
     <div class="row align-items-center">
       <div class="col-auto">
@@ -7,50 +42,102 @@
           <i class="fa-solid fa-list"></i> Audit Log
         </h5>
       </div>
+    
     </div>
   </div>
 
 <div class="container-fluid mt-2">
-    <ul class="list-group">
-        <#list auditLog as log>
-        <li class="list-group-item d-flex align-items-center">
-            <div class="d-flex align-items-center flex-wrap">
-                <img src="${avatarServer}/${log.userId?c}" class="img-fluid me-2" width="24" height="24"> 
-                <a href="/ap/user?id=${log.userId}" class="text-decoration-none fw-medium me-2">${log.userName}</a>
-                
-                <span class="me-2">
-                <#if log.action == "RESTRICT">
-                    <span class="badge bg-danger">restricted</span>
-                <#elseif log.action == "UNRESTRICT">
-                    <span class="badge bg-success">unrestricted</span>
-                <#elseif log.action == "ADDPRIV">
-                    <span class="badge bg-danger">added privilege</span> <code class="small">${log.privs}</code> to
-                <#elseif log.action == "REMOVEPRIV">
-                    <span class="badge bg-danger">removed privilege</span> <code class="small">${log.privs}</code> from
-                <#elseif log.action == "WIPE">
-                    <span class="badge bg-dark">wiped</span>
-                <#elseif log.action == "GIVEDONATOR">
-                    <span class="badge bg-warning">gave donator to</span>
-                <#elseif log.action == "RMPB">
-                    <span class="badge bg-secondary">removed profile picture of</span>
-                </#if>
-                </span>
-                
-                <img src="${avatarServer}/${log.targetId?c}" class="img-fluid me-2" width="24" height="24">
-                <a href="/ap/user?id=${log.targetId?c}" class="text-decoration-none fw-medium">${log.targetName}</a>
-                
-                <#if log.action != "ADDPRIV" && log.action != "REMOVEPRIV">
-                    <span class="ms-2 text-muted">for</span>
-                    <span class="ms-1 fst-italic">"${log.reason}"</span>
-                </#if>
-                
-                <#if log.action == "WIPE">
-                    <span class="ms-2 small text-muted">on mode <span class="badge bg-light text-dark">${convertModeBack(log.mode)?upper_case}</span></span>
-                </#if>
-            </div>
-        </li>
-        </#list>
-    </ul>
+    <div class="table-responsive">
+        <table class="table table-hover audit-table">
+            <thead class="table-dark">
+                <tr>
+   
+                    <th>Admin</th>
+                    <th>Action</th>
+                    <th>Target</th>
+                    <th>Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <#list auditLog as log>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <img src="${avatarServer}/${log.userId?c}" class="img-fluid me-2" width="20" height="20">
+                            <a href="/ap/user?id=${log.userId}" class="text-decoration-none fw-medium">${log.userName}</a>
+                        </div>
+                    </td>
+                    
+                    <td>
+                        <#if log.action == "RESTRICT">
+                            <span class="badge bg-danger">RESTRICTED</span>
+                        <#elseif log.action == "UNRESTRICT">
+                            <span class="badge bg-success">UNRESTRICTED</span>
+                        <#elseif log.action == "ADDPRIV">
+                            <span class="badge bg-danger">ADDED PRIVILEGE</span>
+                        <#elseif log.action == "REMOVEPRIV">
+                            <span class="badge bg-danger">REMOVED PRIVILEGE</span>
+                        <#elseif log.action == "WIPE">
+                            <span class="badge bg-dark">WIPED</span>
+                        <#elseif log.action == "GIVEDONATOR">
+                            <span class="badge bg-warning text-dark">GAVE DONATOR</span>
+                        <#elseif log.action == "RMPB">
+                            <span class="badge bg-secondary">REMOVED AVATAR</span>
+                        <#elseif log.action == "ALERT_ALL">
+                            <span class="badge bg-secondary">GLOBAL ALERT</span>
+                        <#elseif log.action == "RANK">
+                            <span class="badge bg-purple" style="background-color: #6f42c1 !important;">RANKED</span>
+                        <#else>
+                            <span class="badge bg-light text-dark">${log.action}</span>
+                        </#if>
+                    </td>
+                    
+                    <td>
+                        <#if log.targetId?? && log.targetName?? && log.targetName != "NULL">
+                            <div class="d-flex align-items-center">
+                                <img src="${avatarServer}/${log.targetId?c}" class="img-fluid me-2" width="20" height="20">
+                                <a href="/ap/user?id=${log.targetId?c}" class="text-decoration-none">${log.targetName}</a>
+                            </div>
+                        <#elseif log.action == "ALERT_ALL">
+                            <span class="text-muted fst-italic">All Users</span>
+                        <#elseif log.action == "RANK">
+                            <img src="/api/v1/thumb?setId=${log.targetId?c}" class="img-fluid me-2"  width="80">
+                            <span class="text-muted fst-italic">Set ID: ${log.targetId?c} <a href="/ap/mapranking?setId=${log.targetId?c}">View Ranking</a></span>
+                        <#else>
+                            <span class="text-muted">—</span>
+                        </#if>
+                    </td>
+                    
+                    <td>
+                        <div class="small">
+                            <#if log.action == "ADDPRIV" || log.action == "REMOVEPRIV">
+                                <#if log.privs??>
+                                    <code class="bg-light px-1 rounded">${log.privs}</code>
+                                </#if>
+                            <#elseif log.action == "WIPE" && log.mode??>
+                                <span class="badge bg-light text-dark">${convertModeBack(log.mode)?upper_case}</span>
+                            <#elseif log.action == "GIVEDONATOR" && log.reason??>
+                                <span class="text-success fw-medium">${log.reason}</span>
+                            <#elseif log.action == "ALERT_ALL" && log.reason??>
+                                <span class="fst-italic">"${log.reason}"</span>
+                            <#elseif log.reason?? && log.reason != "">
+                                <span class="text-muted fst-italic">"${log.reason}"</span>
+                            </#if>
+                            
+                            <#if log.status?? && log.status != 0>
+                                <div class="mt-1">
+                                    <span class="badge bg-info">New Status: ${convertStatusBack(log.status)}</span>
+                                </div>
+                            </#if>
+                        </div>
+                    </td>
+                    
+           
+                </tr>
+                </#list>
+            </tbody>
+        </table>
+    </div>
 
 
 
@@ -58,5 +145,6 @@
     <#include "/ap/assets/pagination.html">
 
 </div>
+
 </body>
 </html>

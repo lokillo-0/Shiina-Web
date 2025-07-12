@@ -44,6 +44,7 @@ import dev.osunolimits.routes.ap.get.users.Users;
 import dev.osunolimits.routes.ap.post.ChangeSetting;
 import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.ap.post.DenyMapRequest;
+import dev.osunolimits.routes.ap.post.HandleMapStatusUpdate;
 import dev.osunolimits.routes.ap.post.ProcessManageGroup;
 import dev.osunolimits.routes.api.get.GetBanner;
 import dev.osunolimits.routes.api.get.GetBmThumbnail;
@@ -236,6 +237,7 @@ public class App {
         WebServer.post("/ap/themes/change", new ChangeTheme());
         WebServer.post("/ap/settings/update", new ChangeSetting());
         WebServer.post("/ap/maprequests/deny", new DenyMapRequest());
+        WebServer.post("/ap/mapranking", new HandleMapStatusUpdate());
 
         WebServer.get("/banner/:id", new GetBanner());
         GroupRegistry.revalidate();
