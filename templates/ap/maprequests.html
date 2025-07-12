@@ -19,7 +19,7 @@
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
                                     <img class="img-fluid rounded" 
-                                         src="/api/v1/thumb?setId=${mapRequest.setId?c}" 
+                                         src="/api/v1/thumb?setId=${mapRequest.getSetId()?c}" 
                                          alt="Beatmap thumbnail"
                                          style="width: 80px; height: 60px; object-fit: cover;">
                                 </div>
@@ -61,24 +61,23 @@
                                         </div>
                                         <#if mapRequest.active>
                                         <div class="btn-group btn-group-sm" role="group">
-                                            <button type="button" 
-                                                    class="btn btn-outline-primary"
-                                                    onclick="rankMap(${mapRequest.mapId?c})"
-                                                    title="Rank this specific map">
-                                                <i class="fa-solid fa-star me-1"></i>Rank Map
-                                            </button>
-                                            <button type="button" 
-                                                    class="btn btn-outline-success"
-                                                    onclick="rankSet(${mapRequest.setId?c})"
-                                                    title="Rank the entire mapset">
-                                                <i class="fa-solid fa-layer-group me-1"></i>Rank Set
-                                            </button>
-                                            <button type="button" 
-                                                    class="btn btn-outline-danger"
-                                                    onclick="denyRequest(${mapRequest.mapId?c})"
-                                                    title="Deny this map request">
-                                                <i class="fa-solid fa-ban me-1"></i>Deny
-                                            </button>
+                                            <form action="/mapranking" method="get" class="d-inline">
+                                                <input type="hidden" name="reqId" value="${mapRequest.id?c}">
+                                                <input type="hidden" name="setId" value="${mapRequest.getSetId()?c}">
+                                                <button type="submit" 
+                                                        class="btn btn-outline-primary"
+                                                        title="Rank this specific map">
+                                                    <i class="fa-solid fa-star me-1"></i>Rank
+                                            </form>
+                                            <form action="/ap/maprequests/deny" method="post" class="ms-1">
+                                                <input type="hidden" name="reqId" value="${mapRequest.id?c}">
+                                                <input type="hidden" name="page" value="${page?c}">
+                                                <button type="submit" 
+                                                        class="btn btn-outline-danger"
+                                                        title="Deny this map request">
+                                                    <i class="fa-solid fa-ban me-1"></i>Deny
+                                                </button>
+                                            </form>
                                         </div>
                                         </#if>
                                     </div>

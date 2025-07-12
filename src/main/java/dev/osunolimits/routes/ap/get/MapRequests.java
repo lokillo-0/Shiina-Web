@@ -14,10 +14,11 @@ import spark.Response;
 
 public class MapRequests extends Shiina {
 
-    private final String MAP_SQL = "SELECT `map`.`map_id`, `maps`.`set_id`, `map`.`player_id`, `map`.`datetime`, `map`.`active`, CONCAT(`maps`.`title`, ' - ', `maps`.`artist`) AS `map_name`, `users`.`name` FROM `map_requests` AS `map` INNER JOIN `users` ON `map`.`player_id` = `users`.`id` INNER JOIN `maps` ON `map`.`map_id` = `maps`.`id` ORDER BY `map`.`active` DESC, `map`.`datetime` DESC LIMIT ? OFFSET ?;";
+    private final String MAP_SQL = "SELECT `map`.`id`, `map`.`map_id`, `maps`.`set_id`, `map`.`player_id`, `map`.`datetime`, `map`.`active`, CONCAT(`maps`.`title`, ' - ', `maps`.`artist`) AS `map_name`, `users`.`name` FROM `map_requests` AS `map` INNER JOIN `users` ON `map`.`player_id` = `users`.`id` INNER JOIN `maps` ON `map`.`map_id` = `maps`.`id` ORDER BY `map`.`active` DESC, `map`.`datetime` DESC LIMIT ? OFFSET ?;";
 
     @Data
     public class MapRequest {
+        private int id;
         private int mapId;
         private int setId;
         private int playerId;
@@ -53,6 +54,7 @@ public class MapRequests extends Shiina {
         boolean hasNextPage = false;
         while (statsResultSet.next()) {
             MapRequest mapRequest = new MapRequest();
+            mapRequest.setId(statsResultSet.getInt("id"));
             mapRequest.setMapId(statsResultSet.getInt("map_id"));
             mapRequest.setSetId(statsResultSet.getInt("set_id"));
             mapRequest.setPlayerId(statsResultSet.getInt("player_id"));
