@@ -45,7 +45,8 @@
         <form class="d-flex my-2 my-lg-0 shiina-search-form" role="search">
           <input 
             class="form-control me-2 shiina-search-input" 
-            oninput="searchShiina(this.value)" 
+            oninput="searchShiinaDebounced(this.value)" 
+            onkeydown="handleSearchKeydown(event)"
             type="search" 
             placeholder="Search ${c.serverName}" 
             aria-label="Search">

@@ -20,6 +20,13 @@ public class Search extends MySQLRoute {
         public String source_table;
     }
 
+    @Data
+    public class SearchResponse {
+        public int page;
+        boolean has_next;
+        public ArrayList<SearchEntry> results = new ArrayList<>();
+    }
+
     private final String SEARCH_QUERY = "SELECT id, name AS item_name, NULL AS set_id, 'users' AS source_table FROM users WHERE LOWER(name) LIKE CONCAT('%', LOWER(?), '%') UNION SELECT id, name AS item_name, NULL AS set_id, 'clans' AS source_table FROM clans WHERE LOWER(name) LIKE CONCAT('%', LOWER(?), '%') UNION SELECT id, CONCAT(COALESCE(artist, ''), ' ', COALESCE(title, ''), ' ', COALESCE(version, '')) AS item_name, set_id, 'maps' AS source_table FROM maps WHERE LOWER(CONCAT(COALESCE(artist, ''), ' ', COALESCE(title, ''), ' ', COALESCE(version, ''))) LIKE CONCAT('%', LOWER(?), '%') ORDER BY CASE WHEN source_table = 'users' THEN 1 WHEN source_table = 'clans' THEN 2 WHEN source_table = 'maps' THEN 3 END, item_name LIMIT ? OFFSET ?;";
 
     @Override
@@ -52,9 +59,9 @@ public class Search extends MySQLRoute {
         }
 
         ResultSet searchResult = shiina.mysql.Query(SEARCH_QUERY, query, query, query, pageSize, offset);
-        ArrayList<SearchEntry> searchResults = new ArrayList<>();
+        SearchResponse searchResponse = new SearchResponse();
         while(searchResult.next()) {
-            if(searchResults.size() == 10) {
+            if(searchResponse.results.size() == 10) {
                 break;
             }
 
@@ -63,9 +70,10 @@ public class Search extends MySQLRoute {
             entry.item_name = searchResult.getString("item_name");
             entry.set_id = searchResult.getInt("set_id");
             entry.source_table = searchResult.getString("source_table");
-            searchResults.add(entry);
+            searchResponse.results.add(entry);
         }
-        
-        return shiinaAPIHandler.renderJSON(searchResults, shiina, res);
+        searchResponse.page = page;
+        searchResponse.has_next = searchResult.getRow() == pageSize;
+        return shiinaAPIHandler.renderJSON(searchResponse, shiina, res);
     }
 }
