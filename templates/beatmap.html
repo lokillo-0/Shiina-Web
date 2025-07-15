@@ -166,60 +166,103 @@
         </div>
 
 
-        <ul class="leaderboard-list">
+        <div class="list-group list-group-flush">
             <#assign leaderboardC=0>
-                <#list beatmap.scores as score>
-
-                    <li style="list-style: none;">
-                        <a href="/scores/${score.id?c}?mode=${mode}" class="bg-secondary m-2 p-2 justify-content-end row leaderboard-panel style="border-radius: 5px;">
-                            <span class="col-auto d-flex align-items-center opacity-25 shiina-rank-font rounded-start bg-dark "
-                                >#${(score?index + 1) + (pageSize * (page - 1))}</span>
-                            <span class="col-auto d-flex align-items-center"><img class="flag"
-                                src="${avatarServer}/${score.userId?c}"
-                                alt=""></span>
-                            <span class="col-auto d-flex align-items-center"><img class="flag"
-                                    src="/img/flags/${score.country}.svg"
-                                    alt=""></span>
-                            
-                            <span class="col-auto d-flex align-items-center me-auto">
-                                
-                                <span class="mx-2 <#if score.supporter>supporter</#if>">${score.user.name}</span> <span class="mod-pill badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 me-2">${score.mods?join(", ")}</span>  <#if score.user.groups??> <#list score.user.groups as group><span class="groupDiv">${group.emoji} ${group.name}</span></#list> </#if>
-                            </span>
-                            <span class="col-auto d-flex align-items-center">
-                                
-                                <span class="mx-2"> <#assign height=30> <#include "/freemarker/gradeconvert.ftl">
-                            </span>
-
-
-                            <div class="score-stats col-auto d-flex align-items-center ">
-                                <div class="main-stats">
-                                    <div class="pp-display text-info fw-bold">
-                                        <#if sort == 'pp'>
-                                            ${score.pp?string("0")}<span class="text-info-emphasis">pp</span>
-                                        <#elseif sort == 'score'>
-                                            ${score.score} <span class="text-info-emphasis"> Score</span>
-                                        <#elseif sort == 'scorev2'>
-                                            ${score.score} <span class="text-info-emphasis"> Score v2</span>
-                                        </#if>
-                                    </div>
-                                
-                                </div>
+            <#list beatmap.scores as score>
+                <a href="/scores/${score.id?c}?mode=${mode}" class="list-group-item list-group-item-action d-flex align-items-center py-3">
+                    <!-- Rank -->
+                    <div class="me-3">
+                        <span class="badge bg-dark rounded-pill px-3 py-2 fw-bold" style="min-width: 50px;">
+                            #${(score?index + 1) + (pageSize * (page - 1))}
+                        </span>
+                    </div>
+                    
+                    <!-- Avatar (hidden on small screens) -->
+                    <div class="me-3 d-none d-sm-block">
+                        <img src="${avatarServer}/${score.userId?c}" 
+                             alt="Avatar" 
+                             class="rounded" 
+                             width="40" height="40">
+                    </div>
+                    
+                    <!-- Country Flag (hidden on small screens) -->
+                    <div class="me-3 d-none d-md-block">
+                        <img src="/img/flags/${score.country}.svg" 
+                             alt="${score.country}" 
+                             class="rounded" 
+                             width="24" height="18">
+                    </div>
+                    
+                    <!-- Player Info -->
+                    <div class="flex-grow-1 me-3">
+                        <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
+                            <div class="player-name">
+                                <span class="fw-medium <#if score.supporter>text-warning</#if>">${score.user.name}</span>
+                                <#if score.mods?? && score.mods?size gt 0>
+                                    <span class="badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25 ms-2">${score.mods?join(", ")}</span>
+                                </#if>
+                                <#if score.user.groups??>
+                                    <#list score.user.groups as group>
+                                        <span class="badge bg-light shiina-badge bg-opacity-25 text-white ms-2 py-2 rounded-pill pe-3"><span class="groupEmoji me-2">${group.emoji}</span>${group.name}</span>
+                                    </#list>
+                                </#if>
                             </div>
                             
-                     
-                        </a>
-                    </li>
-                    <#assign leaderboardC=leaderboardC + 1>
-                    <#else>
-                    <div class="card">
-                        <div class="card-body text-center py-5">
-                          <i class="fa-solid fa-circle-exclamation text-primary mb-3" style="font-size: 3rem;"></i>
-                          <h1 class="card-title">No scores set on this beatmap</h1>
-                          <p class="card-text text-muted">Be the first to set a record on this beatmap!</p>
+                            <!-- Mobile: Show avatar and country flag -->
+                            <div class="d-flex d-sm-none mt-2 gap-2">
+                                <img src="${avatarServer}/${score.userId?c}" 
+                                     alt="Avatar" 
+                                     class="rounded" 
+                                     width="24" height="24">
+                                <img src="/img/flags/${score.country}.svg" 
+                                     alt="${score.country}" 
+                                     class="rounded" 
+                                     width="20" height="15">
+                            </div>
                         </div>
-                      </div>
-                </#list>
-        </ul>
+                    </div>
+                    
+                    <!-- Grade (hidden on mobile) -->
+                    <div class="me-3 d-none d-md-block">
+                        <#assign height=30>
+                        <#include "/freemarker/gradeconvert.ftl">
+                    </div>
+                    
+                    <!-- Main Stat -->
+                    <div class="text-end">
+                        <div class="h5 mb-0 text-primary fw-bold">
+                            <#if sort == 'pp' || !sort??>
+                                ${score.pp?string("0")}<small class="text-muted ms-1">pp</small>
+                            <#elseif sort == 'score'>
+                                ${score.score}
+                            <#elseif sort == 'scorev2'>
+                                ${score.score}
+                            </#if>
+                        </div>
+                        <#if sort == 'score'>
+                            <small class="text-muted">Score</small>
+                        <#elseif sort == 'scorev2'>
+                            <small class="text-muted">Score v2</small>
+                        </#if>
+                        
+                        <!-- Mobile: Show grade -->
+                        <div class="d-md-none mt-1">
+                            <#assign height=20>
+                            <#include "/freemarker/gradeconvert.ftl">
+                        </div>
+                    </div>
+                </a>
+                <#assign leaderboardC=leaderboardC + 1>
+            <#else>
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fa-solid fa-circle-exclamation text-primary mb-3" style="font-size: 3rem;"></i>
+                        <h1 class="card-title">No scores set on this beatmap</h1>
+                        <p class="card-text text-muted">Be the first to set a record on this beatmap!</p>
+                    </div>
+                </div>
+            </#list>
+        </div>
 
 
 

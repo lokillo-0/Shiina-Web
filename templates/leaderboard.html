@@ -100,7 +100,7 @@
                                     <div class="me-3 d-none d-md-block">
                                         <img src="/img/flags/${player.country}.svg" 
                                              alt="${player.country}" 
-                                             class="flag" 
+                                             class="rounded" 
                                              width="24" height="18">
                                     </div>
                                     
@@ -114,7 +114,7 @@
                                                 <span class="fw-medium <#if player.supporter>text-warning</#if>">${player.name}</span>
                                                 <#if player.groups??>
                                                     <#list player.groups as group>
-                                                        <span class="badge bg-info ms-1 small">${group.emoji} ${group.name}</span>
+                                                        <span class="badge bg-light shiina-badge bg-opacity-25 text-white ms-2 py-2 rounded-pill pe-3"><span class="groupEmoji me-2">${group.emoji}</span>${group.name}</span>
                                                     </#list>
                                                 </#if>
                                             </div>
@@ -123,11 +123,11 @@
                                             <div class="d-flex d-sm-none mt-2 gap-2">
                                                 <img src="${avatarServer}/${player.playerId?c}" 
                                                      alt="Avatar" 
-                                                     class="rounded-circle" 
+                                                     class="rounded" 
                                                      width="24" height="24">
                                                 <img src="/img/flags/${player.country}.svg" 
                                                      alt="${player.country}" 
-                                                     class="flag" 
+                                                     class="rounded" 
                                                      width="20" height="15">
                                             </div>
                                         </div>

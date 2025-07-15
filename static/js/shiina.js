@@ -205,7 +205,7 @@ function loadComments(firstLoad = true) {
 
             data.comments.forEach(comment => {
                 let element = document.createElement('div');
-                element.innerHTML = loadCommentPanel(comment.user, comment.comment, comment.time * 100000);
+                element.innerHTML = loadCommentPanel(comment.user, comment, comment.time * 100000);
                 container.appendChild(element);
             }
             )
@@ -568,23 +568,31 @@ function loadCommentPanel(user, comment, time) {
     let groups = user.groups;
     let output = '';
 
-    output += '<div class="row p-2 align-items-start">';
-    output += '<div class="col-auto">';
-    output += '<img class="flag rounded-circle" src=' + avatarServer + '/' + user.id + '" alt="" width="40" height="40">';
-    output += '</div> <div class="col"><div class="d-flex align-items-baseline gap-2">';
+    output += '<div class="d-flex align-items-start p-3 border-bottom">';
+    output += '<div class="me-3">';
+    output += '<img class="rounded mt-1" src="' + avatarServer + '/' + user.id + '" alt="Avatar" width="40" height="40">';
+    output += '</div>';
+    output += '<div class="flex-grow-1">';
+    output += '<div class="d-flex align-items-center mb-2">';
 
     let groupsDiv = '';
+
     groups.forEach(group => {
-        groupsDiv += '<span class="badge bg-secondary mx-1"><span style="margin-right:5px;">'+ group.emoji+'</span>' + group.name + '</span>';
+        groupsDiv += '<span class="badge ms-2 shiina-badge bg-light bg-opacity-25 text-white py-1 rounded-pill pe-3"><span class="groupEmoji me-2">' + group.emoji + '</span>' + group.name + '</span>';
     });
-    let supClass ='';
-    if(comment.supporter = true) {
+    
+    let supClass = '';
+
+    if(comment.supporter == true) {
         supClass += 'supporter'
     }
-    output += '<a href="/u/' + user.id + '" class="shiina-comment-a h6 mb-0"><span class="' + supClass + '">' + user.name + '</span> ' + groupsDiv + '</a> '
-    //output += '<small class="text-muted">' + timeUntil(time, true) + '</small>';
-    output += '</div> <div class="bg-secondary text-light p-2 mt-1 rounded-2">';
-    output += comment;
+    
+    output += '<a href="/u/' + user.id + '" class="text-decoration-none fw-medium no-a fw-bold ' + supClass + '">' + user.name + '</a>';
+    output += groupsDiv;
+    //output += '<small class="text-muted ms-auto">' + timeUntil(time, true) + '</small>';
+    output += '</div>';
+    output += '<div class="bg-secondary bg-opacity-10 text-body rounded">';
+    output += comment.comment;
     output += '</div></div></div>';
 
     return output;

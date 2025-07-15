@@ -1524,6 +1524,10 @@ LEADERBOARD */
     font-weight: 500;
 }
 
+.shiina-badge {
+    user-select: none;
+}
+
 .leaderboard-additional-stat-label {
     font-size: 0.8em;
     opacity: 0.7;
