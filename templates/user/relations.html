@@ -61,7 +61,7 @@
                                             style="width: 80px; height: 80px; object-fit: cover;"
                                         >
                                     </div>
-                                    <span class="rel-username mb-1 fw-bold <#if relation.supporter>supporter</#if> mx-2">${relation.name}</span><#list relation.user.groups as group><span class="groupDiv">${group.emoji} ${group.name}</span></#list>
+                                    <span class="rel-username mb-1 fw-bold <#if relation.supporter>supporter</#if>">${relation.name}</span><#list relation.user.groups as group> <span class="badge shiina-badge bg-light bg-opacity-25 text-white py-1 rounded-pill pe-3"><span class="groupEmoji me-2">${group.emoji}</span>${group.name}</span></#list>
                                     <div class="rel-timestamp text-muted small">
                                         <i class="fa-regular fa-clock me-1"></i>
                                         <span>Last seen: </span>

@@ -30,14 +30,14 @@
     </#if>
 
     <!-- Profile Section -->
-    <div class="card my-4">
-         <div class="bg-gradient position-relative" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="card rounded my-4">
+         <div class="bg-gradient rounded position-relative" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
             <div class="row p-4 position-relative">
                 <!-- Profile Picture -->
                 <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
                     <div class="position-relative">
                         <img src="${avatarServer}/${u.player.info.id?c}" alt="Profile picture"
-                            class="img-fluid rounded-circle shadow-lg" 
+                            class="img-fluid rounded shadow-lg" 
                             style="width: 150px; height: 150px; object-fit: cover;">
                         <#if status.player_status.online==true>
                             <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-white border-2" 
@@ -94,7 +94,7 @@
                             </h2>
                         </div>
                         <div class="col-12 col-md-6 d-flex flex-column align-items-center">
-                            <small>Country Rank <img data-bs-toggle="tooltip" data-bs-placement="top" aria-label="${ucountry}" data-bs-original-title="${ucountry}" class="flag rounded" width="20" height="15"
+                            <small>Country Rank <img data-bs-toggle="tooltip" data-bs-placement="top" aria-label="${ucountry}" data-bs-original-title="${ucountry}" class="rounded ms-2" width="20" height="15"
                                     src="/img/flags/${u.player.info.country}.svg" alt=""></small>
                             <h2>#<#if u.player.stats[mode?string].country_rank==0>-<#else>${u.player.stats[mode?string].country_rank}</#if>
                             </h2>
