@@ -14,6 +14,9 @@ install:
 		echo "Warning: This install script is intended for Debian/Ubuntu only. Skipping install."; \
 	fi
 
+build: 
+	mvn clean install
+
 run-dev:
 	watchexec -r -e java "mvn compile exec:java -Dexec.args='-dev'"
 
