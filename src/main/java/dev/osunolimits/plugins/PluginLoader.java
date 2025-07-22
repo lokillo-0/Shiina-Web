@@ -1,5 +1,6 @@
 package dev.osunolimits.plugins;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -176,11 +177,57 @@ public class PluginLoader {
                 return;
             }
 
+            copyModulesIfFound(metadata);
+
             ShiinaPlugin pluginInstance = (ShiinaPlugin) clazz.getDeclaredConstructor().newInstance();
             pluginInstance.onEnable(metadata.name, logger);
             logger.info("Loaded and enabled plugin: " + metadata.name);
         } catch (Exception e) {
             logger.error("Error loading and enabling plugin: ", e);
+        }
+    }
+
+    private void copyModulesIfFound(PluginMetadata metadata) {
+        try (JarFile jarFile = new JarFile(metadata.jarFilePath)) {
+            // Check if there are any entries that start with "modules/"
+            boolean hasModules = jarFile.stream()
+                .anyMatch(entry -> entry.getName().startsWith("modules/") && !entry.isDirectory());
+            
+            if (hasModules) {
+                log.info("Found modules directory in JAR for plugin: " + metadata.name);
+                Path targetBasePath = Paths.get("templates/modules/plugins");
+                Files.createDirectories(targetBasePath);
+                
+                // Extract all files from the modules directory
+                jarFile.stream()
+                    .filter(entry -> entry.getName().startsWith("modules/") && !entry.isDirectory())
+                    .forEach(entry -> {
+                        try {
+                            // Remove "modules/" prefix to get relative path
+                            String relativePath = entry.getName().substring("modules/".length());
+                            Path destFile = targetBasePath.resolve(relativePath);
+                            
+                            // Only copy if the file doesn't already exist
+                            if (!Files.exists(destFile)) {
+                                // Create parent directories if needed
+                                Files.createDirectories(destFile.getParent());
+                                
+                                // Copy file content
+                                try (InputStream inputStream = jarFile.getInputStream(entry)) {
+                                    Files.copy(inputStream, destFile);
+                                }
+                                
+                                log.debug("Extracted module file: " + relativePath);
+                            }
+                        } catch (IOException e) {
+                            log.error("Error extracting module file: " + entry.getName(), e);
+                        }
+                    });
+                
+                log.info("Copied modules for plugin: " + metadata.name);
+            }
+        } catch (IOException e) {
+            log.error("Error reading JAR file for modules: " + metadata.jarFilePath, e);
         }
     }
 }
