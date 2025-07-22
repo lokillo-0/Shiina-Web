@@ -8,6 +8,7 @@ public class NavbarItem {
     private String name;
     private String url;
     private int actNav;
+    private boolean loggedInOnly = false;
 
     public NavbarItem(String name, String url) {
         this.name = name;

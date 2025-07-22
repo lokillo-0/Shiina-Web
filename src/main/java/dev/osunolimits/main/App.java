@@ -103,7 +103,7 @@ import spark.Spark;
  * By Marc Andre Herpers
  */
 public class App {
-    
+
     public static final Logger log = (Logger) LoggerFactory.getLogger("Shiina-Web");
     public static Dotenv loggerEnv;
     public static Dotenv env;
@@ -115,7 +115,7 @@ public class App {
     public static String dbVersion = "1.6";
 
     public static boolean devMode = false;
-    
+
     public static ShiinaRankCache rankCache;
     public static ShiinaMultiDetection multiDetection;
     public static DatabaseCleanUp databaseCleanUp;
@@ -126,22 +126,23 @@ public class App {
         // Register shutdown hook early
         Runtime.getRuntime().addShutdownHook(new Shutdown());
 
-        if(args.length > 0 && args[0].equals("-dev")) {
+        if (args.length > 0 && args[0].equals("-dev")) {
             devMode = true;
-            log.info("Running shiina in development mode, do not use this in production!"); 
-            log.info("Also some stuff will not work when not running a prod instance in the bg!"); 
+            log.info("Running shiina in development mode, do not use this in production!");
+            log.info("Also some stuff will not work when not running a prod instance in the bg!");
         }
 
         env = Dotenv.configure().directory(".config/").load();
         loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
-        log.info("Shiina-Web Rewrite "+version);
+        log.info("Shiina-Web Rewrite " + version);
         Init init = new Init();
         init.initializeDataDirectory();
         init.initializeRedisConfiguration();
         init.initializeJettyLogging();
         init.initializeDatabase();
         init.initializeJedis();
-        if(!devMode) init.initializeAutorunSQL();
+        if (!devMode)
+            init.initializeAutorunSQL();
         customization = init.initializeCustomizations();
 
         ThemeLoader.loadThemes();
@@ -173,7 +174,7 @@ public class App {
         WebServer.get("/b/:id", new Beatmap());
         WebServer.get("/u/1", new Bot());
         WebServer.get("/u/:id", new User());
-     
+
         WebServer.get("/settings", new Settings());
         WebServer.get("/friends", new Relations());
         WebServer.post("/settings/avatar", new HandleAvatarChange());
@@ -182,7 +183,7 @@ public class App {
         WebServer.post("/settings/mode", new HandleModeChange());
         WebServer.post("/settings/userpage", new HandleUserpageChange());
         WebServer.post("/settings/banner", new HandleBannerChange());
-        
+
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());
         WebServer.get("/auth/recover", new Recover());
@@ -209,7 +210,7 @@ public class App {
         WebServer.post("/api/v1/handle_favorite", new HandleBeatmapFavorite());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
-        
+
         WebServer.get("/ap/bancho", new Bancho());
         WebServer.get("/ap/api/handler", new PubSubHandler());
         WebServer.get("/ap/settings", new ModularSettings());
@@ -246,8 +247,9 @@ public class App {
         userInfoCache.populateIfNeeded();
 
         MonetizationConfig config = new MonetizationConfig();
-        if(config.ENABLED) {
+        if (config.ENABLED) {
             NavbarItem item = new NavbarItem("Donate", "donate");
+            item.setLoggedInOnly(true);
             NavbarRegister.register(item);
             Spark.post("/handlekofi", new KofiDonoHandler());
             Spark.get("/donate", new Donate(config, item.getActNav()));
@@ -256,23 +258,19 @@ public class App {
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();
 
-        if(!devMode) {
-            
-            PluginLoader pluginLoader = new PluginLoader();
-            pluginLoader.loadPlugins();
-
-            rankCache = new ShiinaRankCache();
-            multiDetection = new ShiinaMultiDetection();
-
-            databaseCleanUp = new DatabaseCleanUp();
-            databaseCleanUp.start();
-
-            hourlyPlayerStatsThread = new HourlyPlayerStatsThread();
-            hourlyPlayerStatsThread.start();
-            
-        }
+        PluginLoader pluginLoader = new PluginLoader();
+        pluginLoader.loadPlugins();
 
         ModuleRegister.reloadModuleConfigurations();
+
+        rankCache = new ShiinaRankCache();
+        multiDetection = new ShiinaMultiDetection();
+
+        databaseCleanUp = new DatabaseCleanUp();
+        databaseCleanUp.start();
+
+        hourlyPlayerStatsThread = new HourlyPlayerStatsThread();
+        hourlyPlayerStatsThread.start();
 
     }
 
