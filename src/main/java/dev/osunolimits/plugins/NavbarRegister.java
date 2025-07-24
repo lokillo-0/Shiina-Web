@@ -12,7 +12,7 @@ import dev.osunolimits.plugins.models.NavbarItem;
 public class NavbarRegister {
 
     private static final Logger log = (Logger) LoggerFactory.getLogger("NavbarRegister");
-    private final static int START_ACTNAV = 20;
+    private final static int START_ACTNAV = 22;
     private static List<NavbarItem> items = new ArrayList<>();
     private static List<NavbarAdminItem> adminItems = new ArrayList<>();
 

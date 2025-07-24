@@ -32,6 +32,7 @@ public class Shiina implements Route {
         res.header("Content-Type", "text/html; charset=utf-8");
         if(shiina.mysql != null) shiina.mysql.close();
         shiina.data.put("navbarItems", NavbarRegister.getItems());
+        shiina.data.put("adminNavbarItems", NavbarRegister.getAdminItems());
         shiina.data.put("docs", ShiinaDocs.docs);
         shiina.data.put("analytics", analytics);
         shiina.data.put("domain", domain);

@@ -129,6 +129,20 @@
                 </li>
                 </#if>
 
+                <#if adminNavbarItems?? && adminNavbarItems?has_content>
+                <li class="mt-4">
+                    <h6 class="sidebar-header text-uppercase">Plugins</h6>
+                    <hr class="sidebar-divider my-1">
+                </li>
+                <#list adminNavbarItems as item>
+                    <li class="nav-item">
+                        <a href="/${item.url}" class="nav-link <#if actNav == item.actNav>active</#if>">
+                            <i class="fa-solid ${item.icon} shiina-ap-icon"></i> ${item.name}
+                        </a>
+                    </li>
+                </#list>
+                </#if>
+
                 <!-- Other Section -->
                 <li class="mt-4">
                     <h6 class="sidebar-header text-uppercase">Other</h6>

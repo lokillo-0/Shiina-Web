@@ -50,6 +50,9 @@ inputFiles.lst
 static/css/theme-*.css
 static/css/themedev-*.css
 
+# marketplace host
+/marketplace/
+
 # data
 .cache/
 .logs/
