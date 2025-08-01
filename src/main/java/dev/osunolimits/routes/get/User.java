@@ -19,8 +19,9 @@ import dev.osunolimits.models.Group;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.modules.ShiinaSupporterBadge;
 import dev.osunolimits.modules.utils.SEOBuilder;
+import dev.osunolimits.modules.utils.ShiinaAchievementsSorter;
+import dev.osunolimits.modules.utils.ShiinaSupporterBadge;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.LevelCalculator;
 import dev.osunolimits.utils.osu.OsuConverter;
@@ -36,7 +37,7 @@ public class User extends Shiina {
     }
 
     private final Gson gson;
-    private final String ACH_QUERY = "SELECT `achievements`.`file`, `achievements`.`name`, `achievements`.`desc` FROM `user_achievements` LEFT JOIN `achievements` ON `user_achievements`.`achid` = `achievements`.`id` WHERE `user_achievements`.`userid` = ? AND (`achievements`.`file` LIKE ? OR `achievements`.`file` LIKE 'all%');";
+    private final String ACH_QUERY = "SELECT `achievements`.`file`, `achievements`.`id`, `achievements`.`name`, `achievements`.`desc` FROM `user_achievements` LEFT JOIN `achievements` ON `user_achievements`.`achid` = `achievements`.`id` WHERE `user_achievements`.`userid` = ? AND (`achievements`.`file` LIKE ? OR `achievements`.`file` LIKE 'all%');";
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
@@ -85,9 +86,8 @@ public class User extends Shiina {
             if (String.valueOf(shiina.user.id).equals(String.valueOf(id))) {
                 shiina.data.put("self", true);
             } else {
-                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.ADMINISTRATOR)) {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
                     return notFound(res, shiina);
-
                 } else {
                     shiina.data.put("self", false);
                 }
@@ -121,6 +121,7 @@ public class User extends Shiina {
         ArrayList<Achievements> achievements = new ArrayList<>();
         while (achRs.next()) {
             Achievements ach = new Achievements();
+            ach.setId(achRs.getInt("id"));
             ach.setFile(achRs.getString("file"));
             ach.setName(achRs.getString("name"));
             ach.setDesc(achRs.getString("desc"));
@@ -128,10 +129,12 @@ public class User extends Shiina {
         }
 
         ResultSet followerRs = shiina.mysql
-                .Query("SELECT COUNT(*) AS followers FROM relationships WHERE user2 = ? AND user1 != user2;", id);
+        .Query("SELECT COUNT(*) AS follower_count, (SELECT `tag` FROM `clans` WHERE `id` = ?) AS clan_tag FROM relationships WHERE user2 = ? AND user1 != user2;", user.getPlayer().getInfo().getClan_id(), id);
         int follower = 0;
+        String clanTag = "";
         if (followerRs.next()) {
-            follower = followerRs.getInt("followers");
+            follower = followerRs.getInt("follower_count");
+            clanTag = followerRs.getString("clan_tag");
         }
 
         if (shiina.loggedIn) {
@@ -158,8 +161,7 @@ public class User extends Shiina {
 
         shiina.data.put("groups", userInfo.getGroups());
         shiina.data.put("achievements", achievements);
-
-        
+        shiina.data.put("achievementGroups", ShiinaAchievementsSorter.achievements);
         
         shiina.data.put("uprivs", userPriv);
         Locale locale = Locale.of("", user.getPlayer().getInfo().getCountry().toUpperCase());
@@ -174,16 +176,18 @@ public class User extends Shiina {
                 LevelCalculator.getLevelPrecise(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
         shiina.data.put("levelProgress", LevelCalculator
                 .getPercentageToNextLevel(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));
+        shiina.data.put("clanTag", clanTag);
         shiina.data.put("u", user);
         shiina.data.put("mode", mode);
         shiina.data.put("status", userStatus);
         SEOBuilder seo = new SEOBuilder("Profile of " + userInfo.getName(), App.customization.get("homeDescription").toString(), App.env.get("AVATARSRV") + "/" + id);
         shiina.data.put("seo", seo);
-        return renderTemplate("user.html", shiina, res, req);
+        return renderTemplate("user/user.html", shiina, res, req);
     }
 
     @Data
     public class Achievements {
+        private int id;
         private String file;
         private String name;
         private String desc;

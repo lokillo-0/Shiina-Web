@@ -2,6 +2,8 @@ package dev.osunolimits.main;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +19,15 @@ public class WebServer extends Spark {
 
     private final Logger LOG = (Logger) LoggerFactory.getLogger("WebServer");
 
+    private static final List<String> ignoredPaths = new ArrayList<>();
+
     public static Configuration freemarkerCfg = new Configuration(Configuration.VERSION_2_3_23);
+
+    public static void addIgnoredPath(String path) {
+        if (!ignoredPaths.contains(path)) {
+            ignoredPaths.add(path);
+        }
+    }
 
     public void setThreadPool(int minThreads, int maxThreads, int timeOutMillis) {
         threadPool(maxThreads, minThreads, timeOutMillis);
@@ -62,14 +72,17 @@ public class WebServer extends Spark {
         }
         after((req, res) -> {
             res.header("Server", "ShiinaONL");
-            
-            LOG.info(req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.url() + " | " + req.userAgent() + " | " + req.headers("Referer"));
+
+            if(ignoredPaths.contains(req.pathInfo())) {
+                return;
+            }
+
+            LOG.info(req.ip()  + " | " + req.requestMethod() + " (" + res.status() + ") | " + req.pathInfo() + " | " + req.userAgent());
         });
         awaitInitialization();
 
-        LOG.info("WebServer ignited on -> " +   ip + ":" + port + ")");
+        LOG.info("WebServer ignited on -> " +   App.env.get("DOMAIN") + " (" + ip + ":" + port + ")");
     }
-
 
     /**
      * Properly shuts down the web server and releases all resources.
@@ -77,28 +90,24 @@ public class WebServer extends Spark {
      * properly cleaned up to prevent port binding issues on restart.
      */
     public void shutdown() {
-        LOG.info("Performing thorough web server shutdown sequence");
+        LOG.debug("Performing thorough web server shutdown sequence");
         
         try {
             // Get port for debugging
             int currentPort = Spark.port();
-            LOG.info("Shutting down server on port: " + currentPort);
+            LOG.debug("Shutting down server on port: " + currentPort);
      
             // Stop accepting new requests
             Spark.stop();
-            LOG.info("Stopped accepting new requests");
-            
-           
-            
+            LOG.debug("Stopped accepting new requests");
+
             // Allow current requests to finish processing
-            LOG.info("Waiting for ongoing requests to complete...");
+            LOG.debug("Waiting for ongoing requests to complete...");
             Spark.awaitStop();
             
-
             System.gc();
             
-            
-            LOG.info("Web server shutdown complete");
+            LOG.debug("Web server shutdown complete");
         } catch (Exception e) {
             LOG.error("Error during web server shutdown: " + e.getMessage(), e);
         }

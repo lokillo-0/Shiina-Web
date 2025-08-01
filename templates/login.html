@@ -8,12 +8,12 @@
 
         <div class="card-body bg-body px-4">
             <#if error??>
-                <div class="alert alert-danger" role="alert">
+                <div data-turbo-temporary class="alert alert-danger" role="alert">
                     ${error}
                 </div>
             </#if>
             <#if info??>
-                <div class="alert alert-primary" role="alert">
+                <div data-turbo-temporary class="alert alert-primary" role="alert">
                     ${info}
                 </div>
             </#if>

@@ -128,18 +128,25 @@
                     </a>
                 </li>
                 </#if>
-
-                <#if adminNavbarItems?? && adminNavbarItems?has_content>
+                <#assign seeableItems = 0>
+                <#list adminNavbarItems as item>
+                    <#if userPriv?seq_contains(item.permission)>
+                        <#assign seeableItems = seeableItems + 1>
+                    </#if>
+                </#list>
+                <#if adminNavbarItems?? && adminNavbarItems?has_content && (seeableItems > 0)>
                 <li class="mt-4">
                     <h6 class="sidebar-header text-uppercase">Plugins</h6>
                     <hr class="sidebar-divider my-1">
                 </li>
                 <#list adminNavbarItems as item>
+                    <#if userPriv?seq_contains(item.permission)>
                     <li class="nav-item">
                         <a href="/${item.url}" class="nav-link <#if actNav == item.actNav>active</#if>">
                             <i class="fa-solid ${item.icon} shiina-ap-icon"></i> ${item.name}
                         </a>
                     </li>
+                    </#if>
                 </#list>
                 </#if>
 

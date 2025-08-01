@@ -24,6 +24,11 @@ public class PluginLoader {
 
     private static final String PLUGINS_DIR = "plugins/";
     private static Logger log = (Logger) LoggerFactory.getLogger("PluginLoader");
+    private static List<ShiinaPlugin> currentLoadedPlugins = new ArrayList<>();
+
+    public static List<ShiinaPlugin> getCurrentLoadedPlugins() {
+        return currentLoadedPlugins;
+    }
 
     public void loadPlugins() {
         try {
@@ -129,7 +134,8 @@ public class PluginLoader {
         return true;
     }
 
-    private void loadPluginFromMetadata(PluginMetadata metadata, Set<String> loadedPlugins, Map<String, PluginMetadata> pluginMetadataMap) {
+    private void loadPluginFromMetadata(PluginMetadata metadata, Set<String> loadedPlugins,
+            Map<String, PluginMetadata> pluginMetadataMap) {
         Logger logger = (Logger) LoggerFactory.getLogger("Plugin [" + metadata.name + "]");
         try {
             // Step 1: Load dependencies first
@@ -145,6 +151,8 @@ public class PluginLoader {
             // Step 2: Load the plugin itself
             loadAndEnablePlugin(metadata, logger);
             loadedPlugins.add(metadata.name);
+          
+            
             logger.info("Successfully loaded plugin: " + metadata.name);
         } catch (Exception e) {
             log.error("Error loading plugin [" + metadata.name + "]: ", e);
@@ -181,7 +189,7 @@ public class PluginLoader {
 
             ShiinaPlugin pluginInstance = (ShiinaPlugin) clazz.getDeclaredConstructor().newInstance();
             pluginInstance.onEnable(metadata.name, logger);
-            logger.info("Loaded and enabled plugin: " + metadata.name);
+            currentLoadedPlugins.add(pluginInstance);
         } catch (Exception e) {
             logger.error("Error loading and enabling plugin: ", e);
         }
@@ -191,40 +199,35 @@ public class PluginLoader {
         try (JarFile jarFile = new JarFile(metadata.jarFilePath)) {
             // Check if there are any entries that start with "modules/"
             boolean hasModules = jarFile.stream()
-                .anyMatch(entry -> entry.getName().startsWith("modules/") && !entry.isDirectory());
-            
+                    .anyMatch(entry -> entry.getName().startsWith("modules/") && !entry.isDirectory());
+
             if (hasModules) {
-                log.info("Found modules directory in JAR for plugin: " + metadata.name);
+                log.debug("Found modules directory in JAR for plugin: " + metadata.name);
                 Path targetBasePath = Paths.get("templates/modules/plugins");
                 Files.createDirectories(targetBasePath);
-                
-                // Extract all files from the modules directory
+
+                // Extract all files from the modules directory 
                 jarFile.stream()
-                    .filter(entry -> entry.getName().startsWith("modules/") && !entry.isDirectory())
-                    .forEach(entry -> {
-                        try {
-                            // Remove "modules/" prefix to get relative path
-                            String relativePath = entry.getName().substring("modules/".length());
-                            Path destFile = targetBasePath.resolve(relativePath);
-                            
-                            // Only copy if the file doesn't already exist
-                            if (!Files.exists(destFile)) {
+                        .filter(entry -> entry.getName().startsWith("modules/") && !entry.isDirectory())
+                        .forEach(entry -> {
+                            try {
+                                // Remove "modules/" prefix to get relative path
+                                String relativePath = entry.getName().substring("modules/".length());
+                                Path destFile = targetBasePath.resolve(relativePath);
+
                                 // Create parent directories if needed
                                 Files.createDirectories(destFile.getParent());
-                                
-                                // Copy file content
+
+                                // Copy file content with REPLACE_EXISTING option
                                 try (InputStream inputStream = jarFile.getInputStream(entry)) {
-                                    Files.copy(inputStream, destFile);
+                                    Files.copy(inputStream, destFile, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                                 }
-                                
-                                log.debug("Extracted module file: " + relativePath);
+
+                            } catch (IOException e) {
+                                log.error("Error extracting module file: " + entry.getName(), e);
                             }
-                        } catch (IOException e) {
-                            log.error("Error extracting module file: " + entry.getName(), e);
-                        }
-                    });
-                
-                log.info("Copied modules for plugin: " + metadata.name);
+                        });
+
             }
         } catch (IOException e) {
             log.error("Error reading JAR file for modules: " + metadata.jarFilePath, e);

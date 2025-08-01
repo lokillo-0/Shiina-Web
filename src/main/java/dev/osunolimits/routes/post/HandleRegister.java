@@ -2,18 +2,15 @@ package dev.osunolimits.routes.post;
 
 import java.sql.ResultSet;
 
-import com.google.gson.Gson;
-
-import dev.osunolimits.externals.GeoLocQuery;
-import dev.osunolimits.externals.TurnstileQuery;
-import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.queries.GeoLocQuery;
+import dev.osunolimits.modules.queries.TurnstileQuery;
+import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.plugins.events.actions.OnRegisterEvent;
 import dev.osunolimits.utils.Auth;
-import dev.osunolimits.utils.Auth.SessionUser;
 import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
@@ -103,22 +100,10 @@ public class HandleRegister extends Shiina {
         
         new OnRegisterEvent(userId, email, country, username, safeName, curUnixTime).callListeners();
 
-        String token = Auth.generateNewToken();
-
         UserInfoCache userInfoCache = new UserInfoCache();
         userInfoCache.reloadUser(userId);
 
-        SessionUser user = new Auth().new SessionUser();
-        user.id = userId;
-        user.created = (int) (System.currentTimeMillis() / 1000L);
-        user.ip = req.ip();
-    
-        Gson gson = new Gson();
-        String userJson = gson.toJson(user);
-        App.jedisPool.setex("shiina:auth:"+token, 604800, userJson);
-    
-        // Set cookie
-        res.cookie("shiina", token);
+        res.cookie("shiina", new SessionBuilder(userId, req).build());
         
         // Redirect to success page
         res.redirect("/?register=success");

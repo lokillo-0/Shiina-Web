@@ -45,11 +45,11 @@
                                 <i class="fa-solid fa-arrow-left pagination-icon"></i>
                             </button>
                         </div>
-         
+
                         <div class="col ms-auto col-auto">
                             <button onclick="selectParam('page', '${page + 1}')"
-                                class="pagination-button bg-secondary m-2 <#if !hasNext>disabled</#if>"
-                                <#if !hasNext>disabled</#if>>
+                                class="pagination-button bg-secondary m-2 <#if !hasNext>disabled</#if>" <#if
+                                !hasNext>disabled</#if>>
                                 <i class="fa-solid fa-arrow-right pagination-icon"></i>
                             </button>
                         </div>
@@ -59,70 +59,92 @@
                 <div class="col col-12">
                     <div class="list-group list-group-flush">
                         <#assign clanC=0>
-                        <#list clans as clan>
-                            <a href="/clan/${clan.id}?mode=${mode}" class="list-group-item list-group-item-action d-flex align-items-center py-3">
-                                <!-- Rank -->
-                                <div class="me-3">
-                                    <span class="badge bg-dark rounded-pill px-3 py-2 fw-bold" style="min-width: 50px;">
-                                        #${offset + clanC}
-                                    </span>
-                                </div>
-                                
-                                <!-- Clan Avatar Collage -->
-                                <div class="me-3">
-                                    <div class="d-grid user-collage user-collage-sm">
-                                        <#list clan.userCollage as collage>
-                                            <img 
-                                                src="${avatarServer}/${collage}" 
-                                                class="w-100 h-100 object-fit-cover" 
-                                                alt="User collage image"
-                                            >
-                                        </#list>
+                            <#list clans as clan>
+                                <a href="/clan/${clan.id}?mode=${mode}"
+                                    class="list-group-item list-group-item-action d-flex align-items-center py-3">
+                                    <!-- Rank -->
+                                    <div class="me-3">
+                                        <span class="badge bg-dark rounded-pill px-3 py-2 fw-bold"
+                                            style="min-width: 50px;">
+                                            #${offset + clanC}
+                                        </span>
                                     </div>
-                                </div>
-                                
-                                <!-- Clan Info -->
-                                <div class="flex-grow-1 me-3">
-                                    <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
-                                        <div class="clan-info">
-                                            <span class="badge bg-secondary me-2">[${clan.tag}]</span>
-                                            <span class="fw-medium">${clan.name}</span>
+
+                                    <!-- Clan Avatar Collage -->
+                                    <div class="me-3">
+                                        <div class="d-grid user-collage rounded h-100 overflow-hidden user-collage-sm">
+                                            <#assign count=0>
+                                                <#list clan.userCollage as collage>
+                                                    <#assign count=count + 1>
+                                                        <img src="${avatarServer}/${collage?c}"
+                                                            class="w-100 h-100 object-fit-cover"
+                                                            alt="User collage image">
+                                                </#list>
+                                                <#if count==1>
+                                                    <img src="${avatarServer}/0" class="w-100 h-100 object-fit-cover"
+                                                        alt="User collage image">
+                                                    <img src="${avatarServer}/0" class="w-100 h-100 object-fit-cover"
+                                                        alt="User collage image">
+                                                    <img src="${avatarServer}/0" class="w-100 h-100 object-fit-cover"
+                                                        alt="User collage image">
+                                                <#elseif count==2>
+                                                    <img src="${avatarServer}/0"
+                                                            class="w-100 h-100 object-fit-cover"
+                                                            alt="User collage image">
+                                                    <img src="${avatarServer}/0"
+                                                            class="w-100 h-100 object-fit-cover"
+                                                            alt="User collage image">
+                                                    <#elseif count==3>
+                                                    <img src="${avatarServer}/0"
+                                                                class="w-100 h-100 object-fit-cover"
+                                                                alt="User collage image">
+                                                </#if>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <!-- Members Count (hidden on mobile) -->
-                                <div class="me-3 d-none d-md-flex">
-                                    <div class="text-center">
-                                        <div class="small text-muted">Members</div>
-                                        <div class="fw-bold text-info">
-                                            <i class="fas fa-users me-1"></i>${clan.members}
+
+                                    <!-- Clan Info -->
+                                    <div class="flex-grow-1 me-3">
+                                        <div
+                                            class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center">
+                                            <div class="clan-info">
+                                                <span class="badge bg-secondary me-2">[${clan.tag}]</span>
+                                                <span class="fw-medium">${clan.name}</span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                
-                                <!-- Main Stat -->
-                                <div class="text-end">
-                                    <div class="h5 mb-0 text-primary fw-bold">
-                                        ${clan.competitionValue}<small class="text-muted ms-1">
-                                            <#switch sort>
-                                                <#case "totalpp">pp<#break>
-                                                <#case "avgpp">pp<#break>
-                                                <#case "rankedscore">Score<#break>
-                                                <#case "acc">%<#break>
-                                            </#switch>
-                                        </small>
+
+                                    <!-- Members Count (hidden on mobile) -->
+                                    <div class="me-3 d-none d-md-flex">
+                                        <div class="text-center">
+                                            <div class="small text-muted">Members</div>
+                                            <div class="fw-bold text-info">
+                                                <i class="fas fa-users me-1"></i>${clan.members}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <!-- Mobile: Show member count -->
-                                    <div class="d-md-none">
-                                        <small class="text-muted">
-                                            <i class="fas fa-users me-1"></i>${clan.members} members
-                                        </small>
+
+                                    <!-- Main Stat -->
+                                    <div class="text-end">
+                                        <div class="h5 mb-0 text-primary fw-bold">
+                                            ${clan.competitionValue}<small class="text-muted ms-1">
+                                                <#switch sort>
+                                                    <#case "totalpp">pp<#break>
+                                                            <#case "avgpp">pp<#break>
+                                                                    <#case "rankedscore">Score<#break>
+                                                                            <#case "acc">%<#break>
+                                                </#switch>
+                                            </small>
+                                        </div>
+                                        <!-- Mobile: Show member count -->
+                                        <div class="d-md-none">
+                                            <small class="text-muted">
+                                                <i class="fas fa-users me-1"></i>${clan.members} members
+                                            </small>
+                                        </div>
                                     </div>
-                                </div>
-                            </a>
-                            <#assign clanC=clanC + 1>
-                        </#list>
+                                </a>
+                                <#assign clanC=clanC + 1>
+                            </#list>
                     </div>
                 </div>
 
@@ -135,11 +157,11 @@
                                 <i class="fa-solid fa-arrow-left pagination-icon"></i>
                             </button>
                         </div>
-         
+
                         <div class="col ms-auto col-auto">
                             <button onclick="selectParam('page', '${page + 1}')"
-                                class="pagination-button bg-secondary m-2 <#if !hasNext>disabled</#if>"
-                                <#if !hasNext>disabled</#if>>
+                                class="pagination-button bg-secondary m-2 <#if !hasNext>disabled</#if>" <#if
+                                !hasNext>disabled</#if>>
                                 <i class="fa-solid fa-arrow-right pagination-icon"></i>
                             </button>
                         </div>

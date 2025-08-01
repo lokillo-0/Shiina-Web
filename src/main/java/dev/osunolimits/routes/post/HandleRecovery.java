@@ -2,16 +2,13 @@ package dev.osunolimits.routes.post;
 
 import java.sql.ResultSet;
 
-import com.google.gson.Gson;
-
-import dev.osunolimits.externals.TurnstileQuery;
-import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.queries.TurnstileQuery;
+import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.utils.Auth;
-import dev.osunolimits.utils.Auth.SessionUser;
 import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
@@ -66,26 +63,13 @@ public class HandleRecovery extends Shiina {
 
         int userId = recoveryRs.getInt("user");
 
-
-        String authToken = Auth.generateNewToken();
-
         shiina.mysql.Exec("UPDATE `users` SET `pw_bcrypt` = ? WHERE `id` = ?", pwBcrypt, userId);
         shiina.mysql.Exec("DELETE FROM `sh_recovery` WHERE `token` = ?", token);
 
         UserInfoCache userInfoCache = new UserInfoCache();
         userInfoCache.reloadUser(userId);
 
-        SessionUser user = new Auth().new SessionUser();
-        user.id = userId;
-        user.created = (int) (System.currentTimeMillis() / 1000L);
-        user.ip = req.ip();
-    
-        Gson gson = new Gson();
-        String userJson = gson.toJson(user);
-        App.jedisPool.set("shiina:auth:" + authToken, userJson);
-    
-        // Set cookie
-        res.cookie("shiina", token);
+        res.cookie("shiina", new SessionBuilder(userId, req).build());
 
         return redirect(res, shiina, "/?recover=success");
     }

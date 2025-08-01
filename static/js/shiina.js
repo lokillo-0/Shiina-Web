@@ -3,29 +3,6 @@ var out;
 var out2;
 var turnstileId = null;
 
-document.addEventListener("turbo:visit", (event) => {
-    const content = document.getElementById("wrapper");
-
-    content.classList.add("fade-out");
-
-    event.preventDefault();
-
-    content.addEventListener('transitionend', () => {
-        Turbo.visit(event.detail.url);
-    });
-});
-
-document.addEventListener("turbo:render", () => {
-    const content = document.getElementById("wrapper");
-
-    // Remove the exit animation and trigger an entry animation
-    content.classList.remove("fade-out");
-    content.classList.add("fade-in");
-
-    setTimeout(() => {
-        content.classList.remove("fade-in");
-    }, 300); // Match the animation duration
-});
 
 loadEventTurbo = document.addEventListener("turbo:load", function () {
     loadUserPage();
@@ -116,13 +93,7 @@ submitStartTurbo = document.addEventListener('turbo:submit-start', function () {
     Turbo.navigator.delegate.adapter.showProgressBar();
 });
 
-beforeVisitTurbo = document.addEventListener('turbo:before-visit', () => {
-    
-});
 
-beforeRenderTurbo = document.addEventListener('turbo:before-render', () => {
-   
-});
 
 winEvent = document.addEventListener('resize', function () {
     if (out) {
@@ -150,10 +121,8 @@ unloadEventTurbo = document.addEventListener("turbo:before-cache", function () {
     // Clean up event listeners
     window.removeEventListener('resize', winEvent);
     document.removeEventListener("turbo:load", loadEventTurbo);
-    document.removeEventListener("turbo:before-cache", unloadEventTurbo);
     document.removeEventListener("turbo:submit-start", submitStartTurbo);
-    document.removeEventListener("turbo:before-visit", beforeVisitTurbo);
-    document.removeEventListener("turbo:before-render", beforeRenderTurbo);
+    document.removeEventListener("turbo:before-cache", unloadEventTurbo);
 });
 
 function unloadTurnstileIfPresent() {
@@ -613,56 +582,81 @@ function loadScorePanel(
     weight = 0, 
     weight_pp = 0
 ) {
-    const beatmapImg = `/api/v1/thumb?setId=${setId}`;
+    const beatmapImg = `https://assets.ppy.sh/beatmaps/${setId}/covers/cover.jpg?1650681317`;
     const sanitizedName = name.replace('.osu', '');
-    const modsDisplay = mods.length > 0 
-        ? ` <span class="mod-pill badge bg-warning bg-opacity-25 text-warning border border-warning border-opacity-25">${mods.join(", ")}</span>` 
-        : '';
-    const weightDisplay = weight > 0 
-        ? `<div class="weight-badge badge bg-info bg-opacity-10 text-info border border-info border-opacity-25" title="Weight contribution to profile pp"><span>${weight}%</span> <span class="fw-bold">${weight_pp}pp</span></div>` 
-        : '';
     
-    // Generate grade display element with enhanced styling
-    const gradeDisplay = grade.toLowerCase() === 'f' 
-        ? '<div class="grade grade-f bg-danger bg-opacity-75 text-white"><i class="fas fa-f"></i></div>'
-        : `<div class="grade bg-opacity-75"><img src="/img/ranking/ranking-${grade}.png" alt="Grade ${grade}"></div>`;
+    // Helper for conditional elements
+    const createBadge = (condition, html) => condition ? html : '';
 
-    return `
-        <div class="score-card mb-3">
-            <div class="score-container bg-dark shadow">
-                <!-- Left side with image and gradient overlay -->
-                <div class="beatmap-image-container">
-                    <div class="beatmap-image" style="background-image: url('${beatmapImg}')"></div>
-                    <div class="image-overlay"></div>
-                    ${gradeDisplay}
+    const modsDisplay = createBadge(
+        mods.length > 0,
+        ` <span class="mod-pill badge bg-warning bg-opacity-50 text-warning border border-warning">${mods.join(", ")}</span>`
+    );
+
+    const weightDisplay = createBadge(
+        weight > 0,
+        `<div class="weight-badge badge bg-info bg-opacity-25 text-info border border-info" title="Weight contribution to profile pp">
+            <span>${weight}%</span> 
+            <span class="fw-bold">${weight_pp}pp</span>
+        </div>`
+    );
+
+    const gradeDisplay = grade.toLowerCase() === 'f'
+        ? `<div class="osu-grade grade-f"><i class="fas fa-times"></i></div>`
+        : `<div class="osu-grade"><img src="/img/ranking/ranking-${grade}.png" alt="Grade ${grade}"></div>`;
+
+   return `
+    <div class="osu-score-card mb-3">
+        <div class="osu-score-container">
+            <!-- Beatmap Background -->
+            <div class="osu-beatmap-bg" style="background-image: url('${beatmapImg}')"></div>
+            
+            <!-- Content Overlay -->
+            <div class="osu-score-content">
+                <!-- Grade Badge -->
+                ${gradeDisplay}
+                
+                <!-- Score Info -->
+                <div class="osu-score-info">
+                    <div class="osu-beatmap-title">
+                        ${sanitizedName}${modsDisplay}
+                    </div>
+                    
+                    <div class="osu-score-stats">
+                        <div class="osu-pp-display">
+                            ${pp}<span class="pp-unit">pp</span>
+                        </div>
+                        <div class="osu-acc-display">
+                            ${acc}%
+                        </div>
+        
+                    </div>
+                    
+                    ${weightDisplay}
                 </div>
                 
-                <!-- Right side with details -->
-                <div class="score-details text-light">
-                    <!-- Action buttons moved to top-right of details section with higher z-index -->
-                    <div class="score-actions">
-                        <a href="/scores/${scoreId}" class="action-button view-button bg-dark bg-opacity-50 text-light" title="View Score">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <a href="${apiUrl}/v1/get_replay?id=${scoreId}" class="action-button download-button bg-dark bg-opacity-50 text-light" title="Download Replay">
-                            <i class="fas fa-download"></i>
-                        </a>
-                    </div>
-                    
-                    <!-- Title with increased right padding to avoid buttons -->
-                    <div class="beatmap-title fw-medium">${sanitizedName}${modsDisplay}</div>
-                    
-                    <div class="score-stats">
-                        <div class="main-stats">
-                            <div class="pp-display text-info fw-bold">${pp}<span class="text-info-emphasis">pp</span></div>
-                            <div class="acc-display text-light opacity-75">${acc}<span>%</span></div>
-                        </div>
-                        ${weightDisplay}
-                    </div>
+                <!-- Action Buttons -->
+                <div class="osu-action-buttons">
+                    <a href="/scores/${scoreId}" 
+                       class="osu-action-btn osu-view-btn" 
+                       title="View Score"
+                       onmouseover="this.style.background='rgba(52,152,219,0.3)'; this.style.borderColor='#3498db';"
+                       onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)';">
+                        <i class="fas fa-eye"></i>
+                    </a>
+                    <a download href="${apiUrl}/v1/get_replay?id=${scoreId}" 
+                       class="osu-action-btn osu-download-btn" 
+                       title="Download Replay"
+                       onmouseover="this.style.background='rgba(46,204,113,0.3)'; this.style.borderColor='#2ecc71';"
+                       onmouseout="this.style.background='rgba(255,255,255,0.1)'; this.style.borderColor='rgba(255,255,255,0.2)';">
+                        <i class="fas fa-download"></i>
+                    </a>
                 </div>
             </div>
         </div>
-    `;
+    </div>
+`;
+
 }
 
 function getBsPrimaryColor() {

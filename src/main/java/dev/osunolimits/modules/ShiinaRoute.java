@@ -18,7 +18,7 @@ public class ShiinaRoute {
 
     private Gson gson;
 
-    public ShiinaRoute () {
+    public ShiinaRoute() {
         gson = new Gson();
     }
 
@@ -27,28 +27,25 @@ public class ShiinaRoute {
         public HashMap<String, Object> data = new HashMap<>();
         public boolean loggedIn = false;
         public Auth.User user;
-
     }
 
     public ShiinaRequest handle(Request req, Response res) throws Exception {
         ShiinaRequest request = new ShiinaRequest();
         request.mysql = Database.getConnection();
-        if(req.cookie("shiina") != null) {
+        if (req.cookie("shiina") != null) {
             String userJson = App.jedisPool.get("shiina:auth:" + req.cookie("shiina"));
-           
+
             Auth.SessionUser user = gson.fromJson(userJson, Auth.SessionUser.class);
-            
-            if(user != null) {
-                Auth.User referenceUser = new Auth(). new User();
+
+            if (user != null) {
+                Auth.User referenceUser = new Auth().new User();
                 String userInfoJson = App.jedisPool.get("shiina:user:" + user.id);
                 UserInfoObject infoObject = gson.fromJson(userInfoJson, UserInfoObject.class);
                 referenceUser.id = user.id;
                 referenceUser.name = infoObject.name;
                 referenceUser.priv = infoObject.priv;
                 referenceUser.safe_name = infoObject.safe_name;
-                
-    
-                App.log.info(userJson + userInfoJson);
+
                 request.loggedIn = true;
                 request.user = referenceUser;
                 request.data.put("user", referenceUser);
@@ -66,6 +63,4 @@ public class ShiinaRoute {
         return request;
     }
 
-    
-    
 }

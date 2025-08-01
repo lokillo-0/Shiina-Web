@@ -46,6 +46,17 @@ public class GetRankCache extends MySQLRoute {
             rankCacheEntry.setRank(rankCacheResultSet.getInt("rank"));
             rankCacheEntries.add(rankCacheEntry);
         }
+
+        // TODO: Refactor rank cache algorithm
+
+        if(rankCacheEntries.size() > 100) {
+            // Cut each second entry from list - iterate backwards to avoid index issues
+            for (int i = rankCacheEntries.size() - 1; i >= 0; i--) {
+                if (i % 2 == 0) {
+                    rankCacheEntries.remove(i);
+                }
+            }
+        }
       
 
         if(rankCacheEntries.size() <= 2) {

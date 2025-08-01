@@ -47,20 +47,21 @@ inputFiles.lst
 
 # theming
 /themes/*
-static/css/theme-*.css
-static/css/themedev-*.css
+/static/css/theme-*.css
+/static/css/themedev-*.css
 
 # marketplace host
 /marketplace/
 
 # data
-.cache/
-.logs/
-data/
+/.cache/
+/.logs/
+/data/
 
 # modular
 /plugins/
-templates/modules/plugins
-static/robots.txt
+/templates/modules/plugins
+/static/robots.txt
 
 old/
+todo.txt

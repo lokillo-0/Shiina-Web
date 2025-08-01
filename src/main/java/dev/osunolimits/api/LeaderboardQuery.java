@@ -1,11 +1,8 @@
 package dev.osunolimits.api;
 
-import java.io.File;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.annotations.SerializedName;
@@ -14,20 +11,13 @@ import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.Group;
 import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.modules.ShiinaSupporterBadge;
-import dev.osunolimits.utils.CacheInterceptor;
+import dev.osunolimits.modules.utils.ShiinaSupporterBadge;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import lombok.Data;
-import okhttp3.Cache;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class LeaderboardQuery {
-
-    private Gson gson;
-
+public class LeaderboardQuery extends APIQueryGson {
 
     @Data
     public class LeaderboardResponse {
@@ -92,30 +82,11 @@ public class LeaderboardQuery {
         private String clanTag;
 
         private boolean supporter = false;
-
         private List<Group> groups;
     }
-
-    private OkHttpClient client;
-
+    
     public LeaderboardQuery() {
-        client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
-                .cache(new Cache(new File(".cache/leaderboard"), 100L * 1024L * 1024L))
-                .connectionPool(new ConnectionPool(50, 20, TimeUnit.SECONDS)).build();
-        gson = new Gson();
-    }
-
-    private int parameter = 0;
-
-    public String getParameter() {
-        if (parameter == 0) {
-            parameter++;
-            return "?";
-        } else {
-            return "&";
-        }
-
+        super("leaderboard", 15, 30);
     }
 
     public LeaderboardResponse getLeaderboard(String sort, int mode, int limit, int offset, Optional<String> country) {
@@ -137,11 +108,11 @@ public class LeaderboardQuery {
             LeaderboardResponse leaderboardResponse = gson.fromJson(element, LeaderboardResponse.class);
             for (LeaderboardItem item : leaderboardResponse.getLeaderboard()) {
                 UserInfoObject userInfo = new UserInfoObject(item.getPlayerId());
-                if(userInfo != null) {
+                if (userInfo != null) {
                     item.setGroups(userInfo.getGroups());
                 }
                 item.setAccuracy((double) Math.round(item.getAccuracy() * 100) / 100);
-                if(PermissionHelper.hasPrivileges(userInfo.priv, PermissionHelper.Privileges.SUPPORTER)) {
+                if (PermissionHelper.hasPrivileges(userInfo.priv, PermissionHelper.Privileges.SUPPORTER)) {
                     userInfo.groups.add(ShiinaSupporterBadge.getInstance().getGroup());
                     item.setSupporter(true);
                 }

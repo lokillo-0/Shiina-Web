@@ -70,7 +70,7 @@ public class ShiinaDocs {
                 continue;
             }
 
-            if (file.getName().equalsIgnoreCase("README.md") || file.getName().equalsIgnoreCase(".git")) {
+            if (file.getName().equalsIgnoreCase("README.md") || file.getName().equalsIgnoreCase(".git") || file.getName().equalsIgnoreCase("LICENSE")) {
                 continue;
             }
 

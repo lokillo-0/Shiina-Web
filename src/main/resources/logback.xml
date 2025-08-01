@@ -25,7 +25,7 @@
     <logger name="spark.Request" level="OFF" additivity="false" />
     <logger name="net.logicsquad.minifier.css.CSSMinifier" level="OFF" additivity="false" />
     
-    <root level="debug">
+    <root>
         <appender-ref ref="STDOUT" />
         <appender-ref ref="ROLLING_FILE" />
     </root>

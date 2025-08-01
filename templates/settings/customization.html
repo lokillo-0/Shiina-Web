@@ -1,0 +1,50 @@
+<#include "/assets/base.html">
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <#include "sidebar.html">
+        </div>
+        <div class="col-md-9">
+            <!-- Alert Messages -->
+            <#if error??>
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    ${error}
+                </div>
+            </#if>
+            <#if info??>
+                <div class="alert alert-primary" role="alert">
+                    <i class="fas fa-info-circle me-2"></i>
+                    ${info}
+                </div>
+            </#if>
+
+            <#include "customization/mode.html">
+
+            <#include "customization/avatar.html">
+
+            <#include "customization/userpage.html">
+
+            <#include "customization/indentity.html">
+
+            <#include "customization/banner.html">
+          
+        </div>
+    </div>
+</div>
+
+<#include "/assets/footer.html">
+
+<script>
+    document.getElementById("avatar").addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById("avatar-preview").src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

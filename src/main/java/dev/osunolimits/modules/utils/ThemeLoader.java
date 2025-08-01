@@ -49,7 +49,7 @@ public class ThemeLoader {
                                        notIncluded(theme);
                                     }
                                 }
-                                logger.info("Loaded theme: [" + file.getName() + "]");
+                                logger.debug("Loaded theme: [" + file.getName() + "]");
                             }
 
                         } else {
@@ -57,6 +57,8 @@ public class ThemeLoader {
                         }
                     }
                 }
+
+                logger.info("Loaded (" + themes.size() + ") themes.");
             } else {
                 logger.warn("Themes directory is empty.");
             }
@@ -72,7 +74,7 @@ public class ThemeLoader {
         if(App.devMode) 
             themeName += "dev";
 
-        logger.info("Loading style.css for theme [" + theme.getName() + "]");
+        logger.debug("Loading style.css for theme [" + theme.getName() + "]");
 
         generatedIdent = Validation.randomString(5);
         

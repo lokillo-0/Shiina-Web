@@ -1,0 +1,48 @@
+<!-- Userpage Section -->
+<div class="card mb-4">
+    <div class="card-header bg-transparent">
+        <h5 class="mb-0">
+            <i class="fa-solid fa-key me-2"></i>
+            Sessions
+        </h5>
+    </div>
+    <div class="card-body">
+   <#list webSessions as session>
+<div class="card mb-2 p-3 bg-secondary text-body">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <strong>${session.browser}</strong> on 
+            <strong>${session.os}</strong> using 
+            <strong>
+                <#if session.device == "Other">
+                    PC
+                <#else>
+                    ${session.device}
+                </#if>
+            </strong>
+            <br>
+        
+            <small class="text-muted">
+                <#if session.country?? && session.city??>
+                ${session.country}, ${session.city}
+                <#else>
+                Unknown Location
+                </#if>
+            </small><br>
+            <small class="text-muted">First signed in <span data-timestamp-format="unix" data-timestamp="${session.created?c}">
+                ${session.created?c}
+            </span></small>
+        </div>
+        <div>
+            <form data-turbo="false" action="/settings/auth/sessions/delete" method="post">
+                    <input type="hidden" name="token" value="${session.encToken}">
+                    <button type="submit" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i> Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+</#list>
+
+    </div>
+    </div>
+</div>

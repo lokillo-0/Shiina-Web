@@ -10,111 +10,128 @@
                 <div class="shiina-pill-icon"></div>
                 <span>Owner</span>
             </div>
-            <#assign u={ "id" : clan.owner, "name" : clan.ownerName, "isOwner" : true }>
-                <#assign index=0>
+            <#assign u={ "id" : clan.owner, "name" : clan.ownerName, "isOwner" : true}>
+
+                <div class="list-group mx-3">
                     <#include "/freemarker/models/user.ftl">
+                </div>
 
-                        <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
-                            <div class="shiina-pill-icon"></div>
-                            <span>Members</span>
-                        </div>
 
-                        <div class="row w-100">
-                            <#list members as u>
-                                <div class="col col-12 member-entry col-md-6">
-                                    <div class="col col-12 bg-secondary rounded m-2">
-                                        <div class="row">
-                                            <div class="col col-auto">
-                                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-                                                    <img class="flag" src="${avatarServer}/${u.id?c}" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="col col-auto d-flex align-items-center">
-                                                <span class="ms-2 ">
-                                                    ${u.name}
-                                                </span>
-                                            </div>
-                                            <div class="col col-full d-flex justify-content-end">
-                                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'KICK')" class="btn btn-danger">Kick</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
+                    <div class="shiina-pill-icon"></div>
+                    <span>Members</span>
+                </div>
+
+                <div class="list-group mx-3">
+                    <#list members as u>
+                        <div class="list-group-item list-group-item-action mb-1 border rounded d-flex align-items-center py-3 position-relative">
+                            <a href="/u/${u.id?c}"
+                                class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
+                                <div class="me-3">
+                                    <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40"
+                                        height="40">
                                 </div>
-                                <#else>
+
+                                <#if u.country??>
+                                    <div class="me-3 d-none d-md-block">
+                                        <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded"
+                                            width="24" height="18">
+                                    </div>
+                                </#if>
+
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold">${u.name}</div>
+                                </div>
+                            </a>
+                            <div class="text-end position-relative" style="z-index: 2;">
+                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'KICK')"
+                                    class="btn btn-danger">Kick</button>
+                            </div>
+                        </div>
+                        <#else>
                             <div class="text-center py-5">
                                 <h5 class="text-muted">You don't have any members yet.</h5>
                             </div>
-                            </#list>
-                        </div>
+                    </#list>
+                </div>
 
-                        
-                        <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
-                            <div class="shiina-pill-icon"></div>
-                            <span>Pending join requests</span>
-                        </div>
+                <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
+                    <div class="shiina-pill-icon"></div>
+                    <span>Pending join requests</span>
+                </div>
 
-                        <div class="row w-100">
-                            <#list pending as u>
-                                <div class="col col-12 member-entry col-md-6">
-                                    <div class="col col-12 bg-secondary rounded m-2">
-                                        <div class="row">
-                                            <div class="col col-auto">
-                                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-                                                    <img class="flag" src="${avatarServer}/${u.id?c}" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="col col-auto d-flex align-items-center">
-                                                <span class="ms-2 ">
-                                                    ${u.name}
-                                                </span>
-                                            </div>
-                                            <div class="col col-full d-flex justify-content-end">
-                                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'ACCEPT')" type="submit" class="btn btn-success">Accept</button>
-                                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'DENY')" class="btn btn-danger">Deny</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                <div class="list-group mx-3">
+                    <#list pending as u>
+                        <div class="list-group-item list-group-item-action mb-1 border rounded d-flex align-items-center py-3 position-relative">
+                            <a href="/u/${u.id?c}"
+                                class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
+                                <div class="me-3">
+                                    <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40"
+                                        height="40">
                                 </div>
-                            <#else>
+
+                                <#if u.country??>
+                                    <div class="me-3 d-none d-md-block">
+                                        <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded"
+                                            width="24" height="18">
+                                    </div>
+                                </#if>
+
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold">${u.name}</div>
+                                </div>
+                            </a>
+                            <div class="text-end position-relative" style="z-index: 2;">
+                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'ACCEPT')" type="submit"
+                                    class="btn btn-success me-2">Accept</button>
+                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'DENY')"
+                                    class="btn btn-danger">Deny</button>
+                            </div>
+                        </div>
+                        <#else>
                             <div class="text-center py-5">
                                 <h5 class="text-muted">You don't have any requests yet.</h5>
                             </div>
-                            </#list>
-                        </div>
+                    </#list>
+                </div>
 
+                <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
+                    <div class="shiina-pill-icon"></div>
+                    <span>Denied join requests</span>
+                </div>
 
-                        <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
-                            <div class="shiina-pill-icon"></div>
-                            <span>Denied join requests</span>
-                        </div>
-
-                        <div class="row w-100">
-                            <#list denied as u>
-                                <div class="col col-12 member-entry col-md-6">
-                                    <div class="col col-12 bg-secondary rounded m-2">
-                                        <div class="row">
-                                            <div class="col col-auto">
-                                                <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-                                                    <img class="flag" src="${avatarServer}/${u.id?c}" alt="">
-                                                </span>
-                                            </div>
-                                            <div class="col col-auto d-flex align-items-center">
-                                                <span class="ms-2 ">
-                                                    ${u.name}
-                                                </span>
-                                            </div>
-                                            <div class="col col-full d-flex justify-content-end">
-                                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'UNDENY')" class="btn btn-danger">Undeny</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                <div class="list-group mx-3">
+                    <#list denied as u>
+                        <div class="list-group-item list-group-item-action mb-1 border rounded d-flex align-items-center py-3 position-relative">
+                            <a href="/u/${u.id?c}"
+                                class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
+                                <div class="me-3">
+                                    <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40"
+                                        height="40">
                                 </div>
-                            <#else>
-                            <div class="text-center py-5">
-                                <h5 class="text-muted">You don't have any requests yet.</h5>
+
+                                <#if u.country??>
+                                    <div class="me-3 d-none d-md-block">
+                                        <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded"
+                                            width="24" height="18">
+                                    </div>
+                                </#if>
+
+                                <div class="flex-grow-1">
+                                    <div class="fw-bold">${u.name}</div>
+                                </div>
+                            </a>
+                            <div class="text-end position-relative" style="z-index: 2;">
+                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'UNDENY')"
+                                    class="btn btn-warning">Undeny</button>
                             </div>
-                            </#list>
                         </div>
+                        <#else>
+                            <div class="text-center py-5">
+                                <h5 class="text-muted">You don't have any denied requests yet.</h5>
+                            </div>
+                    </#list>
+                </div>
         </div>
     </div>
 

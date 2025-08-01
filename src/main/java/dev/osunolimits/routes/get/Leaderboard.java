@@ -4,11 +4,11 @@ import java.util.Optional;
 
 import dev.osunolimits.api.LeaderboardQuery;
 import dev.osunolimits.api.LeaderboardQuery.LeaderboardResponse;
-import dev.osunolimits.cache.CountryLeaderboardCache;
 import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.cron.CountryLeaderboardTask;
 import dev.osunolimits.modules.utils.SEOBuilder;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.OsuConverter;
@@ -64,7 +64,7 @@ public class Leaderboard extends Shiina {
             leaderboardResponse.setLeaderboard(trimmedLeaderboard);
         }
 
-        shiina.data.put("countries", CountryLeaderboardCache.getOrPut(mode, shiina.mysql));
+        shiina.data.put("countries", CountryLeaderboardTask.get(mode));
         shiina.data.put("leaderboard", leaderboardResponse.getLeaderboard());
 
         shiina.data.put("hasNextPage", hasNextPage);

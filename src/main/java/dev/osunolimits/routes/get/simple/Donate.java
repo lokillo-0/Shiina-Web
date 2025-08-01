@@ -6,8 +6,8 @@ import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.monetization.MonetizationConfig;
 import dev.osunolimits.modules.utils.SEOBuilder;
-import dev.osunolimits.monetization.MonetizationConfig;
 import spark.Request;
 import spark.Response;
 

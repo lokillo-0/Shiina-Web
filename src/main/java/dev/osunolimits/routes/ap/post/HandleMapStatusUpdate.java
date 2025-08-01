@@ -2,13 +2,13 @@ package dev.osunolimits.routes.ap.post;
 
 import com.google.gson.Gson;
 
+import dev.osunolimits.api.BeatmapService;
 import dev.osunolimits.models.Beatmap;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.utils.AuditLogger;
 import dev.osunolimits.routes.ap.api.PubSubHandler.MessageType;
-import dev.osunolimits.services.BeatmapService;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;

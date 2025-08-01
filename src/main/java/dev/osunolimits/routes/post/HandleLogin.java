@@ -2,28 +2,19 @@ package dev.osunolimits.routes.post;
 
 import java.sql.ResultSet;
 
-import com.google.gson.Gson;
-
-import dev.osunolimits.externals.TurnstileQuery;
 import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.queries.TurnstileQuery;
+import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.utils.Auth;
-import dev.osunolimits.utils.Auth.SessionUser;
 import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
 
 public class HandleLogin extends Shiina {
-
-    private final Gson GSON;
-
-    public HandleLogin() {
-        GSON = new Gson();
-    }
-
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
@@ -92,25 +83,14 @@ public class HandleLogin extends Shiina {
             return renderTemplate("login.html", shiina, res, req);
         }
 
-        String token = Auth.generateNewToken();
-
         int userId = validationRs.getInt("id");
         UserInfoCache userInfoCache = new UserInfoCache();
         userInfoCache.reloadUserIfNotPresent(userId);
 
-        SessionUser user = new Auth().new SessionUser();
-        user.id = validationRs.getInt("id");
-        user.created = (int) (System.currentTimeMillis() / 1000L);
-        user.ip = req.ip();
-
-        String userJson = GSON.toJson(user);
-
-        App.jedisPool.setex("shiina:auth:"+token, 604800, userJson);
-
         if(rememberMe) {
-            res.cookie("shiina", token, 604800);
+            res.cookie("shiina", new SessionBuilder(userId, req).build(), 604800);
         }else {
-            res.cookie("shiina", token);
+            res.cookie("shiina", new SessionBuilder(userId, req).build());
         }
 
         res.redirect("/?register=success");

@@ -5,12 +5,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-
-import ch.qos.logback.classic.Logger;
 
 public class Database {
     private static Logger log = (Logger) LoggerFactory.getLogger("Database");
@@ -47,7 +46,7 @@ public class Database {
      */
     public void setMaximumPoolSize(int maximumPoolSize) {
         this.maximumPoolSize = maximumPoolSize;
-        hikariConfig.setMaximumPoolSize(100);
+        hikariConfig.setMaximumPoolSize(maximumPoolSize);
     }
 
     /**
@@ -152,9 +151,9 @@ public class Database {
      * @param database       The name of the database to connect to.
      * @param serverTimezone The server timezone for the MySQL connection.
      */
-    public void connectToMySQL(String host, String user, String password, String database,
+    public void connectToMySQL(Logger logger, String host, String user, String password, String database,
             ServerTimezone serverTimezone) {
-        String url = "jdbc:mysql://" + host + ":3306/" + database + "?serverTimezone=" + serverTimezone;
+        String url = "jdbc:mysql://" + host + ":3306/" + database + "?serverTimezone=" + serverTimezone + "&allowPublicKeyRetrieval=true";
         hikariConfig
                 .setJdbcUrl(url);
         hikariConfig.setUsername(user);
@@ -163,10 +162,10 @@ public class Database {
         dataSource = new HikariDataSource(hikariConfig);
 
         try (Connection connection = dataSource.getConnection()) {
-            log.info("Connected to Database (" + url + ")");
+            logger.info("Connected to Database (" + url + ")");
             connection.close();
         } catch (SQLException e) {
-            log.error("Error while connecting to MySQL database " + e.getMessage());
+            logger.error("Error while connecting to MySQL database " + e.getMessage());
         }
     }
 

@@ -122,6 +122,8 @@ public final class MySQL implements AutoCloseable{
 					stmt.setLong(i + 1, (Long) args[i]);
 				} else if (args[i] instanceof Boolean) {
 					stmt.setBoolean(i + 1, (Boolean) args[i]);
+				} else if (args[i] instanceof Double) {
+					stmt.setDouble(i + 1, (Double) args[i]);
 				} else {
 					throw new IllegalArgumentException("Unsupported parameter type: " + args[i].getClass());
 				}
@@ -138,7 +140,7 @@ public final class MySQL implements AutoCloseable{
 				return rowsAffected;
 			}
 		} catch (Exception ex) {
-			logSQL(ex.getMessage());
+			log.error("MySQL Exec Error: " + ex.getMessage(), ex);
 			return -1;
 		}
 	}	

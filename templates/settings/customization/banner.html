@@ -1,0 +1,23 @@
+<!-- Userpage Section -->
+<div class="card mb-4">
+    <div class="card-header bg-transparent">
+        <h5 class="mb-0">
+            <i class="fa-solid fa-image me-2"></i>
+            Banner
+        </h5>
+    </div>
+    <div class="card-body">
+        <#assign spalert = "banner">
+        <#if !userPriv?seq_contains("SUPPORTER")>
+            <#include "supporter-modal.html">
+        <#else>
+            <form id="banner-upload-form" data-turbo="false" action="/settings/banner" method="post"
+                enctype="multipart/form-data" class="w-100" onsubmit="return handleBannerUpload(event)">
+                <div class="form-group">
+                    <input type="file" name="banner" id="banner" accept=".png" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Upload</button>
+            </form>
+        </#if>
+    </div>
+</div>

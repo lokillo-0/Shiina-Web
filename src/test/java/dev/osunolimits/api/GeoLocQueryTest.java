@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dev.osunolimits.externals.GeoLocQuery;
+import dev.osunolimits.modules.queries.GeoLocQuery;
 import okhttp3.OkHttpClient;
 
 public class GeoLocQueryTest {

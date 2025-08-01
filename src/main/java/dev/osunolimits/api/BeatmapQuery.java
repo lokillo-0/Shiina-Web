@@ -1,25 +1,20 @@
 package dev.osunolimits.api;
 
-import java.io.File;
+import java.io.IOException;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import dev.osunolimits.common.APIRequest;
-import dev.osunolimits.main.App;
 import dev.osunolimits.models.Beatmap;
-import dev.osunolimits.utils.CacheInterceptor;
 import lombok.Data;
-import okhttp3.Cache;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class BeatmapQuery {
+public class BeatmapQuery extends APIQuery {
 
     @Data
     public class BeatmapResponse {
@@ -35,25 +30,8 @@ public class BeatmapQuery {
         private int page_size;
     }
 
-    int maxSize;
-    private OkHttpClient client;
-
     public BeatmapQuery() {
-        client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new CacheInterceptor(30, TimeUnit.MINUTES))
-                .cache(new Cache(new File(".cache/beatmaps"), 100L * 1024L * 1024L))
-                .connectionPool(new ConnectionPool(50, 10, TimeUnit.SECONDS)).build();
-    }
-
-    private int parameter = 0;
-
-    public String getParameter() {
-        if (parameter == 0) {
-            parameter++;
-            return "?";
-        } else {
-            return "&";
-        }
+        super("beatmaps", 30, 25);
     }
 
     public BeatmapResponse getBeatmaps(int page, int pageSize, int status, Optional<String> artist,
@@ -80,15 +58,31 @@ public class BeatmapQuery {
 
         Request request = APIRequest.build(url);
 
-        try {
-            Response response = client.newCall(request).execute();
-            JsonElement element = JsonParser.parseString(response.body().string());
-            BeatmapResponse beatmapResponse = new Gson().fromJson(element, BeatmapResponse.class);
-            return beatmapResponse;
+        Response response;
+        JsonElement element;
+        BeatmapResponse beatmapResponse;
 
-        } catch (Exception e) {
-            App.log.error("Failed to get Beatmaps", e);
+        try {
+            response = client.newCall(request).execute();
+        } catch (IOException e) {
+            logger.error("Error fetching beatmaps from bancho.py API");
             return null;
         }
+
+        try {
+            element = JsonParser.parseString(response.body().string());
+        } catch (JsonSyntaxException | IOException e) {
+            logger.error("Invalid JSON response from bancho.py API");
+            return null;
+        }
+
+        try {
+            beatmapResponse = new Gson().fromJson(element, BeatmapResponse.class);
+        } catch (Exception e) {
+            logger.error("Error parsing JSON response from bancho.py API");
+            return null;
+        }
+
+        return beatmapResponse;
     }
 }

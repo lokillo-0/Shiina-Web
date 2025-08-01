@@ -1,0 +1,111 @@
+<#include "/assets/base.html">
+    <div class="container">
+        <!-- Mode Selector Card -->
+        <div class="card">
+            <div class="row m-2 m-lg-0 justify-content-center justify-content-lg-start">
+                <#include "/freemarker/selector.ftl">
+                <#include "/freemarker/rx-selector.ftl">
+            </div>
+        </div>
+
+        <#if restricted && !self>
+            <div class="alert alert-danger mt-4" role="alert">
+                This user is in restricted mode and not present in our ranking. You can see this user's profile because
+                you are a staff member.
+            </div>
+        </#if>
+        <#if restricted && self>
+            <div class="alert alert-danger mt-4" role="alert">
+                You are in restricted mode and not present in our ranking. Visit our <a
+                    href="${c.discordUrl}">Discord</a> for further information.
+            </div>
+        </#if>
+
+        <!-- Profile Section -->
+        <div class="card rounded my-4">
+            <div class="bg-gradient rounded position-relative"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="row p-4 position-relative">
+                    <!-- Profile Picture -->
+                    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                        <div class="position-relative">
+                            <img src="${avatarServer}/${u.player.info.id?c}" alt="Profile picture"
+                                class="img-fluid rounded shadow-lg"
+                                style="width: 150px; height: 150px; object-fit: cover;">
+                            <#if status.player_status.online==true>
+                                <div class="position-absolute bottom-0 end-0 bg-success rounded-circle border border-white border-2"
+                                    style="width: 30px; height: 30px;"></div>
+                            </#if>
+                        </div>
+                    </div>
+                    <!-- Player Name -->
+                    <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-white">
+                        <div class="mb-2">
+                            <h1 class="display-4 fw-bold mb-2 shiina-player-name <#if uprivs?seq_contains("SUPPORTER")>supporter</#if>">
+                                ${u.player.info.name}
+                            </h1>
+                            <div class="groupPlace d-flex flex-wrap gap-2 mt-2 mb-3">
+                                <#list groups as group>
+                                    <span
+                                        class="badge shiina-badge bg-light bg-opacity-25 text-white py-2 rounded-pill pe-3"><span
+                                            class="groupEmoji me-2">${group.emoji}</span>${group.name}</span>
+                                </#list>
+                            </div>
+                        </div>
+                        <#if status.player_status.online==true>
+                            <div
+                                class="d-flex align-items-center bg-gradient bg-opacity-20 rounded-pill px-3 py-2 w-fit">
+                                <div class="bg-success rounded-circle me-2" style="width: 8px; height: 8px;"></div>
+                                <span class="fw-medium">
+                                    <#if status.player_status.status.action==0>Idle
+                                        <#elseif status.player_status.status.action==1>Online
+                                            <#else>Playing ${status.player_status.status.info_text}
+                                    </#if>
+                                </span>
+                            </div>
+                        </#if>
+                    </div>
+                </div>
+            </div>
+            <#if uprivs?seq_contains("SUPPORTER")>
+                <div class="row">
+                    <div class="col col-12">
+                        <img class="shiina-banner mb-2" src="/banner/${id?c}" alt="">
+                    </div>
+                </div>
+            </#if>
+
+            <#include "user/stats.html">
+
+            <#include "user/rankgraph.html">
+
+            <#include "user/userpage.html">
+
+            <#include "user/best-scores.html">
+
+            <#include "user/last-scores.html">
+
+            <#include "user/first-place-scores.html">
+
+            <#include "user/playcountgraph.html">
+
+            <#include "user/achievements.html">
+        </div>
+    </div>
+<input type="hidden" id="offsetFirstPlaces" value="0">
+<input type="hidden" id="offsetBestScores" value="0">
+<input type="hidden" id="offsetLastScores" value="0">
+<input type="hidden" id="firstLoad" value="true">
+
+<#include "/assets/footer.html">
+
+<script>
+    var bootstrapTextColor = getBootstrapTextColor();
+    var bootstrapTextTransparent = getBootstrapTextTransparent();
+    var noBeatmapIcon = '${noBeatmapIcon}';
+    var apiUrl = "${apiUrlPub}";
+    var reqUrl = "/api/v1/get_first_places?id=${id?c}&mode=${mode?c}&offset=";
+    var reqUrlScores = "/api/v1/get_player_scores?id=${id?c}&mode=${mode?c}&offset=";
+    var playCountGraphUrl = "/api/v1/get_playcount_graph?id=${id?c}&mode=${mode?c}";
+    var rankGraphUrl = "/api/v1/get_rank_cache?id=${id?c}&mode=${mode?c}";
+</script>

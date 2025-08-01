@@ -7,7 +7,7 @@
 
   <groupId>dev.osunolimits</groupId>
   <artifactId>shiina</artifactId>
-  <version>1.6</version>
+  <version>1.7</version>
 
   <name>shiina</name>
   <url>https://osunolimits.dev</url>
@@ -26,6 +26,16 @@
   </repositories>
 
   <dependencies>
+    <dependency>
+      <groupId>com.opencsv</groupId>
+      <artifactId>opencsv</artifactId>
+      <version>5.9</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.ua-parser</groupId>
+      <artifactId>uap-java</artifactId>
+      <version>1.6.1</version>
+    </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
@@ -129,7 +139,7 @@
       <version>5.11.4</version>
       <scope>test</scope>
     </dependency>
-    
+
   </dependencies>
 
   <build>
@@ -198,14 +208,14 @@
           <artifactId>maven-project-info-reports-plugin</artifactId>
           <version>3.0.0</version>
         </plugin>
-          <plugin>
-      <groupId>org.codehaus.mojo</groupId>
-      <artifactId>exec-maven-plugin</artifactId>
-      <version>3.1.0</version>
-      <configuration>
-        <mainClass>dev.osunolimits.main.App</mainClass>
-      </configuration>
-    </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>3.1.0</version>
+          <configuration>
+            <mainClass>dev.osunolimits.main.App</mainClass>
+          </configuration>
+        </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-shade-plugin</artifactId>

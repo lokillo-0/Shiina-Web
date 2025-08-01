@@ -1,0 +1,68 @@
+<!-- Identity Change Section -->
+<div class="card mb-4">
+    <div class="card-header bg-transparent">
+        <h5 class="mb-0">
+            <i class="fas fa-id-card me-2"></i>
+            Identity Change
+        </h5>
+    </div>
+    <div class="card-body mb-0">
+        <#assign spalert = "country flag and username">
+        <#if !userPriv?seq_contains("SUPPORTER")>
+            <#include "supporter-modal.html">
+        <#else>
+            <!-- Country Selection -->
+            <div class="mb-4">
+                <h6 class="mb-3">
+                    <i class="fas fa-flag me-2"></i>
+                    Country Flag
+                </h6>
+                <form id="countryForm" action="/settings/country" method="post" class="w-100">
+                    <div class="mb-3">
+                        <select name="newCountry" 
+                                id="country-selector" 
+                                class="form-select"
+                                style="width: 100%;">
+                            <#list countries as country>
+                                <option <#if country?contains(curCountry?upper_case)>selected</#if> 
+                                        value="${country.code}" 
+                                        data-flag="/img/flags/${country.code?lower_case}.svg">
+                                    ${country.name}
+                                </option>
+                            </#list>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-flag me-2"></i>
+                        Change Flag
+                    </button>
+                </form>
+            </div>
+
+            <hr>
+
+            <!-- Username Change -->
+            <div class="">
+                <h6 class="mb-3">
+                    <i class="fas fa-user-edit me-2"></i>
+                    Username
+                </h6>
+                <form id="nameForm" action="/settings/name" method="post" class="w-100">
+                    <div class="mb-3">
+                        <input type="text" 
+                                class="form-control" 
+                                name="newname" 
+                                id="newname"
+                                placeholder="Enter new username"
+                                maxlength="15">
+                        <div class="form-text">Username must be 3-15 characters long</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-user-edit me-2"></i>
+                        Change Username
+                    </button>
+                </form>
+            </div>
+        </#if>
+    </div>
+</div>

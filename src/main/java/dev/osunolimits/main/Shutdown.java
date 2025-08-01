@@ -15,30 +15,15 @@ public class Shutdown extends Thread {
 
     @Override
     public void run() {
-        log.info("Starting shutdown process...");
+        log.debug("Starting shutdown process...");
         long startTime = System.currentTimeMillis();
-
-        if (App.rankCache != null) {
-            log.info("Shutting down rank cache scheduler...");
-            App.rankCache.shutdown();
+        
+        if (App.cron != null) {
+            log.debug("Shutting down cron tasks...");
+            App.cron.shutdown();
         }
 
-        if (App.multiDetection != null) {
-            log.info("Shutting down multi-detection scheduler...");
-            App.multiDetection.shutdown();
-        }
-
-        if(App.databaseCleanUp != null) {
-            log.info("Shutting down database cleanup thread...");
-            App.databaseCleanUp.interrupt();
-        }
-
-        if(App.hourlyPlayerStatsThread != null) {
-            log.info("Shutting down hourly player stats thread...");
-            App.hourlyPlayerStatsThread.interrupt();
-        }
-
-        log.info("Closing active MySQL connections (" + Database.runningConnections.size() + " connections)...");
+        log.debug("Closing active MySQL connections (" + Database.runningConnections.size() + " connections)...");
         for (MySQL connection : new ArrayList<>(Database.runningConnections)) {
             try {
                 connection.close();
@@ -48,17 +33,17 @@ public class Shutdown extends Thread {
         }
 
         if (Database.dataSource != null && !Database.dataSource.isClosed()) {
-            log.info("Closing HikariCP data source...");
+            log.debug("Closing HikariCP data source...");
             Database.dataSource.close();
         }
 
         if (App.jedisPool != null) {
-            log.info("Closing Redis connection pool...");
+            log.debug("Closing Redis connection pool...");
             App.jedisPool.close();
         }
 
         if (App.webServer != null) {
-            log.info("Stopping web server...");
+            log.debug("Stopping web server...");
             Spark.awaitStop();
             App.webServer.shutdown();
             App.webServer = null;

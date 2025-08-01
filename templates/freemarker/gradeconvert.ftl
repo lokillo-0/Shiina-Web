@@ -1,1 +1,9 @@
- <#if score.grade != "F"><img src="/img/ranking/ranking-${score.grade}.png" alt="Grade" class="img-fluid me-3" style="height: ${height}px;"><#else><i class="fa-solid fa-f h3 mx-2 me-4"></i></#if>
+<#if score.grade != "F">
+<div class="osu-grade">
+    <img src="/img/ranking/ranking-${score.grade}.png" alt="Grade ${score.grade}">
+</div>
+<#else>
+<div class="osu-grade grade-f">
+    <i class="fas fa-times"></i>
+</div>
+</#if>

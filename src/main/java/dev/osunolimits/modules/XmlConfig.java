@@ -34,6 +34,12 @@ public class XmlConfig {
         }
         return instance;
     }
+    
+    public void cleanupXmlFile() {
+        // Force cleanup and save
+        cleanupDocument();
+        save();
+    }
 
     private void load() {
         try {
@@ -100,14 +106,45 @@ public class XmlConfig {
 
     private void save() {
         try {
+            // Clean up the document before saving
+            cleanupDocument();
+            
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.STANDALONE, "no");
+
+            // Proper indentation
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+
             DOMSource source = new DOMSource(document);
             StreamResult result = new StreamResult(configFile);
             transformer.transform(source, result);
         } catch (TransformerException e) {
             throw new RuntimeException("Failed to save XML configuration", e);
+        }
+    }
+    
+    private void cleanupDocument() {
+        Element root = document.getDocumentElement();
+        removeEmptyTextNodes(root);
+    }
+    
+    private void removeEmptyTextNodes(Node node) {
+        NodeList children = node.getChildNodes();
+        for (int i = children.getLength() - 1; i >= 0; i--) {
+            Node child = children.item(i);
+            if (child.getNodeType() == Node.TEXT_NODE) {
+                String content = child.getTextContent();
+                if (content != null && content.trim().isEmpty()) {
+                    node.removeChild(child);
+                }
+            } else if (child.getNodeType() == Node.ELEMENT_NODE) {
+                removeEmptyTextNodes(child);
+            }
         }
     }
 }

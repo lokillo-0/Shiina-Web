@@ -14,6 +14,7 @@ import spark.Response;
 public abstract class ShiinaModule {
 
     public abstract String moduleName();
+
     public abstract String moduleDescription();
 
     public abstract String handle(Request request, Response response, ShiinaRequest shiina);
@@ -21,7 +22,7 @@ public abstract class ShiinaModule {
     public String renderModuleTemplate(String template, ShiinaRequest shiina) {
         try {
             Template templateFree = WebServer.freemarkerCfg.getTemplate("modules/" + template);
-             try (StringWriter out = new StringWriter()) {
+            try (StringWriter out = new StringWriter()) {
                 templateFree.process(shiina.data, out);
                 return out.toString();
             } catch (TemplateException e) {
@@ -30,7 +31,7 @@ public abstract class ShiinaModule {
             }
         } catch (IOException e) {
             App.log.error("Error loading module template (" + template + ")", e);
-                return null;
+            return null;
         }
     }
 
@@ -52,11 +53,7 @@ public abstract class ShiinaModule {
             }
         };
 
-
         return module;
     }
 
-
-
-    
 }

@@ -1,24 +1,30 @@
-<div class="col col-12 <#if !u.isOwner??><#if !u.big??>col-md-6</#if></#if> member-entry <#if (index >= 4)> d-none</#if>">
-    <a href="/u/${u.id?c}<#if u.mode??>?mode=${u.mode}</#if>" class="bg-secondary m-2 p-2 row leaderboard-panel" style="border-radius: 5px;">
-        <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-            <img class="flag" src="${avatarServer}/${u.id?c}" alt="">
-        </span>
+<div class="list-group list-group-flush">
+    <a href="/u/${u.id?c}<#if u.mode??>?mode=${u.mode}</#if>"
+        class="list-group-item border rounded list-group-item-action d-flex align-items-center py-3">
+        <div class="me-3">
+            <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40" height="40">
+        </div>
+
         <#if u.country??>
-        <span class="m-1 m-sm-0 col-auto d-none d-lg-flex align-items-center">
-            <img class="flag" src="/img/flags/${u.country}.svg" alt="${u.country} Flag">
-        </span>
+
+        <div class="me-3 d-none d-md-block">
+            <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded" width="24" height="18">
+        </div>
+
         </#if>
+
         <#if u.isOwner??>
-            <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
+            <div class="me-3">
                 <i class="fa-solid fa-crown fa-2xl"></i>
-            </span>
+            </div>
         </#if>
-        <span class="m-1 m-sm-0 col-auto"
-            style="font-size: calc((var(--bs-font-size-base) + .3000rem) + .5vw);"></span>
-        <span class="m-1 m-sm-0 col-auto d-flex align-items-center">
-            <span class="ms-2">
-                ${u.name}
-            </span>
-        </span>
+
+        <div class="flex-grow-1">
+            <div class="fw-bold">${u.name}</div>
+
+        </div>
+        <div class="text-muted">
+            <i class="fa fa-arrow-right"></i>
+        </div>
     </a>
 </div>

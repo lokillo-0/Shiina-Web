@@ -41,14 +41,15 @@ public class HandleBeatmapFavorite extends Shiina {
         }
 
         ResultSet checkFavoriResultSet = shiina.mysql.Query(BEATMAP_FAVORITE_QUERY, shiina.user.id, beatmapSetId);
-        if (checkFavoriResultSet.next()) {
+        boolean hasNext = checkFavoriResultSet.next();
+        if (hasNext) {
             shiina.mysql.Exec("DELETE FROM `favourites` WHERE `userid` = ? AND `setid` = ?", shiina.user.id,
                     beatmapSetId);
-            new OnBeatmapFavoriteEvent(shiina.user.id, beatmapSetIdNumber, true).callListeners();
         } else {
             shiina.mysql.Exec(INSERT_FAVORITE_EXEC, shiina.user.id, beatmapSetId, System.currentTimeMillis() / 1000);
-            new OnBeatmapFavoriteEvent(shiina.user.id, beatmapSetIdNumber, false).callListeners();
         }
+        
+        new OnBeatmapFavoriteEvent(shiina.user.id, beatmapSetIdNumber, hasNext).callListeners();
 
         return redirect(res, shiina, "/b/" + beatmapId);
     }

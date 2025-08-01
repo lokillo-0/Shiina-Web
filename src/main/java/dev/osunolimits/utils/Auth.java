@@ -7,6 +7,8 @@ import java.util.Base64;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
+import com.google.gson.annotations.SerializedName;
+
 import dev.osunolimits.main.App;
 import lombok.Data;
 
@@ -23,14 +25,23 @@ public class Auth {
     }
 
     @Data
-    public class SessionUser {
+    public static class SessionUser {
+        @SerializedName("id")
         public Integer id;
+        @SerializedName("created")
         public Integer created;
+        @SerializedName("ip")
         public String ip;
+        @SerializedName("userAgent")
+        public String userAgent = "Unknown";
+        @SerializedName("city")
+        public String city = null;
+        @SerializedName("country")
+        public String country = null;
     }
 
-    private static final SecureRandom secureRandom = new SecureRandom(); 
-    private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder(); 
+    private static final SecureRandom secureRandom = new SecureRandom();
+    private static final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
 
     public static String generateNewToken() {
         byte[] randomBytes = new byte[24];

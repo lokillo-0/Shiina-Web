@@ -1,24 +1,21 @@
 # **Shiina-Web**
-
-[![](https://dcbadge.limes.pink/api/server/Dr79DU9kbD)](https://discord.gg/Dr79DU9kbD) ![Contributors](https://img.shields.io/github/contributors/osu-NoLimits/Shiina-Web?style=for-the-badge) [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=for-the-badge)](http://makeapullrequest.com)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/osu-NoLimits/Shiina-Web/maven.yml?label=Tests&color=1783a3&link=https%3A%2F%2Fgithub.com%2Fosu-NoLimits%2FShiina-Web)
+![Discord](https://img.shields.io/discord/1295422749807743037?label=Discord&link=https%3A%2F%2Fdiscord.gg%2F6DH8bB24p6&color=1783a3&link=https%3A%2F%2Fgithub.com%2Fosu-NoLimits%2FShiina-Web)
+![GitHub contributors](https://img.shields.io/github/contributors/osu-NoLimits/Shiina-Web?label=Contributors&color=1783a3&link=https%3A%2F%2Fgithub.com%2Fosu-NoLimits%2FShiina-Web)
+![GitHub License](https://img.shields.io/github/license/osu-NoLimits/Shiina-Web?label=License&color=1783a3&link=https%3A%2F%2Fgithub.com%2Fosu-NoLimits%2FShiina-Web)
+![GitHub Created At](https://img.shields.io/github/created-at/osu-NoLimits/Shiina-Web?label=Created&color=1783a3&link=https%3A%2F%2Fgithub.com%2Fosu-NoLimits%2FShiina-Web)
+![Static Badge](https://img.shields.io/badge/available%20-%20Test?label=Documentation&color=1783a3&link=https%3A%2F%2Fosu-nolimits.github.io%2Fwiki%2F)
+![GitHub Repo stars](https://img.shields.io/github/stars/osu-NoLimits/Shiina-Web)
 
 A Java-based web frontend for **bancho.py-ex** osu! private servers, with extensive features and plugin support.
 
-## **Requirements**
-- Java 21 (OpenJDK 21)
-- Maven
-- [bancho.py-ex](https://github.com/osu-NoLimits/bancho.py-ex) (standard bancho.py is not currently supported)
+---
 
-## **Installation**
-1. `make install` - installs dependencies and compiles the project
-2. Copy all files in `.config/` with `.example` extension and remove the `.example` suffix
-   ```
-   cp .config/.env.example .config/.env
-   cp .config/customization.yml.example .config/customization.yml
-   cp .config/logger.env.example .config/logger.env
-   ```
-3. Configure the files in `.config/` directory according to your needs
-4. `make run` - starts the Shiina web frontend
+## 🛠️ Installation
+
+For installation look up our [new documentation](https://osu-nolimits.github.io/wiki/)
+
+---
 
 ## **Feature List**
 
@@ -51,34 +48,22 @@ A Java-based web frontend for **bancho.py-ex** osu! private servers, with extens
 - ✅ Easy customization via `.config/customization.yml`
 - ✅ Multiple webhook support
 
-### In Progress
-- 🧩 SEO optimization
-
-## **Plugin System**
-
-Shiina features a Java plugin system that allows extending functionality without modifying the core codebase.
-
-Custom plugins can be added to the `/plugins` directory. To learn making plugins for shiina check out [PLUGINS](https://github.com/osu-NoLimits/Shiina-Web/wiki/Plugins)
-
-## **Project Structure**
-
-```
-shiina/
-├── .config/         # Configuration files
-├── data/            # Application data storage
-├── docs/            # Documentation
-├── logs/            # Application logs
-├── plugins/         # Java plugins and configurations
-├── src/             # Source code
-├── static/          # Static web assets (CSS, JS, images)
-├── target/          # Compiled output
-└── templates/       # HTML templates
-```
+---
 
 ## **License**
 
 This project is licensed under the MIT LICENSE found in the [LICENSE](/LICENSE) file.
 
+---
+
 ## **Contributing**
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
+
+### **Contributors**
+
+<a href="https://github.com/osu-NoLimits/Shiina-Web/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=osu-NoLimits/Shiina-Web" />
+</a>

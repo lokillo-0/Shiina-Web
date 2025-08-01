@@ -3,24 +3,32 @@ package dev.osunolimits.main;
 import java.sql.SQLException;
 import java.util.Map;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
+import dev.osunolimits.main.init.StartupLogConfigTask;
+import dev.osunolimits.main.init.StartupLoggerLevelTask;
+import dev.osunolimits.main.init.StartupSetupDataTask;
+import dev.osunolimits.main.init.StartupDatabaseTask;
+import dev.osunolimits.main.init.StartupTextTask;
+import dev.osunolimits.main.init.engine.StartupTaskRunner;
 import dev.osunolimits.models.Action;
-import dev.osunolimits.modules.DatabaseCleanUp;
-import dev.osunolimits.modules.HourlyPlayerStatsThread;
 import dev.osunolimits.modules.ShiinaDocs;
-import dev.osunolimits.modules.ShiinaMultiDetection;
-import dev.osunolimits.modules.ShiinaRankCache;
+import dev.osunolimits.modules.cron.CountryLeaderboardTask;
+import dev.osunolimits.modules.cron.DatabaseCleanUpTask;
+import dev.osunolimits.modules.cron.MultiDetectionTask;
+import dev.osunolimits.modules.cron.ServerStatsCollectorTask;
+import dev.osunolimits.modules.cron.ShiinaRankCache;
+import dev.osunolimits.modules.cron.engine.Cron;
+import dev.osunolimits.modules.monetization.MonetizationConfig;
+import dev.osunolimits.modules.monetization.routes.KofiDonoHandler;
 import dev.osunolimits.modules.utils.GroupRegistry;
 import dev.osunolimits.modules.utils.RobotJsonConfig;
+import dev.osunolimits.modules.utils.ShiinaAchievementsSorter;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.modules.utils.UserInfoCache;
-import dev.osunolimits.monetization.MonetizationConfig;
-import dev.osunolimits.monetization.routes.KofiDonoHandler;
 import dev.osunolimits.plugins.NavbarRegister;
 import dev.osunolimits.plugins.PluginLoader;
-import dev.osunolimits.plugins.models.NavbarAdminItem;
 import dev.osunolimits.plugins.models.NavbarItem;
 import dev.osunolimits.routes.ap.api.PubSubHandler;
 import dev.osunolimits.routes.ap.api.RecoverAccount;
@@ -37,9 +45,9 @@ import dev.osunolimits.routes.ap.get.Themes;
 import dev.osunolimits.routes.ap.get.groups.Groups;
 import dev.osunolimits.routes.ap.get.groups.ManageGroup;
 import dev.osunolimits.routes.ap.get.groups.ProcessGroup;
-import dev.osunolimits.routes.ap.get.system.System;
 import dev.osunolimits.routes.ap.get.system.SystemConnections;
 import dev.osunolimits.routes.ap.get.system.SystemThreads;
+import dev.osunolimits.routes.ap.get.system.SystemView;
 import dev.osunolimits.routes.ap.get.users.ApUser;
 import dev.osunolimits.routes.ap.get.users.Users;
 import dev.osunolimits.routes.ap.post.ChangeSetting;
@@ -47,8 +55,6 @@ import dev.osunolimits.routes.ap.post.ChangeTheme;
 import dev.osunolimits.routes.ap.post.DenyMapRequest;
 import dev.osunolimits.routes.ap.post.HandleMapStatusUpdate;
 import dev.osunolimits.routes.ap.post.ProcessManageGroup;
-import dev.osunolimits.routes.api.get.GetBanner;
-import dev.osunolimits.routes.api.get.GetBmThumbnail;
 import dev.osunolimits.routes.api.get.GetComments;
 import dev.osunolimits.routes.api.get.GetFirstPlaces;
 import dev.osunolimits.routes.api.get.GetPlaycountGraph;
@@ -61,6 +67,8 @@ import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.HandleRelationship;
+import dev.osunolimits.routes.api.get.image.GetBanner;
+import dev.osunolimits.routes.api.get.image.GetBmThumbnail;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Bot;
@@ -76,26 +84,29 @@ import dev.osunolimits.routes.get.modular.ModuleRegister;
 import dev.osunolimits.routes.get.modular.ShiinaModule;
 import dev.osunolimits.routes.get.modular.home.BigHeader;
 import dev.osunolimits.routes.get.modular.home.MoreInfos;
+import dev.osunolimits.routes.get.settings.Authentication;
+import dev.osunolimits.routes.get.settings.Customization;
+import dev.osunolimits.routes.get.settings.Data;
+import dev.osunolimits.routes.get.settings.Settings;
 import dev.osunolimits.routes.get.simple.Donate;
 import dev.osunolimits.routes.get.simple.Login;
 import dev.osunolimits.routes.get.simple.Recover;
 import dev.osunolimits.routes.get.simple.Register;
 import dev.osunolimits.routes.get.user.Relations;
-import dev.osunolimits.routes.get.user.Settings;
-import dev.osunolimits.routes.post.HandleAvatarChange;
-import dev.osunolimits.routes.post.HandleBannerChange;
 import dev.osunolimits.routes.post.HandleComment;
-import dev.osunolimits.routes.post.HandleFlagChange;
 import dev.osunolimits.routes.post.HandleLogin;
 import dev.osunolimits.routes.post.HandleLogout;
-import dev.osunolimits.routes.post.HandleModeChange;
-import dev.osunolimits.routes.post.HandleNameChange;
 import dev.osunolimits.routes.post.HandleRecovery;
 import dev.osunolimits.routes.post.HandleRegister;
-import dev.osunolimits.routes.post.HandleUserpageChange;
-import dev.osunolimits.routes.redirects.GucchoBmRedirect;
-import dev.osunolimits.routes.redirects.GucchoUserRedirect;
-import dev.osunolimits.utils.osu.PermissionHelper.Privileges;
+import dev.osunolimits.routes.post.settings.auth.HandleTokenDeletion;
+import dev.osunolimits.routes.post.settings.customization.HandleAvatarChange;
+import dev.osunolimits.routes.post.settings.customization.HandleBannerChange;
+import dev.osunolimits.routes.post.settings.customization.HandleFlagChange;
+import dev.osunolimits.routes.post.settings.customization.HandleModeChange;
+import dev.osunolimits.routes.post.settings.customization.HandleNameChange;
+import dev.osunolimits.routes.post.settings.customization.HandleUserpageChange;
+import dev.osunolimits.routes.post.settings.data.HandleDataRequest;
+import dev.osunolimits.utils.Auth;
 import io.github.cdimascio.dotenv.Dotenv;
 import redis.clients.jedis.JedisPooled;
 import spark.Spark;
@@ -106,28 +117,25 @@ import spark.Spark;
  */
 public class App {
 
-    public static final Logger log = (Logger) LoggerFactory.getLogger("Shiina-Web");
+    public static final Logger log = LoggerFactory.getLogger("Shiina-Web");
+    
     public static Dotenv loggerEnv;
     public static Dotenv env;
     public static Map<String, Object> customization;
+
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.6prod";
-    public static String dbVersion = "1.6";
+    public static String version = "1.7prod";
+    public static String dbVersion = "1.7";
+
+    public static String appSecret = Auth.generateNewToken();
 
     public static boolean devMode = false;
 
-    public static ShiinaRankCache rankCache;
-    public static ShiinaMultiDetection multiDetection;
-    public static DatabaseCleanUp databaseCleanUp;
-    public static HourlyPlayerStatsThread hourlyPlayerStatsThread;
+    public static Cron cron = new Cron();
 
     public static void main(String[] args) throws SQLException {
-
-        // Register shutdown hook early
-        Runtime.getRuntime().addShutdownHook(new Shutdown());
-
         if (args.length > 0 && args[0].equals("-dev")) {
             devMode = true;
             log.info("Running shiina in development mode, do not use this in production!");
@@ -136,12 +144,14 @@ public class App {
 
         env = Dotenv.configure().directory(".config/").load();
         loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
-        log.info("Shiina-Web Rewrite " + version);
+        
+        StartupTaskRunner.register(new StartupTextTask());
+        StartupTaskRunner.register(new StartupLoggerLevelTask());
+        StartupTaskRunner.register(new StartupSetupDataTask());
+        StartupTaskRunner.register(new StartupLogConfigTask());
+        StartupTaskRunner.register(new StartupDatabaseTask());
+
         Init init = new Init();
-        init.initializeDataDirectory();
-        init.initializeRedisConfiguration();
-        init.initializeJettyLogging();
-        init.initializeDatabase();
         init.initializeJedis();
         if (!devMode)
             init.initializeAutorunSQL();
@@ -162,9 +172,6 @@ public class App {
 
         WebServer.get("/health", new Health());
 
-        WebServer.get("/user/:handle", new GucchoUserRedirect());
-        WebServer.get("/beatmapset/:set", new GucchoBmRedirect());
-
         WebServer.get("/", new Home());
         WebServer.get("/beatmaps", new Beatmaps());
         WebServer.get("/leaderboard", new Leaderboard());
@@ -178,7 +185,14 @@ public class App {
         WebServer.get("/u/:id", new User());
 
         WebServer.get("/settings", new Settings());
+
+        WebServer.get("/settings/customization", new Customization());
+        WebServer.get("/settings/auth", new Authentication());
+        WebServer.get("/settings/data", new Data());
+
         WebServer.get("/friends", new Relations());
+        WebServer.post("/settings/auth/sessions/delete", new HandleTokenDeletion());
+        WebServer.post("/settings/data/export", new HandleDataRequest());
         WebServer.post("/settings/avatar", new HandleAvatarChange());
         WebServer.post("/settings/country", new HandleFlagChange());
         WebServer.post("/settings/name", new HandleNameChange());
@@ -188,11 +202,12 @@ public class App {
 
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());
+        WebServer.post("/login", new HandleLogin());
+        WebServer.post("/logout", new HandleLogout());
+
         WebServer.get("/auth/recover", new Recover());
         WebServer.post("/recover", new HandleRecovery());
         WebServer.post("/register", new HandleRegister());
-        WebServer.post("/login", new HandleLogin());
-        WebServer.post("/logout", new HandleLogout());
 
         WebServer.post("/post/comment", new HandleComment());
         WebServer.notFound(new NotFound());
@@ -226,7 +241,7 @@ public class App {
         WebServer.get("/ap/start", new Start());
         WebServer.get("/ap/commands", new Commands());
         WebServer.get("/ap/themes", new Themes());
-        WebServer.get("/ap/system", new System());
+        WebServer.get("/ap/system", new SystemView());
         WebServer.get("/ap/system/cons", new SystemConnections());
         WebServer.get("/ap/system/threads", new SystemThreads());
         WebServer.get("/ap/groups", new Groups());
@@ -260,20 +275,21 @@ public class App {
         ShiinaDocs shiinaDocs = new ShiinaDocs();
         shiinaDocs.initializeDocs();
 
+        ShiinaAchievementsSorter.initialize();
+
+        cron.registerTimedTask(120, new MultiDetectionTask());
+        cron.registerTimedTask(30, new DatabaseCleanUpTask());
+        cron.registerTimedTask(30, new CountryLeaderboardTask());
+        cron.registerFixedRateTask(9, 59, new ShiinaRankCache());
+        cron.registerTaskEachFullHour(new ServerStatsCollectorTask());
+
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();
 
         ModuleRegister.reloadModuleConfigurations();
+        
 
-        rankCache = new ShiinaRankCache();
-        multiDetection = new ShiinaMultiDetection();
-
-        databaseCleanUp = new DatabaseCleanUp();
-        databaseCleanUp.start();
-
-        hourlyPlayerStatsThread = new HourlyPlayerStatsThread();
-        hourlyPlayerStatsThread.start();
-
+        Runtime.getRuntime().addShutdownHook(new Shutdown());
     }
 
 }

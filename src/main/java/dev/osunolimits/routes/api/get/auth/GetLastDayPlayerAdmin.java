@@ -1,9 +1,9 @@
 package dev.osunolimits.routes.api.get.auth;
 
-import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.cron.ServerStatsCollectorTask;
 import dev.osunolimits.routes.api.get.ShiinaAPIHandler;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
@@ -26,7 +26,7 @@ public class GetLastDayPlayerAdmin extends Shiina {
         }
 
         ShiinaAPIHandler shiinaAPIHandler = new ShiinaAPIHandler();
-        return shiinaAPIHandler.renderJSON(App.hourlyPlayerStatsThread.getStore().getLast24Hours(), shiina, res);
+        return shiinaAPIHandler.renderJSON(ServerStatsCollectorTask.getStore().getLast24Hours(), shiina, res);
     }
     
 }

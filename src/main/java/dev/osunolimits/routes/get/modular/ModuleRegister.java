@@ -29,13 +29,13 @@ public class ModuleRegister {
     public static void registerDefaultModule(String forPage, ShiinaModule module) {
         ModulePath modulePath = new ModulePath(forPage, module, true);
         modules.add(modulePath);
-        log.info("Registered default module for " + forPage + ": " + module.moduleName());
+        log.debug("Registered default module for " + forPage + ": " + module.moduleName());
     }
 
     public static void registerModule(String forPage, ShiinaModule module) {
         ModulePath modulePath = new ModulePath(forPage, module, false);
         modules.add(modulePath);
-        log.info("Registered module for " + forPage + ": " + module.moduleName());
+        log.debug("Registered module for " + forPage + ": " + module.moduleName());
     }
 
     public static List<ShiinaModule> getModulesForPage(String page) {
@@ -43,12 +43,12 @@ public class ModuleRegister {
     }
 
     public static void reloadModuleConfigurations() {
-        log.info("Reloading Module System...");
+        log.debug("Reloading Module System...");
         Path modulesPath = Path.of("data/modules");
         if (!Files.exists(modulesPath)) {
             try {
                 Files.createDirectories(modulesPath);
-                log.info("Created directory: " + modulesPath);
+                log.debug("Created directory: " + modulesPath);
             } catch (IOException e) {
                 log.error("Failed to create modules directory: ", e);
             }
@@ -65,7 +65,7 @@ public class ModuleRegister {
 
                             String page = filename.substring(0, filename.length() - 5);
 
-                            log.info("Module Json found for page: " + page);
+                            log.debug("Module Json found for page: " + page);
 
                             FoundModule foundModule = new FoundModule(page, Files.readString(jsonPath));
                             foundModules.add(foundModule);
@@ -103,7 +103,7 @@ public class ModuleRegister {
                 String json = gson.toJson(toLoad);
                 try {
                     Files.writeString(Path.of("data/modules/" + page + ".json"), json);
-                    log.info("Created JSON file for page: " + page);
+                    log.debug("Created JSON file for page: " + page);
                 } catch (IOException e) {
                     log.error("Error writing JSON file for page: " + page, e);
                 }

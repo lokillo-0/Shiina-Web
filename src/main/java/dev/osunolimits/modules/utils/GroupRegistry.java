@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
@@ -36,7 +37,7 @@ public class GroupRegistry {
             return new ArrayList<Group>();
         }
 
-        return gson.fromJson(groupRegistry, new com.google.gson.reflect.TypeToken<ArrayList<GroupRegistry.Group>>(){}.getType());
+        return gson.fromJson(groupRegistry, new TypeToken<ArrayList<GroupRegistry.Group>>(){}.getType());
     }
 
     public void revalidate(MySQL mysql) {

@@ -29,7 +29,6 @@ public class Init {
 
     public final Logger log = (Logger) LoggerFactory.getLogger("Igniter");
 
-
     public void initializeWebServer(WebServer webServer) {
 
         try {
@@ -87,47 +86,6 @@ public class Init {
         }
     }
 
-    public void initializeRedisConfiguration() {
-        if (App.loggerEnv.get("HIKARI_LOG").equalsIgnoreCase("FALSE")) {
-            log.info("Disabling HikariCP logging");
-            LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-            Logger hikariLogger = loggerContext.getLogger("com.zaxxer.hikari");
-            hikariLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-        }
-    }
-
-    public void initializeJettyLogging() {
-        if (App.loggerEnv.get("JETTY_LOG").equalsIgnoreCase("FALSE")) {
-            log.info("Disabling Jetty logging");
-            LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory();
-
-            // Disable logging for Jetty
-            Logger jettyLogger = loggerContext.getLogger("org.eclipse.jetty");
-            jettyLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-
-            // Optionally, disable specific Jetty components if needed
-            Logger serverLogger = loggerContext.getLogger("org.eclipse.jetty.server");
-            serverLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-
-            Logger handlerLogger = loggerContext.getLogger("org.eclipse.jetty.server.handler");
-            handlerLogger.setLevel(ch.qos.logback.classic.Level.OFF);
-        }
-    }
-
-    public void initializeDatabase() {
-        try {
-            Database database = new Database();
-            database.setOptimizedSettings();
-            database.setMaximumPoolSize(Integer.parseInt(App.env.get("POOLSIZE")));
-            database.setConnectionTimeout(Integer.parseInt(App.env.get("TIMEOUT")));
-            database.connectToMySQL(App.env.get("DBHOST"), App.env.get("DBUSER"), App.env.get("DBPASS"),
-                    App.env.get("DBNAME"),
-                    ServerTimezone.UTC);
-        } catch (Exception e) {
-            log.error("Failed to configure Database", e);
-            System.exit(1);
-        }
-    }
 
     public void initializeJedis() {
         try {
@@ -163,28 +121,6 @@ public class Init {
             System.exit(1);
         }
         mysql.close();
-    }
-
-    public void initializeDataDirectory() {
-        try {
-            if (!Files.exists(Paths.get("data"))) {
-                Files.createDirectories(Paths.get("data"));
-            }
-
-            if (!Files.exists(Paths.get("data/dbversion.json"))) {
-
-                Gson gson = new Gson();
-                DbVersion dbVersion = new DbVersion();
-                dbVersion.setVersion(App.version);
-                dbVersion.setDbVersion(App.dbVersion);
-
-                Files.writeString(Paths.get("data/dbversion.json"), gson.toJson(dbVersion));
-            }
-        } catch (IOException e) {
-            log.error("Failed to create .data directory", e);
-            System.exit(1);
-        }
-
     }
 
 

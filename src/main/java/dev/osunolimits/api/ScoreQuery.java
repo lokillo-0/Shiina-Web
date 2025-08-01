@@ -9,7 +9,7 @@ import dev.osunolimits.common.MySQL;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.Beatmap;
 import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.modules.ShiinaSupporterBadge;
+import dev.osunolimits.modules.utils.ShiinaSupporterBadge;
 import dev.osunolimits.utils.osu.OsuConverter;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import lombok.Data;

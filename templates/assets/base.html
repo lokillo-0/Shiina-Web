@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="turbo-refresh-method" content="morph">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
     <link rel="stylesheet" href="/css/halfmoon.min.css">
@@ -22,6 +21,11 @@
     <script data-domain="${domain}" src="${analytics}"></script>
     <script src="/js/shiina.js"></script>
     <script src="/js/shiina-search.js"></script>
+
+    <meta name="turbo-refresh-method" content="morph">
+    <meta name="turbo-refresh-scroll" content="preserve">
+    <meta name="turbo-prefetch" content="false">
+    <meta name="view-transition" content="same-origin">
 
     <link rel="stylesheet" href="/css/wysibb-theme.css">
     <#if !currentTheme.included>

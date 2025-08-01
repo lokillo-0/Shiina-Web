@@ -1,0 +1,175 @@
+<div class="mx-1 mx-md-4">
+    <div class="row gx-3">
+        <div class="col col-12 col-sm-12 col-lg-6">
+            <div style="background: rgba(0,0,0,0.1);" class="border py-4 px-2 rounded">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                        <small>Rank</small>
+                        <h2>#<#if u.player.stats[mode?string].rank==0>-<#else>${u.player.stats[mode?string].rank}</#if>
+                        </h2>
+                    </div>
+                    <div class="col-12 col-md-6 d-flex flex-column align-items-center">
+                        <small>Country Rank <img data-bs-toggle="tooltip" data-bs-placement="top"
+                                aria-label="${ucountry}" data-bs-original-title="${ucountry}" class="rounded ms-2"
+                                width="20" height="15" src="/img/flags/${u.player.info.country}.svg" alt=""></small>
+                        <h2>#<#if u.player.stats[mode?string].country_rank==0>-<#else>${u.player.stats[mode?string].country_rank}</#if>
+                        </h2>
+                    </div>
+                </div>
+                <div class="row justify-content-center my-4" id="counts">
+                    <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                        <img src="/img/ranking/ranking-XH.png" class="img-fluid" alt="Ranking XH"
+                            style="max-width: 30px;">
+                        <small class="mt-1">${u.player.stats[mode?string].xh_count}</small>
+                    </div>
+                    <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                        <img src="/img/ranking/ranking-X.png" class="img-fluid" alt="Ranking X"
+                            style="max-width: 30px;">
+                        <small class="mt-1">${u.player.stats[mode?string].x_count}</small>
+                    </div>
+                    <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                        <img src="/img/ranking/ranking-SH.png" class="img-fluid" alt="Ranking SH"
+                            style="max-width: 30px;">
+                        <small class="mt-1">${u.player.stats[mode?string].sh_count}</small>
+                    </div>
+                    <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                        <img src="/img/ranking/ranking-S.png" class="img-fluid" alt="Ranking S"
+                            style="max-width: 30px;">
+                        <small class="mt-1">${u.player.stats[mode?string].s_count}</small>
+                    </div>
+                    <div class="col-4 col-md-2 d-flex flex-column align-items-center">
+                        <img src="/img/ranking/ranking-A.png" class="img-fluid" alt="Ranking A"
+                            style="max-width: 30px;">
+                        <small id="text" class="mt-1">${u.player.stats[mode?string].a_count}</small>
+                    </div>
+                </div>
+                <div class="row justify-content-center p-4" id="level">
+                    <div class="shiina-level-bar d-flex align-items-center">
+                        <div class="shiina-level-bar-level position-relative">
+                            <span class="hexagon">${level?string("0")}</span>
+                        </div>
+                        <div class="shiina-level-bar-progress-container flex-grow-1 ms-3">
+                            <div class="shiina-level-bar-progress" style="width: ${levelProgress}%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col col-12 col-sm-12 col-lg-6 mt-2 mt-sm-0">
+            <div style="background: rgba(0,0,0,0.1);" class="border py-4 px-2 rounded">
+                <table class="w-100">
+                    <tbody>
+                        <tr>
+                            <td>Joined:</td>
+                            <td data-timestamp-format="unix" data-timestamp="${u.player.info.creation_time?c}">
+                                ${u.player.info.creation_time?c}</td>
+                        </tr>
+                        <tr>
+                            <td>Last Activity:</td>
+                            <td data-timestamp-format="unix" data-timestamp="${u.player.info.latest_activity?c}">
+                                ${u.player.info.latest_activity?c}</td>
+                        </tr>
+                        <tr>
+                            <td>PP:</td>
+                            <td>${u.player.stats[mode?string].pp}</td>
+                        </tr>
+                        <tr>
+                            <td>Playcount:</td>
+                            <td>${u.player.stats[mode?string].plays}</td>
+                        </tr>
+                        <tr>
+                            <td>Replay views:</td>
+                            <td>${u.player.stats[mode?string].replay_views}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Score:</td>
+                            <td>${u.player.stats[mode?string].tscore}</td>
+                        </tr>
+                        <tr>
+                            <td>Ranked Score:</td>
+                            <td>${u.player.stats[mode?string].rscore}</td>
+                        </tr>
+                        <tr>
+                            <td>Max Combo:</td>
+                            <td>${u.player.stats[mode?string].max_combo}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Hits:</td>
+                            <td>${u.player.stats[mode?string].total_hits}</td>
+                        </tr>
+                        <tr>
+                            <td>Accuracy:</td>
+                            <td>${u.player.stats[mode?string].acc?string("0.00")}%</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="shiina-playtime-show">
+                    <#assign playTime=u.player.stats[mode?string].playtime>
+                        <small class="mt-4">Played for:
+                            <#list convertPlaytime(playTime)?keys as key>
+                                <span class="shiina-playtime-value">${convertPlaytime(playTime)[key]}</span>
+                                <span class="shiina-playtime-type">${key}</span>
+
+                                <#else>
+                                    <span class="shiina-playtime-value">0</span>
+                                    <span class="shiina-playtime-type">minutes</span>
+                            </#list>
+                        </small>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="d-inline-flex mt-2">
+        <#if user?? && !self>
+            <#if relationship=="mutual">
+                <a class="btn shiina-btn-follow btn-danger" data-user="${id?c}" data-shiina-call="relationship"
+                    role="button">
+                    <i class="fa-solid fa-heart-crack"></i> Unmutual
+                </a>
+                <#elseif relationship=="known">
+                    <a class="btn shiina-btn-follow btn-primary" data-user="${id?c}" data-shiina-call="relationship"
+                        role="button">
+                        <i class="fa-solid fa-circle-xmark"></i> Unfollow
+                    </a>
+                    <#else>
+                        <a class="btn shiina-btn-follow btn-success" role="button" data-user="${id?c}"
+                            data-shiina-call="relationship"><i class="fa-solid fa-user-plus"></i> Follow</a>
+            </#if>
+
+        </#if>
+        <span class="shiina-follower-count me-1">
+            <div class="shiina-follower-count-icon">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="shiina-follower-count-body">
+                ${follower} Followers
+            </div>
+
+        </span>
+
+        <#if uprivs?seq_contains("SUPPORTER")>
+            <span class="shiina-follower-count me-1">
+                <div class="shiina-follower-count-icon">
+                    <i class="fa-solid fa-heart supporterColor"></i>
+                </div>
+                <div class="shiina-follower-count-body">
+                    Supporter
+                </div>
+
+            </span>
+
+        </#if>
+        <#if clanTag??>
+            <a href="/clan/${u.player.info.clan_id}" class="shiina-follower-count">
+                <div class="shiina-follower-count-icon">
+                    <i class="fa-solid fa-hashtag"></i>
+                </div>
+                <div class="shiina-follower-count-body">
+                    [${clanTag}]
+                </div>
+            </a>
+        </#if>
+    </div>
+</div>

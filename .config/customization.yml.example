@@ -13,7 +13,7 @@ homeBigLogoUrl: "/img/biglogo.webp"
 homeVideoUrl: "/video/onl.mp4"
 
 footerDescription: "We believe in granting you the freedom to explore to your heart's content. While we reserve the right to introduce minor restrictions in the future, for now, let your imagination run wild."
-footerCopyright: "© 2024 osuNoLimits.<br>Not affiliated with ppy.sh or osu!"
+footerCopyright: "© 2025 osuNoLimits.<br>Not affiliated with ppy.sh or osu!"
 footer:
   - title: "Vote"
     items:
@@ -24,11 +24,11 @@ footer:
 
   - title: "Links"
     items:
-      - name: "Docs"
-        url: "/docs"
       - name: "Beatmaps"
         url: "/beatmaps"
       - name: "Discord"
         url: "https://discord.gg/8Zv6r3Q"
       - name: "GitHub"
         url: "https://github.com/osu-NoLimits/Shiina-Web/tree/main"
+      - name: "Documentation"
+        url: "https://osu-nolimits.github.io/wiki"

@@ -1,0 +1,20 @@
+<!-- Request Data Section -->
+<div class="card mb-4">
+    <div class="card-header bg-transparent">
+        <h5 class="mb-0">
+            <i class="fa-solid fa-file-export me-2"></i>
+            Request Data
+        </h5>
+    </div>
+    <div class="card-body">
+        <form data-turbo="false" action="/settings/data/export" method="post"> 
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save me-2"></i>
+                Download data
+            </button>
+            <div class="form-text">
+                This will generate a ZIP file containing your data, including your profile information, beatmaps, and other relevant data. The process may take some time depending on the amount of data you have.
+            </div> 
+        </form>
+    </div>
+</div>

@@ -1,0 +1,76 @@
+<div class="row p-1 p-md-4">
+    <div class="col-12">
+        <#list achievementGroups?keys as achGroup>
+            <!-- Achievement Group -->
+            <div class="">
+                <!-- Group Header -->
+                <div class="d-flex align-items-center mx-1 mx-md-0 my-3">
+                    <h5 class="mb-0 me-3 text-muted text-uppercase fw-bold"
+                        style="font-size: 0.9rem; letter-spacing: 0.05em;">
+                        <i class="fas fa-trophy me-2 text-warning"></i>
+                        ${achGroup}
+                    </h5>
+                    <div class="flex-grow-1"
+                        style="height: 1px; background: linear-gradient(90deg, rgba(255,255,255,0.2) 0%, transparent 100%);">
+                    </div>
+                </div>
+
+                <!-- Achievement Cards -->
+                <div class="p-3 rounded-3"
+                    style="background: rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.1);">
+                    <div class="row g-3">
+                        <#assign groupCount=0>
+                            <#list achievements as ach>
+                                <#if achievementGroups[achGroup]?seq_contains(ach.id)>
+                                    <#assign groupCount=groupCount + 1>
+                                        <div class="col-6 col-sm-4 col-md-3 col-lg-2">
+                                            <div class="card h-100 text-center border-0 rounded-3 position-relative"
+                                                style="background: rgba(255,255,255,0.05); 
+                                                            border: 1px solid rgba(255,255,255,0.1) !important; 
+                                                            transition: all 0.2s ease;
+                                                            cursor: pointer;" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" data-bs-html="true"
+                                                title="<strong>${ach.name}</strong><br><small class='text-muted'>${ach.desc}</small>"
+                                                onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.3)';"
+                                                onmouseout="this.style.background='rgba(255,255,255,0.05)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';">
+
+                                                <div class="card-body p-3">
+                                                    <!-- Achievement Image -->
+                                                    <div class="mb-2">
+                                                        <img src="${assetsUrl}/medals/client/${ach.file}.png"
+                                                            alt="${ach.name}" class="img-fluid"
+                                                            style="max-height: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));">
+                                                    </div>
+
+                                                    <!-- Achievement Name -->
+                                                    <h6 class="card-title mb-0 text-muted"
+                                                        style="font-size: 0.75rem; line-height: 1.2;">
+                                                        ${ach.name}
+                                                    </h6>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </#if>
+                            </#list>
+                            <#if groupCount==0>
+                                <div class="col-12 text-center text-muted">
+                                    No achievements in this group.
+                                </div>
+                            </#if>
+                    </div>
+                </div>
+            </div>
+        </#list>
+
+        <!-- No Achievements Message -->
+        <#if !achievementGroups?has_content>
+            <div class="text-center py-5">
+                <div class="mb-3">
+                    <i class="fas fa-medal text-muted" style="font-size: 3rem; opacity: 0.3;"></i>
+                </div>
+                <h5 class="text-muted mb-2">No Achievements Yet</h5>
+                <p class="text-muted small">Play more to unlock achievements!</p>
+            </div>
+        </#if>
+    </div>
+</div>

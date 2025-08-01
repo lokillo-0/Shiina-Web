@@ -1,22 +1,15 @@
 package dev.osunolimits.api;
 
-import java.io.File;
-import java.util.concurrent.TimeUnit;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
-import dev.osunolimits.utils.CacheInterceptor;
 import lombok.Data;
-import okhttp3.Cache;
-import okhttp3.ConnectionPool;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class BanchoStats {
+public class BanchoStats extends APIQuery {
 
     @Data
     public class PlayerCountResponse {
@@ -35,13 +28,8 @@ public class BanchoStats {
         private int restricted;
     }
 
-    private OkHttpClient client;
-
     public BanchoStats() {
-        client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(new CacheInterceptor(5, TimeUnit.MINUTES))
-                .cache(new Cache(new File(".cache/stats"), 100L * 1024L * 1024L))
-                .connectionPool(new ConnectionPool(50, 30, TimeUnit.MINUTES)).build();
+        super("stats", 5, 20);
     }
 
     public CustomCountResponse getCustomCount() {
