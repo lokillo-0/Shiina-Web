@@ -89,7 +89,7 @@ function renderSearchResults(data, append = false) {
             // Avatar/Image
             if (item.source_table === 'maps') {
                 const img = document.createElement('img');
-                img.src = "/api/v1/thumb?setId=" + item.set_id;
+                img.src = "https://assets.ppy.sh/beatmaps/" + item.set_id + "/covers/cover.jpg?1650681317";
                 img.alt = item.item_name + ' Image';
                 img.classList.add('me-3', 'rounded');
                 img.style.width = '48px';

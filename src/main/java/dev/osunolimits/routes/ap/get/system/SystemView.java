@@ -5,14 +5,12 @@ import java.lang.management.MemoryMXBean;
 import java.lang.management.OperatingSystemMXBean;
 import java.lang.management.ThreadMXBean;
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import dev.osunolimits.common.Database;
+import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.routes.api.get.image.GetBmThumbnail;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -86,17 +84,6 @@ public class SystemView extends Shiina {
         shiina.data.put("non_heap_used", formatBytes(nonHeapUsed));
         shiina.data.put("non_heap_max", nonHeapMax > 0 ? formatBytes(nonHeapMax) : "Unlimited");
 
-        // Thumbnail cache statistics
-        HashMap<String, byte[]> thumbnailCache = GetBmThumbnail.thumbnailCache;
-        AtomicInteger thumbnailCacheSizeBytes = new AtomicInteger(0);
-        thumbnailCache.forEach((k, v) -> {
-            thumbnailCacheSizeBytes.addAndGet(v.length);
-        });
-
-        long cacheSizeBytes = thumbnailCacheSizeBytes.get();
-        shiina.data.put("thumbnail_cache_size", formatBytes(cacheSizeBytes));
-        shiina.data.put("thumbnail_cache_count", thumbnailCache.size());
-
         // Database connections
         shiina.data.put("sql_con", Database.currentConnections);
         shiina.data.put("sql_con_list", Database.runningConnections.size());
@@ -106,6 +93,9 @@ public class SystemView extends Shiina {
         shiina.data.put("peak_thread_count", threadMXBean.getPeakThreadCount());
         shiina.data.put("daemon_thread_count", threadMXBean.getDaemonThreadCount());
 
+        int runningCronTasks = App.cron.getTasks().size();
+        shiina.data.put("running_cron_tasks", runningCronTasks);
+        
         // Uptime
         long uptimeMs = ManagementFactory.getRuntimeMXBean().getUptime();
         shiina.data.put("uptime", formatUptime(uptimeMs));

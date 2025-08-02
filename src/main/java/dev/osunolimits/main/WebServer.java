@@ -1,23 +1,20 @@
 package dev.osunolimits.main;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.utils.ShiinaTemplateException;
-import dev.osunolimits.utils.osu.OsuConverter;
 import freemarker.cache.NullCacheStorage;
 import freemarker.template.Configuration;
-import freemarker.template.TemplateModelException;
 import spark.Spark;
 
 public class WebServer extends Spark {
 
-    private final Logger LOG = (Logger) LoggerFactory.getLogger("WebServer");
+    private final Logger LOG = LoggerFactory.getLogger("WebServer");
 
     private static final List<String> ignoredPaths = new ArrayList<>();
 
@@ -50,26 +47,18 @@ public class WebServer extends Spark {
         Spark.staticFiles.externalLocation("static/");
     }
 
-    public void ignite(String ip, int port, int updateDelay) {
+    public void ignite(Logger logger, String ip, int port, int updateDelay) throws Exception {
         ipAddress(ip);
         port(port);
         freemarkerCfg.setWhitespaceStripping(true);
         freemarkerCfg.setTemplateExceptionHandler(new ShiinaTemplateException());
         freemarkerCfg.setLogTemplateExceptions(false);
-        try {
-            freemarkerCfg.setDirectoryForTemplateLoading(new File("templates/"));
-        } catch (IOException e) {
-            LOG.error("Failed to load templates directory", e);
-        }
+        freemarkerCfg.setDirectoryForTemplateLoading(new File("templates/"));
         freemarkerCfg.setTemplateUpdateDelayMilliseconds(updateDelay);
         if(updateDelay == 0) {
             freemarkerCfg.setCacheStorage(new NullCacheStorage());
         }
-        try {
-            freemarkerCfg.setSharedVariable("OsuConverter", OsuConverter.class);
-        } catch (TemplateModelException e) {
-            App.log.error("Error injecting OsuConverter into Freemarker");
-        }
+
         after((req, res) -> {
             res.header("Server", "ShiinaONL");
 
@@ -81,7 +70,7 @@ public class WebServer extends Spark {
         });
         awaitInitialization();
 
-        LOG.info("WebServer ignited on -> " +   App.env.get("DOMAIN") + " (" + ip + ":" + port + ")");
+        logger.info("WebServer ignited on -> " +   App.env.get("DOMAIN") + " (" + ip + ":" + port + ")");
     }
 
     /**

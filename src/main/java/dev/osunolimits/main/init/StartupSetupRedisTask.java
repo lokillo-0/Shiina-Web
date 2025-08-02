@@ -26,6 +26,6 @@ public class StartupSetupRedisTask extends RunableInitTask {
 
     @Override
     public String getName() {
-        return "StartupRedisTask";
+        return "StartupSetupRedisTask";
     }
 }

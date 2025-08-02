@@ -85,6 +85,10 @@ public class Cron {
         }, initialDelay, oneHour, TimeUnit.SECONDS);
     }
 
+    public List<CronTask> getTasks() {
+        return tasks;
+    }
+
     private long fullHourDelay() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextRun = now.truncatedTo(ChronoUnit.HOURS).plusHours(1);

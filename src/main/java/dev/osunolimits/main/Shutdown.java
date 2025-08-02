@@ -17,6 +17,13 @@ public class Shutdown extends Thread {
     public void run() {
         log.debug("Starting shutdown process...");
         long startTime = System.currentTimeMillis();
+
+        if (App.webServer != null) {
+            log.debug("Stopping web server...");
+            Spark.awaitStop();
+            App.webServer.shutdown();
+            App.webServer = null;
+        }
         
         if (App.cron != null) {
             log.debug("Shutting down cron tasks...");
@@ -40,13 +47,6 @@ public class Shutdown extends Thread {
         if (App.jedisPool != null) {
             log.debug("Closing Redis connection pool...");
             App.jedisPool.close();
-        }
-
-        if (App.webServer != null) {
-            log.debug("Stopping web server...");
-            Spark.awaitStop();
-            App.webServer.shutdown();
-            App.webServer = null;
         }
 
         // Force JVM to perform garbage collection to release any lingering resources

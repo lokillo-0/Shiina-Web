@@ -21,7 +21,7 @@
 <div class="osu-score-card mb-3">
     <div class="osu-score-container">
         <!-- Beatmap Background -->
-        <div class="osu-beatmap-bg" style="background-image: url('/api/v1/thumb?setId=${score.set_id?c}')"></div>
+        <div class="osu-beatmap-bg" style="background-image: url('https://assets.ppy.sh/beatmaps/${score.set_id?c}/covers/cover.jpg?1650681317')"></div>
         
         <!-- Content Overlay -->
         <div class="osu-score-content">

@@ -1,4 +1,4 @@
-package dev.osunolimits.main.init;
+package dev.osunolimits.main.init.logger;
 
 import org.slf4j.LoggerFactory;
 

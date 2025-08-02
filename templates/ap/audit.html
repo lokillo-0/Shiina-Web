@@ -101,7 +101,7 @@
                         <#elseif log.action == "ALERT_ALL">
                             <span class="text-muted fst-italic">All Users</span>
                         <#elseif log.action == "RANK">
-                            <img src="/api/v1/thumb?setId=${log.targetId?c}" class="img-fluid me-2"  width="80">
+                            <img src="https://assets.ppy.sh/beatmaps/${log.targetId?c}/covers/cover.jpg?1650681317" class="img-fluid me-2"  width="80">
                             <span class="text-muted fst-italic">Set ID: ${log.targetId?c} <a href="/ap/mapranking?setId=${log.targetId?c}">View Ranking</a></span>
                         <#else>
                             <span class="text-muted">—</span>

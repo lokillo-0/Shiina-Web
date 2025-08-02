@@ -3,8 +3,8 @@
     <div class="osu-beatmap-card">
         <div class="osu-beatmap-container">
             <!-- Beatmap Background -->
-            <div class="osu-beatmap-bg" style="background-image: url('/api/v1/thumb?setId=${beatmap.set_id?c}')"></div>
-            
+            <div class="osu-beatmap-bg" style="background-image: url('https://assets.ppy.sh/beatmaps/${beatmap.set_id?c}/covers/cover.jpg?1650681317')"></div>
+
             <!-- Content Overlay -->
             <div class="osu-beatmap-content">
                 <!-- Status Badge -->

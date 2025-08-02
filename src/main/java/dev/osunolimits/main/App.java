@@ -6,14 +6,18 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import dev.osunolimits.main.init.StartupLogConfigTask;
-import dev.osunolimits.main.init.StartupLoggerLevelTask;
-import dev.osunolimits.main.init.StartupSetupRedisTask;
-import dev.osunolimits.main.init.StartupSetupDataTask;
-import dev.osunolimits.main.init.AutorunSQLTask;
 import dev.osunolimits.main.init.StartupDatabaseTask;
+import dev.osunolimits.main.init.StartupOkHttpTask;
+import dev.osunolimits.main.init.StartupSetupDataTask;
+import dev.osunolimits.main.init.StartupSetupRedisTask;
 import dev.osunolimits.main.init.StartupTextTask;
+import dev.osunolimits.main.init.StartupWebServerTask;
+import dev.osunolimits.main.init.cfg.AutorunSQLTask;
+import dev.osunolimits.main.init.cfg.RobotJsonConfigTask;
+import dev.osunolimits.main.init.cfg.StartupInitCustomizations;
 import dev.osunolimits.main.init.engine.StartupTaskRunner;
+import dev.osunolimits.main.init.logger.StartupLogConfigTask;
+import dev.osunolimits.main.init.logger.StartupLoggerLevelTask;
 import dev.osunolimits.models.Action;
 import dev.osunolimits.modules.ShiinaDocs;
 import dev.osunolimits.modules.cron.CountryLeaderboardTask;
@@ -25,7 +29,6 @@ import dev.osunolimits.modules.cron.engine.Cron;
 import dev.osunolimits.modules.monetization.MonetizationConfig;
 import dev.osunolimits.modules.monetization.routes.KofiDonoHandler;
 import dev.osunolimits.modules.utils.GroupRegistry;
-import dev.osunolimits.modules.utils.RobotJsonConfig;
 import dev.osunolimits.modules.utils.ShiinaAchievementsSorter;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.modules.utils.UserInfoCache;
@@ -70,7 +73,6 @@ import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.HandleRelationship;
 import dev.osunolimits.routes.api.get.image.GetBanner;
-import dev.osunolimits.routes.api.get.image.GetBmThumbnail;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Bot;
@@ -155,17 +157,15 @@ public class App {
         StartupTaskRunner.register(new StartupSetupRedisTask());
         StartupTaskRunner.register(new AutorunSQLTask());
 
-        Init init = new Init();
-        customization = init.initializeCustomizations();
+        StartupTaskRunner.register(new StartupInitCustomizations());
 
         ThemeLoader.loadThemes();
 
-        webServer = new WebServer();
-        init.initializeWebServer(webServer);
-        init.initializeOkHttpCacheReset();
+        StartupTaskRunner.register(new StartupWebServerTask());
+        StartupTaskRunner.register(new StartupOkHttpTask());
 
-        RobotJsonConfig robotJsonConfig = new RobotJsonConfig();
-        robotJsonConfig.updateRobotsTxt();
+        StartupTaskRunner.register(new RobotJsonConfigTask());
+
 
         ModuleRegister.registerDefaultModule("home", new BigHeader());
         ModuleRegister.registerDefaultModule("home", ShiinaModule.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
@@ -220,7 +220,6 @@ public class App {
         WebServer.get("/api/v1/get_rank_cache", new GetRankCache());
         WebServer.get("/api/v1/get_playcount_graph", new GetPlaycountGraph());
         WebServer.get("/api/v1/search", new Search());
-        WebServer.get("/api/v1/thumb", new GetBmThumbnail());
 
         WebServer.get("/api/v1/manage_cl", new HandleClanAction());
         WebServer.get("/api/v1/join_clan", new HandleClanRequest());

@@ -75,8 +75,8 @@ public class Beatmap extends Shiina {
         }
 
         fullBeatmap.setScores(scores.toArray(new FullBeatmap.BeatmapScore[0]));
-        SEOBuilder seo = new SEOBuilder(fullBeatmap.getTitle(), App.customization.get("homeDescription").toString(),
-                App.env.get("DOMAIN") + "/api/v1/thumb?setId=" + fullBeatmap.getSetId());
+        String peppyImageUrl = "https://assets.ppy.sh/beatmaps/" + fullBeatmap.getSetId() + "/covers/cover.jpg?1650681317";
+        SEOBuilder seo = new SEOBuilder(fullBeatmap.getTitle(), App.customization.get("homeDescription").toString(), peppyImageUrl);
         shiina.data.put("seo", seo);
         shiina.data.put("beatmap", fullBeatmap);
         shiina.data.put("id", id);

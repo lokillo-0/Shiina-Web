@@ -1,4 +1,4 @@
-package dev.osunolimits.main.init;
+package dev.osunolimits.main.init.cfg;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
