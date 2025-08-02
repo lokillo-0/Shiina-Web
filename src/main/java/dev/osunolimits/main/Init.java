@@ -87,41 +87,4 @@ public class Init {
     }
 
 
-    public void initializeJedis() {
-        try {
-            HostAndPort hostAndPort = new HostAndPort(App.env.get("REDISHOST"),
-                    Integer.parseInt(App.env.get("REDISPORT")));
-
-            DefaultJedisClientConfig clientConfig = DefaultJedisClientConfig.builder()
-                    .connectionTimeoutMillis(Integer.parseInt(App.env.get("REDISTIMEOUT")))
-                    .database(Integer.parseInt(App.env.get("REDISDB")))
-                    .password(App.env.get("REDISPASS"))
-                    .user(App.env.get("REDISUSER"))
-                    .build();
-
-            App.jedisPool = new JedisPooled(hostAndPort, clientConfig);
-
-            log.info("Connected to Redis: " + App.jedisPool.ping());
-
-        } catch (Exception e) {
-            log.error("Failed to configure Jedis", e);
-            System.exit(1);
-        }
-    }
-
-    public void initializeAutorunSQL() {
-        MySQL mysql = Database.getConnection();
-
-        try {
-            for (String s : new SQLFileLoader("autorun_sql/").loadSQLFiles()) {
-                mysql.Exec(s);
-            }
-        } catch (IOException | URISyntaxException e) {
-            log.error("Failed to autorun sql files", e);
-            System.exit(1);
-        }
-        mysql.close();
-    }
-
-
 }

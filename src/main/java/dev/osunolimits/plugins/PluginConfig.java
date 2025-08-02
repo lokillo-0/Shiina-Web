@@ -74,7 +74,7 @@ public class PluginConfig {
             }
 
         } else {
-            log.info("[" + pluginName + "] Config file already exists.");
+            log.debug("[" + pluginName + "] Config file already exists.");
         }
 
         try {

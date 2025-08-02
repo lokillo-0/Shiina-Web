@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import dev.osunolimits.main.init.StartupLogConfigTask;
 import dev.osunolimits.main.init.StartupLoggerLevelTask;
+import dev.osunolimits.main.init.StartupSetupRedisTask;
 import dev.osunolimits.main.init.StartupSetupDataTask;
+import dev.osunolimits.main.init.AutorunSQLTask;
 import dev.osunolimits.main.init.StartupDatabaseTask;
 import dev.osunolimits.main.init.StartupTextTask;
 import dev.osunolimits.main.init.engine.StartupTaskRunner;
@@ -150,11 +152,10 @@ public class App {
         StartupTaskRunner.register(new StartupSetupDataTask());
         StartupTaskRunner.register(new StartupLogConfigTask());
         StartupTaskRunner.register(new StartupDatabaseTask());
+        StartupTaskRunner.register(new StartupSetupRedisTask());
+        StartupTaskRunner.register(new AutorunSQLTask());
 
         Init init = new Init();
-        init.initializeJedis();
-        if (!devMode)
-            init.initializeAutorunSQL();
         customization = init.initializeCustomizations();
 
         ThemeLoader.loadThemes();

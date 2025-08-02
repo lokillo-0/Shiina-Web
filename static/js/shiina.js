@@ -420,7 +420,7 @@ function initPlayCountGraph() {
         });
 
         if(data.length == 0) {
-            document.getElementById('rankDiv').innerHTML = "<p class='text-center'>No rank data available</p>";
+            document.getElementById('rankDiv').innerHTML = "<span class='text-center'>No rank data available</span>";
         }
 
         let ctx = document.getElementById('rankChart');
