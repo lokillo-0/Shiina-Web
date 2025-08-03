@@ -12,10 +12,10 @@ import dev.osunolimits.api.UserQuery;
 import dev.osunolimits.api.UserStatusQuery;
 import dev.osunolimits.main.App;
 import dev.osunolimits.models.FullUser;
-import dev.osunolimits.models.UserInfoObject;
-import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.models.FullUser.Player;
 import dev.osunolimits.models.Group;
+import dev.osunolimits.models.UserInfoObject;
+import dev.osunolimits.models.UserStatus;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
@@ -170,7 +170,6 @@ public class User extends Shiina {
         } else {
             shiina.data.put("ucountry", "Unknown");
         }
-
         shiina.data.put("id", id);
         shiina.data.put("level",
                 LevelCalculator.getLevelPrecise(user.getPlayer().getStats().get(String.valueOf(mode)).getTscore()));

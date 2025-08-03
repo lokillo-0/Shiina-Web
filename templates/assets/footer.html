@@ -49,6 +49,11 @@
     </div>
 </footer>
 
+<#if globalModules??>
+<#list globalModules as module>
+    ${module}
+</#list>
+</#if>
 
 <script>
         var avatarServer = '${avatarServer}';

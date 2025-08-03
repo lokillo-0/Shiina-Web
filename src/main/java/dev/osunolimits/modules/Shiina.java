@@ -1,11 +1,16 @@
 package dev.osunolimits.modules;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 import dev.osunolimits.main.App;
 import dev.osunolimits.main.WebServer;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.plugins.NavbarRegister;
+import dev.osunolimits.routes.get.modular.ModuleRegister;
+import dev.osunolimits.routes.get.modular.ShiinaModule;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import spark.Request;
@@ -19,7 +24,7 @@ public class Shiina implements Route {
 
     public Shiina() {
         this.analytics = XmlConfig.getInstance().getOrDefault("plausible.js.url", " ");
-        this.domain  = App.env.get("DOMAIN").replaceAll("https://", "");
+        this.domain = App.env.get("DOMAIN").replaceAll("https://", "");
     }
 
     @Override
@@ -30,7 +35,8 @@ public class Shiina implements Route {
     public String renderTemplate(String template, ShiinaRequest shiina, Response res, Request req) {
         res.header("Content-Encoding", "gzip");
         res.header("Content-Type", "text/html; charset=utf-8");
-        if(shiina.mysql != null) shiina.mysql.close();
+        if (shiina.mysql != null)
+            shiina.mysql.close();
         shiina.data.put("navbarItems", NavbarRegister.getItems());
         shiina.data.put("adminNavbarItems", NavbarRegister.getAdminItems());
         shiina.data.put("docs", ShiinaDocs.docs);
@@ -38,6 +44,16 @@ public class Shiina implements Route {
         shiina.data.put("domain", domain);
         shiina.data.put("devMode", App.devMode);
         shiina.data.put("themeIdent", ThemeLoader.generatedIdent);
+
+        List<String> modulesRaw = new ArrayList<>();
+        if (ModuleRegister.getModulesForPage("globals") != null) {
+            for (ShiinaModule module : ModuleRegister.getModulesForPage("globals")) {
+                modulesRaw.add(module.handle(req, res, shiina));
+            }
+        }
+
+        shiina.data.put("globalModules", modulesRaw);
+
         try {
             Template templateFree = WebServer.freemarkerCfg.getTemplate(template);
             try (StringWriter out = new StringWriter()) {
@@ -60,17 +76,19 @@ public class Shiina implements Route {
     }
 
     public Object redirect(Response response, ShiinaRequest shiina, String location) {
-        if(shiina.mysql != null) shiina.mysql.close();
+        if (shiina.mysql != null)
+            shiina.mysql.close();
         response.status(302);
         response.redirect(location);
         return null;
     }
 
     public Object notFound(Response response, ShiinaRequest shiina) {
-        if(shiina.mysql != null) shiina.mysql.close();
+        if (shiina.mysql != null)
+            shiina.mysql.close();
         response.status(404);
         return null;
-        
+
     }
 
 }

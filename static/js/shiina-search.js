@@ -100,7 +100,7 @@ function renderSearchResults(data, append = false) {
                 const img = document.createElement('img');
                 img.src = avatarServer + "/" + item.id;
                 img.alt = item.item_name + ' Avatar';
-                img.classList.add('me-3', 'rounded-circle');
+                img.classList.add('me-3', 'rounded');
                 img.style.width = '48px';
                 img.style.height = '48px';
                 img.style.objectFit = 'cover';

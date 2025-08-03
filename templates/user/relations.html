@@ -1,11 +1,28 @@
 <#include "/assets/base.html">
-<div class="relationship-container container mb-3">
-    <div class="relationship-main-card card w-100 text-white">
-        <div class="relationship-header card-header bg-secondary d-flex justify-content-between align-items-center py-4">
-            <span class="relationship-title h1 fw-bold mb-0">Relationships</span>
-        </div>
 
-        <div class="relationship-body card-body px-4">
+    <div class="container mb-4">
+        <div class="card rounded">
+            <div class="bg-gradient rounded position-relative"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="row p-4 position-relative">
+
+                    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                        <div class="position-relative">
+                            <i class="fa-solid fa-user-group shiina-doc-font-size"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-white">
+                        <h2 class="display-5 py-3 fw-bold mb-2">
+                            Relationships
+                        </h2>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-body bg-body px-4 py-3">
+                <div class="relationship-body card-body px-4">
             <#if error??>
                 <div class="relationship-alert-error alert alert-danger alert-dismissible fade show" role="alert">
                     ${error}
@@ -23,82 +40,78 @@
                 <div class="relationship-grid row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     <#list relations as relation>
                     <div class="rel-item col">
-                        <div class="rel-card bg-secondary card border-0 rounded-4 h-100 position-relative overflow-hidden">
-                            <div class="rel-card-accent position-absolute" style="
-                                <#if relation.relationship_status == "mutual">
-                                    background: linear-gradient(135deg, var(--bs-danger) 0%, transparent 50%);
-                                <#elseif relation.relationship_status == "known">
-                                    background: linear-gradient(135deg, var(--bs-primary) 0%, transparent 50%);
-                                <#else>
-                                    background: linear-gradient(135deg, var(--bs-success) 0%, transparent 50%);
-                                </#if>
-                                height: 100px; width: 100px; top: 0; left: 0; z-index: 1;
-                            "></div>
-                            
-                            <div class="rel-card-content card-body d-flex flex-column position-relative z-index-2 p-4">
-                                <div class="rel-status-badge position-absolute top-0 end-0 m-3">
+                        <a href="/u/${relation.id?c}" class="text-decoration-none">
+                            <div class="osu-relation-card" 
+                                 style="background: rgba(0,0,0,0.1); transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='rgba(255,255,255,0.1)'; this.style.transform='translateY(-3px)';"
+                                 onmouseout="this.style.background='rgba(0,0,0,0.1)'; this.style.transform='translateY(0px)';">
+
+                                <!-- Status Badge -->
+                                <div class="relation-status-badge">
                                     <#if relation.relationship_status == "mutual">
-                                        <span class="badge bg-danger rounded-pill py-2 px-3" data-bs-toggle="tooltip" data-bs-original-title="Mutual Connection">
-                                            <i class="rel-icon-mutual fa-solid text-white fa-heart me-1"></i> Mutual
+                                        <span class="status-badge mutual-badge">
+                                            <i class="fas fa-heart me-1"></i> Mutual
                                         </span>
                                     <#elseif relation.relationship_status == "known">
-                                        <span class="badge bg-primary rounded-pill py-2 px-3" data-bs-toggle="tooltip" data-bs-original-title="You Follow">
-                                            <i class="rel-icon-following fa-solid fa-user-check me-1"></i> Following
+                                        <span class="status-badge following-badge">
+                                            <i class="fas fa-user-check me-1"></i> Following
                                         </span>
                                     <#else>
-                                        <span class="badge bg-success rounded-pill py-2 px-3" data-bs-toggle="tooltip" data-bs-original-title="Follows You">
-                                            <i class="rel-icon-follower fa-solid fa-user-plus me-1"></i> Follower
+                                        <span class="status-badge follower-badge">
+                                            <i class="fas fa-user-plus me-1"></i> Follower
                                         </span>
                                     </#if>
                                 </div>
                                 
-                                <div class="rel-user-info text-center mb-4">
-                                    <div class="rel-avatar-wrapper mx-auto mb-3">
-                                        <img 
-                                            src="${avatarServer}/${relation.id?c}" 
-                                            alt="${relation.name}" 
-                                            class="rel-avatar rounded-circle border border-3 border-secondary" 
-                                            style="width: 80px; height: 80px; object-fit: cover;"
-                                        >
+                                <!-- User Info -->
+                                <div class="relation-user-info">
+                                    <div class="relation-avatar ">
+                                        <img class="rounded" src="${avatarServer}/${relation.id?c}" alt="${relation.name}">
                                     </div>
-                                    <span class="rel-username mb-1 fw-bold <#if relation.supporter>supporter</#if>">${relation.name}</span><#list relation.user.groups as group> <span class="badge shiina-badge bg-light bg-opacity-25 text-white py-1 rounded-pill pe-3"><span class="groupEmoji me-2">${group.emoji}</span>${group.name}</span></#list>
-                                    <div class="rel-timestamp text-muted small">
+                                    
+                                    <div class="relation-name <#if relation.supporter>supporter</#if>">
+                                        ${relation.name}
+                                    </div>
+                                    
+                                    <div class="relation-groups">
+                                        <#list relation.user.groups as group>
+                                            <span class="badge shiina-badge bg-light bg-opacity-25 text-white py-2 rounded-pill pe-3">
+                                                <span class="groupEmoji me-2">${group.emoji}</span>
+                                                ${group.name}
+                                            </span>
+                                        </#list>
+                                    </div>
+                                    
+                                    <div class="relation-timestamp">
                                         <i class="fa-regular fa-clock me-1"></i>
-                                        <span>Last seen: </span>
-                                        <span class="rel-last-seen fw-semibold" data-timestamp-format="unix" data-timestamp="${relation.latest_activity?c}"></span>
+                                        <span data-timestamp-format="unix" data-timestamp="${relation.latest_activity?c}"></span>
                                     </div>
                                 </div>
                                 
-                                <div class="rel-actions d-flex justify-content-center mt-auto">
-                                    <a href="/u/${relation.id?c}" class="rel-profile-link btn btn-outline-secondary btn-sm me-2">
-                                        <i class="fa-solid fa-user me-1"></i> Profile
-                                    </a>
-                                    
+                                <!-- Action Button -->
+                                <div class="relation-action" onclick="event.preventDefault(); event.stopPropagation();">
                                     <#if relation.relationship_status == "follower">
-                                        <button 
-                                            class="rel-btn-follow btn btn-success btn-sm" 
-                                            data-user="${relation.id?c}"
-                                            data-shiina-call="relationship">
-                                            <i class="rel-icon-follow fa-solid fa-user-plus me-1"></i> Follow Back
+                                        <button class="relation-btn follow-btn" 
+                                                data-user="${relation.id?c}"
+                                                data-shiina-call="relationship">
+                                            <i class="fas fa-user-plus me-1"></i> Follow Back
                                         </button>
                                     <#elseif relation.relationship_status == "mutual">
-                                        <button 
-                                            class="rel-btn-unmutual btn btn-outline-danger btn-sm" 
-                                            data-user="${relation.id?c}"
-                                            data-shiina-call="relationship">
-                                            <i class="rel-icon-unmutual fa-solid fa-heart-crack me-1"></i> Unmutual
+                                        <button class="relation-btn unmutual-btn" 
+                                                data-user="${relation.id?c}"
+                                                data-shiina-call="relationship">
+                                            <i class="fas fa-heart-crack me-1"></i> Unmutual
                                         </button>
                                     <#else>
-                                        <button 
-                                            class="rel-btn-unfollow btn btn-outline-primary btn-sm" 
-                                            data-user="${relation.id?c}"
-                                            data-shiina-call="relationship">
-                                            <i class="rel-icon-unfollow fa-solid fa-user-xmark me-1"></i> Unfollow
+                                        <button class="relation-btn unfollow-btn" 
+                                                data-user="${relation.id?c}"
+                                                data-shiina-call="relationship">
+                                            <i class="fas fa-user-xmark me-1"></i> Unfollow
                                         </button>
                                     </#if>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                 </#list>
                 </div>
@@ -108,7 +121,11 @@
                 </div>
             </#if>
         </div>
+            </div>
+        
+        </div>
     </div>
-</div>
+
+
 
 <#include "/assets/footer.html">

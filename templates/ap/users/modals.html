@@ -26,6 +26,35 @@
     </div>
 </div>
 
+<!-- Remove userpage Modal reason -->
+<div class="modal modal-lg fade" id="rmupModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Remove Userpage of ${aname}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="" class="form-label">Reason</label>
+                    <input type="text" class="form-control" id="reasonInputPb" aria-describedby="helpId"
+                        placeholder="Reason for removing the userpage" />
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Close
+                </button>
+                <button type="button" class="btn btn-danger" onclick="removeUserpage(this)">
+                    Remove
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- Wipe Modal -->
 <div class="modal modal-lg fade" id="wipeModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -245,6 +274,21 @@
         temp = button.innerHTML;
         button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
         fetch("/ap/api/handler?type=rmpb&id=${id}&reason=" + document.getElementById('reasonInputPb').value)
+            .then((data) => {
+
+            });
+        setTimeout(() => {
+            button.disabled = false;
+            button.innerHTML = temp;
+            window.location.reload();
+        }, 2500);
+    }
+
+    function removeUserpage(button) {
+        button.disabled = true;
+        temp = button.innerHTML;
+        button.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
+        fetch("/ap/api/handler?type=rmup&id=${id}&reason=" + document.getElementById('reasonInputPb').value)
             .then((data) => {
 
             });

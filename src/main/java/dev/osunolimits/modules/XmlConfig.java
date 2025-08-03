@@ -1,7 +1,9 @@
 package dev.osunolimits.modules;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -22,6 +24,8 @@ public class XmlConfig {
     private static XmlConfig instance;
     private final File configFile;
     private Document document;
+
+    public static List<String> secretConfigKeys = new ArrayList<>(); 
 
     private XmlConfig() {
         this.configFile = new File(FILE_PATH);

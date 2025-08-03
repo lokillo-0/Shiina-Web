@@ -31,12 +31,13 @@ public class ModularSettings extends Shiina {
         }
 
         HashMap<String, Object> xmlSettings = XmlConfig.getInstance().getAll();
-        ArrayList<ModularSetting> modularSettings = new ArrayList<>();
+        HashMap<String, ArrayList<ModularSetting>> groupedSettings = new HashMap<>();
 
         for (String key : xmlSettings.keySet()) {
             ModularSetting setting = new ModularSetting();
             setting.setKey(key);
             setting.setValue(xmlSettings.get(key).toString());
+            setting.setSecret(XmlConfig.secretConfigKeys.contains(key));
 
             if(setting.getValue().equals("true") || setting.getValue().equals("false")) {
                 setting.setType("boolean");
@@ -45,11 +46,18 @@ public class ModularSettings extends Shiina {
             } else {
                 setting.setType("text");
             }
+
+            // Extract group name from key (first part before the dot)
+            String groupName = key.contains(".") ? key.split("\\.")[0] : "general";
             
-            modularSettings.add(setting);
+            if(!groupedSettings.containsKey(groupName)) {
+                groupedSettings.put(groupName, new ArrayList<>());
+            }
+            
+            groupedSettings.get(groupName).add(setting);
         }
 
-        shiina.data.put("modularSettings", modularSettings);
+        shiina.data.put("groupedSettings", groupedSettings);
         shiina.data.put("themes", ThemeLoader.themes);
 
         if(req.queryParams("state") != null && req.queryParams("message") != null) {
@@ -65,6 +73,7 @@ public class ModularSettings extends Shiina {
         private String type;
         private String key;
         private String value;
+        private boolean secret;
     }
     
 }

@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import dev.osunolimits.main.init.StartupDatabaseTask;
 import dev.osunolimits.main.init.StartupOkHttpTask;
+import dev.osunolimits.main.init.StartupSetupCronTask;
 import dev.osunolimits.main.init.StartupSetupDataTask;
+import dev.osunolimits.main.init.StartupSetupMarketTask;
 import dev.osunolimits.main.init.StartupSetupRedisTask;
 import dev.osunolimits.main.init.StartupTextTask;
 import dev.osunolimits.main.init.StartupWebServerTask;
@@ -105,10 +107,12 @@ import dev.osunolimits.routes.post.HandleRegister;
 import dev.osunolimits.routes.post.settings.auth.HandleTokenDeletion;
 import dev.osunolimits.routes.post.settings.customization.HandleAvatarChange;
 import dev.osunolimits.routes.post.settings.customization.HandleBannerChange;
+import dev.osunolimits.routes.post.settings.customization.HandleGfxDeletion;
 import dev.osunolimits.routes.post.settings.customization.HandleFlagChange;
 import dev.osunolimits.routes.post.settings.customization.HandleModeChange;
 import dev.osunolimits.routes.post.settings.customization.HandleNameChange;
 import dev.osunolimits.routes.post.settings.customization.HandleUserpageChange;
+import dev.osunolimits.routes.post.settings.data.HandleAccountDeletion;
 import dev.osunolimits.routes.post.settings.data.HandleDataRequest;
 import dev.osunolimits.utils.Auth;
 import io.github.cdimascio.dotenv.Dotenv;
@@ -165,6 +169,7 @@ public class App {
         StartupTaskRunner.register(new StartupOkHttpTask());
 
         StartupTaskRunner.register(new RobotJsonConfigTask());
+        StartupTaskRunner.register(new StartupSetupCronTask());
 
 
         ModuleRegister.registerDefaultModule("home", new BigHeader());
@@ -193,7 +198,9 @@ public class App {
 
         WebServer.get("/friends", new Relations());
         WebServer.post("/settings/auth/sessions/delete", new HandleTokenDeletion());
+        WebServer.post("/settings/gfx/delete", new HandleGfxDeletion());
         WebServer.post("/settings/data/export", new HandleDataRequest());
+        WebServer.post("/settings/data/delete", new HandleAccountDeletion());
         WebServer.post("/settings/avatar", new HandleAvatarChange());
         WebServer.post("/settings/country", new HandleFlagChange());
         WebServer.post("/settings/name", new HandleNameChange());
@@ -258,6 +265,9 @@ public class App {
         WebServer.post("/ap/mapranking", new HandleMapStatusUpdate());
 
         WebServer.get("/banner/:id", new GetBanner());
+
+        StartupTaskRunner.register(new StartupSetupMarketTask());
+
         GroupRegistry.revalidate();
 
         UserInfoCache userInfoCache = new UserInfoCache();

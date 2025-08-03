@@ -11,6 +11,7 @@ import dev.osunolimits.models.FullBeatmap;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
+import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.utils.SEOBuilder;
 import dev.osunolimits.modules.utils.ShiinaSupporterBadge;
@@ -24,6 +25,10 @@ public class Beatmap extends Shiina {
 
     public static int pageSize = 25;
     private final Gson gson = new Gson();
+
+    public Beatmap() {
+        XmlConfig.getInstance().getOrDefault("comments.beatmaps.enabled", "false");
+    }
 
     @Override
     public Object handle(Request req, Response res) throws Exception {
@@ -78,6 +83,7 @@ public class Beatmap extends Shiina {
         String peppyImageUrl = "https://assets.ppy.sh/beatmaps/" + fullBeatmap.getSetId() + "/covers/cover.jpg?1650681317";
         SEOBuilder seo = new SEOBuilder(fullBeatmap.getTitle(), App.customization.get("homeDescription").toString(), peppyImageUrl);
         shiina.data.put("seo", seo);
+        shiina.data.put("commentsEnabled", Boolean.parseBoolean(XmlConfig.getInstance().getOrDefault("comments.beatmaps.enabled", "false")));
         shiina.data.put("beatmap", fullBeatmap);
         shiina.data.put("id", id);
         shiina.data.put("mode", mode);

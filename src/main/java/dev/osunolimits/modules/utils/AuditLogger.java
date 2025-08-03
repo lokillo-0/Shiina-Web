@@ -17,6 +17,11 @@ public class AuditLogger {
         this.type = type.toString();
     }
 
+    public void removeUserpage(Auth.User user, int targetId, String reason) {
+        mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `reason`) VALUES (?,?,?,?);", type, user.id, targetId, reason);
+        fire(user.id, targetId, null, reason, null, null);
+    }
+
     public void rankMap(Auth.User user, int beatmapId, int status, String reason) {
         mysql.Exec("INSERT INTO `sh_audit`(`action`, `user_id`, `target_id`, `status`, `reason`) VALUES (?,?,?,?,?);", type, user.id, beatmapId, status, reason);
         fire(user.id, beatmapId, null, reason, status, null);

@@ -11,24 +11,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class Cron {
-    private final ScheduledExecutorService scheduler;
+    public static ScheduledExecutorService scheduler;
     private final List<CronTask> tasks = new ArrayList<>();
     private final Logger logger = (Logger) LoggerFactory.getLogger("Cron");
-
-    public Cron() {
-        ThreadFactory threadFactory = new ThreadFactory() {
-            private final ThreadFactory defaultFactory = Executors.defaultThreadFactory();
-            private int count = 1;
-
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread thread = defaultFactory.newThread(r);
-                thread.setName("ShiinaCron-" + count++);
-                return thread;
-            }
-        };
-        scheduler = Executors.newScheduledThreadPool(3, threadFactory);
-    }
 
     /**
      * Runs task every X minutes.

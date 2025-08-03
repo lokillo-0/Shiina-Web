@@ -16,44 +16,59 @@
                 ${message}
             </div>
         </#if>
-        <div class="row justify-content-center">
-            <#list modularSettings as setting>
-                <div class="col-12 col-md-6 col-lg-6 mb-3">
-                    <form method="POST" action="/ap/settings/update?key=${setting.key}">
-                        <div class="card h-100">
-                            <div class="card-header border-bottom border-0">
-                                <h5 class="mb-0 fw-bold">
-                                    <i class="fa-solid fa-gear text-primary me-2"></i> ${setting.key}
-                                </h5>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col">
-                                        <#if setting.type=="boolean">
-                                            <select name="value" id="setting-${setting.key}" class="form-select">
-                                                <option value="true" <#if setting.value=="true">selected</#if>>Enabled</option>
-                                                <option value="false" <#if setting.value=="false">selected</#if>>Disabled</option>
-                                            </select>
-                                        <#elseif setting.type=="number">
-                                            <input type="number" name="value" id="setting-${setting.key}"
-                                                class="form-control" value="${setting.value}">
-                                        <#else>
-                                            <input type="text" name="value" id="setting-${setting.key}"
-                                                class="form-control" value="${setting.value}">
-                                        </#if>
-                                    </div>
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col">
-                                        <button type="submit" class="btn btn-primary">Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
+        
+        <#list groupedSettings?keys as groupName>
+            <div class="mb-4">
+                <!-- Group Header -->
+                <div class="d-flex align-items-center mb-3">
+                    <h4 class="mb-0 text-capitalize fw-bold text-primary">
+                        <i class="fa-solid fa-folder-open me-2"></i>${groupName}
+                    </h4>
+                    <hr class="flex-grow-1 ms-3">
                 </div>
-            </#list>
-        </div>
+                
+                <!-- Group Settings -->
+                <div class="row justify-content-start">
+                    <#list groupedSettings[groupName] as setting>
+                        <div class="col-12 col-md-6 col-lg-4 mb-3">
+                            <form method="POST" action="/ap/settings/update?key=${setting.key}">
+                                <div class="card h-100">
+                                    <div class="card-header border-bottom border-0">
+                                        <h6 class="mb-0 fw-bold">
+                                            <i class="fa-solid fa-gear text-secondary me-2"></i>
+                                            <span class="text-muted small">${groupName}.</span>${setting.key?substring(groupName?length + 1)}
+                                        </h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col">
+                                                <#if setting.type=="boolean">
+                                                    <select name="value" id="setting-${setting.key}" class="form-select">
+                                                        <option value="true" <#if setting.value=="true">selected</#if>>Enabled</option>
+                                                        <option value="false" <#if setting.value=="false">selected</#if>>Disabled</option>
+                                                    </select>
+                                                <#elseif setting.type=="number">
+                                                    <input type="number" name="value" id="setting-${setting.key}"
+                                                        class="form-control" value="${setting.value}">
+                                                <#else>
+                                                    <input type="<#if setting.secret>password<#else>text</#if>" name="value" id="setting-${setting.key}"
+                                                        class="form-control" value="${setting.value}">
+                                                </#if>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-3">
+                                            <div class="col">
+                                                <button type="submit" class="btn btn-primary btn-sm">Save</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </#list>
+                </div>
+            </div>
+        </#list>
     </div>
 
     </body>

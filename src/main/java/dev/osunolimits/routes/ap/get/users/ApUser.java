@@ -13,6 +13,7 @@ import dev.osunolimits.models.Group;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
+import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.OsuConverter;
@@ -39,6 +40,7 @@ public class ApUser extends Shiina {
 
     public ApUser() {
         gson = new Gson();
+        XmlConfig.getInstance().getOrDefault("ap.user.emails", "false");
     }
 
     public enum BanchoPyPrivs {
@@ -144,6 +146,10 @@ public class ApUser extends Shiina {
         }
 
         EnumSet<BanchoPyPrivs> allPrivs = EnumSet.allOf(BanchoPyPrivs.class);
+
+        if(Boolean.parseBoolean(XmlConfig.getInstance().getOrDefault("ap.user.emails", "false"))) {
+            shiina.data.put("email", user.getString("email"));
+        }
 
         shiina.data.put("allGroups", groups);
         shiina.data.put("id", userId);

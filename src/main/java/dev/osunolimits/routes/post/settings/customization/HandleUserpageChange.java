@@ -28,7 +28,12 @@ public class HandleUserpageChange extends Shiina {
         if(userpage == null || userpage.isEmpty()) {
             return redirect(res, shiina, "/settings?error=Userpage cannot be empty");
         }
+        
+        if(userpage.length() > 10000) {
+            return redirect(res, shiina, "/settings?error=Userpage is too long (max 10000 characters)");
+        }
 
+        
         String raw = Encode.forHtmlContent(userpage);
         BBProcessorFactory processor = BBProcessorFactory.getInstance();
         TextProcessor bb = processor.create();

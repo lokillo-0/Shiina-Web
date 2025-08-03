@@ -1031,7 +1031,7 @@ h1 {
 }
 
 .shiina-doc-font-size {
-    font-size: 2rem;
+    font-size: 4rem;
 }
 
 .shiina-follower-count {
@@ -1096,10 +1096,15 @@ a.shiina-follower-count:hover div {
 }
 
 .shiina-background-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-size: cover;
-    background-color: rgba(0, 0, 0, 0.75);
-    background-blend-mode: overlay;
-
+    background-position: center;
+    filter: blur(5px) brightness(0.2);
+    transform: scale(1.05);
 }
 
 @media (max-width: 350px) {
@@ -1973,6 +1978,226 @@ a.shiina-follower-count:hover div {
 
 /* END SCORE HERO PAGE CSS */
 
+/* OSU RELATION CARDS CSS - Modern osu! inspired design for relationship cards */
+.osu-relation-card {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 20px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    color: inherit;
+}
+
+.relation-status-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 2;
+}
+
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.mutual-badge {
+    background: rgba(231,76,60,0.2);
+    color: #e74c3c;
+    border-color: rgba(231,76,60,0.3);
+}
+
+.following-badge {
+    background: rgba(52,152,219,0.2);
+    color: #3498db;
+    border-color: rgba(52,152,219,0.3);
+}
+
+.follower-badge {
+    background: rgba(46,204,113,0.2);
+    color: #2ecc71;
+    border-color: rgba(46,204,113,0.3);
+}
+
+.relation-user-info {
+    text-align: center;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.relation-avatar {
+    margin-bottom: 16px;
+}
+
+.relation-avatar img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.2);
+    object-fit: cover;
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+}
+
+.shiina-hover-card {
+    background: rgba(255,255,255,0.05); 
+    border: 1px solid rgba(255,255,255,0.1) !important; 
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.relation-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.relation-groups {
+    margin-bottom: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+}
+
+.group-badge {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 10px;
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.group-emoji {
+    font-size: 12px;
+}
+
+.relation-timestamp {
+    font-size: 0.8rem;
+    color: #bbb;
+    opacity: 0.8;
+}
+
+.relation-action {
+    margin-top: auto;
+    padding-top: 16px;
+    display: flex;
+    justify-content: center;
+}
+
+.relation-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 120px;
+    justify-content: center;
+}
+
+.follow-btn {
+    background: rgba(46,204,113,0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46,204,113,0.3);
+}
+
+.follow-btn:hover {
+    background: rgba(46,204,113,0.3);
+    transform: translateY(-1px);
+}
+
+.unmutual-btn {
+    background: rgba(231,76,60,0.2);
+    color: #e74c3c;
+    border: 1px solid rgba(231,76,60,0.3);
+}
+
+.unmutual-btn:hover {
+    background: rgba(231,76,60,0.3);
+    transform: translateY(-1px);
+}
+
+.unfollow-btn {
+    background: rgba(52,152,219,0.2);
+    color: #3498db;
+    border: 1px solid rgba(52,152,219,0.3);
+}
+
+.unfollow-btn:hover {
+    background: rgba(52,152,219,0.3);
+    transform: translateY(-1px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .osu-relation-card {
+        padding: 16px;
+    }
+    
+    .relation-user-info {
+        padding: 16px 0;
+    }
+    
+    .relation-avatar img {
+        width: 64px;
+        height: 64px;
+    }
+    
+    .relation-name {
+        font-size: 1rem;
+    }
+    
+    .relation-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        min-width: 100px;
+    }
+    
+    .status-badge {
+        font-size: 10px;
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .relation-status-badge {
+        position: static;
+        margin-bottom: 12px;
+        text-align: center;
+    }
+    
+    .group-badge {
+        font-size: 9px;
+        padding: 1px 6px;
+    }
+}
+
+/* END OSU RELATION CARDS CSS */
+
 /* SCORE CARD CSS */
 /* Score card styling - removed hover animation */
 .score-container {
@@ -2430,8 +2655,7 @@ END LEADERBOARD */
 }
 
 .user-collage-lg {
-    width: 80px;
-    height: 80px;
+    width: 150px;
 }
 
 .user-collage img {

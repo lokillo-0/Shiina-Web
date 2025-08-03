@@ -32,6 +32,7 @@ public class KofiDonoHandler extends Shiina {
 
     public KofiDonoHandler() {
         XmlConfig.getInstance().getOrDefault("monetization.discord.webhook", "");
+        XmlConfig.secretConfigKeys.add("monetization.discord.webhook");
     }
 
     @Override

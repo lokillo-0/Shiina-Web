@@ -40,7 +40,8 @@ public class PubSubHandler extends Shiina {
         ADDPRIV,
         REMOVEPRIV,
         NONE,
-        RMPB
+        RMPB,
+        RMUP
     }
 
     public Object handle(Request req, Response res) throws Exception {
@@ -185,6 +186,20 @@ public class PubSubHandler extends Shiina {
                 auditLogger.removePriv(shiina.user, removePrivInput.getId(), removePrivInput.getPrivs());
                 res.redirect("/ap/user?id=" + removePrivInput.getId());
               
+                break;
+            }
+
+            case RMUP: {
+                if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.MODERATOR)) {
+                    return redirect(res, shiina, "/");
+                }
+                int userId = Integer.parseInt(req.queryParams("id"));
+                ResultSet userpageRs = shiina.mysql.Query("SELECT * FROM `userpages` WHERE `user_id` = ?", userId);
+                if (userpageRs.next()) {
+                    shiina.mysql.Exec("DELETE FROM `userpages` WHERE `user_id` = ?", userId);
+                }
+                auditLogger.removeUserpage(shiina.user, userId, req.queryParams("reason"));
+                res.redirect("/ap/user?id=" + userId);
                 break;
             }
 

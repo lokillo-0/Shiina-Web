@@ -1,16 +1,29 @@
 <#include "assets/base.html">
-<div class="container my-2">
-    <div class="card w-100 mb-4">
-        <div class="bg-secondary border-0 card-header text-body d-flex align-items-center py-4">
-            <div class="col-auto me-3">
-                <i class="${icon} shiina-doc-font-size"></i>
-            </div>
-            <h4 class="mb-0">${title}</h4>
-        </div>
+    <div class="container mb-4">
+        <div class="card rounded">
+            <div class="bg-gradient rounded position-relative"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="row p-4 position-relative">
 
-        <div class="card-body bg-body px-4 py-3">
-            ${content}
+                    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                        <div class="position-relative">
+                            <i class="${icon} shiina-doc-font-size"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-white">
+                        <h2 class="display-5 py-3 fw-bold mb-2">
+                            ${title}
+                        </h2>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-body bg-body px-4 py-3">
+                ${content}
+            </div>
+        
         </div>
     </div>
-</div>
 <#include "assets/footer.html">

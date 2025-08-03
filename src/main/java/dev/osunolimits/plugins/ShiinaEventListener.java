@@ -2,6 +2,7 @@ package dev.osunolimits.plugins;
 
 import dev.osunolimits.plugins.events.actions.OnAccountDeletionEvent;
 import dev.osunolimits.plugins.events.actions.OnBeatmapFavoriteEvent;
+import dev.osunolimits.plugins.events.actions.OnGfxDeletionEvent;
 import dev.osunolimits.plugins.events.actions.OnRegisterEvent;
 import dev.osunolimits.plugins.events.actions.OnUserFlagChangeEvent;
 import dev.osunolimits.plugins.events.actions.OnUserNameChangeEvent;
@@ -44,6 +45,10 @@ public class ShiinaEventListener {
     }
 
     public void onAccountDeletionEvent(OnAccountDeletionEvent event) {
+    }
+
+    public void onGfxDeletionEvent(OnGfxDeletionEvent event) {
+        
     }
 
     // CLANS

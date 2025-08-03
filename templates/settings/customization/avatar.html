@@ -24,7 +24,7 @@
             <div class="col-12 col-sm-9 col-md-10">
                 <form id="avatar-upload-form" data-turbo="false" action="/settings/avatar" method="post"
                     enctype="multipart/form-data" class="w-100" onsubmit="return handleAvatarUpload(event)">
-                    <div class="mb-3">
+                    <div class="mb-2">
                         <input type="file" name="avatar" id="avatar"
                             accept=".png<#if userPriv?seq_contains('SUPPORTER')>, .gif</#if>" class="form-control">
                         <div class="form-text">
@@ -34,6 +34,13 @@
                     <button type="submit" class="btn btn-primary">
                         <i class="fas fa-upload me-2"></i>
                         Upload Avatar
+                    </button>
+                </form>
+                <form action="/settings/gfx/delete?action=pb" method="post">
+                    <input type="hidden" name="action" value="pb">
+                    <button type="submit" class="btn btn-danger mt-2">
+                        <i class="fas fa-trash me-2"></i>
+                        Delete Profile Picture
                     </button>
                 </form>
             </div>
