@@ -17,7 +17,7 @@ public class AutorunSQLTask extends RunableInitTask {
 
         MySQL mysql = Database.getConnection();
         try {
-            for (String s : new SQLFileLoader("autorun_sql/", App.class).loadSQLFiles()) {
+            for (String s : new SQLFileLoader("autorun_sql/", App.class.getClassLoader()).loadSQLFiles()) {
                 mysql.Exec(s);
             }
         } catch (IOException | URISyntaxException e) {
