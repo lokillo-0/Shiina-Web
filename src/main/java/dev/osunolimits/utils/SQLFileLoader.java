@@ -16,9 +16,11 @@ import java.util.stream.Collectors;
 public class SQLFileLoader {
 
     private final String directory;
+    private final Class<?> clazz; 
 
-    public SQLFileLoader(String directory) {
+    public SQLFileLoader(String directory, Class<?> clazz) {
         this.directory = directory.endsWith("/") ? directory : directory + "/";
+        this.clazz = clazz;
     }
 
     /**
@@ -29,7 +31,7 @@ public class SQLFileLoader {
      * @throws URISyntaxException If the resource URI is invalid
      */
     public List<String> loadSQLFiles() throws IOException, URISyntaxException {
-        Enumeration<URL> resources = Thread.currentThread().getContextClassLoader().getResources(directory);
+        Enumeration<URL> resources = clazz.getClassLoader().getResources(directory);
         if (!resources.hasMoreElements()) {
             throw new IllegalStateException("Directory not found: " + directory);
         }
@@ -75,7 +77,7 @@ public class SQLFileLoader {
     }
 
     private String readResource(String resourcePath) {
-        try (InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
+        try (InputStream inputStream = clazz.getClassLoader().getResourceAsStream(resourcePath);
              BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             return reader.lines().collect(Collectors.joining("\n"));
         } catch (IOException e) {
