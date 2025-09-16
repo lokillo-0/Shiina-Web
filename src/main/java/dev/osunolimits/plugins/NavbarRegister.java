@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.plugins.models.NavbarAdminItem;
 import dev.osunolimits.plugins.models.NavbarItem;
+import dev.osunolimits.plugins.models.NavbarProfileItem;
 import dev.osunolimits.plugins.models.NavbarSettingsItem;
 
 public class NavbarRegister {
@@ -18,6 +19,7 @@ public class NavbarRegister {
     private static List<NavbarItem> items = new ArrayList<>();
     private static List<NavbarAdminItem> adminItems = new ArrayList<>();
     private static List<NavbarSettingsItem> settingsItems = new ArrayList<>();
+    private static List<NavbarProfileItem> profileItems = new ArrayList<>();
 
     public static void register(NavbarItem item) {
         log.debug("Registering navbar item: '" + item.getName() + "' on Route (" + item.getUrl()+ ") with actNav (" + item.getActNav() + ")");
@@ -34,6 +36,11 @@ public class NavbarRegister {
         settingsItems.add(item);
     }
 
+    public static void registerProfile(NavbarProfileItem item) {
+        log.debug("Registering profile navbar item: '" + item.getName() + "' on Route (" + item.getUrl()+ ")");
+        profileItems.add(item);
+    }
+
     public static List<NavbarItem> getItems() {
         return items;
     }
@@ -44,6 +51,10 @@ public class NavbarRegister {
 
     public static List<NavbarSettingsItem> getSettingsItems() {
         return settingsItems;
+    }
+
+    public static List<NavbarProfileItem> getProfileItems() {
+        return profileItems;
     }
 
     public static int getActNav() {

@@ -53,7 +53,7 @@ public class Shiina implements Route {
         }
 
         shiina.data.put("globalModules", modulesRaw);
-
+        shiina.data.put("profileNavbarItems", NavbarRegister.getProfileItems());
         try {
             Template templateFree = WebServer.freemarkerCfg.getTemplate(template);
             try (StringWriter out = new StringWriter()) {

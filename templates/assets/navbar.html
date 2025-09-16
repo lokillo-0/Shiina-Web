@@ -75,6 +75,9 @@
             <li><a class="dropdown-item" href="/u/${user.id?c}">Profile</a></li>
             <li><a class="dropdown-item" href="/friends">Friends</a></li>
             <li><a class="dropdown-item" href="/settings">Settings</a></li>
+            <#list profileNavbarItems as item>
+              <li><a class="dropdown-item" href="${item.url}">${item.name}</a></li>
+            </#list>
             <#if userPriv?seq_contains("STAFF")>
             <li><a class="dropdown-item" data-turbo="false" href="/ap/start">Admin Panel</a></li>
             </#if>

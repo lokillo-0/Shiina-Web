@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 
 public class SQLFileLoader {
@@ -54,12 +55,15 @@ public class SQLFileLoader {
     }
 
     private List<String> getFilesFromJar(URL jarUrl) {
-        try (InputStream jarStream = jarUrl.openStream();
-             BufferedReader reader = new BufferedReader(new InputStreamReader(jarStream))) {
-            return reader.lines()
-                    .filter(line -> line.startsWith(directory) && line.endsWith(".sql"))
-                    .map(line -> directory + line.substring(directory.length())) // Strip prefix
-                    .collect(Collectors.toList());
+        try {
+            // Extract JAR path from URL (e.g., jar:file:/path/to/jar!/directory/)
+            String jarPath = jarUrl.getPath().substring(5, jarUrl.getPath().indexOf("!"));
+            try (JarFile jarFile = new JarFile(jarPath)) {
+                return jarFile.stream()
+                        .filter(entry -> entry.getName().startsWith(directory) && entry.getName().endsWith(".sql") && !entry.isDirectory())
+                        .map(entry -> entry.getName())
+                        .collect(Collectors.toList());
+            }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load files from JAR: " + jarUrl, e);
         }

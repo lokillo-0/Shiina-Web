@@ -87,6 +87,7 @@ public class ModuleRegister {
             foundPagesJson.add(foundModule.getPage());
         }
 
+        boolean createdAnyJson = false;
         for(String page : foundPages) {
             if(!foundPagesJson.contains(page)) {
                 List<String> toLoad = new ArrayList<>();
@@ -104,9 +105,35 @@ public class ModuleRegister {
                 try {
                     Files.writeString(Path.of("data/modules/" + page + ".json"), json);
                     log.debug("Created JSON file for page: " + page);
+                    createdAnyJson = true;
                 } catch (IOException e) {
                     log.error("Error writing JSON file for page: " + page, e);
                 }
+            }
+        }
+
+        // If any new JSON files were created, reload foundModules
+        if (createdAnyJson) {
+            foundModules.clear();
+            try (Stream<Path> paths = Files.walk(modulesPath)) {
+                paths.filter(path -> path.toString().endsWith(".json"))
+                        .forEach(jsonPath -> {
+                            try {
+                                Path relativePath = modulesPath.relativize(jsonPath);
+                                String filename = relativePath.getFileName().toString();
+
+                                String page = filename.substring(0, filename.length() - 5);
+
+                                log.debug("Module Json found for page: " + page);
+
+                                FoundModule foundModule = new FoundModule(page, Files.readString(jsonPath));
+                                foundModules.add(foundModule);
+                            } catch (Exception e) {
+                                log.error("Error processing JSON file: " + jsonPath, e);
+                            }
+                        });
+            } catch (IOException e) {
+                log.error("Error walking through modules directory: ", e);
             }
         }
 
@@ -123,10 +150,6 @@ public class ModuleRegister {
             log.info("Loaded modules for page: " + foundModule.getPage() + ": " + loaded);
             loadedModules.put(foundModule.getPage(), loaded);
         }
-
-        
-
-
     }
 
     @AllArgsConstructor @Getter

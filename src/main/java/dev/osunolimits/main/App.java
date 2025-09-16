@@ -37,6 +37,7 @@ import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.plugins.NavbarRegister;
 import dev.osunolimits.plugins.PluginLoader;
 import dev.osunolimits.plugins.models.NavbarItem;
+import dev.osunolimits.plugins.models.NavbarProfileItem;
 import dev.osunolimits.routes.ap.api.PubSubHandler;
 import dev.osunolimits.routes.ap.api.RecoverAccount;
 import dev.osunolimits.routes.ap.get.Audit;
@@ -134,7 +135,7 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.7prod";
+    public static String version = "1.7.5prod";
     public static String dbVersion = "1.7";
 
     public static String appSecret = Auth.generateNewToken();
