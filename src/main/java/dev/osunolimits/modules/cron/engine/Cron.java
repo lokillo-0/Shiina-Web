@@ -14,7 +14,7 @@ public class Cron {
     public static ScheduledExecutorService scheduler;
     private final List<CronTask> tasks = new ArrayList<>();
     private final Logger logger = (Logger) LoggerFactory.getLogger("Cron");
-
+    public static final List<CronEngineTaskMeta> taskMetas = new ArrayList<>();
     /**
      * Runs task every X minutes.
      */
@@ -30,6 +30,12 @@ public class Cron {
                 logger.error("Error running task: " + task.getName(), e);
             }
         }, 0, intervalMinutes, TimeUnit.MINUTES);
+
+        CronEngineTaskMeta meta = new CronEngineTaskMeta();
+        meta.setName(task.getName());
+        meta.setType(CronEngineTaskMeta.CronEngineTaskType.TIMED);
+        meta.setIntervalMinutes(intervalMinutes);
+        taskMetas.add(meta);
     }
 
     /**
@@ -51,6 +57,13 @@ public class Cron {
                 logger.error("Error running task: " + task.getName(), e);
             }
         }, initialDelay, oneDay, TimeUnit.SECONDS);
+
+        CronEngineTaskMeta meta = new CronEngineTaskMeta();
+        meta.setName(task.getName());
+        meta.setType(CronEngineTaskMeta.CronEngineTaskType.FIXED_TIMED);
+        meta.setTargetHour(targetHour);
+        meta.setTargetMinute(targetMinute);
+        taskMetas.add(meta);
     }
 
     public void registerTaskEachFullHour(CronTask task) {
@@ -68,6 +81,11 @@ public class Cron {
                 logger.error("Error running task: " + task.getName(), e);
             }
         }, initialDelay, oneHour, TimeUnit.SECONDS);
+
+        CronEngineTaskMeta meta = new CronEngineTaskMeta();
+        meta.setName(task.getName());
+        meta.setType(CronEngineTaskMeta.CronEngineTaskType.FULL_HOUR);
+        taskMetas.add(meta);
     }
 
     public List<CronTask> getTasks() {

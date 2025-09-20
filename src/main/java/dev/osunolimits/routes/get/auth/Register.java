@@ -1,4 +1,4 @@
-package dev.osunolimits.routes.get.simple;
+package dev.osunolimits.routes.get.auth;
 
 import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
@@ -15,6 +15,11 @@ public class Register extends Shiina {
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
         shiina.data.put("actNav", 0);
+
+        String path = req.queryParams("path");
+        if (path != null && !path.isEmpty()) {
+            shiina.data.put("refPath", path);
+        }
 
         shiina.data.put("seo", new SEOBuilder("Register", App.customization.get("homeDescription").toString()));
         return renderTemplate("register.html", shiina, res, req);

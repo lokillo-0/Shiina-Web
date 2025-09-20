@@ -101,4 +101,9 @@ public class WebServer extends Spark {
             LOG.error("Error during web server shutdown: " + e.getMessage(), e);
         }
     }
+
+    public static void unregister(String route) {
+        Spark.unmap(route);
+        App.log.debug("Unregistered route: " + route);
+    }
 }

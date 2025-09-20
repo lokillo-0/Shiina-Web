@@ -44,6 +44,10 @@ public class PermissionHelper {
         
             return result;
         }
+
+        public static int removePrivilege(int userPriv, Privileges priv) {
+            return userPriv & ~priv.getValue();
+        }
         
         
         public static int fromPrivs(Privileges... privs) {

@@ -16,7 +16,7 @@ public class HandleGfxDeletion extends Shiina {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
 
         if (!shiina.loggedIn) {
-            return redirect(res, shiina, "/");
+            return redirect(res, shiina, "/login?path=/settings/customization");
         }
 
 

@@ -104,9 +104,13 @@ public class HandleRegister extends Shiina {
         userInfoCache.reloadUser(userId);
 
         res.cookie("shiina", new SessionBuilder(userId, req).build());
-        
-        // Redirect to success page
-        res.redirect("/?register=success");
+
+        String refPath = req.queryParams("refPath");
+        if(refPath != null && !refPath.isEmpty()) {
+            res.redirect(refPath);
+        } else {
+            res.redirect("/?register=success");
+        }
         return notFound(res, shiina);
     }
     

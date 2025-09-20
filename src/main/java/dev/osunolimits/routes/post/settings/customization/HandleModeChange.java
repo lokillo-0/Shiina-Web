@@ -14,7 +14,7 @@ public class HandleModeChange extends Shiina {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
 
         if (!shiina.loggedIn) {
-            return redirect(res, shiina, "/login?path=customization");
+            return redirect(res, shiina, "/login?path=/settings/customization");
         }
 
         int userId = shiina.user.id;

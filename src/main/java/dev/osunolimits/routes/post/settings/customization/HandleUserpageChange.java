@@ -19,8 +19,7 @@ public class HandleUserpageChange extends Shiina {
        ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
 
         if (!shiina.loggedIn) {
-            // TODO: impl customization redirect on login
-            return redirect(res, shiina, "/login?path=customization");
+            return redirect(res, shiina, "/login?path=/settings/customization");
         }
         int userId = shiina.user.id;
         String userpage = req.queryParams("userpage");

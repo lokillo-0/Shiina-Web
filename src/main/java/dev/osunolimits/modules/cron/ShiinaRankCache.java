@@ -49,4 +49,8 @@ public class ShiinaRankCache extends RunnableCronTask {
         mysql.close();
     }
 
+    @Override
+    public String getName() {
+        return "ShiinaRankCache";
+    }
 }

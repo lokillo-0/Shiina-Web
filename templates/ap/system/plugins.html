@@ -1,0 +1,36 @@
+<#include "/ap/assets/base.html">
+    <div class="container-fluid bg-body-tertiary border-bottom p-3">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-plug"></i> System Dashboard - Plugins
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <#list plugins as plugin>
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h2 class="mb-0">
+                        <i class="fa-solid fa-plug"></i> ${plugin.name}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Main Class:</strong> ${plugin.mainClass!"Unknown"}</p>
+                            <p><strong>JAR File:</strong> ${plugin.jarFilePath!"Unknown"}</p>
+                            <#if plugin.dependencies?? && plugin.dependencies?size gt 0>
+                                <p><strong>Dependencies:</strong> ${plugin.dependencies?join(", ")}</p>
+                            </#if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <#else>
+            <div class="alert alert-info">
+                <i class="fa-solid fa-info-circle"></i> No plugins found.
+            </div>
+        </#list>
+    </div>

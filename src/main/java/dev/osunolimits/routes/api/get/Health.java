@@ -58,5 +58,6 @@ public class Health extends MySQLRoute {
         private String status;
         private List<ShiinaAPIParameter> issues;
         private String message;
+        private String shiina = "v" + App.version;
     }
 }

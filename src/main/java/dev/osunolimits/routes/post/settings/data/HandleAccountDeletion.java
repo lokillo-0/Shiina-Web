@@ -13,7 +13,7 @@ public class HandleAccountDeletion extends Shiina {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
 
         if (!shiina.loggedIn) {
-            return redirect(res, shiina, "/login?path=settings/data");
+            return redirect(res, shiina, "/login?path=/settings/data");
         }
 
         AccountDeletion deletion = new AccountDeletion(shiina.mysql);

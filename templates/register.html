@@ -31,6 +31,10 @@
                     </div>
                 </div>
 
+                <#if refPath??>
+                    <input type="hidden" name="refPath" value="${refPath}">
+                </#if>
+
                 <div class="row">
                     <div class="col-md-12">
                         <div class="form-group mb-3">
@@ -67,7 +71,7 @@
             </form>
 
             <div class="mt-4">
-                <i class="fa fa-user fa-fw"></i> Already a member? <a href="/login">Login</a>
+                <i class="fa fa-user fa-fw"></i> Already a member? <a href="/login<#if refPath??>?path=${refPath}</#if>">Login</a>
             </div>
         </div>
     </div>

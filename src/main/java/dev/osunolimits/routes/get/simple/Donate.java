@@ -30,7 +30,7 @@ public class Donate extends Shiina {
         }
 
         if(!shiina.loggedIn) {
-            return redirect(res, shiina, "/login");
+            return redirect(res, shiina, "/login?path=/donate");
         }
 
         shiina.data.put("kofiConfig", MonetizationConfig.KOFI_CONFIG);

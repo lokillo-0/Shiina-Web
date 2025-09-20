@@ -22,6 +22,10 @@ public class HandleComment extends Shiina {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
         ShiinaAPIHandler shiinaAPIHandler = new ShiinaAPIHandler();
 
+        if (!shiina.loggedIn) {
+            return redirect(res, shiina, "/login?path=/");
+        }
+
         if(!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.UNRESTRICTED)) {
             return redirect(res, shiina, "/");
         }

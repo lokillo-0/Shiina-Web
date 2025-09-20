@@ -19,12 +19,15 @@ import java.util.jar.JarFile;
 
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Logger;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 public class PluginLoader {
 
     private static final String PLUGINS_DIR = "plugins/";
     private static Logger log = (Logger) LoggerFactory.getLogger("PluginLoader");
     private static List<ShiinaPlugin> currentLoadedPlugins = new ArrayList<>();
+    private static HashMap<ShiinaPlugin, PluginMetadata> mainPluginMetadata = new HashMap<>();
 
     public static List<ShiinaPlugin> getCurrentLoadedPlugins() {
         return currentLoadedPlugins;
@@ -81,6 +84,7 @@ public class PluginLoader {
                 String mainClass = properties.getProperty("main");
                 String pluginName = properties.getProperty("name");
                 String dependsOn = properties.getProperty("depends-on");
+                
 
                 if (mainClass == null || pluginName == null) {
                     log.error("plugin.yml missing required fields in " + jarFilePath);
@@ -148,6 +152,8 @@ public class PluginLoader {
                 }
             }
 
+            
+
             // Step 2: Load the plugin itself
             loadAndEnablePlugin(metadata, logger);
             loadedPlugins.add(metadata.name);
@@ -159,18 +165,13 @@ public class PluginLoader {
         }
     }
 
-    private static class PluginMetadata {
-        String name;
-        String mainClass;
-        List<String> dependencies;
-        String jarFilePath;
-
-        PluginMetadata(String name, String mainClass, List<String> dependencies, String jarFilePath) {
-            this.name = name;
-            this.mainClass = mainClass;
-            this.dependencies = dependencies;
-            this.jarFilePath = jarFilePath;
-        }
+    @Data
+    @AllArgsConstructor
+    public static class PluginMetadata {
+        private String name;
+        private String mainClass;
+        private List<String> dependencies;
+        private String jarFilePath;
     }
 
     private void loadAndEnablePlugin(PluginMetadata metadata, Logger logger) {
@@ -188,6 +189,7 @@ public class PluginLoader {
             copyModulesIfFound(metadata);
 
             ShiinaPlugin pluginInstance = (ShiinaPlugin) clazz.getDeclaredConstructor().newInstance();
+            mainPluginMetadata.put(pluginInstance, metadata);
             pluginInstance.onEnable(metadata.name, logger);
             currentLoadedPlugins.add(pluginInstance);
         } catch (Exception e) {
@@ -232,5 +234,9 @@ public class PluginLoader {
         } catch (IOException e) {
             log.error("Error reading JAR file for modules: " + metadata.jarFilePath, e);
         }
+    }
+
+    public static List<PluginMetadata> getLoadedPluginMetadata() {
+        return new ArrayList<>(mainPluginMetadata.values());
     }
 }

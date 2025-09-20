@@ -1,0 +1,50 @@
+<#include "/ap/assets/base.html">
+    <div class="container-fluid bg-body-tertiary border-bottom p-3">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-bars"></i> System Dashboard - NavbarRegister
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <#list navItems as navitem>
+            <!-- public class SystemNavItem {
+                public String target;
+                public String name;
+                public String link;
+                public String icon = null;
+                public Boolean auth = null;
+                public String privilege = null;
+            } -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h2 class="mb-0">
+                        <#if navitem.icon??>
+                            <i class="fa-solid ${navitem.icon}"></i>
+                        </#if>
+                        ${navitem.name}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Target:</strong> ${navitem.target!"Unknown"}</p>
+                            <p><strong>Link:</strong> <a href="/${navitem.link}">/${navitem.link}</a></p>
+                            <#if navitem.auth??>
+                                <p><strong>Auth Required:</strong> ${navitem.auth?string("Yes", "No")}</p>
+                            </#if>
+                            <#if navitem.privilege??>
+                                <p><strong>Privilege:</strong> ${navitem.privilege}</p>
+                            </#if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <#else>
+            <div class="alert alert-info">
+                <i class="fa-solid fa-info-circle"></i> No navigation items found.
+            </div>
+        </#list>
+    </div>

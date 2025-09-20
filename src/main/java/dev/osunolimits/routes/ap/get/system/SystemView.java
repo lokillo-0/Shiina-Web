@@ -11,6 +11,8 @@ import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.plugins.NavbarRegister;
+import dev.osunolimits.plugins.PluginLoader;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -92,6 +94,12 @@ public class SystemView extends Shiina {
         shiina.data.put("thread_count", threadMXBean.getThreadCount());
         shiina.data.put("peak_thread_count", threadMXBean.getPeakThreadCount());
         shiina.data.put("daemon_thread_count", threadMXBean.getDaemonThreadCount());
+
+        int registeredNavItems = NavbarRegister.getAllItems().size();
+        shiina.data.put("registered_nav_items", registeredNavItems);
+
+        int pluginCount = PluginLoader.getLoadedPluginMetadata().size();
+        shiina.data.put("loaded_plugins", pluginCount);
 
         int runningCronTasks = App.cron.getTasks().size();
         shiina.data.put("running_cron_tasks", runningCronTasks);

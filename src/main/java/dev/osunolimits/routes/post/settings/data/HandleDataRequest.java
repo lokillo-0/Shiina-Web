@@ -14,7 +14,7 @@ public class HandleDataRequest extends Shiina {
        ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
 
         if (!shiina.loggedIn) {
-            return redirect(res, shiina, "/login?path=settings/data");
+            return redirect(res, shiina, "/login?path=/settings/data");
         }
         String cooldownKey = "shiina:user:" + shiina.user.id + ":data_cooldown";
         String timestamp = App.jedisPool.get(cooldownKey);

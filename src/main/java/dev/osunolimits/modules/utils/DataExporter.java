@@ -35,7 +35,7 @@ public class DataExporter {
     public byte[] exportData() {
         MySQL mysql = Database.getConnection();
         try {
-            // TODO: Make data more readable
+            // TODO: Add plugin engine support for custom tables
 
             ResultSet rs = mysql.Query("SELECT * FROM `client_hashes` WHERE `userid` = ?", userId);
             exportResultSetAsCSVZip("client_hashes", rs);

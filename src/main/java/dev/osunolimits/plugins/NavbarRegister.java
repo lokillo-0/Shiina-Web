@@ -22,23 +22,46 @@ public class NavbarRegister {
     private static List<NavbarProfileItem> profileItems = new ArrayList<>();
 
     public static void register(NavbarItem item) {
-        log.debug("Registering navbar item: '" + item.getName() + "' on Route (" + item.getUrl()+ ") with actNav (" + item.getActNav() + ")");
+        log.debug("Registering navbar item: '" + item.getName() + "' on Route (" + item.getUrl() + ") with actNav ("
+                + item.getActNav() + ")");
         items.add(item);
     }
 
-    public static void registerAdmin(NavbarAdminItem item) {
-        log.debug("Registering admin navbar item: '" + item.getName() + "' on Route (" + item.getUrl()+ ") with actNav (" + item.getActNav() + ")");
+    public static void register(NavbarAdminItem item) {
+        log.debug("Registering admin navbar item: '" + item.getName() + "' on Route (" + item.getUrl()
+                + ") with actNav (" + item.getActNav() + ")");
         adminItems.add(item);
     }
 
-    public static void registerSettings(NavbarSettingsItem item) {
-        log.debug("Registering settings navbar item: '" + item.getName() + "' on Route (" + item.getUrl()+ ") with actNav (" + item.getActNav() + ")");
+    public static void register(NavbarSettingsItem item) {
+        log.debug("Registering settings navbar item: '" + item.getName() + "' on Route (" + item.getUrl()
+                + ") with actNav (" + item.getActNav() + ")");
         settingsItems.add(item);
     }
 
-    public static void registerProfile(NavbarProfileItem item) {
-        log.debug("Registering profile navbar item: '" + item.getName() + "' on Route (" + item.getUrl()+ ")");
+    public static void register(NavbarProfileItem item) {
+        log.debug("Registering profile navbar item: '" + item.getName() + "' on Route (" + item.getUrl() + ")");
         profileItems.add(item);
+    }
+
+    public static void unregister(NavbarItem item) {
+        items.remove(item);
+        log.debug("Unregistered navbar item: " + item.getName());
+    }
+
+    public static void unregister(NavbarAdminItem item) {
+        adminItems.remove(item);
+        log.debug("Unregistered admin navbar item: " + item.getName());
+    }
+
+    public static void unregister(NavbarSettingsItem item) {
+        settingsItems.remove(item);
+        log.debug("Unregistered settings navbar item: " + item.getName());
+    }
+
+    public static void unregister(NavbarProfileItem item) {
+        profileItems.remove(item);
+        log.debug("Unregistered profile navbar item: " + item.getName());
     }
 
     public static List<NavbarItem> getItems() {
@@ -67,6 +90,32 @@ public class NavbarRegister {
 
     public static int getSettingsActNav() {
         return START_SETTINGS_ACTNAV + settingsItems.size();
+    }
+
+    public static List<Object> getAllItems() {
+        List<Object> allItems = new ArrayList<>();
+        allItems.addAll(items);
+        allItems.addAll(adminItems);
+        allItems.addAll(settingsItems);
+        allItems.addAll(profileItems);
+        return allItems;
+    }
+
+    // DEPRECATED
+
+    public static void registerAdmin(NavbarAdminItem item) {
+        log.warn("Deprecated: Use register(NavbarAdminItem item) instead and update your plugins");
+        adminItems.add(item);
+    }
+
+    public static void registerSettings(NavbarSettingsItem item) {
+        log.warn("Deprecated: Use register(NavbarSettingsItem item) instead and update your plugins");
+        settingsItems.add(item);
+    }
+
+    public static void registerProfile(NavbarProfileItem item) {
+        log.warn("Deprecated: Use register(NavbarProfileItem item) instead and update your plugins");
+        profileItems.add(item);
     }
 
 }

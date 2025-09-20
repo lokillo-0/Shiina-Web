@@ -1,11 +1,10 @@
+
 package dev.osunolimits.utils;
 
 import java.security.SecureRandom;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 public class Validation {
-    private static final Pattern pattern = Pattern.compile("-?\\d+(\\.\\d+)?");
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final Random RANDOM = new SecureRandom();
 
@@ -14,13 +13,15 @@ public class Validation {
             return false;
         }
 
-        if (!pattern.matcher(strNum).matches()) {
+        // Only allow optional leading minus and digits, no decimal
+        if (!strNum.matches("-?\\d+")) {
             return false;
         }
 
         try {
-            double num = Double.parseDouble(strNum);
-            return num >= 0;
+            Integer.parseInt(strNum);
+            // No need to check range, parseInt throws if out of bounds
+            return true;
         } catch (NumberFormatException e) {
             return false;
         }

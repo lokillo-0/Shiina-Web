@@ -63,6 +63,9 @@ public class User extends Shiina {
             return notFound(res, shiina);
         }
         if(mode == null) {
+            if(user.getPlayer() == null || user.getPlayer().getInfo() == null) {
+                return notFound(res, shiina);
+            }
             return redirect(res, shiina, "/u/" + id + "?mode=" + user.getPlayer().getInfo().getPreferred_mode());
         }
         

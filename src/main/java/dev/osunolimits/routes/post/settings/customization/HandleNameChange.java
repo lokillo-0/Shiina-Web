@@ -26,8 +26,7 @@ public class HandleNameChange extends Shiina {
        ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
 
         if (!shiina.loggedIn) {
-            // TODO: impl customization redirect on login
-            return redirect(res, shiina, "/login?path=customization");
+            return redirect(res, shiina, "/login?path=/settings/customization");
         }
 
         if(!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.SUPPORTER)) {

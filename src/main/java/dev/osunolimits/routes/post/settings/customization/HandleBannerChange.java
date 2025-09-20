@@ -37,7 +37,7 @@ public class HandleBannerChange extends Shiina {
         shiina.data.put("actNav", 0);
 
         if (!shiina.loggedIn) {
-            res.redirect("/login");
+            res.redirect("/login?path=/settings/customization");
             return notFound(res, shiina);
         }
 

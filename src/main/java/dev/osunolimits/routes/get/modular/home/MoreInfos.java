@@ -13,7 +13,7 @@ import spark.Response;
 
 public class MoreInfos extends ShiinaModule {
 
-    private final String STATS_SQL = "SELECT (SELECT COUNT(`id`) FROM `ingame_logins`) AS `total_logins`, (SELECT COUNT(`id`) FROM `ingame_logins` WHERE DATE(`datetime`) = CURDATE()) AS `logins_today`,(SELECT MAX(`datetime`) FROM `startups`) AS `startup`, (SELECT COUNT(`id`) FROM `users` WHERE (`priv` & (4096 | 8192 | 16384 | 2048 | 1024)) > 0) AS `staff_count`;";
+    private final String STATS_SQL = "SELECT (SELECT COUNT(`id`) FROM `ingame_logins`) AS `total_logins`, (SELECT COUNT(`id`) FROM `ingame_logins` WHERE DATE(`datetime`) = CURDATE()) AS `logins_today`,(SELECT MIN(`datetime`) FROM `startups`) AS `startup`, (SELECT COUNT(`id`) FROM `users` WHERE (`priv` & (4096 | 8192 | 16384 | 2048 | 1024)) > 0) AS `staff_count`;";
 
     @Override
     public String moduleName() {

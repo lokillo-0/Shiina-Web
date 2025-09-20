@@ -93,7 +93,12 @@ public class HandleLogin extends Shiina {
             res.cookie("shiina", new SessionBuilder(userId, req).build());
         }
 
-        res.redirect("/?register=success");
+        String refPath = req.queryParams("refPath");
+        if(refPath != null && !refPath.isEmpty()) {
+            res.redirect(refPath);
+        } else {
+            res.redirect("/?register=success");
+        }
         return notFound(res, shiina);
     }
 

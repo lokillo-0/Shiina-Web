@@ -1,0 +1,47 @@
+<#include "/ap/assets/base.html">
+    <div class="container-fluid bg-body-tertiary border-bottom p-3">
+        <div class="row align-items-center">
+            <div class="col-auto">
+                <h5 class="mb-0">
+                    <i class="fa-solid fa-server"></i> System Dashboard - Cron Tasks
+                </h5>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid mt-2">
+        <#list tasks as task>
+            <!-- CronEngineTaskMeta fields:
+                String name;
+                CronEngineTaskType type;
+                Long intervalMinutes; // For TIMED
+                Integer targetHour, targetMinute; // For FIXED_TIMED
+            -->
+            <div class="card mb-3 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h2 class="mb-0">
+                        <i class="fa-solid fa-clock"></i> ${task.name}
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p><strong>Type:</strong> ${task.type}</p>
+                            <#if task.type == "TIMED" && task.intervalMinutes??>
+                                <p><strong>Schedule:</strong> Every ${task.intervalMinutes} minute<#if task.intervalMinutes != 1>s</#if></p>
+                            <#elseif task.type == "FIXED_TIMED" && task.targetHour?? && task.targetMinute??>
+                                <p><strong>Schedule:</strong> Every day at ${task.targetHour?string("00")}:${task.targetMinute?string("00")}</p>
+                            <#elseif task.type == "FULL_HOUR">
+                                <p><strong>Schedule:</strong> Every full hour</p>
+                            <#else>
+                                <p><strong>Schedule:</strong> Unknown</p>
+                            </#if>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <#else>
+            <div class="alert alert-info">
+                <i class="fa-solid fa-info-circle"></i> No cron tasks found.
+            </div>
+        </#list>
+    </div>
