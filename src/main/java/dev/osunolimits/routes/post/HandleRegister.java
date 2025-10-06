@@ -107,11 +107,10 @@ public class HandleRegister extends Shiina {
 
         String refPath = req.queryParams("refPath");
         if(refPath != null && !refPath.isEmpty()) {
-            res.redirect(refPath);
-        } else {
-            res.redirect("/?register=success");
+            return redirect(res, shiina, refPath);
         }
-        return notFound(res, shiina);
+
+        return redirect(res, shiina, "/onboarding");
     }
     
 }

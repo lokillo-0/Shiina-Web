@@ -15,6 +15,7 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.routes.get.modular.ModuleRegister;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.OsuConverter;
 import dev.osunolimits.utils.osu.PermissionHelper;
@@ -151,6 +152,7 @@ public class ApUser extends Shiina {
             shiina.data.put("email", user.getString("email"));
         }
 
+        shiina.data.put("apProfile", ModuleRegister.getModulesRawForPage("ap_profile", req, res, shiina));
         shiina.data.put("allGroups", groups);
         shiina.data.put("id", userId);
         shiina.data.put("aname", userInfo.name);

@@ -77,12 +77,14 @@ import dev.osunolimits.routes.api.get.auth.GetLastDayPlayerAdmin;
 import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
+import dev.osunolimits.routes.api.get.auth.HandleOnBoarding;
 import dev.osunolimits.routes.api.get.auth.HandleRelationship;
 import dev.osunolimits.routes.api.get.image.GetBanner;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
 import dev.osunolimits.routes.get.Bot;
 import dev.osunolimits.routes.get.Leaderboard;
+import dev.osunolimits.routes.get.OnBoarding;
 import dev.osunolimits.routes.get.User;
 import dev.osunolimits.routes.get.UserScore;
 import dev.osunolimits.routes.get.auth.Login;
@@ -138,8 +140,8 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.8prod";
-    public static String dbVersion = "1.8";
+    public static String version = "1.9.0prod";
+    public static String dbVersion = "1.9.0";
 
     public static String appSecret = Auth.generateNewToken();
 
@@ -216,6 +218,7 @@ public class App {
         WebServer.get("/register", new Register());
         WebServer.post("/login", new HandleLogin());
         WebServer.post("/logout", new HandleLogout());
+        WebServer.get("/onboarding", new OnBoarding());
 
         WebServer.get("/auth/recover", new Recover());
         WebServer.post("/recover", new HandleRecovery());
@@ -232,6 +235,7 @@ public class App {
         WebServer.get("/api/v1/get_playcount_graph", new GetPlaycountGraph());
         WebServer.get("/api/v1/search", new Search());
 
+        WebServer.get("/api/v1/onboarding", new HandleOnBoarding());
         WebServer.get("/api/v1/manage_cl", new HandleClanAction());
         WebServer.get("/api/v1/join_clan", new HandleClanRequest());
         WebServer.get("/api/v1/update_rel", new HandleRelationship());
