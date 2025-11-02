@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import dev.osunolimits.common.AppCache;
 import dev.osunolimits.main.init.StartupDatabaseTask;
 import dev.osunolimits.main.init.StartupOkHttpTask;
 import dev.osunolimits.main.init.StartupSetupCronTask;
@@ -137,6 +138,7 @@ public class App {
     public static Dotenv env;
     public static Map<String, Object> customization;
 
+    public static AppCache appCache = new AppCache();
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 

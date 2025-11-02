@@ -131,7 +131,7 @@ public class ApUser extends Shiina {
         }
         shiina.data.put("detections", detections);
 
-        UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + userId), UserInfoObject.class);
+        UserInfoObject userInfo = gson.fromJson(App.appCache.get("shiina:user:" + userId), UserInfoObject.class);
         if(userInfo == null) {
             return redirect(res, shiina, "/ap/users");
         }

@@ -110,7 +110,7 @@ public class User extends Shiina {
 
         }
 
-        UserInfoObject userInfo = gson.fromJson(App.jedisPool.get("shiina:user:" + id), UserInfoObject.class);
+        UserInfoObject userInfo = gson.fromJson(App.appCache.get("shiina:user:" + id), UserInfoObject.class);
 
         UserStatusQuery userStatusQuery = new UserStatusQuery();
         UserStatus userStatus = userStatusQuery.getUserStatus(id);

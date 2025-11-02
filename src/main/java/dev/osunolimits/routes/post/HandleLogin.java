@@ -24,7 +24,7 @@ public class HandleLogin extends Shiina {
         String captchaResponse = req.queryParams("cf-turnstile-response");
 
         if(req.cookie("shiina") != null) {
-            if(App.jedisPool.get("shiina:auth:" + req.cookie("shiina")) != null) {
+            if(App.appCache.get("shiina:auth:" + req.cookie("shiina")) != null) {
                 shiina.data.put("info", "You are already logged in");
                 return renderTemplate("login.html", shiina, res, req);
             }
