@@ -158,8 +158,8 @@ public class App {
             log.info("Also some stuff will not work when not running a prod instance in the bg!");
         }
 
-        env = Dotenv.configure().directory(".config/").load();
-        loggerEnv = Dotenv.configure().directory(".config/").filename("logger.env").load();
+        env = Dotenv.configure().ignoreIfMissing().systemProperties().directory(".config/").load();
+        loggerEnv = Dotenv.configure().systemProperties().directory(".config/").filename("logger.env").load();
         
         StartupTaskRunner.register(new StartupTextTask());
         StartupTaskRunner.register(new StartupLoggerLevelTask());
