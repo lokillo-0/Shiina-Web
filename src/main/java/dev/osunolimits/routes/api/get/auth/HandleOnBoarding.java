@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.routes.api.get.ShiinaAPIHandler;
 import lombok.Data;
 import spark.Request;
@@ -28,6 +29,9 @@ public class HandleOnBoarding extends Shiina {
         if(dbPrivData.next()) {
             data.setPriv(dbPrivData.getInt("priv"));
             data.setId(shiina.user.id);
+
+            UserInfoCache userInfoCache = new UserInfoCache();
+            userInfoCache.reloadUser(shiina.user.id);
         }
 
         return shiinaAPIHandler.renderJSON(data, shiina, res);
