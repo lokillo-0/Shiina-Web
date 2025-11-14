@@ -17,7 +17,7 @@
                 <!-- Clan Avatar/Collage -->
                 <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
                     <div class="position-relative">
-                        <div class="user-collage user-collage-lg rounded overflow-hidden"
+                        <div class="d-grid user-collage user-collage-lg rounded overflow-hidden"
                              style="width: 150px; height: 150px;">
                             <#assign count=0>
                             <img src="${avatarServer}/${clan.owner?c}" class="w-100 h-100 object-fit-cover" alt="Owner">
@@ -67,6 +67,13 @@
                     </#if>
                     
                     <#if clanRel.userInThisClan>
+                        <#if clan.owner!=user.id>
+                            <button type="button" class="btn btn-danger" 
+                                onclick="handleClanLeave('${clan.id}')">
+                                <i class="fas fa-user-minus me-1"></i>Leave Clan
+                            </button>
+                        </#if>
+
                         <span class="shiina-follower-count">
                             <div class="shiina-follower-count-icon">
                                 <i class="fa-solid fa-heart-circle-check"></i>
@@ -133,7 +140,7 @@
             <!-- Stats Grid -->
             <div class="row mb-4">
                 <div class="col col-12 col-sm-12 col-lg-6">
-                    <div class="row p-3 mx-1 h-100 border rounded" style="background: rgba(0,0,0,0.1);">
+                    <div class="row p-3 mx-1 h-100 rounded">
                         <div class="col col-12 col-md-6">
                             <small>Total PP Rank</small>
                             <h2>#${clan.totalPPRank}</h2>
@@ -153,7 +160,7 @@
                     </div>
                 </div>
                 <div class="col col-12 col-sm-12 col-lg-6 mt-2 mt-lg-0">
-                    <div class="p-3 mx-1 border rounded h-100" style="background: rgba(0,0,0,0.1);">
+                    <div class="p-3 mx-1 rounded h-100">
                         <table class="w-100">
                             <tbody>
                                 <tr>
@@ -192,51 +199,128 @@
 
             <!-- Members Section -->
             <div class="card mx-1 mb-4" style="background: rgba(0,0,0,0.1);">
+                <div class="card-header border-bottom" style="background: rgba(0,0,0,0.2);">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-users me-2"></i>Clan Members
+                        <span class="badge bg-primary ms-2">${members?size}</span>
+                    </h5>
+                </div>
                 <div class="card-body p-0">
-                    <div class="row mt-2 mx-0">
+                    <div class="list-group list-group-flush">
                         <#list members as u>
                             <#assign index=u?index>
-                            <div class="col-12 mb-2 col-md-6 member-entry <#if (index >= 4)>d-none</#if>">
-                                <a href="/u/${u.id?c}<#if u.mode??>?mode=${u.mode}</#if>"
-                                   class="d-block border p-3 text-decoration-none text-reset"
-                                   style="transition: all 0.15s ease-in-out; border-radius: 0.375rem;"
-                                   onmouseover="this.style.backgroundColor='hsla(var(--bs-white-hsl), 0.05)'; this.style.transform='translateY(-1px)';"
-                                   onmouseout="this.style.backgroundColor='transparent'; this.style.transform='translateY(0)';">
-                                    <div class="d-flex align-items-center">
-                                        <div class="me-3">
-                                            <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40" height="40">
-                                        </div>
-                                        <#if u.country??>
-                                        <div class="me-3 d-none d-md-block">
-                                            <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded" width="24" height="18">
-                                        </div>
-                                        </#if>
-                                        <div class="flex-grow-1">
-                                            <div class="fw-bold text-body">${u.name}</div>
-                                        </div>
-                                        <div class="text-end">
-                                            <small class="text-muted" data-timestamp-format="unix" data-timestamp="${u.latestActivity?c}">
-                                                ${u.latestActivity?c}
-                                            </small>
+                            <a href="/u/${u.id?c}<#if u.mode??>?mode=${u.mode}</#if>"
+                               class="list-group-item list-group-item-action member-entry <#if (index >= 8)>d-none</#if>"
+                               style="background: transparent; border-color: rgba(255,255,255,0.1); transition: all 0.2s ease;">
+                                <div class="d-flex align-items-center py-2">
+                                    <!-- Avatar -->
+                                    <div class="me-3">
+                                        <div class="position-relative">
+                                            <img src="${avatarServer}/${u.id?c}" 
+                                                 alt="${u.name}" 
+                                                 class="rounded shadow-sm" 
+                                                 width="50" 
+                                                 height="50"
+                                                 style="object-fit: cover;">
+                                            <#if u.id == clan.owner>
+                                                <div class="position-absolute top-0 end-0 bg-warning rounded-circle border border-white" 
+                                                     style="width: 18px; height: 18px; margin-top: -4px; margin-right: -4px;"
+                                                     data-bs-toggle="tooltip" 
+                                                     title="Clan Owner">
+                                                    <i class="fa-solid fa-crown" style="font-size: 10px; margin-left: 3px; margin-top: 3px;"></i>
+                                                </div>
+                                            </#if>
                                         </div>
                                     </div>
-                                </a>
-                            </div>
+                                    
+                                    <!-- Country Flag -->
+                                    <#if u.country??>
+                                    <div class="me-3 d-none d-lg-block">
+                                        <img src="/img/flags/${u.country}.svg" 
+                                             alt="${u.country}" 
+                                             class="rounded shadow-sm" 
+                                             width="32" 
+                                             height="24">
+                                    </div>
+                                    </#if>
+                                    
+                                    <!-- Player Name & Info -->
+                                    <div class="flex-grow-1">
+                                        <div class="fw-bold mb-1" style="font-size: 1.05rem;">
+                                            ${u.name}
+                                            <#if u.id == clan.owner>
+                                                <i class="fa-solid fa-crown text-warning ms-1 d-md-none" 
+                                                   data-bs-toggle="tooltip" 
+                                                   title="Clan Owner"></i>
+                                            </#if>
+                                        </div>
+                                        <div class="d-flex gap-3 small text-muted">
+                                            <#if u.country??>
+                                            <span class="d-lg-none">
+                                                <img src="/img/flags/${u.country}.svg" 
+                                                     alt="${u.country}" 
+                                                     class="rounded me-1" 
+                                                     width="16" 
+                                                     height="12">
+                                                ${u.country}
+                                            </span>
+                                            </#if>
+                                            <span class="d-none d-sm-inline">
+                                                <i class="fa-solid fa-clock me-1"></i>
+                                                <span data-timestamp-format="unix" data-timestamp="${u.latestActivity?c}">
+                                                    ${u.latestActivity?c}
+                                                </span>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Stats Section -->
+                                    <div class="d-none d-xl-flex gap-4 me-3">
+                                        <#if u.pp??>
+                                        <div class="text-center">
+                                            <div class="small text-muted mb-1">PP</div>
+                                            <div class="fw-bold text-info">${u.pp?string("0")}</div>
+                                        </div>
+                                        </#if>
+                                        <#if u.rank??>
+                                        <div class="text-center">
+                                            <div class="small text-muted mb-1">Rank</div>
+                                            <div class="fw-bold text-warning">#${u.rank?string("0")}</div>
+                                        </div>
+                                        </#if>
+                                    </div>
+                                    
+                                    <!-- Arrow Icon -->
+                                    <div class="text-muted ms-2">
+                                        <i class="fa-solid fa-chevron-right"></i>
+                                    </div>
+                                </div>
+                            </a>
                         <#else>
-                            <div class="col-12 text-center py-5">
-                                <h5 class="text-muted">No members in this clan.</h5>
+                            <div class="list-group-item text-center py-5" style="background: transparent;">
+                                <i class="fa-solid fa-users fa-3x text-muted mb-3 d-block"></i>
+                                <h5 class="text-muted mb-0">No members in this clan</h5>
+                                <p class="text-muted small mt-2">Be the first to join!</p>
                             </div>
                         </#list>
-                           <#if (members?size > 4)>
-                    <button id="loadMoreBtn" class="btn rounded-top-0 btn-sm btn-outline-secondary">Load More Members</button>
-                        </#if>
                     </div>
+                    <#if (members?size > 8)>
+                    <div class="card-footer border-top text-center" style="background: rgba(0,0,0,0.2);">
+                        <button id="loadMoreBtn" class="btn btn-outline-primary btn-sm">
+                            <i class="fa-solid fa-angles-down me-2"></i>Load More Members
+                        </button>
+                    </div>
+                    </#if>
                 </div>
-             
             </div>
 
             <!-- Activity Section -->
             <div class="card mx-1" style="background: rgba(0,0,0,0.1);">
+                <div class="card-header border-bottom" style="background: rgba(0,0,0,0.2);">
+                    <h5 class="mb-0">
+                        <i class="fa-solid fa-chart-line me-2"></i>Recent Activity
+                    </h5>
+                </div>
                 <div class="card-body row p-0 m-0" id="activity">
       
                         <#list activity as score>
@@ -245,24 +329,65 @@
                             <#include "/freemarker/models/score.ftl">
                         </#list>
                            <#if (activity?size > 4)>
-                    <button id="loadMoreBtnAct" class="btn rounded-top-0 btn-sm btn-outline-secondary">Load More Activity</button>
+                    <div class="card-footer border-top text-center" style="background: rgba(0,0,0,0.2);">
+                        <button id="loadMoreBtnAct" class="btn btn-outline-success btn-sm">
+                            <i class="fa-solid fa-angles-down me-2"></i>Load More Activity
+                        </button>
+                    </div>
                 </#if>
             
                     
                 </div>
              
             </div>
+            
         </div>
     </div>
 </div>
 
-<input type="hidden" id="currentCount" value="4">
+<input type="hidden" id="currentCount" value="8">
 <input type="hidden" id="totalMembers" value="${members?size}">
 <input type="hidden" id="currentCountAct" value="4">
 <input type="hidden" id="totalMembersAct" value="${activity?size}">
 
 <#include "/assets/footer.html">
+<style>
+    .list-group-item-action:hover {
+        background: rgba(255, 255, 255, 0.05) !important;
+        transform: translateX(4px);
+        border-color: rgba(255,255,255,0.2) !important;
+    }
+    
+    .list-group-item-action {
+        transition: all 0.2s ease;
+    }
+    
+    .member-entry .badge {
+        transition: all 0.3s ease;
+    }
+    
+    .member-entry:hover .badge {
+        transform: scale(1.05);
+    }
+    
+    .member-entry img {
+        transition: all 0.3s ease;
+    }
+    
+    .member-entry:hover img {
+        transform: scale(1.05);
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+</style>
 <script>
+    // Initialize Bootstrap tooltips
+    document.addEventListener('turbo:load', function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+    
     var loadMoreBtn = document.getElementById('loadMoreBtn');
     var loadMoreBtnAct = document.getElementById('loadMoreBtnAct');
 
@@ -273,12 +398,13 @@
         let currentCountName = isActivity ? 'currentCountAct' : 'currentCount';
         let totalMembersName = isActivity ? 'totalMembersAct' : 'totalMembers';
         let entryName = isActivity ? 'act' : 'member';
+        let loadIncrement = isActivity ? 4 : 8;
 
         let currentCount = parseInt(document.getElementById(currentCountName).value, 10);
         let totalMembers = parseInt(document.getElementById(totalMembersName).value, 10);
 
         const hiddenEntries = document.querySelectorAll('.' + entryName + '-entry.d-none');
-        const limit = Math.min(hiddenEntries.length, 4);
+        const limit = Math.min(hiddenEntries.length, loadIncrement);
 
         for (let i = 0; i < limit; i++) {
             hiddenEntries[i].classList.remove('d-none');

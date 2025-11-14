@@ -818,3 +818,11 @@ function handleClanJoinRequest(clanid, action) {
             Turbo.visit(window.location.href);
         });
 }
+
+function handleClanLeave(clanid) {
+    fetch('/api/v1/leave_clan?clanid=' + clanid)
+        .then(response => response.text())
+        .then(response => {
+            Turbo.visit(window.location.href);
+        });
+}

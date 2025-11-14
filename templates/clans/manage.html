@@ -1,10 +1,23 @@
 <#include "/assets/base.html">
     <div class="container">
         <div class="card w-100a text-white mb-4">
-            <div class="card-header mb-1 bg-secondary d-flex justify-content-between align-items-center py-4">
-                <span class="h1 fw-bold
-                mb-0">Settings of ${clan.name} [${clan.tag}]</span>
+            <div class="bg-gradient rounded position-relative"
+                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="row p-4 position-relative">
 
+                    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                        <div class="position-relative">
+                            <i class="fa-solid fa-gear shiina-doc-font-size"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-white">
+                        <h2 class="display-5 py-3 fw-bold mb-2">
+                            Settings of ${clan.name} [${clan.tag}]
+                        </h2>
+                    </div>
+
+                </div>
             </div>
             <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
                 <div class="shiina-pill-icon"></div>
@@ -22,115 +35,144 @@
                     <span>Members</span>
                 </div>
 
-                <div class="list-group mx-3">
-                    <#list members as u>
-                        <div class="list-group-item list-group-item-action mb-1 border rounded d-flex align-items-center py-3 position-relative">
-                            <a href="/u/${u.id?c}"
-                                class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
-                                <div class="me-3">
-                                    <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40"
-                                        height="40">
-                                </div>
+                <div class="mx-3">
+                    <div class="row g-2">
+                        <#list members as u>
+                            <div class="col-12 col-lg-6">
+                                <div class="list-group">
+                                    <div
+                                        class="list-group-item list-group-item-action border rounded d-flex align-items-center py-3 position-relative">
+                                        <a href="/u/${u.id?c}"
+                                            class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
+                                            <div class="me-3">
+                                                <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded"
+                                                    width="40" height="40">
+                                            </div>
 
-                                <#if u.country??>
-                                    <div class="me-3 d-none d-md-block">
-                                        <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded"
-                                            width="24" height="18">
+                                            <#if u.country??>
+                                                <div class="me-3 d-none d-md-block">
+                                                    <img src="/img/flags/${u.country}.svg" alt="${u.country}"
+                                                        class="rounded" width="24" height="18">
+                                                </div>
+                                            </#if>
+
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold">${u.name}</div>
+                                            </div>
+                                        </a>
+                                        <div class="text-end position-relative" style="z-index: 2;">
+                                            <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'KICK')"
+                                                class="btn btn-danger">Ban</button>
+                                        </div>
                                     </div>
-                                </#if>
-
-                                <div class="flex-grow-1">
-                                    <div class="fw-bold">${u.name}</div>
                                 </div>
-                            </a>
-                            <div class="text-end position-relative" style="z-index: 2;">
-                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'KICK')"
-                                    class="btn btn-danger">Kick</button>
                             </div>
-                        </div>
-                        <#else>
-                            <div class="text-center py-5">
-                                <h5 class="text-muted">You don't have any members yet.</h5>
-                            </div>
-                    </#list>
+                            <#else>
+                                <div class="col-12 text-center py-5">
+                                    <h5 class="text-muted">You don't have any members yet.</h5>
+                                </div>
+                        </#list>
+                    </div>
                 </div>
 
                 <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
                     <div class="shiina-pill-icon"></div>
-                    <span>Pending join requests</span>
+                    <span>Join requests</span>
                 </div>
 
-                <div class="list-group mx-3">
-                    <#list pending as u>
-                        <div class="list-group-item list-group-item-action mb-1 border rounded d-flex align-items-center py-3 position-relative">
-                            <a href="/u/${u.id?c}"
-                                class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
-                                <div class="me-3">
-                                    <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40"
-                                        height="40">
-                                </div>
+                <div class="mx-3">
+                    <div class="row g-2">
+                        <#list pending as u>
+                            <div class="col-12 col-lg-6">
+                                <div class="list-group">
+                                    <div
+                                        class="list-group-item list-group-item-action border rounded d-flex align-items-center py-3 position-relative">
+                                        <a href="/u/${u.id?c}"
+                                            class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
+                                            <div class="me-3">
+                                                <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded"
+                                                    width="40" height="40">
+                                            </div>
 
-                                <#if u.country??>
-                                    <div class="me-3 d-none d-md-block">
-                                        <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded"
-                                            width="24" height="18">
+                                            <#if u.country??>
+                                                <div class="me-3 d-none d-md-block">
+                                                    <img src="/img/flags/${u.country}.svg" alt="${u.country}"
+                                                        class="rounded" width="24" height="18">
+                                                </div>
+                                            </#if>
+
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold">${u.name}</div>
+                                            </div>
+                                        </a>
+                                        <div class="text-end position-relative" style="z-index: 2;">
+                                            <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'ACCEPT')"
+                                                type="submit" class="btn btn-success me-2">Accept</button>
+                                            <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'DENY')"
+                                                class="btn btn-danger">Ban</button>
+                                        </div>
                                     </div>
-                                </#if>
-
-                                <div class="flex-grow-1">
-                                    <div class="fw-bold">${u.name}</div>
                                 </div>
-                            </a>
-                            <div class="text-end position-relative" style="z-index: 2;">
-                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'ACCEPT')" type="submit"
-                                    class="btn btn-success me-2">Accept</button>
-                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'DENY')"
-                                    class="btn btn-danger">Deny</button>
                             </div>
-                        </div>
-                        <#else>
-                            <div class="text-center py-5">
-                                <h5 class="text-muted">You don't have any requests yet.</h5>
-                            </div>
-                    </#list>
+                            <#else>
+                                <div class="col-12 text-center py-5">
+                                    <h5 class="text-muted">You don't have any requests yet.</h5>
+                                </div>
+                        </#list>
+                    </div>
                 </div>
 
                 <div class="shiina-pill mx-1 my-2 mx-md-4 d-flex align-items-center">
                     <div class="shiina-pill-icon"></div>
-                    <span>Denied join requests</span>
+                    <span>Banned users</span>
                 </div>
 
-                <div class="list-group mx-3">
-                    <#list denied as u>
-                        <div class="list-group-item list-group-item-action mb-1 border rounded d-flex align-items-center py-3 position-relative">
-                            <a href="/u/${u.id?c}"
-                                class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
-                                <div class="me-3">
-                                    <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded" width="40"
-                                        height="40">
-                                </div>
+                <div class="mx-3 mb-3">
+                    <div class="row g-2">
+                        <#list denied as u>
+                            <div class="col-12 col-lg-6">
+                                <div class="list-group">
+                                    <div
+                                        class="list-group-item list-group-item-action border rounded d-flex align-items-center py-3 position-relative">
+                                        <a href="/u/${u.id?c}"
+                                            class="stretched-link text-decoration-none text-reset d-flex align-items-center flex-grow-1">
+                                            <div class="me-3">
+                                                <img src="${avatarServer}/${u.id?c}" alt="${u.name}" class="rounded"
+                                                    width="40" height="40">
+                                            </div>
 
-                                <#if u.country??>
-                                    <div class="me-3 d-none d-md-block">
-                                        <img src="/img/flags/${u.country}.svg" alt="${u.country}" class="rounded"
-                                            width="24" height="18">
+                                            <#if u.country??>
+                                                <div class="me-3 d-none d-md-block">
+                                                    <img src="/img/flags/${u.country}.svg" alt="${u.country}"
+                                                        class="rounded" width="24" height="18">
+                                                </div>
+                                            </#if>
+
+                                            <div class="flex-grow-1">
+                                                <div class="fw-bold">${u.name}</div>
+                                            </div>
+                                        </a>
+                                        <div class="text-end position-relative" style="z-index: 2;">
+                                            <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'UNDENY')"
+                                                class="btn btn-warning">Unban</button>
+                                        </div>
                                     </div>
-                                </#if>
-
-                                <div class="flex-grow-1">
-                                    <div class="fw-bold">${u.name}</div>
                                 </div>
-                            </a>
-                            <div class="text-end position-relative" style="z-index: 2;">
-                                <button onclick="handleClanManage('${u.id?c}', '${clan.id?c}', 'UNDENY')"
-                                    class="btn btn-warning">Undeny</button>
                             </div>
-                        </div>
-                        <#else>
-                            <div class="text-center py-5">
-                                <h5 class="text-muted">You don't have any denied requests yet.</h5>
-                            </div>
-                    </#list>
+                            <#else>
+                                <div class="col-12 text-center py-5">
+                                    <h5 class="text-muted">No banned users in this clan.</h5>
+                                </div>
+                        </#list>
+                    </div>
+                </div>
+
+                <div class="mx-3 mb-3">
+                    <form action="/api/v1/disband_clan" method="post" onsubmit="return confirm('Are you sure you want to disband this clan? This action cannot be undone and will remove all members from the clan.');">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash-alt me-1"></i>Disband Clan
+                        </button>
+                    </form>
                 </div>
         </div>
     </div>

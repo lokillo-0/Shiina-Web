@@ -26,7 +26,7 @@
                     enctype="multipart/form-data" class="w-100" onsubmit="return handleAvatarUpload(event)">
                     <div class="mb-2">
                         <input type="file" name="avatar" id="avatar"
-                            accept=".png<#if userPriv?seq_contains('SUPPORTER')>, .gif</#if>" class="form-control">
+                            accept=".png<#if userPriv?seq_contains('SUPPORTER')>, .gif</#if>" class="form-control" required>
                         <div class="form-text">
                             Supported formats: PNG<#if userPriv?seq_contains('SUPPORTER')>, GIF</#if>. Max size: 2MB
                         </div>

@@ -73,6 +73,8 @@ import dev.osunolimits.routes.api.get.Search;
 import dev.osunolimits.routes.api.get.auth.GetLastDayPlayerAdmin;
 import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
+import dev.osunolimits.routes.api.get.auth.HandleClanDisband;
+import dev.osunolimits.routes.api.get.auth.HandleClanLeave;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.HandleOnBoarding;
 import dev.osunolimits.routes.api.get.auth.HandleRelationship;
@@ -110,6 +112,7 @@ import dev.osunolimits.routes.post.HandleRegister;
 import dev.osunolimits.routes.post.settings.auth.HandleTokenDeletion;
 import dev.osunolimits.routes.post.settings.customization.HandleAvatarChange;
 import dev.osunolimits.routes.post.settings.customization.HandleBannerChange;
+import dev.osunolimits.routes.post.settings.customization.HandleClanCreation;
 import dev.osunolimits.routes.post.settings.customization.HandleFlagChange;
 import dev.osunolimits.routes.post.settings.customization.HandleGfxDeletion;
 import dev.osunolimits.routes.post.settings.customization.HandleModeChange;
@@ -227,6 +230,7 @@ public class App {
         WebServer.post("/settings/mode", new HandleModeChange());
         WebServer.post("/settings/userpage", new HandleUserpageChange());
         WebServer.post("/settings/banner", new HandleBannerChange());
+        WebServer.post("/settings/clans/create", new HandleClanCreation());
 
         WebServer.get("/beatmapset/:id", new BeatmapSetRedirect());
 
@@ -253,8 +257,11 @@ public class App {
 
         WebServer.get("/api/v1/onboarding", new HandleOnBoarding());
         WebServer.get("/api/v1/manage_cl", new HandleClanAction());
+        WebServer.get("/api/v1/leave_clan", new HandleClanLeave());
         WebServer.get("/api/v1/join_clan", new HandleClanRequest());
         WebServer.get("/api/v1/update_rel", new HandleRelationship());
+
+        WebServer.post("/api/v1/disband_clan", new HandleClanDisband());
         WebServer.post("/api/v1/handle_favorite", new HandleBeatmapFavorite());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
