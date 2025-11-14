@@ -81,11 +81,8 @@ public class HandleClanAction extends Shiina {
                 new OnUserGetKickedClanEvent(clanid, userid, shiina.user.id).callListeners();
                 break;
             default:
-                res.status(400);
-                shiina.mysql.close();
-                return "invalid action";
+                return raw(res, shiina, "invalid action");
         }
-        shiina.mysql.close();
-        return "success";
+        return raw(res, shiina, "success");
     }
 }

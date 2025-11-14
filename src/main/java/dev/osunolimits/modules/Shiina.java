@@ -71,6 +71,13 @@ public class Shiina implements Route {
         return null;
     }
 
+    public Object raw(Response response, ShiinaRequest shiina, String content) {
+        if (shiina.mysql != null)
+            shiina.mysql.close();
+        response.status(200);
+        return content;
+    }
+
     public Object notFound(Response response, ShiinaRequest shiina) {
         if (shiina.mysql != null)
             shiina.mysql.close();

@@ -57,8 +57,7 @@ public class HandleClanRequest extends Shiina {
             default:
                 return notFound(res, shiina);
         }
-        shiina.mysql.close();
-        return "success";
+        return raw(res, shiina, "success");
     }
 
 }

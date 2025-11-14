@@ -47,8 +47,7 @@ public class PubSubHandler extends Shiina {
         }
 
         if (type == MessageType.NONE) {
-            shiina.mysql.close();
-            return "invalid type";
+            return raw(res, shiina, "invalid type");
         }
 
         AuditLogger auditLogger = new AuditLogger(shiina.mysql, type);
@@ -178,8 +177,6 @@ public class PubSubHandler extends Shiina {
                 break;
         }
 
-        shiina.mysql.close();
-        res.status(200);
-        return "success";
+        return raw(res, shiina, "success");
     }
 }

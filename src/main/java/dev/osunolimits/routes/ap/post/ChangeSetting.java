@@ -28,8 +28,7 @@ public class ChangeSetting extends Shiina {
         String value = req.queryParams("value");
 
         if (key == null || value == null) {
-            res.status(400);
-            return "Bad Request: Missing key or value";
+            return raw(res, shiina, "invalid parameters");
         }
 
         XmlConfig.getInstance().set(key, value);

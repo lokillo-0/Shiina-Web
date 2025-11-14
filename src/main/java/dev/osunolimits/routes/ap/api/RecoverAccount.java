@@ -37,13 +37,10 @@ public class RecoverAccount extends Shiina {
 
         String token = SyncedAction.generateRecoveryToken(userid);
 
-        res.status(200);
-        shiina.mysql.close();
-
         RecoveryOutput output = new RecoveryOutput();
         output.url = "/auth/recover?token=" + token;
 
-        return gson.toJson(output);
+        return raw(res, shiina, gson.toJson(output));
     }
 
     @Data
