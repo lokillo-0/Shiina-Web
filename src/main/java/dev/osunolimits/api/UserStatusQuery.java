@@ -19,7 +19,8 @@ import okhttp3.Response;
 
 
 public class UserStatusQuery {
-    private OkHttpClient client;
+    private static final Gson gson = new Gson();
+    private final OkHttpClient client;
 
     public UserStatusQuery() {
         client = new OkHttpClient.Builder()
@@ -34,7 +35,7 @@ public class UserStatusQuery {
         try {
             Response response = client.newCall(request).execute();
             JsonElement element = JsonParser.parseString(response.body().string());
-            UserStatus userStatus = new Gson().fromJson(element, UserStatus.class);
+            UserStatus userStatus = gson.fromJson(element, UserStatus.class);
             return userStatus;
 
         } catch (Exception e) {

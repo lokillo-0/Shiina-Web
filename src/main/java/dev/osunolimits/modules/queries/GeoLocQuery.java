@@ -2,15 +2,16 @@ package dev.osunolimits.modules.queries;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import dev.osunolimits.main.App;
 import lombok.Data;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class GeoLocQuery {
 
@@ -23,13 +24,11 @@ public class GeoLocQuery {
         client = new OkHttpClient.Builder().build(); 
     }
 
-  
-
     public String getCountryCode(String ip) {
         
         String url;
         try {
-            url = URL.replace("%ip%", java.net.URLEncoder.encode(ip, "UTF-8"));
+            url = URL.replace("%ip%", URLEncoder.encode(ip, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             url = URL.replace("%ip%", ip);
         }
@@ -54,7 +53,7 @@ public class GeoLocQuery {
         
         String url;
         try {
-            url = URL_SESSION.replace("%ip%", java.net.URLEncoder.encode(ip, "UTF-8"));
+            url = URL_SESSION.replace("%ip%", URLEncoder.encode(ip, "UTF-8"));
         } catch (UnsupportedEncodingException e) {
             url = URL_SESSION.replace("%ip%", ip);
         }

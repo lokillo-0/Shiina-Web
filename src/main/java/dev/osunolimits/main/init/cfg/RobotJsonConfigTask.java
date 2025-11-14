@@ -12,12 +12,11 @@ import dev.osunolimits.main.init.engine.RunableInitTask;
 import lombok.Data;
 
 public class RobotJsonConfigTask extends RunableInitTask {
-
+    private final Gson gson = new Gson();
     public static Robots robots;
 
     @Override
     public void execute() throws Exception {
-        Gson gson = new Gson();
         File robotConfig = new File("data/robots.json");
 
         // Ensure data folder exists

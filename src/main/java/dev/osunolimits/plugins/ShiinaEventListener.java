@@ -11,6 +11,7 @@ import dev.osunolimits.plugins.events.admin.OnAuditLogEvent;
 import dev.osunolimits.plugins.events.admin.OnDonationEvent;
 import dev.osunolimits.plugins.events.admin.OnMultiAccountDetectionEvent;
 import dev.osunolimits.plugins.events.admin.OnRankBeatmapEvent;
+import dev.osunolimits.plugins.events.admin.OnRecoveryTokenGenerated;
 import dev.osunolimits.plugins.events.clans.OnUserDenyClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserGetKickedClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserJoinClanEvent;
@@ -33,6 +34,10 @@ public class ShiinaEventListener {
     }
 
     public void onDonationEvent(OnDonationEvent event) {
+        
+    }
+
+    public void onRecoveryTokenGenerated(OnRecoveryTokenGenerated event) {
         
     }
 

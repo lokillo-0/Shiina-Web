@@ -10,18 +10,14 @@ import dev.osunolimits.main.App;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.utils.Auth;
+import dev.osunolimits.utils.Auth.User;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
 
 public class ShiinaRoute {
 
-    private Gson gson;
-    private Auth auth = new Auth();
-
-    public ShiinaRoute() {
-        gson = new Gson();
-    }
+    private static final Gson gson = new Gson();
 
     public class ShiinaRequest {
         public MySQL mysql;
@@ -39,7 +35,7 @@ public class ShiinaRoute {
             Auth.SessionUser user = gson.fromJson(userJson, Auth.SessionUser.class);
 
             if (user != null) {
-                Auth.User referenceUser = auth.new User();
+                Auth.User referenceUser = new User();
                 String userInfoJson = App.appCache.get("shiina:user:" + user.id);
                 UserInfoObject infoObject = gson.fromJson(userInfoJson, UserInfoObject.class);
                 referenceUser.id = user.id;

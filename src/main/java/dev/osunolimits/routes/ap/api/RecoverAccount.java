@@ -6,6 +6,7 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.pubsubs.SyncedAction;
+import dev.osunolimits.plugins.events.admin.OnRecoveryTokenGenerated;
 import dev.osunolimits.utils.Validation;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import lombok.Data;
@@ -39,6 +40,8 @@ public class RecoverAccount extends Shiina {
 
         RecoveryOutput output = new RecoveryOutput();
         output.url = "/auth/recover?token=" + token;
+
+        new OnRecoveryTokenGenerated(userid, token).callListeners();
 
         return raw(res, shiina, gson.toJson(output));
     }

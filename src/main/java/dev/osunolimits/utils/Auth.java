@@ -15,7 +15,7 @@ import lombok.Data;
 public class Auth {
 
     @Data
-    public class User {
+    public static class User {
         public Integer id;
         public String name;
         public String safe_name;
