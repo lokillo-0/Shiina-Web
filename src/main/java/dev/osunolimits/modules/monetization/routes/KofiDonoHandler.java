@@ -7,29 +7,23 @@ import java.sql.ResultSet;
 import org.json.JSONObject;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-
 import ch.qos.logback.classic.Logger;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
-import dev.osunolimits.main.App;
-import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.modules.monetization.MonetizationConfig;
-import dev.osunolimits.plugins.events.admin.OnDonationEvent;
 import dev.osunolimits.modules.XmlConfig;
-import dev.osunolimits.routes.ap.api.PubSubModels;
-import dev.osunolimits.routes.ap.api.PubSubModels.GiveDonatorInput;
+import dev.osunolimits.modules.monetization.MonetizationConfig;
+import dev.osunolimits.modules.pubsubs.SyncedAction;
+import dev.osunolimits.plugins.events.admin.OnDonationEvent;
 import dev.osunolimits.routes.api.get.ShiinaAPIHandler;
 import spark.Request;
 import spark.Response;
 
 public class KofiDonoHandler extends Shiina {
     private final Logger log = (Logger) LoggerFactory.getLogger("KofiDonoHandler");
-    private final Gson GSON = new Gson();
 
     public KofiDonoHandler() {
         XmlConfig.getInstance().getOrDefault("monetization.discord.webhook", "");
@@ -99,19 +93,8 @@ public class KofiDonoHandler extends Shiina {
         }
 
         int userId = checkForUser.getInt("id");
-        GiveDonatorInput giveDonatorInput = new PubSubModels().new GiveDonatorInput();
-        giveDonatorInput.setId(userId);
-        giveDonatorInput.setDuration(weeks + "w");
 
-        App.jedisPool.publish("givedonator", GSON.toJson(giveDonatorInput));
-
-        Thread.sleep(500);
-
-        UserInfoObject obj = GSON.fromJson(App.appCache.get("shiina:user:" + userId), UserInfoObject.class);
-        ResultSet privRs = shiina.mysql.Query("SELECT `priv` FROM `users` WHERE `id` = ?", giveDonatorInput.getId());
-        obj.priv = privRs.next() ? privRs.getInt("priv") : 0;
-        String userJson = GSON.toJson(obj);
-        App.appCache.set("shiina:user:" + userId, userJson);
+        SyncedAction.addDonatorStatus(userId, weeks+"w");
 
         log.info("Kofi Donation: userId={}, months={}, amount={}, transactionId={}", userId, months, amount,
                 transactionId);
@@ -121,6 +104,6 @@ public class KofiDonoHandler extends Shiina {
                 userId, months, amount, transactionId);
         log.info("Kofi Donation Success: {}", transactionId);
 
-        return apiHandler.renderJSON(giveDonatorInput, shiina, res);
+        return apiHandler.renderJSON("success", shiina, res);
     }
 }

@@ -2,11 +2,11 @@ package dev.osunolimits.routes.ap.post;
 
 import com.google.gson.Gson;
 
-import dev.osunolimits.api.BeatmapService;
 import dev.osunolimits.models.Beatmap;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.modules.pubsubs.SyncedAction;
 import dev.osunolimits.modules.utils.AuditLogger;
 import dev.osunolimits.routes.ap.api.PubSubHandler.MessageType;
 import dev.osunolimits.utils.Validation;
@@ -39,16 +39,13 @@ public class HandleMapStatusUpdate extends Shiina {
             return redirect(res, shiina, "/");
         }
 
-        BeatmapService beatmapService = new BeatmapService(shiina.mysql);
+        
         for (String string : mapIds) {
             Beatmap beatmap = new Beatmap();
             beatmap.setId(Integer.parseInt(string));
             beatmap.setStatus(Integer.parseInt(rankingStatus));
-            beatmapService.changeBeatmapRankStatus(beatmap,beatmap.getStatus(), true);
-            Thread.sleep(50);
+            SyncedAction.changeBeatmapRankStatus(beatmap, beatmap.getStatus(), true);
         }
-
-        Thread.sleep(500);
 
         AuditLogger auditLogger = new AuditLogger(shiina.mysql, MessageType.RANK);
 
