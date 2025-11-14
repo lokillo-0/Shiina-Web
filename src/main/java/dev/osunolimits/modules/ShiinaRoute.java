@@ -17,6 +17,7 @@ import spark.Response;
 public class ShiinaRoute {
 
     private Gson gson;
+    private Auth auth = new Auth();
 
     public ShiinaRoute() {
         gson = new Gson();
@@ -38,7 +39,7 @@ public class ShiinaRoute {
             Auth.SessionUser user = gson.fromJson(userJson, Auth.SessionUser.class);
 
             if (user != null) {
-                Auth.User referenceUser = new Auth().new User();
+                Auth.User referenceUser = auth.new User();
                 String userInfoJson = App.appCache.get("shiina:user:" + user.id);
                 UserInfoObject infoObject = gson.fromJson(userInfoJson, UserInfoObject.class);
                 referenceUser.id = user.id;

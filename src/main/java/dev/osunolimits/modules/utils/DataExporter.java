@@ -33,8 +33,7 @@ public class DataExporter {
     }
 
     public byte[] exportData() {
-        MySQL mysql = Database.getConnection();
-        try {
+        try (MySQL mysql = Database.getConnection()) {
             // TODO: Add plugin engine support for custom tables
 
             ResultSet rs = mysql.Query("SELECT * FROM `client_hashes` WHERE `userid` = ?", userId);
@@ -107,13 +106,12 @@ public class DataExporter {
                 logger.error("Error closing ZIP output stream", ioException);
             }
         }
+        
         try {
             csvWriter.close();
         } catch (IOException e) {
             logger.error("Error closing CSV writer", e);
         }
-
-        mysql.close();
 
         return byteArrayOutputStream.toByteArray();
     }

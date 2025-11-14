@@ -18,17 +18,11 @@ import dev.osunolimits.models.UserInfoObject;
 
 public class UserInfoCache {
 
-    private Gson gson;
-    private MySQL mysql;
-    private Logger log = (Logger) LoggerFactory.getLogger("RedisUserInfoCache");
+    private final static Gson gson = new Gson();
+    private final static Logger log = (Logger) LoggerFactory.getLogger("RedisUserInfoCache");
 
-    public UserInfoCache() {
-        gson = new Gson();
-        mysql = Database.getConnection();
-    }
-
-    public void populateIfNeeded() {
-        try {
+    public static void populateIfNeeded() {
+        try (MySQL mysql = Database.getConnection()) {
             ResultSet usersRs = mysql.Query("SELECT `id`, `name`, `safe_name`, `priv` FROM `users`");
             List<UserInfoObject> users = new ArrayList<>();
             while (usersRs.next()) {
@@ -77,12 +71,10 @@ public class UserInfoCache {
         } catch (SQLException e) {
             log.error("SQL Error: ", e);
         }
-        mysql.close();
-
     }
 
-    public void reloadUser(int userId) {
-        try {
+    public static void reloadUser(int userId) {
+        try (MySQL mysql = Database.getConnection()) {
             ResultSet userRs = mysql.Query("SELECT `id`, `name`, `safe_name`, `priv` FROM `users` WHERE `id` = ?", userId);
             if (userRs.next()) {
                 UserInfoObject user = new UserInfoObject();
@@ -121,14 +113,11 @@ public class UserInfoCache {
         } catch (SQLException e) {
             log.error("SQL Error: ", e);
         }
-        mysql.close();
     }
 
-    public void reloadUserIfNotPresent(int userId) {
+    public static void reloadUserIfNotPresent(int userId) {
         if (App.appCache.get("shiina:user:" + userId) == null) {
             reloadUser(userId);
-        }else {
-            mysql.close();
         }
     }
 

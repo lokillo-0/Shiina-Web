@@ -9,7 +9,6 @@ import dev.osunolimits.modules.queries.TurnstileQuery;
 import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.utils.Auth;
-import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
 
@@ -34,7 +33,7 @@ public class HandleRecovery extends Shiina {
             return renderTemplate("recovery.html", shiina, res, req);
         }
     
-        TurnstileQuery turnstileQuery = new TurnstileQuery(new OkHttpClient());
+        TurnstileQuery turnstileQuery = new TurnstileQuery();
         if (!turnstileQuery.verifyCaptcha(captchaResponse).success) {
             shiina.data.put("error", "Invalid Captcha");
             return renderTemplate("recovery.html", shiina, res, req);
@@ -66,8 +65,7 @@ public class HandleRecovery extends Shiina {
         shiina.mysql.Exec("UPDATE `users` SET `pw_bcrypt` = ? WHERE `id` = ?", pwBcrypt, userId);
         shiina.mysql.Exec("DELETE FROM `sh_recovery` WHERE `token` = ?", token);
 
-        UserInfoCache userInfoCache = new UserInfoCache();
-        userInfoCache.reloadUser(userId);
+        UserInfoCache.reloadUser(userId);
 
         res.cookie("shiina", new SessionBuilder(userId, req).build());
 

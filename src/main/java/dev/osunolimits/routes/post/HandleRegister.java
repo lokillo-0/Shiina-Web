@@ -11,7 +11,6 @@ import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.plugins.events.actions.OnRegisterEvent;
 import dev.osunolimits.utils.Auth;
-import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
 
@@ -33,7 +32,7 @@ public class HandleRegister extends Shiina {
             return renderTemplate("register.html", shiina, res, req);
         }
     
-        TurnstileQuery turnstileQuery = new TurnstileQuery(new OkHttpClient());
+        TurnstileQuery turnstileQuery = new TurnstileQuery();
         if (!turnstileQuery.verifyCaptcha(captchaResponse).success) {
             shiina.data.put("error", "Invalid Captcha");
             return renderTemplate("register.html", shiina, res, req);
@@ -100,8 +99,7 @@ public class HandleRegister extends Shiina {
         
         new OnRegisterEvent(userId, email, country, username, safeName, curUnixTime).callListeners();
 
-        UserInfoCache userInfoCache = new UserInfoCache();
-        userInfoCache.reloadUser(userId);
+        UserInfoCache.reloadUser(userId);
 
         res.cookie("shiina", new SessionBuilder(userId, req).build());
 

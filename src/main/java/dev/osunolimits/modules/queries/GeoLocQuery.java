@@ -23,9 +23,7 @@ public class GeoLocQuery {
         client = new OkHttpClient.Builder().build(); 
     }
 
-    public GeoLocQuery(OkHttpClient client) {
-        this.client = client;
-    }
+  
 
     public String getCountryCode(String ip) {
         

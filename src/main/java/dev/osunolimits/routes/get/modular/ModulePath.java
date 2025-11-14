@@ -9,4 +9,5 @@ public class ModulePath {
     private String path;
     private ShiinaModule module;
     private boolean isDefault;
+    private boolean isInternal = false;
 }

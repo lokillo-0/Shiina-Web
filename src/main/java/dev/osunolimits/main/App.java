@@ -179,10 +179,27 @@ public class App {
         StartupTaskRunner.register(new RobotJsonConfigTask());
         StartupTaskRunner.register(new StartupSetupCronTask());
 
+        ModuleRegister.registerInternalModule("home", new BigHeader());
+        ModuleRegister.registerInternalModule("home", ShiinaModule.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
+        ModuleRegister.registerInternalModule("home", new MoreInfos());
 
-        ModuleRegister.registerDefaultModule("home", new BigHeader());
-        ModuleRegister.registerDefaultModule("home", ShiinaModule.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
-        ModuleRegister.registerDefaultModule("home", new MoreInfos());
+        StartupTaskRunner.register(new StartupSetupMarketTask());
+
+        GroupRegistry.revalidate();
+
+        UserInfoCache.populateIfNeeded();
+
+        ShiinaDocs shiinaDocs = new ShiinaDocs();
+        shiinaDocs.initializeDocs();
+
+        ShiinaAchievementsSorter.initialize();
+
+        cron.registerTimedTask(120, new MultiDetectionTask());
+        cron.registerTimedTask(30, new DatabaseCleanUpTask());
+        cron.registerTimedTask(30, new CountryLeaderboardTask());
+        cron.registerTimedTask(30, new DonatorCleanUpTask());
+        cron.registerFixedRateTask(9, 59, new ShiinaRankCache());
+        cron.registerTaskEachFullHour(new ServerStatsCollectorTask());
 
         WebServer.get("/health", new Health());
 
@@ -279,13 +296,7 @@ public class App {
 
         WebServer.get("/banner/:id", new GetBanner());
 
-        StartupTaskRunner.register(new StartupSetupMarketTask());
-
-        GroupRegistry.revalidate();
-
-        UserInfoCache userInfoCache = new UserInfoCache();
-        userInfoCache.populateIfNeeded();
-
+        // Todo: move to plugin
         MonetizationConfig config = new MonetizationConfig();
         if (config.ENABLED) {
             NavbarItem item = new NavbarItem("Donate", "donate");
@@ -295,23 +306,10 @@ public class App {
             Spark.get("/donate", new Donate(config, item.getActNav()));
         }
 
-        ShiinaDocs shiinaDocs = new ShiinaDocs();
-        shiinaDocs.initializeDocs();
-
-        ShiinaAchievementsSorter.initialize();
-
-        cron.registerTimedTask(120, new MultiDetectionTask());
-        cron.registerTimedTask(30, new DatabaseCleanUpTask());
-        cron.registerTimedTask(30, new CountryLeaderboardTask());
-        cron.registerTimedTask(30, new DonatorCleanUpTask());
-        cron.registerFixedRateTask(9, 59, new ShiinaRankCache());
-        cron.registerTaskEachFullHour(new ServerStatsCollectorTask());
-
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();
 
         ModuleRegister.reloadModuleConfigurations();
-        
 
         Runtime.getRuntime().addShutdownHook(new Shutdown());
     }
