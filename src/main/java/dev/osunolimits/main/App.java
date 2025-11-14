@@ -99,6 +99,7 @@ import dev.osunolimits.routes.get.modular.ModuleRegister;
 import dev.osunolimits.routes.get.modular.ShiinaModule;
 import dev.osunolimits.routes.get.modular.home.BigHeader;
 import dev.osunolimits.routes.get.modular.home.MoreInfos;
+import dev.osunolimits.routes.get.redirect.BeatmapSetRedirect;
 import dev.osunolimits.routes.get.settings.Authentication;
 import dev.osunolimits.routes.get.settings.Customization;
 import dev.osunolimits.routes.get.settings.Data;
@@ -232,6 +233,8 @@ public class App {
         WebServer.post("/settings/mode", new HandleModeChange());
         WebServer.post("/settings/userpage", new HandleUserpageChange());
         WebServer.post("/settings/banner", new HandleBannerChange());
+
+        WebServer.get("/beatmapset/:id", new BeatmapSetRedirect());
 
         WebServer.get("/login", new Login());
         WebServer.get("/register", new Register());
