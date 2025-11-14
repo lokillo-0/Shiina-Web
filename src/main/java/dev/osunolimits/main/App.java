@@ -30,15 +30,11 @@ import dev.osunolimits.modules.cron.MultiDetectionTask;
 import dev.osunolimits.modules.cron.ServerStatsCollectorTask;
 import dev.osunolimits.modules.cron.ShiinaRankCache;
 import dev.osunolimits.modules.cron.engine.Cron;
-import dev.osunolimits.modules.monetization.MonetizationConfig;
-import dev.osunolimits.modules.monetization.routes.KofiDonoHandler;
 import dev.osunolimits.modules.utils.GroupRegistry;
 import dev.osunolimits.modules.utils.ShiinaAchievementsSorter;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.modules.utils.UserInfoCache;
-import dev.osunolimits.plugins.NavbarRegister;
 import dev.osunolimits.plugins.PluginLoader;
-import dev.osunolimits.plugins.models.NavbarItem;
 import dev.osunolimits.routes.ap.api.PubSubHandler;
 import dev.osunolimits.routes.ap.api.RecoverAccount;
 import dev.osunolimits.routes.ap.get.Audit;
@@ -104,7 +100,6 @@ import dev.osunolimits.routes.get.settings.Authentication;
 import dev.osunolimits.routes.get.settings.Customization;
 import dev.osunolimits.routes.get.settings.Data;
 import dev.osunolimits.routes.get.settings.Settings;
-import dev.osunolimits.routes.get.simple.Donate;
 import dev.osunolimits.routes.get.simple.Recover;
 import dev.osunolimits.routes.get.user.Relations;
 import dev.osunolimits.routes.post.HandleComment;
@@ -125,7 +120,6 @@ import dev.osunolimits.routes.post.settings.data.HandleDataRequest;
 import dev.osunolimits.utils.Auth;
 import io.github.cdimascio.dotenv.Dotenv;
 import redis.clients.jedis.JedisPooled;
-import spark.Spark;
 
 /**
  * shiina - a modern osu! private server frontend for the web
@@ -298,16 +292,6 @@ public class App {
         WebServer.post("/ap/mapranking", new HandleMapStatusUpdate());
 
         WebServer.get("/banner/:id", new GetBanner());
-
-        // Todo: move to plugin
-        MonetizationConfig config = new MonetizationConfig();
-        if (config.ENABLED) {
-            NavbarItem item = new NavbarItem("Donate", "donate");
-            item.setLoggedInOnly(true);
-            NavbarRegister.register(item);
-            Spark.post("/handlekofi", new KofiDonoHandler());
-            Spark.get("/donate", new Donate(config, item.getActNav()));
-        }
 
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();
