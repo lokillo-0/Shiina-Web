@@ -12,9 +12,12 @@ import dev.osunolimits.plugins.events.admin.OnDonationEvent;
 import dev.osunolimits.plugins.events.admin.OnMultiAccountDetectionEvent;
 import dev.osunolimits.plugins.events.admin.OnRankBeatmapEvent;
 import dev.osunolimits.plugins.events.admin.OnRecoveryTokenGenerated;
+import dev.osunolimits.plugins.events.clans.OnUserClanCreatedEvent;
 import dev.osunolimits.plugins.events.clans.OnUserDenyClanEvent;
+import dev.osunolimits.plugins.events.clans.OnUserDisbandClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserGetKickedClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserJoinClanEvent;
+import dev.osunolimits.plugins.events.clans.OnUserLeaveClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserRequestJoinClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserUnDenyClanEvent;
 
@@ -76,4 +79,14 @@ public class ShiinaEventListener {
 
     public void onUserRequestJoinClanEvent(OnUserRequestJoinClanEvent event) {
     }
+
+    public void onUserLeaveClanEvent(OnUserLeaveClanEvent event) {
+    }
+
+    public void onUserDisbandClanEvent(OnUserDisbandClanEvent event) {
+    }
+
+    public void onUserClanCreatedEvent(OnUserClanCreatedEvent event) {
+    }
+    
 }

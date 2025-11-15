@@ -103,6 +103,7 @@ public class UserInfoCache {
                     return;
                 }
     
+                App.appCache.del("shiina:user:" + user.id);
                 App.appCache.set("shiina:user:" + user.id, gson.toJson(user));
                 
             }else {

@@ -2,9 +2,11 @@ package dev.osunolimits.routes.post.settings.customization;
 
 import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
+import dev.osunolimits.models.Clan;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.plugins.events.clans.OnUserClanCreatedEvent;
 import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
@@ -53,6 +55,10 @@ public class HandleClanCreation extends Shiina {
             if (clanResult.next()) {
                 int clanId = clanResult.getInt("id");
                 mysql.Exec("UPDATE `users` SET `clan_id` = ?, `clan_priv` = 3 WHERE `id` = ?", clanId, userId);
+
+                Clan clan = new Clan(clanId, name, tag);
+                new OnUserClanCreatedEvent(clan, userId).callListeners();
+
                 return redirect(res, shiina, "/clan/" + clanId);
             }
         }

@@ -15,6 +15,9 @@ import com.opencsv.CSVWriter;
 
 import dev.osunolimits.common.Database;
 import dev.osunolimits.common.MySQL;
+import dev.osunolimits.plugins.PluginExporter;
+import dev.osunolimits.plugins.ShiinaRegistry;
+import dev.osunolimits.plugins.annotations.Table;
 
 public class DataExporter {
 
@@ -34,8 +37,6 @@ public class DataExporter {
 
     public byte[] exportData() {
         try (MySQL mysql = Database.getConnection()) {
-            // TODO: Add plugin engine support for custom tables
-
             ResultSet rs = mysql.Query("SELECT * FROM `client_hashes` WHERE `userid` = ?", userId);
             exportResultSetAsCSVZip("client_hashes", rs);
 
@@ -78,9 +79,6 @@ public class DataExporter {
             rs = mysql.Query("SELECT * FROM `sh_groups_users` WHERE `user_id` = ?", userId);
             exportResultSetAsCSVZip("sh_groups_users", rs);
 
-            rs = mysql.Query("SELECT * FROM `sh_payments` WHERE `user_id` = ?", userId);
-            exportResultSetAsCSVZip("sh_payments", rs);
-
             rs = mysql.Query("SELECT * FROM `sh_recovery` WHERE `user` = ?", userId);
             exportResultSetAsCSVZip("sh_recovery", rs);
 
@@ -95,7 +93,24 @@ public class DataExporter {
 
             rs = mysql.Query("SELECT * FROM `user_achievements` WHERE `userid` = ?", userId);
             exportResultSetAsCSVZip("user_achievements", rs);
-            
+
+            // Plugin engine exporters
+            for (PluginExporter exporter : ShiinaRegistry.getExporters()) {
+                rs = exporter.exportPluginData();
+                exporter.getClass().isAnnotationPresent(Table.class);
+                Table tableAnnotation = exporter.getClass().getAnnotation(Table.class);
+                if (tableAnnotation != null) {
+                    exportResultSetAsCSVZip(tableAnnotation.value(), rs);
+                } else {
+                    logger.warn("PluginExporter " + exporter.getClass().getSimpleName()
+                            + " is missing @Table annotation. Skipping export for this exporter.");
+                }
+
+            }
+
+            PluginExporter pluginExporter = new PluginExporter(userId, mysql);
+            rs = pluginExporter.exportPluginData();
+
             zipOutputStream.finish();
 
         } catch (Exception e) {
@@ -106,7 +121,7 @@ public class DataExporter {
                 logger.error("Error closing ZIP output stream", ioException);
             }
         }
-        
+
         try {
             csvWriter.close();
         } catch (IOException e) {

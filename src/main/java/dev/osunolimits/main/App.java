@@ -140,8 +140,8 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.9.0prod";
-    public static String dbVersion = "1.9.0";
+    public static String version = "2.0.0branch";
+    public static String dbVersion = "2.0.0";
 
     public static String appSecret = Auth.generateNewToken();
 

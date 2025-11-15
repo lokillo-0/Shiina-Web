@@ -1,8 +1,10 @@
 package dev.osunolimits.routes.api.get.auth;
 
+import dev.osunolimits.models.Clan;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.plugins.events.clans.OnUserDisbandClanEvent;
 import spark.Request;
 import spark.Response;
 
@@ -15,17 +17,26 @@ public class HandleClanDisband extends Shiina {
         if(shiina.user == null) {
             return notFound(res, shiina);
         }
+        int clanId = 0;
+        var clanCheck = shiina.mysql.Query("SELECT u.`clan_id`, c.`name`, c.`tag` FROM `users` u LEFT JOIN `clans` c ON u.`clan_id` = c.`id` WHERE u.`id` = ?", shiina.user.id);
+        if (clanCheck.next()) {
 
-        var clanResult = shiina.mysql.Query("SELECT `clan_id`, `clan_priv` FROM `users` WHERE `id` = ?", shiina.user.id);
-        if(!clanResult.next()) {
-            return raw(res, shiina, "error");
+            clanId = clanCheck.getInt("clan_id");
+            if (clanId == 0) {
+                return raw(res, shiina, "not_in_clan");
+            }
+
+            Clan clan = new Clan(
+                clanCheck.getInt("clan_id"),
+                clanCheck.getString("name"),
+                clanCheck.getString("tag")
+            );
+            
+            // Trigger event
+            OnUserDisbandClanEvent event = new OnUserDisbandClanEvent(clan, shiina.user.id);
+            event.callListeners();
         }
 
-        if(clanResult.getInt("clan_id") == 0 || clanResult.getInt("clan_priv") != 3) {
-            return raw(res, shiina, "no clan or no leader");
-        }
-
-        int clanId = clanResult.getInt("clan_id");
 
         shiina.mysql.Exec("UPDATE `users` SET `clan_id`=0,`clan_priv`=0 WHERE `clan_id` = ?", clanId);
         shiina.mysql.Exec("DELETE FROM `clans` WHERE `id` = ?", clanId);

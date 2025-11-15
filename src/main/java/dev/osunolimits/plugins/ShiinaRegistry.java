@@ -10,6 +10,7 @@ import ch.qos.logback.classic.Logger;
 public class ShiinaRegistry {
     private static Logger log = (Logger) LoggerFactory.getLogger("ShiinaRegistry");
     private static List<ShiinaEventListener> listeners = new ArrayList<>();
+    private static List<PluginExporter> exporters = new ArrayList<>();
 
     public static void registerListener(ShiinaEventListener listener) {
         listeners.add(listener);
@@ -19,6 +20,20 @@ public class ShiinaRegistry {
     public static void unregisterListener(ShiinaEventListener listener) {
         listeners.remove(listener);
         log.debug("Unregistered listener: " + listener.getClass().getSimpleName());
+    }
+
+    public static void registerExporter(PluginExporter exporter) {
+        exporters.add(exporter);
+        log.debug("Registered exporter: " + exporter.getClass().getSimpleName());
+    }
+
+    public static void unregisterExporter(PluginExporter exporter) {
+        exporters.remove(exporter);
+        log.debug("Unregistered exporter: " + exporter.getClass().getSimpleName());
+    }
+
+    public static List<PluginExporter> getExporters() {
+        return exporters;
     }
 
     public static List<ShiinaEventListener> getListeners() {
