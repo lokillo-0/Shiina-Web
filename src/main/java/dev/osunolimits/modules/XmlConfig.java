@@ -25,7 +25,7 @@ public class XmlConfig {
     private final File configFile;
     private Document document;
 
-    public static List<String> secretConfigKeys = new ArrayList<>(); 
+    public static List<String> secretConfigKeys = new ArrayList<>();
 
     private XmlConfig() {
         this.configFile = new File(FILE_PATH);
@@ -38,7 +38,7 @@ public class XmlConfig {
         }
         return instance;
     }
-    
+
     public void cleanupXmlFile() {
         // Force cleanup and save
         cleanupDocument();
@@ -79,6 +79,25 @@ public class XmlConfig {
         }
     }
 
+    public void initKey(String key, String defaultValue) {
+        Element root = document.getDocumentElement();
+        NodeList nodes = root.getElementsByTagName(key);
+
+        if (!(nodes.getLength() > 0)) {
+            set(key, defaultValue);
+        }
+    }
+
+    public String get(String key) {
+        Element root = document.getDocumentElement();
+        NodeList nodes = root.getElementsByTagName(key);
+
+        if (nodes.getLength() > 0) {
+            return nodes.item(0).getTextContent();
+        }
+        return null;
+    }
+
     public HashMap<String, Object> getAll() {
         HashMap<String, Object> keyValues = new HashMap<>();
         Element root = document.getDocumentElement();
@@ -108,11 +127,22 @@ public class XmlConfig {
         save();
     }
 
+    public void remove(String key) {
+        Element root = document.getDocumentElement();
+        NodeList nodes = root.getElementsByTagName(key);
+
+        if (nodes.getLength() > 0) {
+            Node nodeToRemove = nodes.item(0);
+            root.removeChild(nodeToRemove);
+            save();
+        }
+    }
+
     private void save() {
         try {
             // Clean up the document before saving
             cleanupDocument();
-            
+
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
             Transformer transformer = transformerFactory.newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -131,12 +161,12 @@ public class XmlConfig {
             throw new RuntimeException("Failed to save XML configuration", e);
         }
     }
-    
+
     private void cleanupDocument() {
         Element root = document.getDocumentElement();
         removeEmptyTextNodes(root);
     }
-    
+
     private void removeEmptyTextNodes(Node node) {
         NodeList children = node.getChildNodes();
         for (int i = children.getLength() - 1; i >= 0; i--) {

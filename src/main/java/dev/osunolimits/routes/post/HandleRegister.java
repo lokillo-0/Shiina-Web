@@ -4,18 +4,24 @@ import java.sql.ResultSet;
 
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
+import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.modules.queries.GeoLocQuery;
-import dev.osunolimits.modules.queries.TurnstileQuery;
+import dev.osunolimits.modules.captcha.CaptchaProvider;
+import dev.osunolimits.modules.geoloc.DefaultGeoLocQuery;
 import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.plugins.events.actions.OnRegisterEvent;
 import dev.osunolimits.utils.Auth;
-import okhttp3.OkHttpClient;
 import spark.Request;
 import spark.Response;
 
 public class HandleRegister extends Shiina {
+
+    public HandleRegister() {
+        XmlConfig.getInstance().initKey("shiina.activate.onboarding", "true");
+    }
+
     @Override
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
@@ -33,8 +39,8 @@ public class HandleRegister extends Shiina {
             return renderTemplate("register.html", shiina, res, req);
         }
     
-        TurnstileQuery turnstileQuery = new TurnstileQuery(new OkHttpClient());
-        if (!turnstileQuery.verifyCaptcha(captchaResponse).success) {
+        CaptchaProvider captchaProvider = ShiinaRegistry.getCaptchaProvider();
+        if (!captchaProvider.verifyCaptcha(captchaResponse).success) {
             shiina.data.put("error", "Invalid Captcha");
             return renderTemplate("register.html", shiina, res, req);
         }
@@ -80,7 +86,7 @@ public class HandleRegister extends Shiina {
         String safeName = username.toLowerCase().replaceAll(" ", "_");
         long curUnixTime = System.currentTimeMillis() / 1000L;
 
-        GeoLocQuery geoLocQuery = new GeoLocQuery();
+        DefaultGeoLocQuery geoLocQuery = new DefaultGeoLocQuery();
         country = geoLocQuery.getCountryCode(req.ip()).toLowerCase();
         
         String insertSql = "INSERT INTO `users`(`name`, `safe_name`, `email`, `pw_bcrypt`, `country`, `creation_time`, `latest_activity`) VALUES (?,?,?,?,?,?,?)";
@@ -100,8 +106,7 @@ public class HandleRegister extends Shiina {
         
         new OnRegisterEvent(userId, email, country, username, safeName, curUnixTime).callListeners();
 
-        UserInfoCache userInfoCache = new UserInfoCache();
-        userInfoCache.reloadUser(userId);
+        UserInfoCache.reloadUser(userId);
 
         res.cookie("shiina", new SessionBuilder(userId, req).build());
 
@@ -110,7 +115,13 @@ public class HandleRegister extends Shiina {
             return redirect(res, shiina, refPath);
         }
 
-        return redirect(res, shiina, "/onboarding");
+        boolean isOnBoardingEnabled = Boolean.parseBoolean(XmlConfig.getInstance().get("shiina.activate.onboarding"));
+        
+        if(isOnBoardingEnabled) {
+            return redirect(res, shiina, "/onboarding");
+        }
+
+        return redirect(res, shiina, "/?action=auth");
     }
     
 }

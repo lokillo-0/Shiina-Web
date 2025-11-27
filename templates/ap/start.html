@@ -121,10 +121,12 @@
                             const labels = data.map(entry => {
                                 const date = new Date(entry.time);
                                 const hour = date.getHours();
+                                const minute = date.getMinutes();
                                 const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
                                 const dayName = dayNames[date.getDay()];
                                 const hourString = hour.toString().padStart(2, '0');
-                                return dayName + ' ' + hourString + ':00';
+                                const minuteString = minute.toString().padStart(2, '0');
+                                return dayName + ' ' + hourString + ':' + minuteString;
                             });
                             const values = data.map(entry => Math.round(entry.value));
 

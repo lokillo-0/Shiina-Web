@@ -31,7 +31,7 @@ public class Data extends Shiina {
         }
 
         if (req.queryParams("timestamp") != null && Validation.isNumeric(req.queryParams("timestamp"))) {
-            shiina.data.put("timestamp", Long.parseLong(req.queryParams("timestamp")) / 1000);
+            shiina.data.put("timestamp", Long.parseLong(req.queryParams("timestamp")));
         }
 
         shiina.data.put("pluginNav", NavbarRegister.getSettingsItems());

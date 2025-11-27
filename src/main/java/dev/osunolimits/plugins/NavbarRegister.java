@@ -101,18 +101,19 @@ public class NavbarRegister {
         return allItems;
     }
 
-    // DEPRECATED
-
+    @Deprecated
     public static void registerAdmin(NavbarAdminItem item) {
         log.warn("Deprecated: Use register(NavbarAdminItem item) instead and update your plugins");
         adminItems.add(item);
     }
 
+    @Deprecated
     public static void registerSettings(NavbarSettingsItem item) {
         log.warn("Deprecated: Use register(NavbarSettingsItem item) instead and update your plugins");
         settingsItems.add(item);
     }
 
+    @Deprecated
     public static void registerProfile(NavbarProfileItem item) {
         log.warn("Deprecated: Use register(NavbarProfileItem item) instead and update your plugins");
         profileItems.add(item);

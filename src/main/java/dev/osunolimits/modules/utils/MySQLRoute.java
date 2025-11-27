@@ -9,7 +9,6 @@ import spark.Route;
 
 public class MySQLRoute implements Route {
 
-
     public ShiinaRequest getRequest() {
         ShiinaRequest shiina = new ShiinaRoute(). new ShiinaRequest();
         shiina.mysql = Database.getConnection();

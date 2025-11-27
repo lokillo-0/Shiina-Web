@@ -18,7 +18,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class UserQuery {
-    private OkHttpClient client;
+    private final static Gson gson = new Gson();
+    private final OkHttpClient client;
 
     public UserQuery() {
         client = new OkHttpClient.Builder()
@@ -33,7 +34,7 @@ public class UserQuery {
         try {
             Response response = client.newCall(request).execute();
             JsonElement element = JsonParser.parseString(response.body().string());
-            FullUser userResponse = new Gson().fromJson(element, FullUser.class);
+            FullUser userResponse = gson.fromJson(element, FullUser.class);
             return userResponse;
 
         } catch (Exception e) {

@@ -4,6 +4,7 @@ import dev.osunolimits.plugins.events.actions.OnAccountDeletionEvent;
 import dev.osunolimits.plugins.events.actions.OnBeatmapFavoriteEvent;
 import dev.osunolimits.plugins.events.actions.OnGfxDeletionEvent;
 import dev.osunolimits.plugins.events.actions.OnRegisterEvent;
+import dev.osunolimits.plugins.events.actions.OnShiinaSettingChangedEvent;
 import dev.osunolimits.plugins.events.actions.OnUserFlagChangeEvent;
 import dev.osunolimits.plugins.events.actions.OnUserNameChangeEvent;
 import dev.osunolimits.plugins.events.admin.OnAddDonorEvent;
@@ -11,9 +12,13 @@ import dev.osunolimits.plugins.events.admin.OnAuditLogEvent;
 import dev.osunolimits.plugins.events.admin.OnDonationEvent;
 import dev.osunolimits.plugins.events.admin.OnMultiAccountDetectionEvent;
 import dev.osunolimits.plugins.events.admin.OnRankBeatmapEvent;
+import dev.osunolimits.plugins.events.admin.OnRecoveryTokenGenerated;
+import dev.osunolimits.plugins.events.clans.OnUserClanCreatedEvent;
 import dev.osunolimits.plugins.events.clans.OnUserDenyClanEvent;
+import dev.osunolimits.plugins.events.clans.OnUserDisbandClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserGetKickedClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserJoinClanEvent;
+import dev.osunolimits.plugins.events.clans.OnUserLeaveClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserRequestJoinClanEvent;
 import dev.osunolimits.plugins.events.clans.OnUserUnDenyClanEvent;
 
@@ -36,6 +41,10 @@ public class ShiinaEventListener {
         
     }
 
+    public void onRecoveryTokenGenerated(OnRecoveryTokenGenerated event) {
+        
+    }
+
     // ACTIONS
     public void onRegisterEvent(OnRegisterEvent event) {
     }
@@ -53,7 +62,9 @@ public class ShiinaEventListener {
     }
 
     public void onGfxDeletionEvent(OnGfxDeletionEvent event) {
-        
+    }
+
+    public void onShiinaSettingChangedEvent(OnShiinaSettingChangedEvent event) {
     }
 
     // CLANS
@@ -71,4 +82,14 @@ public class ShiinaEventListener {
 
     public void onUserRequestJoinClanEvent(OnUserRequestJoinClanEvent event) {
     }
+
+    public void onUserLeaveClanEvent(OnUserLeaveClanEvent event) {
+    }
+
+    public void onUserDisbandClanEvent(OnUserDisbandClanEvent event) {
+    }
+
+    public void onUserClanCreatedEvent(OnUserClanCreatedEvent event) {
+    }
+    
 }

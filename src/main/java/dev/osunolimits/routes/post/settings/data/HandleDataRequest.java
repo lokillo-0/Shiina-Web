@@ -20,7 +20,7 @@ public class HandleDataRequest extends Shiina {
         String timestamp = App.appCache.get(cooldownKey);
 
         if(timestamp != null && System.currentTimeMillis() < Long.parseLong(timestamp)) {
-            return redirect(res, shiina, "/settings/data?error=You can download your data again in &timestamp=" + timestamp);
+            return redirect(res, shiina, "/settings/data?error=You can download your data again in &timestamp=" + (Long.parseLong(timestamp) / 1000));
         }
 
         App.appCache.set(cooldownKey, String.valueOf(System.currentTimeMillis() + 3600000), 3600);

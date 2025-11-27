@@ -30,8 +30,7 @@ public class HandleOnBoarding extends Shiina {
             data.setPriv(dbPrivData.getInt("priv"));
             data.setId(shiina.user.id);
 
-            UserInfoCache userInfoCache = new UserInfoCache();
-            userInfoCache.reloadUser(shiina.user.id);
+            UserInfoCache.reloadUser(shiina.user.id);
         }
 
         return shiinaAPIHandler.renderJSON(data, shiina, res);

@@ -12,6 +12,8 @@ import okhttp3.Response;
 
 public class OnlineQuery extends APIQuery {
 
+    private static final Gson gson = new Gson();
+
     @Data
     public class OnlineUser {
         private int id;
@@ -36,7 +38,7 @@ public class OnlineQuery extends APIQuery {
         try {
             Response response = client.newCall(request).execute();
             JsonElement element = JsonParser.parseString(response.body().string());
-            OnlineResponse userResponse = new Gson().fromJson(element, OnlineResponse.class);
+            OnlineResponse userResponse = gson.fromJson(element, OnlineResponse.class);
             return userResponse;
         } catch (Exception e) {
             App.log.error("Failed to get Online EX", e);

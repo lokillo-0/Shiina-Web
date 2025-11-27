@@ -17,11 +17,9 @@ import spark.Route;
 
 public class Shiina implements Route {
 
-    private String analytics;
     private String domain;
 
     public Shiina() {
-        this.analytics = XmlConfig.getInstance().getOrDefault("plausible.js.url", " ");
         this.domain = App.env.get("DOMAIN").replaceAll("https://", "");
     }
 
@@ -38,7 +36,6 @@ public class Shiina implements Route {
         shiina.data.put("navbarItems", NavbarRegister.getItems());
         shiina.data.put("adminNavbarItems", NavbarRegister.getAdminItems());
         shiina.data.put("docs", ShiinaDocs.docs);
-        shiina.data.put("analytics", analytics);
         shiina.data.put("domain", domain);
         shiina.data.put("devMode", App.devMode);
         shiina.data.put("themeIdent", ThemeLoader.generatedIdent);
@@ -72,6 +69,13 @@ public class Shiina implements Route {
         response.status(302);
         response.redirect(location);
         return null;
+    }
+
+    public Object raw(Response response, ShiinaRequest shiina, String content) {
+        if (shiina.mysql != null)
+            shiina.mysql.close();
+        response.status(200);
+        return content;
     }
 
     public Object notFound(Response response, ShiinaRequest shiina) {

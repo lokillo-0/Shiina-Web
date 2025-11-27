@@ -41,7 +41,8 @@ public class ApUser extends Shiina {
 
     public ApUser() {
         gson = new Gson();
-        XmlConfig.getInstance().getOrDefault("ap.user.emails", "false");
+        XmlConfig.getInstance().remove("ap.user.emails");
+        XmlConfig.getInstance().initKey("shiina.admin-panel.view.email", "false");
     }
 
     public enum BanchoPyPrivs {
@@ -148,7 +149,7 @@ public class ApUser extends Shiina {
 
         EnumSet<BanchoPyPrivs> allPrivs = EnumSet.allOf(BanchoPyPrivs.class);
 
-        if(Boolean.parseBoolean(XmlConfig.getInstance().getOrDefault("ap.user.emails", "false"))) {
+        if(Boolean.parseBoolean(XmlConfig.getInstance().get("shiina.admin-panel.view.email"))) {
             shiina.data.put("email", user.getString("email"));
         }
 

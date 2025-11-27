@@ -1,32 +1,31 @@
 <#include "assets/base.html">
-<div class="container">
-<div class="card my-2 shiina-user-card">
-    <div class="bg-secondary rounded-top">
-        <div class="row p-4">
-            <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
-                <img src="${avatarServer}/${u.id}" alt="Profile picture"
-                    class="img-fluid rounded" style="max-width: 150px; min-width: 150px;">
-            </div>
-            <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-body">
-                <div><span class='display-3 fw-bold shiina-player-name'>${u.name} 
-
-                </span> 
-                    <div class="groupPlace">
-                        <span class="groupDiv"><span class="groupEmoji">🤖</span>Bot</span>
-                       
+    <div class="container">
+        <div class="bg-gradient border rounded position-relative"
+            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+            <div class="row p-4 position-relative">
+                <!-- Profile Picture -->
+                <div class="col-12 col-md-3 d-flex justify-content-center align-items-center mb-3 mb-md-0">
+                    <div class="position-relative">
+                        <img src="${avatarServer}/${u.id}" alt="Profile picture" class="img-fluid rounded shadow-lg"
+                            style="width: 150px; height: 150px; object-fit: cover;">
                     </div>
-                   
                 </div>
-                <style>
-                    .groupEmoji {
-                        width: 20px;
-                        display:inline-block;
-                    }
-                </style>
+                <!-- Player Name -->
+                <div class="col-12 col-md-9 d-flex flex-column justify-content-center text-white">
+                    <div class="mb-2">
+                        <h1 class="display-4 fw-bold mb-2 shiina-player-name">
+                            ${u.name}
+                        </h1>
 
+                        <div class="groupPlace d-flex flex-wrap gap-2 mt-2 mb-3">
+                            <span class="badge shiina-badge bg-light bg-opacity-25 text-white py-2 rounded-pill pe-3">
+                                <span class="groupEmoji me-2">🤖</span>Bot
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
-</div>
-</div>
-<#include "assets/footer.html">
+    <#include "assets/footer.html">

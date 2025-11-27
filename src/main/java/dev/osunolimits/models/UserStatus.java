@@ -12,7 +12,6 @@ public class UserStatus {
         private boolean online;
         private double login_time;
         private PlayerStatusExtended status;
-        
     }
 
     @Data

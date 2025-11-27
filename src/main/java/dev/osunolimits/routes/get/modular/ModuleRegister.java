@@ -30,15 +30,29 @@ public class ModuleRegister {
     private static final Logger log = (Logger) LoggerFactory.getLogger("ModuleRegister");
 
     public static void registerDefaultModule(String forPage, ShiinaModule module) {
-        ModulePath modulePath = new ModulePath(forPage, module, true);
+        ModulePath modulePath = new ModulePath(forPage, module, true, false);
+        modules.add(modulePath);
+        log.debug("Registered default module for " + forPage + ": " + module.moduleName());
+    }
+
+    public static void registerInternalModule(String forPage, ShiinaModule module) {
+        ModulePath modulePath = new ModulePath(forPage, module, true, true);
         modules.add(modulePath);
         log.debug("Registered default module for " + forPage + ": " + module.moduleName());
     }
 
     public static void registerModule(String forPage, ShiinaModule module) {
-        ModulePath modulePath = new ModulePath(forPage, module, false);
+        ModulePath modulePath = new ModulePath(forPage, module, false, false);
         modules.add(modulePath);
         log.debug("Registered module for " + forPage + ": " + module.moduleName());
+    }
+
+    public static List<String> getPages() {
+        Set<String> pagesSet = new HashSet<>();
+        for(ModulePath modulePath : modules) {
+            pagesSet.add(modulePath.getPath());
+        }
+        return new ArrayList<>(pagesSet);
     }
 
     public static List<ShiinaModule> getModulesForPage(String page) {
@@ -153,6 +167,35 @@ public class ModuleRegister {
 
         for(FoundModule foundModule : foundModules) {
             List<String> toLoad = new Gson().fromJson(foundModule.getJson(), new TypeToken<List<String>>(){}.getType());
+            
+            // Check if default modules are missing from the JSON
+            List<String> defaultModuleNames = new ArrayList<>();
+            for(ModulePath modulePath : modules) {
+                if(modulePath.getPath().equals(foundModule.getPage()) && modulePath.isDefault()) {
+                    defaultModuleNames.add(modulePath.getModule().moduleName());
+                }
+            }
+            
+            // Add missing default modules to the JSON list at the beginning
+            boolean needsUpdate = false;
+            for(String defaultModule : defaultModuleNames) {
+                if(!toLoad.contains(defaultModule)) {
+                    toLoad.add(0, defaultModule); // Add at the beginning
+                    needsUpdate = true;
+                }
+            }
+            
+            // Update the JSON file if we added defaults
+            if(needsUpdate) {
+                String updatedJson = new Gson().toJson(toLoad);
+                try {
+                    Files.writeString(Path.of("data/modules/" + foundModule.getPage() + ".json"), updatedJson);
+                    log.info("Added default modules to JSON for page: " + foundModule.getPage());
+                } catch (IOException e) {
+                    log.error("Error updating JSON file for page: " + foundModule.getPage(), e);
+                }
+            }
+            
             List<ShiinaModule> loaded = new ArrayList<>();
             for(String moduleName : toLoad) {
                 for(ModulePath modulePath : modules) {

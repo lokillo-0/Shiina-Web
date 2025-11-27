@@ -3,10 +3,7 @@ package dev.osunolimits.api;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.google.gson.Gson;
-
 import dev.osunolimits.common.MySQL;
-import dev.osunolimits.main.App;
 import dev.osunolimits.models.Beatmap;
 import dev.osunolimits.models.UserInfoObject;
 import dev.osunolimits.modules.utils.ShiinaSupporterBadge;
@@ -17,7 +14,6 @@ import lombok.Data;
 public class ScoreQuery {
 
     private MySQL mysql;
-    private static final Gson gson = new Gson();
 
     public ScoreQuery(MySQL mysql) {
         this.mysql = mysql;
@@ -90,8 +86,7 @@ public class ScoreQuery {
             beatmap.setLast_update(scoreRs.getString("last_update"));
             beatmap.setStatus(scoreRs.getInt("bm_status"));
 
-            UserInfoObject userInfo = gson.fromJson(App.appCache.get("shiina:user:" + score.getUserId()),
-                    UserInfoObject.class);
+            UserInfoObject userInfo = new UserInfoObject(score.getUserId());
             if (PermissionHelper.hasPrivileges(userInfo.priv, PermissionHelper.Privileges.SUPPORTER)) {
                 userInfo.groups.add(ShiinaSupporterBadge.getInstance().getGroup());
                 score.setSupporter(true);

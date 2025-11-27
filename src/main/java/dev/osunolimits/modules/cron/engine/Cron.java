@@ -88,6 +88,29 @@ public class Cron {
         taskMetas.add(meta);
     }
 
+    public void registerTaskEach15Minutes(CronTask task) {
+        logger.debug("Registering task: " + task.getName() + " to run every 15 minutes");
+
+        long initialDelay = quarterHourDelay();
+        long fifteenMinutes = TimeUnit.MINUTES.toSeconds(15);
+        
+        scheduler.scheduleAtFixedRate(() -> {
+            try {
+                logger.debug("Running task: " + task.getName());
+                task.run();
+            }
+            catch (Exception e) {
+                logger.error("Error running task: " + task.getName(), e);
+            }
+        }, initialDelay, fifteenMinutes, TimeUnit.SECONDS);
+
+        CronEngineTaskMeta meta = new CronEngineTaskMeta();
+        meta.setName(task.getName());
+        meta.setType(CronEngineTaskMeta.CronEngineTaskType.TIMED);
+        meta.setIntervalMinutes(15L);
+        taskMetas.add(meta);
+    }
+
     public List<CronTask> getTasks() {
         return tasks;
     }
@@ -95,6 +118,17 @@ public class Cron {
     private long fullHourDelay() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime nextRun = now.truncatedTo(ChronoUnit.HOURS).plusHours(1);
+        return Duration.between(now, nextRun).getSeconds();
+    }
+
+    private long quarterHourDelay() {
+        LocalDateTime now = LocalDateTime.now();
+        int currentMinute = now.getMinute();
+        int minutesUntilNext15 = 15 - (currentMinute % 15);
+        if (minutesUntilNext15 == 15) {
+            minutesUntilNext15 = 0; // Already at 15-minute boundary, run immediately
+        }
+        LocalDateTime nextRun = now.plusMinutes(minutesUntilNext15).truncatedTo(ChronoUnit.MINUTES);
         return Duration.between(now, nextRun).getSeconds();
     }
 

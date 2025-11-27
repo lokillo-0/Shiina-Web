@@ -30,15 +30,12 @@ import dev.osunolimits.modules.cron.MultiDetectionTask;
 import dev.osunolimits.modules.cron.ServerStatsCollectorTask;
 import dev.osunolimits.modules.cron.ShiinaRankCache;
 import dev.osunolimits.modules.cron.engine.Cron;
-import dev.osunolimits.modules.monetization.MonetizationConfig;
-import dev.osunolimits.modules.monetization.routes.KofiDonoHandler;
 import dev.osunolimits.modules.utils.GroupRegistry;
 import dev.osunolimits.modules.utils.ShiinaAchievementsSorter;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.modules.utils.UserInfoCache;
-import dev.osunolimits.plugins.NavbarRegister;
 import dev.osunolimits.plugins.PluginLoader;
-import dev.osunolimits.plugins.models.NavbarItem;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.routes.ap.api.PubSubHandler;
 import dev.osunolimits.routes.ap.api.RecoverAccount;
 import dev.osunolimits.routes.ap.get.Audit;
@@ -77,6 +74,8 @@ import dev.osunolimits.routes.api.get.Search;
 import dev.osunolimits.routes.api.get.auth.GetLastDayPlayerAdmin;
 import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
+import dev.osunolimits.routes.api.get.auth.HandleClanDisband;
+import dev.osunolimits.routes.api.get.auth.HandleClanLeave;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.HandleOnBoarding;
 import dev.osunolimits.routes.api.get.auth.HandleRelationship;
@@ -104,7 +103,6 @@ import dev.osunolimits.routes.get.settings.Authentication;
 import dev.osunolimits.routes.get.settings.Customization;
 import dev.osunolimits.routes.get.settings.Data;
 import dev.osunolimits.routes.get.settings.Settings;
-import dev.osunolimits.routes.get.simple.Donate;
 import dev.osunolimits.routes.get.simple.Recover;
 import dev.osunolimits.routes.get.user.Relations;
 import dev.osunolimits.routes.post.HandleComment;
@@ -115,6 +113,7 @@ import dev.osunolimits.routes.post.HandleRegister;
 import dev.osunolimits.routes.post.settings.auth.HandleTokenDeletion;
 import dev.osunolimits.routes.post.settings.customization.HandleAvatarChange;
 import dev.osunolimits.routes.post.settings.customization.HandleBannerChange;
+import dev.osunolimits.routes.post.settings.customization.HandleClanCreation;
 import dev.osunolimits.routes.post.settings.customization.HandleFlagChange;
 import dev.osunolimits.routes.post.settings.customization.HandleGfxDeletion;
 import dev.osunolimits.routes.post.settings.customization.HandleModeChange;
@@ -124,8 +123,8 @@ import dev.osunolimits.routes.post.settings.data.HandleAccountDeletion;
 import dev.osunolimits.routes.post.settings.data.HandleDataRequest;
 import dev.osunolimits.utils.Auth;
 import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.OkHttpClient;
 import redis.clients.jedis.JedisPooled;
-import spark.Spark;
 
 /**
  * shiina - a modern osu! private server frontend for the web
@@ -134,19 +133,21 @@ import spark.Spark;
 public class App {
 
     public static final Logger log = LoggerFactory.getLogger("Shiina-Web");
+    public static final OkHttpClient sharedClient = new OkHttpClient();
+    public static final AppCache appCache = new AppCache();
+
+    public static final String appSecret = Auth.generateNewToken();
     
     public static Dotenv loggerEnv;
     public static Dotenv env;
     public static Map<String, Object> customization;
 
-    public static AppCache appCache = new AppCache();
+    
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "1.9.0prod";
-    public static String dbVersion = "1.9.0";
-
-    public static String appSecret = Auth.generateNewToken();
+    public static String version = "2.0.0branch";
+    public static String dbVersion = "2.0.0";
 
     public static boolean devMode = false;
 
@@ -180,10 +181,27 @@ public class App {
         StartupTaskRunner.register(new RobotJsonConfigTask());
         StartupTaskRunner.register(new StartupSetupCronTask());
 
+        ModuleRegister.registerInternalModule("home", new BigHeader());
+        ModuleRegister.registerInternalModule("home", ShiinaModule.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
+        ModuleRegister.registerInternalModule("home", new MoreInfos());
 
-        ModuleRegister.registerDefaultModule("home", new BigHeader());
-        ModuleRegister.registerDefaultModule("home", ShiinaModule.fromRawHtml("HomeInfos", "infos", "home/infos.html"));
-        ModuleRegister.registerDefaultModule("home", new MoreInfos());
+        StartupTaskRunner.register(new StartupSetupMarketTask());
+
+        GroupRegistry.revalidate();
+
+        UserInfoCache.populateIfNeeded();
+
+        ShiinaDocs shiinaDocs = new ShiinaDocs();
+        shiinaDocs.initializeDocs();
+
+        ShiinaAchievementsSorter.initialize();
+
+        cron.registerTimedTask(120, new MultiDetectionTask());
+        cron.registerTimedTask(30, new DatabaseCleanUpTask());
+        cron.registerTimedTask(30, new CountryLeaderboardTask());
+        cron.registerTimedTask(30, new DonatorCleanUpTask());
+        cron.registerFixedRateTask(9, 59, new ShiinaRankCache());
+        cron.registerTaskEach15Minutes(new ServerStatsCollectorTask());
 
         WebServer.get("/health", new Health());
 
@@ -216,6 +234,7 @@ public class App {
         WebServer.post("/settings/mode", new HandleModeChange());
         WebServer.post("/settings/userpage", new HandleUserpageChange());
         WebServer.post("/settings/banner", new HandleBannerChange());
+        WebServer.post("/settings/clans/create", new HandleClanCreation());
 
         WebServer.get("/beatmapset/:id", new BeatmapSetRedirect());
 
@@ -242,8 +261,11 @@ public class App {
 
         WebServer.get("/api/v1/onboarding", new HandleOnBoarding());
         WebServer.get("/api/v1/manage_cl", new HandleClanAction());
+        WebServer.get("/api/v1/leave_clan", new HandleClanLeave());
         WebServer.get("/api/v1/join_clan", new HandleClanRequest());
         WebServer.get("/api/v1/update_rel", new HandleRelationship());
+
+        WebServer.post("/api/v1/disband_clan", new HandleClanDisband());
         WebServer.post("/api/v1/handle_favorite", new HandleBeatmapFavorite());
 
         WebServer.get("/ap/users/recovery", new RecoverAccount());
@@ -282,39 +304,13 @@ public class App {
 
         WebServer.get("/banner/:id", new GetBanner());
 
-        StartupTaskRunner.register(new StartupSetupMarketTask());
-
-        GroupRegistry.revalidate();
-
-        UserInfoCache userInfoCache = new UserInfoCache();
-        userInfoCache.populateIfNeeded();
-
-        MonetizationConfig config = new MonetizationConfig();
-        if (config.ENABLED) {
-            NavbarItem item = new NavbarItem("Donate", "donate");
-            item.setLoggedInOnly(true);
-            NavbarRegister.register(item);
-            Spark.post("/handlekofi", new KofiDonoHandler());
-            Spark.get("/donate", new Donate(config, item.getActNav()));
-        }
-
-        ShiinaDocs shiinaDocs = new ShiinaDocs();
-        shiinaDocs.initializeDocs();
-
-        ShiinaAchievementsSorter.initialize();
-
-        cron.registerTimedTask(120, new MultiDetectionTask());
-        cron.registerTimedTask(30, new DatabaseCleanUpTask());
-        cron.registerTimedTask(30, new CountryLeaderboardTask());
-        cron.registerTimedTask(30, new DonatorCleanUpTask());
-        cron.registerFixedRateTask(9, 59, new ShiinaRankCache());
-        cron.registerTaskEachFullHour(new ServerStatsCollectorTask());
+        ShiinaRegistry.registerIconToSettingsGroup("shiina", "fa-solid fa-flask");
+        ShiinaRegistry.registerIconToSettingsGroup("donator", "fa-solid fa-users");
 
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();
 
         ModuleRegister.reloadModuleConfigurations();
-        
 
         Runtime.getRuntime().addShutdownHook(new Shutdown());
     }

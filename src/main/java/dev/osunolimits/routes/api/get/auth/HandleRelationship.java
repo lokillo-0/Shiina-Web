@@ -31,8 +31,7 @@ public class HandleRelationship extends Shiina {
         }
 
         if(App.appCache.get("shiina:user:" + user2) == null) {
-            shiina.mysql.close();
-            return "invalid user";
+            return raw(res, shiina, "invalid user");
         }
         
         ResultSet searchResult = shiina.mysql.Query(SEARCH_QUERY, user1, user2);
@@ -41,8 +40,6 @@ public class HandleRelationship extends Shiina {
         }else {
             shiina.mysql.Exec(INSERT_QUERY, user1, user2);
         }
-        res.status(200);
-        shiina.mysql.close();
-        return "";
+        return raw(res, shiina, "");
     }
 }

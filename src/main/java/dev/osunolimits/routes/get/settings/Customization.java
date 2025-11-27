@@ -19,6 +19,15 @@ import spark.Request;
 import spark.Response;
 
 public class Customization extends Shiina {
+
+    public Customization() {
+        // Remove of old key TODO: move to migrationss
+        XmlConfig.getInstance().remove("clans.create.for.supporter");
+
+        XmlConfig.getInstance().initKey("shiina.clans.create-supporter", "true");
+        XmlConfig.getInstance().initKey("donator.gif-support", "false");
+    }
+
     @Override
     public Object handle(Request req, Response res) throws Exception {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
@@ -37,7 +46,7 @@ public class Customization extends Shiina {
             shiina.data.put("error", req.queryParams("error"));
         }
 
-        ResultSet settingsResult = shiina.mysql.Query("SELECT `country`, `raw`, `preferred_mode` FROM `users` LEFT JOIN `userpages` ON `users`.`id` = `userpages`.`user_id` WHERE `users`.`id` = ?;", shiina.user.id);
+        ResultSet settingsResult = shiina.mysql.Query("SELECT `country`, `raw`, `preferred_mode`, `clan_id` FROM `users` LEFT JOIN `userpages` ON `users`.`id` = `userpages`.`user_id` WHERE `users`.`id` = ?;", shiina.user.id);
         if(!settingsResult.next()) {
             return notFound(res, shiina);
         }
@@ -61,11 +70,13 @@ public class Customization extends Shiina {
         shiina.data.put("curCountry", settingsResult.getString("country"));
         shiina.data.put("curUserpage", settingsResult.getString("raw"));
         shiina.data.put("curMode", settingsResult.getInt("preferred_mode"));
+        shiina.data.put("curClanId", settingsResult.getInt("clan_id"));
 
         shiina.data.put("modes", modes);
         shiina.data.put("countries", countries);
+        shiina.data.put("clanCreateSupporter", XmlConfig.getInstance().get("shiina.clans.create-supporter").equals("true"));
 
-        shiina.data.put("gifSupport", Boolean.parseBoolean(XmlConfig.getInstance().getOrDefault("donator.gif-support", "false")));
+        shiina.data.put("gifSupport", Boolean.parseBoolean(XmlConfig.getInstance().get("donator.gif-support")));
 
         shiina.data.put("pluginNav", NavbarRegister.getSettingsItems());
         shiina.data.put("seo", new SEOBuilder("Settings | Customization", App.customization.get("homeDescription").toString()));

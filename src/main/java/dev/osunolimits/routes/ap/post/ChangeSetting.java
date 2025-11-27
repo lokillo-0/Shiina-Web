@@ -4,6 +4,7 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.plugins.events.actions.OnShiinaSettingChangedEvent;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -28,11 +29,12 @@ public class ChangeSetting extends Shiina {
         String value = req.queryParams("value");
 
         if (key == null || value == null) {
-            res.status(400);
-            return "Bad Request: Missing key or value";
+            return raw(res, shiina, "invalid parameters");
         }
 
         XmlConfig.getInstance().set(key, value);
+
+        new OnShiinaSettingChangedEvent(shiina.user.id, key, value).callListeners();
 
         return redirect(res, shiina, "/ap/settings?state=success&message=Setting%20" + key + "%20updated%20successfully");
 

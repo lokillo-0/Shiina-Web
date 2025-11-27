@@ -27,7 +27,8 @@ public class Beatmap extends Shiina {
     private final Gson gson = new Gson();
 
     public Beatmap() {
-        XmlConfig.getInstance().getOrDefault("comments.beatmaps.enabled", "false");
+        XmlConfig.getInstance().remove("comments.beatmaps.enabled");
+        XmlConfig.getInstance().initKey("shiina.simple-comments.enabled", "false");
     }
 
     @Override
@@ -83,7 +84,7 @@ public class Beatmap extends Shiina {
         String peppyImageUrl = "https://assets.ppy.sh/beatmaps/" + fullBeatmap.getSetId() + "/covers/cover.jpg?1650681317";
         SEOBuilder seo = new SEOBuilder(fullBeatmap.getTitle(), App.customization.get("homeDescription").toString(), peppyImageUrl);
         shiina.data.put("seo", seo);
-        shiina.data.put("commentsEnabled", Boolean.parseBoolean(XmlConfig.getInstance().getOrDefault("comments.beatmaps.enabled", "false")));
+        shiina.data.put("commentsEnabled", Boolean.parseBoolean(XmlConfig.getInstance().get("shiina.simple-comments.enabled")));
         shiina.data.put("beatmap", fullBeatmap);
         shiina.data.put("id", id);
         shiina.data.put("mode", mode);

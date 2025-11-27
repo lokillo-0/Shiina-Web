@@ -5,8 +5,8 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import dev.osunolimits.main.App;
-import dev.osunolimits.modules.queries.GeoLocQuery;
-import dev.osunolimits.modules.queries.GeoLocQuery.GeoLocResponse;
+import dev.osunolimits.modules.geoloc.GeoLocProvider.GeoLocResponse;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.utils.Auth;
 import dev.osunolimits.utils.Auth.SessionUser;
 import lombok.AllArgsConstructor;
@@ -15,8 +15,7 @@ import spark.Request;
 @AllArgsConstructor
 public class SessionBuilder {
     private static final Gson gson = new Gson();
-    private static final GeoLocQuery geoLocQuery = new GeoLocQuery();
-
+ 
     private int id;
     private Request request;
 
@@ -29,7 +28,7 @@ public class SessionBuilder {
         user.ip = request.ip();
         user.userAgent = request.userAgent() != null ? request.userAgent() : "Unknown";
 
-        GeoLocResponse geoLocResponse = geoLocQuery.getCountryCodeSession(request.ip());
+        GeoLocResponse geoLocResponse = ShiinaRegistry.getGeoLocProvider().getCountryCodeSession(request.ip());
         if(geoLocResponse != null) {
             user.country = geoLocResponse.getCountry();
             user.city = geoLocResponse.getCity();

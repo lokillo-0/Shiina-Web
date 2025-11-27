@@ -20,6 +20,7 @@ public class PluginConfig {
     private Class<?> configObject;
     private Object config;
 
+    @Deprecated
     public PluginConfig(String pluginName, Class<?> configObject) {
         this.pluginName = pluginName;
         this.configObject = configObject;
@@ -29,7 +30,8 @@ public class PluginConfig {
     public Object getConfig() {
         return config;
     }
-
+    
+    @Deprecated
     public void loadConfig() {
         if (configObject == null) {
             log.error("[" + pluginName + "] No config object found for plugin.");
