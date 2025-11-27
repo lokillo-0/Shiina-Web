@@ -2,6 +2,7 @@ package dev.osunolimits.routes.api.get;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.utils.MySQLRoute;
@@ -23,14 +24,14 @@ public class GetRankCache extends MySQLRoute {
         int mode = 0;
         if (OsuConverter.checkForValidMode(req.queryParams("mode"))) {
             mode = Integer.parseInt(req.queryParams("mode"));
-        }else {
+        } else {
             shiinaAPIHandler.addRequiredParameter("mode", "int", "missing or invalid");
         }
 
         Integer id = null;
         if (req.queryParams("id") != null && Validation.isNumeric(req.queryParams("id"))) {
             id = Integer.parseInt(req.queryParams("id"));
-        }else {
+        } else {
             shiinaAPIHandler.addRequiredParameter("id", "int", "missing");
         }
 
@@ -39,7 +40,7 @@ public class GetRankCache extends MySQLRoute {
         }
 
         ResultSet rankCacheResultSet = shiina.mysql.Query(GET_RANK_CACHE, mode, id);
-        ArrayList<RankCacheEntry> rankCacheEntries = new ArrayList<>();
+        List<RankCacheEntry> rankCacheEntries = new ArrayList<>();
         while (rankCacheResultSet.next()) {
             RankCacheEntry rankCacheEntry = new RankCacheEntry();
             rankCacheEntry.setDate(rankCacheResultSet.getString("date"));
@@ -47,19 +48,21 @@ public class GetRankCache extends MySQLRoute {
             rankCacheEntries.add(rankCacheEntry);
         }
 
-        // TODO: Refactor rank cache algorithm
+        int size = rankCacheEntries.size();
+        if (size > 100) {
+            double ratio = 100.0 / size; // target shrink-to-100 entries
+            List<RankCacheEntry> newList = new ArrayList<>(100);
 
-        if(rankCacheEntries.size() > 100) {
-            // Cut each second entry from list - iterate backwards to avoid index issues
-            for (int i = rankCacheEntries.size() - 1; i >= 0; i--) {
-                if (i % 2 == 0) {
-                    rankCacheEntries.remove(i);
-                }
+            double index = 0;
+            while (newList.size() < 100 && index < size) {
+                newList.add(rankCacheEntries.get((int) index));
+                index += 1.0 / ratio; // keeps elements roughly evenly spaced
             }
-        }
-      
 
-        if(rankCacheEntries.size() <= 2) {
+            rankCacheEntries = newList;
+        }
+
+        if (rankCacheEntries.size() <= 2) {
             return shiinaAPIHandler.renderJSON(new ArrayList<>(), shiina, res);
         }
 

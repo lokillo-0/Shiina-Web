@@ -5,6 +5,7 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.utils.SEOBuilder;
+import dev.osunolimits.routes.get.modular.ModuleRegister;
 import spark.Request;
 import spark.Response;
 
@@ -20,6 +21,8 @@ public class Login extends Shiina {
         if (path != null && !path.isEmpty()) {
             shiina.data.put("refPath", path);
         }
+
+        shiina.data.put("modules", ModuleRegister.getModulesRawForPage("login", req, res, shiina));
 
         shiina.data.put("seo", new SEOBuilder("Login", App.customization.get("homeDescription").toString()));
         return renderTemplate("login.html", shiina, res, req);

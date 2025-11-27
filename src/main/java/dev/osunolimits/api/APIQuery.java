@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.LoggerFactory;
 
 import ch.qos.logback.classic.Logger;
+import dev.osunolimits.main.App;
 import dev.osunolimits.utils.CacheInterceptor;
 import okhttp3.Cache;
 import okhttp3.ConnectionPool;
@@ -21,7 +22,7 @@ public class APIQuery {
     }
 
     public APIQuery() {
-        this.client = new OkHttpClient.Builder().build();
+        this.client = App.sharedClient;
     }
 
     protected APIQuery(String cacheDir, int minutes, int maxIdleConnection) {

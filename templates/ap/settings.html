@@ -18,11 +18,15 @@
         </#if>
         
         <#list groupedSettings?keys as groupName>
-            <div class="mb-4">
+            <div class="my-3">
                 <!-- Group Header -->
                 <div class="d-flex align-items-center mb-3">
                     <h4 class="mb-0 text-capitalize fw-bold text-primary">
+                        <#if !icons[groupName]??>
                         <i class="fa-solid fa-folder-open me-2"></i>${groupName}
+                        <#else>
+                        <i class="fa-solid ${icons[groupName]} me-2"></i>${groupName}
+                        </#if>
                     </h4>
                     <hr class="flex-grow-1 ms-3">
                 </div>

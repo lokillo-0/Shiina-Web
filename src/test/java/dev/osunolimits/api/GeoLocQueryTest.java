@@ -6,15 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import dev.osunolimits.modules.queries.GeoLocQuery;
+import dev.osunolimits.modules.geoloc.DefaultGeoLocQuery;
 
 public class GeoLocQueryTest {
 
-    private GeoLocQuery geoLocQuery;
+    private DefaultGeoLocQuery geoLocQuery;
 
     @BeforeEach
     void setUp() {
-        geoLocQuery = new GeoLocQuery();
+        geoLocQuery = new DefaultGeoLocQuery();
     }
 
     @Test

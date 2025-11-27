@@ -21,7 +21,11 @@ import spark.Response;
 public class Customization extends Shiina {
 
     public Customization() {
-        XmlConfig.getInstance().getOrDefault("clans.create.for.supporter", "true");
+        // Remove of old key TODO: move to migrationss
+        XmlConfig.getInstance().remove("clans.create.for.supporter");
+
+        XmlConfig.getInstance().initKey("shiina.clans.create-supporter", "true");
+        XmlConfig.getInstance().initKey("donator.gif-support", "false");
     }
 
     @Override
@@ -70,9 +74,9 @@ public class Customization extends Shiina {
 
         shiina.data.put("modes", modes);
         shiina.data.put("countries", countries);
-        shiina.data.put("clanCreateSupporter", XmlConfig.getInstance().getOrDefault("clans.create.for.supporter", "true").equals("true"));
+        shiina.data.put("clanCreateSupporter", XmlConfig.getInstance().get("shiina.clans.create-supporter").equals("true"));
 
-        shiina.data.put("gifSupport", Boolean.parseBoolean(XmlConfig.getInstance().getOrDefault("donator.gif-support", "false")));
+        shiina.data.put("gifSupport", Boolean.parseBoolean(XmlConfig.getInstance().get("donator.gif-support")));
 
         shiina.data.put("pluginNav", NavbarRegister.getSettingsItems());
         shiina.data.put("seo", new SEOBuilder("Settings | Customization", App.customization.get("homeDescription").toString()));

@@ -5,9 +5,10 @@ import java.sql.ResultSet;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.modules.queries.TurnstileQuery;
+import dev.osunolimits.modules.captcha.CaptchaProvider;
 import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.utils.Auth;
 import spark.Request;
 import spark.Response;
@@ -33,8 +34,8 @@ public class HandleRecovery extends Shiina {
             return renderTemplate("recovery.html", shiina, res, req);
         }
     
-        TurnstileQuery turnstileQuery = new TurnstileQuery();
-        if (!turnstileQuery.verifyCaptcha(captchaResponse).success) {
+        CaptchaProvider captchaProvider = ShiinaRegistry.getCaptchaProvider();
+        if (!captchaProvider.verifyCaptcha(captchaResponse).success) {
             shiina.data.put("error", "Invalid Captcha");
             return renderTemplate("recovery.html", shiina, res, req);
         }

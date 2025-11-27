@@ -8,6 +8,7 @@ import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
 import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.utils.ThemeLoader;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import lombok.Data;
 import spark.Request;
@@ -59,6 +60,7 @@ public class ModularSettings extends Shiina {
 
         shiina.data.put("groupedSettings", groupedSettings);
         shiina.data.put("themes", ThemeLoader.themes);
+        shiina.data.put("icons", ShiinaRegistry.getIconSettingsMap());
 
         if(req.queryParams("state") != null && req.queryParams("message") != null) {
             shiina.data.put("state", req.queryParams("state"));

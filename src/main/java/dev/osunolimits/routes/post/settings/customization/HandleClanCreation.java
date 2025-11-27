@@ -23,7 +23,7 @@ public class HandleClanCreation extends Shiina {
             return redirect(res, shiina, "/settings/customization");
         }
 
-        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.SUPPORTER) && XmlConfig.getInstance().getOrDefault("clans.create.for.supporter", "true").equals("true")) {
+        if (!PermissionHelper.hasPrivileges(shiina.user.priv, PermissionHelper.Privileges.SUPPORTER) && XmlConfig.getInstance().get("shiina.clans.create-supporter").equals("true")) {
             return redirect(res, shiina, "/settings/customization");
         }
 

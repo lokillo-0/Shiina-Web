@@ -10,11 +10,13 @@ import lombok.Data;
 @Data
 public class UserInfoObject {
     private final static Gson gson = new Gson();
+
     public UserInfoObject() {
-    }   
+    }
+
     public UserInfoObject(int id) {
         UserInfoObject userInfo = gson.fromJson(App.appCache.get("shiina:user:" + id),
-                        UserInfoObject.class);
+                UserInfoObject.class);
         this.id = userInfo.id;
         this.name = userInfo.name;
         this.safe_name = userInfo.safe_name;

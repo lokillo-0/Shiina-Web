@@ -35,6 +35,7 @@ import dev.osunolimits.modules.utils.ShiinaAchievementsSorter;
 import dev.osunolimits.modules.utils.ThemeLoader;
 import dev.osunolimits.modules.utils.UserInfoCache;
 import dev.osunolimits.plugins.PluginLoader;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.routes.ap.api.PubSubHandler;
 import dev.osunolimits.routes.ap.api.RecoverAccount;
 import dev.osunolimits.routes.ap.get.Audit;
@@ -122,6 +123,7 @@ import dev.osunolimits.routes.post.settings.data.HandleAccountDeletion;
 import dev.osunolimits.routes.post.settings.data.HandleDataRequest;
 import dev.osunolimits.utils.Auth;
 import io.github.cdimascio.dotenv.Dotenv;
+import okhttp3.OkHttpClient;
 import redis.clients.jedis.JedisPooled;
 
 /**
@@ -131,19 +133,21 @@ import redis.clients.jedis.JedisPooled;
 public class App {
 
     public static final Logger log = LoggerFactory.getLogger("Shiina-Web");
+    public static final OkHttpClient sharedClient = new OkHttpClient();
+    public static final AppCache appCache = new AppCache();
+
+    public static final String appSecret = Auth.generateNewToken();
     
     public static Dotenv loggerEnv;
     public static Dotenv env;
     public static Map<String, Object> customization;
 
-    public static AppCache appCache = new AppCache();
+    
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
     public static String version = "2.0.0branch";
     public static String dbVersion = "2.0.0";
-
-    public static String appSecret = Auth.generateNewToken();
 
     public static boolean devMode = false;
 
@@ -197,7 +201,7 @@ public class App {
         cron.registerTimedTask(30, new CountryLeaderboardTask());
         cron.registerTimedTask(30, new DonatorCleanUpTask());
         cron.registerFixedRateTask(9, 59, new ShiinaRankCache());
-        cron.registerTaskEachFullHour(new ServerStatsCollectorTask());
+        cron.registerTaskEach15Minutes(new ServerStatsCollectorTask());
 
         WebServer.get("/health", new Health());
 
@@ -299,6 +303,9 @@ public class App {
         WebServer.post("/ap/mapranking", new HandleMapStatusUpdate());
 
         WebServer.get("/banner/:id", new GetBanner());
+
+        ShiinaRegistry.registerIconToSettingsGroup("shiina", "fa-solid fa-flask");
+        ShiinaRegistry.registerIconToSettingsGroup("donator", "fa-solid fa-users");
 
         PluginLoader pluginLoader = new PluginLoader();
         pluginLoader.loadPlugins();

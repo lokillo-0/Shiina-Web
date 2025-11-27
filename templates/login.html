@@ -48,6 +48,10 @@
                 </div>
                 <div id="turnstile" data-theme="${c.mode}"></div>
 
+                <#list modules as module>
+                    ${module}
+                </#list>
+
                 <div class="row my-2">
                     <div class="checkbox checkbox-primary">
                         <input id="checkbox_remember" type="checkbox" name="remember">

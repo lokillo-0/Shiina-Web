@@ -4,6 +4,7 @@ import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.XmlConfig;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
+import dev.osunolimits.plugins.events.actions.OnShiinaSettingChangedEvent;
 import dev.osunolimits.utils.osu.PermissionHelper;
 import spark.Request;
 import spark.Response;
@@ -32,6 +33,8 @@ public class ChangeSetting extends Shiina {
         }
 
         XmlConfig.getInstance().set(key, value);
+
+        new OnShiinaSettingChangedEvent(shiina.user.id, key, value).callListeners();
 
         return redirect(res, shiina, "/ap/settings?state=success&message=Setting%20" + key + "%20updated%20successfully");
 

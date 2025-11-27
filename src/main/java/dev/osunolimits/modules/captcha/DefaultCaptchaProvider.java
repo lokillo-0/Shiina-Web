@@ -1,4 +1,4 @@
-package dev.osunolimits.modules.queries;
+package dev.osunolimits.modules.captcha;
 
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -8,15 +8,13 @@ import com.google.gson.Gson;
 
 import dev.osunolimits.main.App;
 import okhttp3.FormBody;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-public class TurnstileQuery {
+public class DefaultCaptchaProvider implements CaptchaProvider {
     private static final String VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
     private static final Logger logger = LoggerFactory.getLogger("TurnstileQuery");
     private static final Gson gson = new Gson();
-    private static final OkHttpClient client = new OkHttpClient();
 
     public static class TurnstileResponse {
         public boolean success;
@@ -25,7 +23,7 @@ public class TurnstileQuery {
         public String[] errorCodes;
     }
 
-    public @NotNull TurnstileResponse verifyCaptcha(String captchaResponse) {
+    public @NotNull CaptchaResponse verifyCaptcha(String captchaResponse) {
         RequestBody formBody = new FormBody.Builder()
                 .add("secret", App.env.get("TURNSTILE_SECRET"))
                 .add("response", captchaResponse)
@@ -37,16 +35,20 @@ public class TurnstileQuery {
                 .build();
 
         try {
-            String response = client.newCall(request).execute().body().string();
+            String response = App.sharedClient.newCall(request).execute().body().string();
             TurnstileResponse turnstileResponse = gson.fromJson(response, TurnstileResponse.class);
-            return turnstileResponse;
+            CaptchaResponse captchaResp = new CaptchaResponse();
+            captchaResp.success = turnstileResponse.success;
+            captchaResp.status = turnstileResponse.success ? 200 : 400;
+            return captchaResp;
         } catch (Exception e) {
             logger.error("Error while verifying captcha", e);
         }
 
-        TurnstileResponse turnstileResponse = new TurnstileResponse();
-        turnstileResponse.success = false;
-        return turnstileResponse;
+        CaptchaResponse captchaResp = new CaptchaResponse();
+        captchaResp.success = false;
+        captchaResp.status = 400;
+        return captchaResp;
     }
 
 }

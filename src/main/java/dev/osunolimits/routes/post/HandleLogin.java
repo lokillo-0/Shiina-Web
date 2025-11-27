@@ -6,9 +6,10 @@ import dev.osunolimits.main.App;
 import dev.osunolimits.modules.Shiina;
 import dev.osunolimits.modules.ShiinaRoute;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import dev.osunolimits.modules.queries.TurnstileQuery;
+import dev.osunolimits.modules.captcha.CaptchaProvider;
 import dev.osunolimits.modules.utils.SessionBuilder;
 import dev.osunolimits.modules.utils.UserInfoCache;
+import dev.osunolimits.plugins.ShiinaRegistry;
 import dev.osunolimits.utils.Auth;
 import spark.Request;
 import spark.Response;
@@ -54,8 +55,8 @@ public class HandleLogin extends Shiina {
             rememberMe = true;
         }
 
-        TurnstileQuery turnstileQuery = new TurnstileQuery();
-        if (!turnstileQuery.verifyCaptcha(captchaResponse).success) {
+        CaptchaProvider captchaProvider = ShiinaRegistry.getCaptchaProvider();
+        if (!captchaProvider.verifyCaptcha(captchaResponse).success) {
             shiina.data.put("error", "Invalid Captcha");
             return renderTemplate("login.html", shiina, res, req);
         }
@@ -107,7 +108,7 @@ public class HandleLogin extends Shiina {
             return redirect(res, shiina, refPath);
         }
 
-        return redirect(res, shiina, "/");
+        return redirect(res, shiina, "/?action=auth");
     }
 
 }

@@ -7,7 +7,6 @@ import java.io.InputStream;
 import dev.osunolimits.main.App;
 import dev.osunolimits.main.init.engine.RunableInitTask;
 import okhttp3.Call;
-import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
@@ -28,13 +27,11 @@ public class StartupSetupMarketTask extends RunableInitTask {
             return;
         }
 
-        OkHttpClient client = new OkHttpClient();
-
         Request request = new Request.Builder()
                 .url(MARKETPLACE_URL)
                 .build();
 
-        Call call = client.newCall(request);
+        Call call = App.sharedClient.newCall(request);
         try (Response response = call.execute()) {
             if (!response.isSuccessful()) {
                 throw new RuntimeException("Failed to download: " + response);

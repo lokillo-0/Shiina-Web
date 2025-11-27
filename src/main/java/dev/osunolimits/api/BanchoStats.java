@@ -6,6 +6,7 @@ import com.google.gson.JsonParser;
 import dev.osunolimits.common.APIRequest;
 import dev.osunolimits.main.App;
 import lombok.Data;
+import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -26,6 +27,10 @@ public class BanchoStats extends APIQuery {
         private int loginsToday;
         private int staff;
         private int restricted;
+    }
+
+    public BanchoStats(OkHttpClient client) {
+        super(client);
     }
 
     public BanchoStats() {
