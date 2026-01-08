@@ -1,23 +1,30 @@
 FROM maven:3.9-eclipse-temurin-21-alpine AS build
 WORKDIR /app
+
+# Fix Alpine DNS + JVM stalls
+ENV MAVEN_OPTS="-Djava.net.preferIPv4Stack=true -Xmx512m"
+
+# Cache dependencies
 COPY pom.xml .
+RUN mvn -B dependency:go-offline
+
+# Build
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN mvn -B clean package -DskipTests
+
+# -----------------------------
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-# Copy the JAR file
+# Copy the JAR
 COPY --from=build /app/target/*.jar /app/shiina.jar
 
-# Copy required directories and files
+# App resources
 COPY static /app/static
 COPY templates /app/templates
 
-# Create directories for volumes
-RUN mkdir -p /app/logs
-RUN mkdir -p /app/plugins
-RUN mkdir -p /app/data
-RUN mkdir -p /app/.cache
+# Runtime dirs
+RUN mkdir -p /app/logs /app/plugins /app/data /app/.cache
 
 ENTRYPOINT ["java", "-jar", "/app/shiina.jar"]

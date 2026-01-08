@@ -45,6 +45,7 @@ import dev.osunolimits.routes.ap.get.Commands;
 import dev.osunolimits.routes.ap.get.MapRanking;
 import dev.osunolimits.routes.ap.get.MapRequests;
 import dev.osunolimits.routes.ap.get.ModularSettings;
+import dev.osunolimits.routes.ap.get.ModuleSettingRoute;
 import dev.osunolimits.routes.ap.get.Multiaccounts;
 import dev.osunolimits.routes.ap.get.Start;
 import dev.osunolimits.routes.ap.get.Themes;
@@ -71,7 +72,6 @@ import dev.osunolimits.routes.api.get.GetPlayerScores;
 import dev.osunolimits.routes.api.get.GetRankCache;
 import dev.osunolimits.routes.api.get.Health;
 import dev.osunolimits.routes.api.get.Search;
-import dev.osunolimits.routes.api.get.auth.GetLastDayPlayerAdmin;
 import dev.osunolimits.routes.api.get.auth.HandleBeatmapFavorite;
 import dev.osunolimits.routes.api.get.auth.HandleClanAction;
 import dev.osunolimits.routes.api.get.auth.HandleClanDisband;
@@ -79,6 +79,9 @@ import dev.osunolimits.routes.api.get.auth.HandleClanLeave;
 import dev.osunolimits.routes.api.get.auth.HandleClanRequest;
 import dev.osunolimits.routes.api.get.auth.HandleOnBoarding;
 import dev.osunolimits.routes.api.get.auth.HandleRelationship;
+import dev.osunolimits.routes.api.get.auth.ap.GetLastDayPlayerAdmin;
+import dev.osunolimits.routes.api.get.auth.ap.SetModuleSortAdmin;
+import dev.osunolimits.routes.api.get.auth.ap.UpdateModuleBlockAdmin;
 import dev.osunolimits.routes.api.get.image.GetBanner;
 import dev.osunolimits.routes.get.Beatmap;
 import dev.osunolimits.routes.get.Beatmaps;
@@ -251,6 +254,9 @@ public class App {
         WebServer.post("/post/comment", new HandleComment());
         WebServer.notFound(new NotFound());
 
+        WebServer.post("/api/v1/modules/sort", new SetModuleSortAdmin());
+        WebServer.post("/api/v1/modules/block", new UpdateModuleBlockAdmin(Action.DELETE));
+        WebServer.post("/api/v1/modules/unblock", new UpdateModuleBlockAdmin(Action.CREATE));
         WebServer.get("/api/v1/get_ap_players", new GetLastDayPlayerAdmin());
         WebServer.get("/api/v1/get_comments", new GetComments());
         WebServer.get("/api/v1/get_first_places", new GetFirstPlaces());
@@ -277,6 +283,7 @@ public class App {
         WebServer.get("/ap/maprequests", new MapRequests());
         WebServer.get("/ap/mapranking", new MapRanking());
 
+        WebServer.get("/ap/modules", new ModuleSettingRoute());
         WebServer.get("/ap/multiaccs", new Multiaccounts());
         WebServer.get("/ap/audit", new Audit());
         WebServer.get("/ap/chat", new ChatExplorer());

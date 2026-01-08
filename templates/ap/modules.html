@@ -1,0 +1,159 @@
+<#include "assets/base.html">
+
+<div class="container-fluid bg-body-tertiary border-bottom p-3">
+    <div class="row align-items-center">
+        <div class="col-auto">
+            <h5 class="mb-0">
+                <i class="fa-solid fa-plug"></i> Modules
+            </h5>
+        </div>
+    </div>
+</div>
+
+<style>
+.module-item {
+    cursor: move;
+}
+.module-item.dragging {
+    opacity: 0.5;
+}
+.module-item.blocked {
+    opacity: 0.6;
+    text-decoration: line-through;
+}
+</style>
+
+<div class="container-fluid mt-2">
+    <div class="row g-3">
+        <#list moduleConfig.settings?keys as moduleKey>
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0">
+                        <i class="fa-solid fa-gear me-2"></i>
+                        ${moduleKey}
+                    </h6>
+                    <button class="btn btn-sm btn-primary save-order-btn" data-page="${moduleKey}" style="display: none;">
+                        <i class="fa-solid fa-save"></i> Save
+                    </button>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush module-list" data-page="${moduleKey}">
+                        <#list moduleConfig.settings[moduleKey].modulesSorted as module>
+                            <#assign isBlocked = moduleConfig.settings[moduleKey].modulesBlocked?seq_contains(module)>
+                            <li class="list-group-item module-item d-flex justify-content-between align-items-center ${isBlocked?then('blocked', '')}" 
+                                draggable="true" 
+                                data-module="${module}">
+                                <span>
+                                    <i class="fa-solid fa-grip-vertical me-2 text-muted"></i>
+                                    ${module}
+                                </span>
+                                <button class="btn btn-sm ${isBlocked?then('btn-success', 'btn-danger')} block-btn" 
+                                        data-page="${moduleKey}" 
+                                        data-module="${module}"
+                                        data-action="${isBlocked?then('unblock', 'block')}">
+                                    <i class="fa-solid ${isBlocked?then('fa-check', 'fa-ban')}"></i>
+                                </button>
+                            </li>
+                        </#list>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        </#list>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let draggedItem = null;
+    let sourceList = null;
+
+    document.querySelectorAll('.module-item').forEach(item => {
+        item.addEventListener('dragstart', function(e) {
+            draggedItem = this;
+            sourceList = this.parentElement;
+            this.classList.add('dragging');
+        });
+
+        item.addEventListener('dragend', function(e) {
+            this.classList.remove('dragging');
+            if (sourceList) {
+                const page = sourceList.dataset.page;
+                document.querySelector('.save-order-btn[data-page="' + page + '"]').style.display = 'block';
+            }
+        });
+
+        item.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            const afterElement = getDragAfterElement(this.parentElement, e.clientY);
+            if (afterElement == null) {
+                this.parentElement.appendChild(draggedItem);
+            } else {
+                this.parentElement.insertBefore(draggedItem, afterElement);
+            }
+        });
+    });
+
+    document.querySelectorAll('.module-list').forEach(list => {
+        list.addEventListener('dragover', e => e.preventDefault());
+    });
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('.module-item:not(.dragging)')];
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect();
+            const offset = y - box.top - box.height / 2;
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child };
+            } else {
+                return closest;
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    document.querySelectorAll('.block-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const page = this.dataset.page;
+            const module = this.dataset.module;
+            const action = this.dataset.action;
+
+            fetch('/api/v1/modules/' + action, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ page: page, module: module })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    alert('Failed to ' + action + ' module');
+                }
+            });
+        });
+    });
+
+    document.querySelectorAll('.save-order-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const page = this.dataset.page;
+            const list = document.querySelector('.module-list[data-page="' + page + '"]');
+            const modules = [...list.querySelectorAll('.module-item')].map(item => item.dataset.module);
+
+            fetch('/api/v1/modules/sort', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ page: page, modules: modules })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.style.display = 'none';
+                } else {
+                    alert('Failed to save order');
+                }
+            });
+        });
+    });
+});
+</script>

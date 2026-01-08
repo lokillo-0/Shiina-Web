@@ -15,14 +15,6 @@ public class Home extends Shiina {
         ShiinaRequest shiina = new ShiinaRoute().handle(req, res);
         shiina.data.put("actNav", 1);
 
-        if (req.queryParams("payment") != null) {
-            if (req.queryParams("payment").equals("success")) {
-                shiina.data.put("info", "Payment successful");
-            } else if (req.queryParams("payment").equals("cancel")) {
-                shiina.data.put("error", "Payment cancelled");
-            }
-        }
-
         if (req.queryParams("login") != null && shiina.loggedIn == true) {
             shiina.data.put("info", "You have successfully logged in");
         }

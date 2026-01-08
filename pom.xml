@@ -7,7 +7,7 @@
 
   <groupId>dev.osunolimits</groupId>
   <artifactId>shiina</artifactId>
-  <version>2.0</version>
+  <version>2.1</version>
 
   <name>shiina</name>
   <url>https://osunolimits.dev</url>
@@ -23,7 +23,7 @@
     <dotenv-java.version>3.2.0</dotenv-java.version>
     <thumbnailator.version>0.4.21</thumbnailator.version>
     <lombok.version>1.18.42</lombok.version>
-    <spring-security.version>6.5.6</spring-security.version>
+    <spring-security.version>7.0.2</spring-security.version>
     <commonmark.version>0.27.0</commonmark.version>
     <snakeyml.version>2.5</snakeyml.version>
     <kefirbb.version>1.5</kefirbb.version>
@@ -43,7 +43,7 @@
     <!-- Main dependencies -->
     <spark.version>40e9a4fc7e</spark.version>
     <spark-freemarker.version>2.7.1</spark-freemarker.version>
-    <logback.version>1.5.20</logback.version>
+    <logback.version>1.5.24</logback.version>
     <okhttp.version>4.12.0</okhttp.version>
 
     <!-- Build dependencies -->

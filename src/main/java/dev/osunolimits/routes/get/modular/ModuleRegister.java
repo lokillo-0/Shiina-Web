@@ -1,25 +1,18 @@
 package dev.osunolimits.routes.get.modular;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.stream.Stream;
 
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import ch.qos.logback.classic.Logger;
 import dev.osunolimits.modules.ShiinaRoute.ShiinaRequest;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import dev.osunolimits.plugins.ModuleConfiguration;
+import dev.osunolimits.plugins.ModuleConfiguration.ModuleSetting;
 import spark.Request;
 import spark.Response;
 
@@ -28,6 +21,7 @@ public class ModuleRegister {
     private static final List<ModulePath> modules = new ArrayList<>();
     private static final Map<String, List<ShiinaModule>> loadedModules = new HashMap<>();
     private static final Logger log = (Logger) LoggerFactory.getLogger("ModuleRegister");
+    private static final ModuleConfiguration config = new ModuleConfiguration();
 
     public static void registerDefaultModule(String forPage, ShiinaModule module) {
         ModulePath modulePath = new ModulePath(forPage, module, true, false);
@@ -55,6 +49,10 @@ public class ModuleRegister {
         return new ArrayList<>(pagesSet);
     }
 
+    public static ModuleConfiguration getConfig() {
+        return config;
+    }
+
     public static List<ShiinaModule> getModulesForPage(String page) {
         return loadedModules.get(page);
     }
@@ -71,153 +69,104 @@ public class ModuleRegister {
     }
 
     public static void reloadModuleConfigurations() {
-        log.debug("Reloading Module System...");
-        Path modulesPath = Path.of("data/modules");
-        if (!Files.exists(modulesPath)) {
-            try {
-                Files.createDirectories(modulesPath);
-                log.debug("Created directory: " + modulesPath);
-            } catch (IOException e) {
-                log.error("Failed to create modules directory: ", e);
-            }
-        }
-
-        List<FoundModule> foundModules = new ArrayList<>();
-
-        try (Stream<Path> paths = Files.walk(modulesPath)) {
-            paths.filter(path -> path.toString().endsWith(".json"))
-                    .forEach(jsonPath -> {
-                        try {
-                            Path relativePath = modulesPath.relativize(jsonPath);
-                            String filename = relativePath.getFileName().toString();
-
-                            String page = filename.substring(0, filename.length() - 5);
-
-                            log.debug("Module Json found for page: " + page);
-
-                            FoundModule foundModule = new FoundModule(page, Files.readString(jsonPath));
-                            foundModules.add(foundModule);
-                        } catch (Exception e) {
-                            log.error("Error processing JSON file: " + jsonPath, e);
-                        }
-                    });
-        } catch (IOException e) {
-            log.error("Error walking through modules directory: ", e);
-        }
-
-        Set<String> foundPages = new HashSet<>();
-        for(ModulePath modulePath : modules) {
-            foundPages.add(modulePath.getPath());
-        }
-
-        Set<String> foundPagesJson = new HashSet<>();
-        for(FoundModule foundModule : foundModules) {
-            foundPagesJson.add(foundModule.getPage());
-        }
-
-        boolean createdAnyJson = false;
-        for(String page : foundPages) {
-            if(!foundPagesJson.contains(page)) {
-                List<String> toLoad = new ArrayList<>();
-                for (ModulePath modulePath : modules) {
-                    if (modulePath.getPath().equals(page)) {
-                        if(!modulePath.isDefault()) {
-                            continue;
-                        }
-                        toLoad.add(modulePath.getModule().moduleName());
-                    }
+        log.debug("Reloading Module System 2.0...");
+        
+        loadedModules.clear();
+        for (String page : getPages()) {
+            List<ShiinaModule> modulesForPage = new ArrayList<>();
+            for (ModulePath modulePath : modules) {
+                if (modulePath.getPath().equals(page)) {
+                    modulesForPage.add(modulePath.getModule());
+                    log.debug("Loaded module for " + page + ": " + modulePath.getModule().moduleName());
                 }
+            }
+            loadedModules.put(page, modulesForPage);
+        }
 
-                Gson gson = new Gson();
-                String json = gson.toJson(toLoad);
-                try {
-                    Files.writeString(Path.of("data/modules/" + page + ".json"), json);
-                    log.debug("Created JSON file for page: " + page);
-                    createdAnyJson = true;
-                } catch (IOException e) {
-                    log.error("Error writing JSON file for page: " + page, e);
+        config.load();
+        
+        if (config.isEmpty()) {
+            Map<String, List<String>> defaultModulesByPage = new HashMap<>();
+            for (String page : getPages()) {
+                List<String> moduleNames = new ArrayList<>();
+                for (ShiinaModule module : loadedModules.get(page)) {
+                    moduleNames.add(module.moduleName());
+                }
+                defaultModulesByPage.put(page, moduleNames);
+            }
+            config.createDefault(defaultModulesByPage);
+        }
+
+        boolean settingsUpdated = false;
+        
+        // Check for new pages not in config and add them
+        for (String page : loadedModules.keySet()) {
+            if (!config.getAllSettings().containsKey(page)) {
+                List<String> moduleNames = new ArrayList<>();
+                for (ShiinaModule module : loadedModules.get(page)) {
+                    moduleNames.add(module.moduleName());
+                }
+                if (config.addNewModules(page, moduleNames)) {
+                    settingsUpdated = true;
+                    log.info("Auto-added new page '" + page + "' to configuration");
                 }
             }
         }
-
-        // If any new JSON files were created, reload foundModules
-        if (createdAnyJson) {
-            foundModules.clear();
-            try (Stream<Path> paths = Files.walk(modulesPath)) {
-                paths.filter(path -> path.toString().endsWith(".json"))
-                        .forEach(jsonPath -> {
-                            try {
-                                Path relativePath = modulesPath.relativize(jsonPath);
-                                String filename = relativePath.getFileName().toString();
-
-                                String page = filename.substring(0, filename.length() - 5);
-
-                                log.debug("Module Json found for page: " + page);
-
-                                FoundModule foundModule = new FoundModule(page, Files.readString(jsonPath));
-                                foundModules.add(foundModule);
-                            } catch (Exception e) {
-                                log.error("Error processing JSON file: " + jsonPath, e);
-                            }
-                        });
-            } catch (IOException e) {
-                log.error("Error walking through modules directory: ", e);
-            }
-        }
-
-        for(FoundModule foundModule : foundModules) {
-            List<String> toLoad = new Gson().fromJson(foundModule.getJson(), new TypeToken<List<String>>(){}.getType());
-            
-            // Check if default modules are missing from the JSON
-            List<String> defaultModuleNames = new ArrayList<>();
-            for(ModulePath modulePath : modules) {
-                if(modulePath.getPath().equals(foundModule.getPage()) && modulePath.isDefault()) {
-                    defaultModuleNames.add(modulePath.getModule().moduleName());
-                }
+        
+        // Process all pages (both existing and newly added)
+        for (String page : loadedModules.keySet()) {
+            ModuleSetting setting = config.getSettingForPage(page);
+            List<String> currentModuleNames = new ArrayList<>();
+            for (ShiinaModule module : loadedModules.get(page)) {
+                currentModuleNames.add(module.moduleName());
             }
             
-            // Add missing default modules to the JSON list at the beginning
-            boolean needsUpdate = false;
-            for(String defaultModule : defaultModuleNames) {
-                if(!toLoad.contains(defaultModule)) {
-                    toLoad.add(0, defaultModule); // Add at the beginning
-                    needsUpdate = true;
-                }
+            // Auto-add new modules to existing pages
+            if (config.addNewModules(page, currentModuleNames)) {
+                settingsUpdated = true;
             }
-            
-            // Update the JSON file if we added defaults
-            if(needsUpdate) {
-                String updatedJson = new Gson().toJson(toLoad);
-                try {
-                    Files.writeString(Path.of("data/modules/" + foundModule.getPage() + ".json"), updatedJson);
-                    log.info("Added default modules to JSON for page: " + foundModule.getPage());
-                } catch (IOException e) {
-                    log.error("Error updating JSON file for page: " + foundModule.getPage(), e);
-                }
-            }
-            
-            List<ShiinaModule> loaded = new ArrayList<>();
-            for(String moduleName : toLoad) {
-                for(ModulePath modulePath : modules) {
-                    if(modulePath.getModule().moduleName().equals(moduleName)) {
-                        loaded.add(modulePath.getModule());
+
+            // Apply sorted and filtered modules
+            List<ShiinaModule> configuredModules = new ArrayList<>();
+            for (String moduleName : setting.modulesSorted) {
+                for (ShiinaModule module : loadedModules.get(page)) {
+                    if (module.moduleName().equals(moduleName) && !setting.modulesBlocked.contains(moduleName)) {
+                        configuredModules.add(module);
+                        break;
                     }
                 }
             }
-            List<String> loadedNames = new ArrayList<>();
-            for(ShiinaModule module : loaded) {
-                loadedNames.add(module.moduleName());
-            }
 
-            log.info("Loaded modules for page: " + foundModule.getPage() + ": " + loadedNames);
-            loadedModules.put(foundModule.getPage(), loaded);
+            loadedModules.put(page, configuredModules);
+        }
+
+        if (settingsUpdated) {
+            config.save();
+        }
+
+        for(String page : loadedModules.keySet()) {
+            log.info("Page '" + page + "' has " + loadedModules.get(page).size() + " modules loaded.");
         }
     }
 
-    @AllArgsConstructor @Getter
-    private static class FoundModule {
-        private String page;
-        private String json;
+    public static void blockModule(String page, String moduleName) {
+        config.blockModule(page, moduleName);
+        config.save();
+        reloadModuleConfigurations();
     }
 
+    public static void unblockModule(String page, String moduleName) {
+        config.unblockModule(page, moduleName);
+        config.save();
+        reloadModuleConfigurations();
+    }
+
+    public static void setSortedModules(String page, List<String> sortedModuleNames) {
+        config.setSortedModules(page, sortedModuleNames);
+        config.save();
+        reloadModuleConfigurations();
+    }
 }
+
+
+
