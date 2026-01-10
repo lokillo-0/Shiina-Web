@@ -14,7 +14,7 @@ import dev.osunolimits.plugins.models.NavbarSettingsItem;
 public class NavbarRegister {
 
     private static final Logger log = (Logger) LoggerFactory.getLogger("NavbarRegister");
-    private final static int START_ACTNAV = 22;
+    private final static int START_ACTNAV = 50;
     private final static int START_SETTINGS_ACTNAV = 120;
     private static List<NavbarItem> items = new ArrayList<>();
     private static List<NavbarAdminItem> adminItems = new ArrayList<>();
