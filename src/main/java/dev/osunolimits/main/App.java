@@ -149,8 +149,8 @@ public class App {
     public static JedisPooled jedisPool;
     public static WebServer webServer;
 
-    public static String version = "2.0.0branch";
-    public static String dbVersion = "2.0.0";
+    public static String version = "2.1";
+    public static String dbVersion = "2.1";
 
     public static boolean devMode = false;
 

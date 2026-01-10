@@ -115,6 +115,59 @@ public class ModuleConfiguration {
         save();
     }
 
+    public boolean cleanupObsoleteModules(String page, List<String> validModuleNames) {
+        ModuleSetting setting = getSettingForPage(page);
+        boolean updated = false;
+        
+        // Remove obsolete modules from sorted list
+        List<String> toRemoveFromSorted = new ArrayList<>();
+        for (String moduleName : setting.modulesSorted) {
+            if (!validModuleNames.contains(moduleName)) {
+                toRemoveFromSorted.add(moduleName);
+                updated = true;
+            }
+        }
+        setting.modulesSorted.removeAll(toRemoveFromSorted);
+        
+        // Remove obsolete modules from blocked list
+        List<String> toRemoveFromBlocked = new ArrayList<>();
+        for (String moduleName : setting.modulesBlocked) {
+            if (!validModuleNames.contains(moduleName)) {
+                toRemoveFromBlocked.add(moduleName);
+                updated = true;
+            }
+        }
+        setting.modulesBlocked.removeAll(toRemoveFromBlocked);
+        
+        if (updated) {
+            log.info("Cleaned up obsolete modules from page '" + page + "': removed " + 
+                    toRemoveFromSorted.size() + " from sorted, " + 
+                    toRemoveFromBlocked.size() + " from blocked");
+        }
+        
+        return updated;
+    }
+
+    public boolean cleanupObsoletePages(List<String> validPages) {
+        List<String> pagesToRemove = new ArrayList<>();
+        
+        for (String page : settings.keySet()) {
+            if (!validPages.contains(page)) {
+                pagesToRemove.add(page);
+            }
+        }
+        
+        if (!pagesToRemove.isEmpty()) {
+            for (String page : pagesToRemove) {
+                settings.remove(page);
+                log.info("Removed obsolete page from configuration: '" + page + "'");
+            }
+            return true;
+        }
+        
+        return false;
+    }
+
     public boolean isEmpty() {
         return settings.isEmpty();
     }

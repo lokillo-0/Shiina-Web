@@ -99,6 +99,11 @@ public class ModuleRegister {
 
         boolean settingsUpdated = false;
         
+        // Clean up obsolete pages from config
+        if (config.cleanupObsoletePages(getPages())) {
+            settingsUpdated = true;
+        }
+        
         // Check for new pages not in config and add them
         for (String page : loadedModules.keySet()) {
             if (!config.getAllSettings().containsKey(page)) {
@@ -115,10 +120,14 @@ public class ModuleRegister {
         
         // Process all pages (both existing and newly added)
         for (String page : loadedModules.keySet()) {
-            ModuleSetting setting = config.getSettingForPage(page);
             List<String> currentModuleNames = new ArrayList<>();
             for (ShiinaModule module : loadedModules.get(page)) {
                 currentModuleNames.add(module.moduleName());
+            }
+            
+            // Clean up obsolete modules from config
+            if (config.cleanupObsoleteModules(page, currentModuleNames)) {
+                settingsUpdated = true;
             }
             
             // Auto-add new modules to existing pages
@@ -126,6 +135,9 @@ public class ModuleRegister {
                 settingsUpdated = true;
             }
 
+            // Get the updated setting after cleanup and additions
+            ModuleSetting setting = config.getSettingForPage(page);
+            
             // Apply sorted and filtered modules
             List<ShiinaModule> configuredModules = new ArrayList<>();
             for (String moduleName : setting.modulesSorted) {
